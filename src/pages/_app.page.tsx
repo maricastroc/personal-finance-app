@@ -9,7 +9,7 @@ const font = Public_Sans({
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className={`${font.className} bg-beige-100`}>
+    <div className={`${font.className} bg-beige-100 overflow-x-hidden`}>
       <Component {...pageProps} />
     </div>
   )

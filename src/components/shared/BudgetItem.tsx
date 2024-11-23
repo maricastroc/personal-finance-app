@@ -14,7 +14,7 @@ export default function BudgetItem() {
   return (
     <ResponsiveContainer
       width="100%"
-      height={350}
+      height={331.5}
       style={{ maxWidth: '20rem', margin: '0 auto' }}
     >
       <PieChart>

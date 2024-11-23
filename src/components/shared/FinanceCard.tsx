@@ -41,7 +41,7 @@ export function FinanceCard({
 
   return (
     <div
-      className={`flex items-center gap-2 h-full w-full p-4 rounded-lg md:h-32 ${cardClasses}`}
+      className={`flex items-center gap-2 h-full w-full p-4 rounded-lg md:h-32 lg:h-[7.4rem] ${cardClasses}`}
     >
       {icon && <div className="mr-4">{icon}</div>}
       <div className="flex flex-col">

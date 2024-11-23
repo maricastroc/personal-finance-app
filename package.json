@@ -14,6 +14,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-svg-loader": "^3.0.3",
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "recharts": "^2.13.3"
   },
   "devDependencies": {
