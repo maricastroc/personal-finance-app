@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_DIRECT_URL")
+}
+
+model User {
+  id               String          @id @default(uuid())
+  name             String
+  email            String          @unique
+  password         String?
+  avatarUrl        String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  accountId        String          @unique @default(uuid())
+  initialBalance   Float?
+  
+  transactions         Transaction[]   @relation("userTransactions")
+  sentTransactions     Transaction[]   @relation("senderTransactions")
+  receivedTransactions  Transaction[]   @relation("recipientTransactions")
+  budgets           Budget[]
+  pots              Pot[]
+  recurringBills    RecurringBill[]    @relation("userRecurringBills")
+  sentRecurringBills RecurringBill[]   @relation("recurringBillSender")
+  receivedRecurringBills RecurringBill[] @relation("recurringBillRecipient")
+  accounts          Account[]
+  sessions          Session[]
+
+  @@map("users")
+}
+
+model Transaction {
+  id                   String     @id @default(uuid())
+  description          String?
+  amount               Float
+  date                 DateTime   @default(now())
+  isRecurring          Boolean    @default(false)
+  categoryId           String?
+  category             Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  senderId             String?
+  sender               User?      @relation("senderTransactions", fields: [senderId], references: [accountId], onDelete: SetNull)
+  recipientId          String?
+  recipient            User?      @relation("recipientTransactions", fields: [recipientId], references: [accountId], onDelete: SetNull)
+  userId               String
+  user                 User       @relation("userTransactions", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([senderId])
+  @@index([recipientId])
+  @@map("transactions")
+}
+
+model RecurringBill {
+  id                   String     @id @default(uuid())
+  description          String?
+  amount               Float
+  recurrenceDay        Int?
+  recurrenceFrequency  String?
+  categoryId           String?
+  category             Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  userId               String
+  user                 User       @relation("userRecurringBills", fields: [userId], references: [id], onDelete: Cascade)
+  senderId             String?
+  sender               User?      @relation("recurringBillSender", fields: [senderId], references: [accountId], onDelete: SetNull)
+  recipientId          String?
+  recipient            User?      @relation("recurringBillRecipient", fields: [recipientId], references: [accountId], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([senderId])
+  @@index([recipientId])
+  @@map("recurring_bills")
+}
+
+model Category {
+  id             String          @id @default(uuid())
+  name           String          @unique
+  transactions   Transaction[]
+  budgets        Budget[]
+  recurringBills RecurringBill[]
+
+  @@map("categories")
+}
+
+model Budget {
+  id         String     @id @default(uuid())
+  amount     Float
+  createdAt  DateTime   @default(now())
+  categoryId String
+  category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  themeId    String?
+  theme      Theme?     @relation("budgetThemes", fields: [themeId], references: [id], onDelete: SetNull)
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([themeId])
+  @@map("budgets")
+}
+
+model Pot {
+  id           String   @id @default(uuid())
+  name         String
+  targetAmount Float
+  currentAmount Float   @default(0)
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  themeId      String?
+  theme        Theme?   @relation("potThemes", fields: [themeId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([themeId])
+  @@map("pots")
+}
+
+model Theme {
+  id          String   @id @default(uuid())
+  color       String   @unique
+  description String? 
+  budgets     Budget[] @relation("budgetThemes")
+  pots        Pot[]    @relation("potThemes")
+
+  @@map("themes")
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}

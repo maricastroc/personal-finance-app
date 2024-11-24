@@ -1,16 +1,31 @@
+import { formatToDollar } from '@/utils/formatToDollar'
+import useRequest from '@/utils/useRequest'
 import React from 'react'
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 
-const data = [
-  { name: 'A', value: 50 },
-  { name: 'B', value: 100 },
-  { name: 'C', value: 750 },
-  { name: 'D', value: 75 },
-]
-
-const COLORS = ['#277c78', '#f2cdac', '#82c9d7', '#626070']
+export interface BudgetWithDetailsProps {
+  categoryName: string
+  amountSpent: number
+  theme: string
+  budgetLimit: number
+}
 
 export default function BudgetItem() {
+  const { data: budgets } = useRequest<BudgetWithDetailsProps[]>({
+    url: '/budgets',
+    method: 'GET',
+  })
+
+  const data = budgets?.map((budget: BudgetWithDetailsProps) => ({
+    name: budget.categoryName,
+    value: budget.budgetLimit,
+  }))
+
+  const budgetLimitSum =
+    budgets?.reduce((sum, budget) => sum + budget.budgetLimit, 0) || 0
+  const amountSpentSum =
+    budgets?.reduce((sum, budget) => sum + budget.amountSpent, 0) || 0
+
   return (
     <ResponsiveContainer
       width="100%"
@@ -18,24 +33,20 @@ export default function BudgetItem() {
       style={{ maxWidth: '20rem', margin: '0 auto' }}
     >
       <PieChart>
-        {/* Camada externa */}
         <Pie
           data={data}
           dataKey="value"
           nameKey="name"
-          cx="50%" // Centro do gráfico
-          cy="50%" // Centro do gráfico
-          innerRadius={'80%'} // Raio interno fixo
+          cx="50%"
+          cy="50%"
+          innerRadius={'80%'}
           outerRadius={'100%'}
-          paddingAngle={0} // Remove o espaço entre as fatias
+          paddingAngle={0}
           cornerRadius={0}
           stroke="none"
         >
-          {data.map((entry, index) => (
-            <Cell
-              key={`cell-outer-${index}`}
-              fill={COLORS[index % COLORS.length]}
-            />
+          {budgets?.map((budget, index) => (
+            <Cell key={`cell-outer-${index}`} fill={budget.theme} />
           ))}
         </Pie>
 
@@ -53,11 +64,8 @@ export default function BudgetItem() {
           outerRadius={'80%'}
           fillOpacity={0.7}
         >
-          {data.map((entry, index) => (
-            <Cell
-              key={`cell-inner-${index}`}
-              fill={COLORS[index % COLORS.length]}
-            />
+          {budgets?.map((budget, index) => (
+            <Cell key={`cell-outer-${index}`} fill={budget.theme} />
           ))}
         </Pie>
         <text
@@ -69,7 +77,7 @@ export default function BudgetItem() {
           fontSize="24"
           fontWeight="bold"
         >
-          $338
+          {formatToDollar(amountSpentSum)}
         </text>
         <text
           x="50%"
@@ -79,7 +87,7 @@ export default function BudgetItem() {
           fill="#696868"
           fontSize="15"
         >
-          of $975 limit
+          of {formatToDollar(budgetLimitSum)} limit
         </text>
       </PieChart>
     </ResponsiveContainer>

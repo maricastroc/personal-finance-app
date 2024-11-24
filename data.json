@@ -1,0 +1,71 @@
+{
+    "balance": {
+        "current": 4836.00,
+        "income": 3814.25,
+        "expenses": 1700.50
+    },
+    "transactions": [
+        {
+            "avatar": "./assets/images/avatars/swift-ride-share.jpg",
+            "name": "Swift Ride Share",
+            "category": "Transportation",
+            "date": "2024-07-02T19:50:05Z",
+            "amount": -16.50,
+            "isRecurring": false
+        }
+    ],
+    "budgets": [
+        {
+            "category": "Entertainment",
+            "maximum": 50.00,
+            "theme": "#277C78"
+        },
+        {
+            "category": "Bills",
+            "maximum": 750.00,
+            "theme": "#82C9D7"
+        },
+        {
+            "category": "Dining Out",
+            "maximum": 75.00,
+            "theme": "#F2CDAC"
+        },
+        {
+            "category": "Personal Care",
+            "maximum": 100.00,
+            "theme": "#626070"
+        }
+    ],
+    "pots": [
+        {
+            "name": "Savings",
+            "target": 2000.00,
+            "total": 159.00,
+            "theme": "#277C78"
+        },
+        {
+            "name": "Concert Ticket",
+            "target": 150.00,
+            "total": 110.00,
+            "theme": "#626070"
+        },
+        {
+            "name": "Gift",
+            "target": 150.00,
+            "total": 110.00,
+            "theme": "#82C9D7"
+        },
+        {
+            "name": "New Laptop",
+            "target": 1000.00,
+            "total": 10.00,
+            "theme": "#F2CDAC"
+        },
+        {
+            "name": "Holiday",
+            "target": 1440.00,
+            "total": 531.00,
+            "theme": "#826CB0"
+        }
+    ]
+}

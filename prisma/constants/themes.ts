@@ -1,0 +1,18 @@
+const themes = [
+  { description: 'Green', color: '#277c78' },
+  { description: 'Yellow', color: '#f2cdac' },
+  { description: 'Cyan', color: '#82c9d7' },
+  { description: 'Navy', color: '#626070' },
+  { description: 'Red', color: '#c94736' },
+  { description: 'Purple', color: '#826cb0' },
+  { description: 'Light Purple', color: '#af81ba' },
+  { description: 'Turquoise', color: '#597c7c' },
+  { description: 'Brown', color: '#93674f' },
+  { description: 'Magenta', color: '#934f6f' },
+  { description: 'Blue', color: '#3f82b2' },
+  { description: 'Navy Grey', color: '#97a0ac' },
+  { description: 'Amy Green', color: '#7f9161' },
+  { description: 'Gold', color: '#cab361' },
+  { description: 'Orange', color: '#b36c49' },
+  { description: 'White', color: '#ffffff' },
+];
