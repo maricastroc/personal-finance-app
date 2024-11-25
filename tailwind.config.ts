@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 export default {
   content: [
@@ -40,17 +41,19 @@ export default {
         },
       },
       fontSize: {
-        '3xl': '2rem',
-        '2xl': '1.75rem',
-        'xl': '1.25rem',
-        'base': '1rem',
-        'sm': '0.875rem',
-        'xs': '0.75rem',
+        "3xl": "2rem",
+        "2xl": "1.75rem",
+        xl: "1.25rem",
+        base: "1rem",
+        sm: "0.875rem",
+        xs: "0.75rem",
       },
       fontFamily: {
-        sans: ['Public Sans', 'sans-serif'], // Use a fonte 'Public Sans' como a fonte padrão
+        sans: ["Public Sans", "sans-serif"], // Use a fonte 'Public Sans' como a fonte padrão
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require("tailwind-scrollbar"),
+  ],
 } satisfies Config;

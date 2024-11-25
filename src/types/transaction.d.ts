@@ -10,4 +10,7 @@ export interface TransactionProps {
   recipientId: string
   userId: string
   user: UserProps
+  balance?: 'expense' | 'income'
+  sender: UserProps
+  recipient: UserProps
 }

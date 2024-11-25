@@ -18,11 +18,11 @@ function AsideItem({ item, active }: Item) {
   return (
     <Link
       href={item.href}
-      className={`flex flex-col gap-2  ${
+      className={`flex flex-col gap-2 ${
         active
           ? 'bg-beige-100 border-b-4 border-b-secondary-green'
           : 'bg-transparent'
-      }   items-center justify-start rounded-t-xl min-w-[64px]  py-2 px-2`}
+      }   items-center justify-start rounded-t-xl min-w-[50px] p-2 sm:min-w-[64px]`}
     >
       <div className="relative h-6 w-6">
         <Image

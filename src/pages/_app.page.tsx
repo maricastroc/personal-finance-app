@@ -14,7 +14,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SessionProvider>
       <AppProvider>
-        <div className={`${font.className} bg-beige-100 overflow-x-hidden`}>
+        <div
+          className={`${font.className} bg-beige-100 overflow-x-hidden h-full`}
+        >
           <Component {...pageProps} />
         </div>
       </AppProvider>

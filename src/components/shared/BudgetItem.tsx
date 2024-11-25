@@ -50,7 +50,6 @@ export default function BudgetItem() {
           ))}
         </Pie>
 
-        {/* Camada interna com transparência */}
         <Pie
           data={data}
           dataKey="value"

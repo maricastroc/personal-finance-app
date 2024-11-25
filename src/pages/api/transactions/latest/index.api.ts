@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
-import { buildNextAuthOptions } from '../auth/[...nextauth].api'
+import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
 
 export default async function handler(
   req: NextApiRequest,
@@ -38,7 +38,7 @@ export default async function handler(
 
     const userAccountId = user.accountId
 
-    // Busca as transações do usuário
+    // Busca as transações do usuário, ordenando por createdAt (mais recentes primeiro)
     const transactions = await prisma.transaction.findMany({
       where: {
         userId: String(userId),
@@ -48,6 +48,10 @@ export default async function handler(
         sender: true,
         recipient: true,
       },
+      orderBy: {
+        date: 'desc', // Ordena pelas transações mais recentes
+      },
+      take: 5,
     })
 
     // Modificar cada transação para adicionar o campo "balance"

@@ -11,7 +11,11 @@ export default function Layout({ children }: LayoutProps) {
   const { isSidebarOpen, handleIsSidebarOpen } = useAppContext()
 
   return (
-    <div className="flex flex-col w-screen min-h-screen">
+    <div
+      className={`flex flex-col w-screen min-h-screen h-full ${
+        isSidebarOpen ? 'lg:pl-[17rem]' : 'lg:pl-[7.5rem]'
+      }`}
+    >
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         handleIsSidebarOpen={() => handleIsSidebarOpen(!isSidebarOpen)}
