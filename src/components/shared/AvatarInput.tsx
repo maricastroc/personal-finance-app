@@ -28,7 +28,7 @@ export const AvatarInput = ({
           <button
             type="button"
             onClick={() => inputFileRef.current?.click()}
-            className="absolute cursor-pointer top-[73%] left-[72%] flex items-center justify-center bg-gray-900 border border-gray-500 rounded-full text-gray-100 w-[1.9rem] h-[1.9rem] sm:left-[68%]"
+            className="absolute hover:bg-gray-500 cursor-pointer top-[73%] left-[72%] flex items-center justify-center bg-gray-900 border border-gray-500 rounded-full text-gray-100 w-[1.9rem] h-[1.9rem] sm:left-[68%]"
           >
             <Pencil size={18} />
           </button>

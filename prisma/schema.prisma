@@ -37,6 +37,7 @@ model Transaction {
   id                   String     @id @default(uuid())
   description          String?
   amount               Float
+  createdAt  DateTime   @default(now())
   date                 DateTime   @default(now())
   isRecurring          Boolean    @default(false)
   categoryId           String?

@@ -133,7 +133,7 @@ export default function Profile() {
   return (
     <Layout>
       <div
-        className={`w-full max-h-screen flex flex-col items-center justify-center p-4 pb-20 md:p-8 overflow-y-scroll
+        className={`w-full max-h-screen flex flex-col items-center justify-center p-4 pb-20 md:p-8 lg:p-12 overflow-y-scroll
         }`}
       >
         <div className="bg-white relative w-full px-5 py-6 rounded-md max-w-[35rem] xl:w-full overflow-y-scroll flex flex-col justify-start scrollbar scrollbar-thumb-gray-500 scrollbar-track-transparent">

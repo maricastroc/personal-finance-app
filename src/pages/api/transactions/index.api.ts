@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '../auth/[...nextauth].api'
+import { Prisma } from '@prisma/client'
 
 export default async function handler(
   req: NextApiRequest,
@@ -26,10 +27,9 @@ export default async function handler(
   }
 
   try {
-    // Obtenha o `accountId` do usuário
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { accountId: true }, // Pegando só o accountId
+      select: { accountId: true },
     })
 
     if (!user || !user.accountId) {
@@ -38,21 +38,72 @@ export default async function handler(
 
     const userAccountId = user.accountId
 
-    // Busca as transações do usuário
+    // Query params
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 10
+    const filterByName = req.query.filterByName as string
+    const sortBy = req.query.sortBy as string
+
+    const skip = (page - 1) * limit
+
+    // Filtros
+    const filters: Prisma.TransactionWhereInput = {
+      userId: String(userId),
+    }
+
+    if (
+      filterByName &&
+      filterByName !== 'all' &&
+      typeof filterByName === 'string'
+    ) {
+      filters.category = {
+        name: {
+          contains: filterByName.trim(), // Remove espaços extras
+          mode: 'insensitive',
+        },
+      }
+    }
+
+    // Ordenação
+    let orderBy: Prisma.TransactionOrderByWithRelationInput = {}
+    switch (sortBy) {
+      case 'latest':
+        orderBy = { date: 'desc' }
+        break
+      case 'oldest':
+        orderBy = { date: 'asc' }
+        break
+      case 'a_to_z':
+        orderBy = { category: { name: 'asc' } }
+        break
+      case 'z_to_a':
+        orderBy = { category: { name: 'desc' } }
+        break
+      case 'highest':
+        orderBy = { amount: 'desc' }
+        break
+      case 'lowest':
+        orderBy = { amount: 'asc' }
+        break
+      default:
+        orderBy = { createdAt: 'desc' }
+    }
+
     const transactions = await prisma.transaction.findMany({
-      where: {
-        userId: String(userId),
-      },
+      where: filters,
       include: {
         category: true,
         sender: true,
         recipient: true,
       },
+      orderBy,
+      skip,
+      take: limit,
     })
 
-    // Modificar cada transação para adicionar o campo "balance"
+    const totalTransactions = await prisma.transaction.count({ where: filters })
+
     const transactionsWithBalance = transactions.map((transaction) => {
-      // Verifica se o senderId é igual ao accountId do usuário
       const balance =
         transaction.senderId === userAccountId ? 'expense' : 'income'
 
@@ -62,7 +113,17 @@ export default async function handler(
       }
     })
 
-    return res.status(200).json({ transactions: transactionsWithBalance })
+    const data = {
+      transactions: transactionsWithBalance,
+      pagination: {
+        page,
+        limit,
+        total: totalTransactions,
+        totalPages: Math.ceil(totalTransactions / limit),
+      },
+    }
+
+    return res.status(200).json({ data })
   } catch (error) {
     console.error('Error fetching transactions:', error)
     return res.status(500).json({ message: 'Internal Server Error' })
