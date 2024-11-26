@@ -17,8 +17,8 @@ export function TransactionCard({
   category,
 }: TransactionCardProps) {
   return (
-    <div className="flex justify-between items-center border-b border-b-beige-100 py-4">
-      <div className="flex items-center gap-3">
+    <div className="flex justify-between w-full items-center py-4">
+      <div className="flex items-center gap-2 md:w-[13rem]">
         <span className="relative w-11 h-11 rounded-full">
           <img
             src={avatarUrl || AVATAR_URL_DEFAULT}
@@ -29,11 +29,13 @@ export function TransactionCard({
 
         <div className="flex flex-col gap-1 items-start pl-2 text-start">
           <p className="text-gray-900 font-bold text-sm">{name}</p>
-          {category && <p className="text-gray-500 text-xs">{category}</p>}
+          {category && (
+            <p className="text-gray-500 text-xs md:hidden">{category}</p>
+          )}
         </div>
       </div>
 
-      <div className="flex flex-col gap-1 items-end pl-2 text-end">
+      <div className="flex flex-col md:hidden gap-1 items-end pl-2 text-end">
         <p
           className={`font-bold text-sm ${
             balance === 'income' ? 'text-secondary-green' : 'text-gray-900'

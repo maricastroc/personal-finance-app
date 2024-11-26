@@ -34,7 +34,7 @@ export const SelectInput = ({
     <Select.Portal>
       <Select.Content
         position="popper"
-        className="z-10 h-40 overflow-y-scroll mt-1 bg-white rounded-md shadow-lg border border-gray-200"
+        className="z-10 w-[190px] h-40 overflow-y-scroll mt-1 bg-white rounded-md shadow-lg border border-gray-200"
       >
         <Select.ScrollUpButton className="flex items-center justify-center text-gray-500 hover:text-gray-900">
           <ChevronUpIcon />

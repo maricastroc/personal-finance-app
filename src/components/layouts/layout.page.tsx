@@ -13,7 +13,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div
       className={`flex flex-col w-screen min-h-screen h-full ${
-        isSidebarOpen ? 'lg:pl-[17rem]' : 'lg:pl-[7.5rem]'
+        isSidebarOpen ? 'lg:pl-[17rem]' : 'lg:pl-[10rem]'
       }`}
     >
       <Sidebar

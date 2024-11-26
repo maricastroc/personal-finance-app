@@ -1,3 +1,4 @@
+import { CategoryProps } from './category'
 import { UserProps } from './user'
 
 export interface TransactionProps {
@@ -13,4 +14,5 @@ export interface TransactionProps {
   balance?: 'expense' | 'income'
   sender: UserProps
   recipient: UserProps
+  category?: CategoryProps
 }

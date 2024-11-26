@@ -38,16 +38,13 @@ export default async function handler(
 
     const userAccountId = user.accountId
 
-    // Query params
     const page = parseInt(req.query.page as string) || 1
     const limit = parseInt(req.query.limit as string) || 10
     const filterByName = req.query.filterByName as string
     const sortBy = req.query.sortBy as string
-
     const skip = (page - 1) * limit
 
-    // Filtros
-    const filters: Prisma.TransactionWhereInput = {
+    const where: Prisma.TransactionWhereInput = {
       userId: String(userId),
     }
 
@@ -56,16 +53,16 @@ export default async function handler(
       filterByName !== 'all' &&
       typeof filterByName === 'string'
     ) {
-      filters.category = {
+      where.category = {
         name: {
-          contains: filterByName.trim(), // Remove espaços extras
+          contains: filterByName.trim(),
           mode: 'insensitive',
         },
       }
     }
 
-    // Ordenação
     let orderBy: Prisma.TransactionOrderByWithRelationInput = {}
+
     switch (sortBy) {
       case 'latest':
         orderBy = { date: 'desc' }
@@ -89,8 +86,37 @@ export default async function handler(
         orderBy = { createdAt: 'desc' }
     }
 
+    let searchQuery
+    console.log(searchQuery)
+
+    if (req.query.search && req.query.search !== '') {
+      searchQuery = String(req.query.search).toLowerCase()
+    }
+
     const transactions = await prisma.transaction.findMany({
-      where: filters,
+      where: {
+        ...where,
+        ...(searchQuery && {
+          OR: [
+            {
+              sender: {
+                name: {
+                  contains: searchQuery,
+                  mode: 'insensitive',
+                },
+              },
+            },
+            {
+              recipient: {
+                name: {
+                  contains: searchQuery,
+                  mode: 'insensitive',
+                },
+              },
+            },
+          ],
+        }),
+      },
       include: {
         category: true,
         sender: true,
@@ -101,7 +127,7 @@ export default async function handler(
       take: limit,
     })
 
-    const totalTransactions = await prisma.transaction.count({ where: filters })
+    const totalTransactions = await prisma.transaction.count({ where })
 
     const transactionsWithBalance = transactions.map((transaction) => {
       const balance =

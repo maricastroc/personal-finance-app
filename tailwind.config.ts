@@ -46,7 +46,7 @@ export default {
         xl: "1.25rem",
         base: "1rem",
         sm: "0.875rem",
-        xs: "0.75rem",
+        xs: "0.8rem",
       },
       fontFamily: {
         sans: ["Public Sans", "sans-serif"], // Use a fonte 'Public Sans' como a fonte padrão

@@ -1,11 +1,9 @@
-import { FinanceCard } from '@/components/shared/FinanceCard'
-import { FinanceItem } from '@/components/shared/FinanceItem'
+import { FinanceCard } from './partials/FinanceCard'
+import { FinanceItem } from './partials/FinanceItem'
 import { TransactionCard } from '@/components/shared/TransactionCard'
-import BudgetItem, {
-  BudgetWithDetailsProps,
-} from '@/components/shared/BudgetItem'
-import HomeCard from '@/components/shared/HomeCard'
-import { BillCard } from '@/components/shared/BillCard'
+import BudgetItem, { BudgetWithDetailsProps } from './partials/BudgetItem'
+import HomeCard from './partials/HomeCard'
+import { BillCard } from '@/pages/home/partials/BillCard'
 import Layout from '@/components/layouts/layout.page'
 import useRequest from '@/utils/useRequest'
 import { formatToDollar } from '@/utils/formatToDollar'
@@ -13,6 +11,7 @@ import { PotProps } from '@/types/pot'
 import { RecurringBillProps } from '@/types/recurringBills'
 import { format } from 'date-fns'
 import { TransactionProps } from '@/types/transaction'
+import { useAppContext } from '@/contexts/AppContext'
 
 interface BalanceProps {
   incomes: number | undefined
@@ -37,6 +36,8 @@ interface RecurringBillsResult {
 }
 
 export default function Home() {
+  const { isSidebarOpen } = useAppContext()
+
   const { data: balance } = useRequest<BalanceProps>({
     url: '/balance',
     method: 'GET',
@@ -64,7 +65,11 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className={`flex-grow px-4 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8`}>
+      <div
+        className={`flex-grow px-4 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
+          isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
+        }`}
+      >
         <h1 className="text-gray-900 font-bold text-3xl">Overview</h1>
 
         <div className="grid md:grid-cols-3 gap-4 mt-8 md:h-[7.5rem] lg:mt-6 lg:gap-6">
