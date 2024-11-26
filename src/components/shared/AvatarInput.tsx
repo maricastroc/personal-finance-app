@@ -15,7 +15,7 @@ export const AvatarInput = ({
   return (
     <div className="flex flex-col sm:mb-4 sm:grid sm:grid-cols-[1fr,3.2fr] items-center gap-4">
       <div className="flex items-center justify-center border border-gray-300 rounded-full w-30 h-30">
-        <div className="relative">
+        <div className="flex items-center justify-center relative h-[7.5rem] w-[7.5rem]">
           {avatarPreview ? (
             <img
               src={avatarPreview || AVATAR_URL_DEFAULT}
@@ -23,7 +23,7 @@ export const AvatarInput = ({
               className="rounded-full h-[7.5rem] w-[7.5rem]"
             />
           ) : (
-            <User className="w-12 h-12 text-gray-900" />
+            <User className="w-16 h-16 text-gray-500" />
           )}
           <button
             type="button"

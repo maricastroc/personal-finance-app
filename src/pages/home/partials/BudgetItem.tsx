@@ -1,7 +1,14 @@
 import { formatToDollar } from '@/utils/formatToDollar'
 import useRequest from '@/utils/useRequest'
 import React from 'react'
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  TooltipProps,
+} from 'recharts'
 
 export interface BudgetWithDetailsProps {
   categoryName: string
@@ -25,6 +32,23 @@ export default function BudgetItem() {
     budgets?.reduce((sum, budget) => sum + budget.budgetLimit, 0) || 0
   const amountSpentSum =
     budgets?.reduce((sum, budget) => sum + budget.amountSpent, 0) || 0
+
+  const tooltipContent = (props: TooltipProps<number, string>) => {
+    const { active, payload } = props
+
+    if (active && payload && payload.length) {
+      const { name, value } = payload[0].payload
+      const percentage = ((value / budgetLimitSum) * 100).toFixed(2)
+
+      return (
+        <div className="custom-tooltip bg-gray-600 text-gray-100 text-sm font-semibold p-2 rounded-md">
+          <p>{`${name}: ${percentage}%`}</p>
+        </div>
+      )
+    }
+
+    return null
+  }
 
   return (
     <ResponsiveContainer
@@ -67,6 +91,10 @@ export default function BudgetItem() {
             <Cell key={`cell-outer-${index}`} fill={budget.theme} />
           ))}
         </Pie>
+
+        {/* Usando Tooltip com conteúdo customizado */}
+        <Tooltip content={tooltipContent} />
+
         <text
           x="50%"
           y="48%"
