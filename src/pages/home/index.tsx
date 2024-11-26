@@ -12,6 +12,7 @@ import { RecurringBillProps } from '@/types/recurringBills'
 import { format } from 'date-fns'
 import { TransactionProps } from '@/types/transaction'
 import { useAppContext } from '@/contexts/AppContext'
+import { EmptyContent } from '@/components/shared/EmptyContent'
 
 interface BalanceProps {
   incomes: number | undefined
@@ -99,84 +100,102 @@ export default function Home() {
                   title="Total saved"
                   value={formatToDollar(allPots?.totalCurrentAmount || 0)}
                 />
-                <div className="grid grid-cols-2 gap-4">
-                  {allPots?.pots?.map((pot: PotProps) => {
-                    return (
-                      <FinanceItem
-                        key={pot.id}
-                        title={pot.name}
-                        value={pot.currentAmount || 0}
-                        color={pot.theme.color}
-                      />
-                    )
-                  })}
-                </div>
+                {allPots && allPots?.pots?.length ? (
+                  <div className="grid grid-cols-2 gap-4">
+                    {allPots?.pots?.map((pot: PotProps) => {
+                      return (
+                        <FinanceItem
+                          key={pot.id}
+                          title={pot.name}
+                          value={pot.currentAmount || 0}
+                          color={pot.theme.color}
+                        />
+                      )
+                    })}
+                  </div>
+                ) : (
+                  <EmptyContent content="No pots available." />
+                )}
               </div>
             </HomeCard>
 
             <HomeCard title="Transactions" buttonLabel="View All">
               <div>
-                {transactions?.map((transaction, index) => {
-                  return (
-                    <TransactionCard
-                      key={index}
-                      name={
-                        transaction.balance === 'income'
-                          ? transaction.sender.name
-                          : transaction.recipient.name
-                      }
-                      balance={transaction?.balance}
-                      avatarUrl={
-                        transaction?.balance === 'income'
-                          ? transaction.sender.avatarUrl
-                          : transaction.recipient.avatarUrl
-                      }
-                      date={format(transaction.date, 'MMM dd, yyyy')}
-                      value={formatToDollar(transaction?.amount || 0)}
-                    />
-                  )
-                })}
+                {transactions && transactions?.length ? (
+                  transactions?.map((transaction, index) => {
+                    return (
+                      <TransactionCard
+                        key={index}
+                        name={
+                          transaction.balance === 'income'
+                            ? transaction.sender.name
+                            : transaction.recipient.name
+                        }
+                        balance={transaction?.balance}
+                        avatarUrl={
+                          transaction?.balance === 'income'
+                            ? transaction.sender.avatarUrl
+                            : transaction.recipient.avatarUrl
+                        }
+                        date={format(transaction.date, 'MMM dd, yyyy')}
+                        value={formatToDollar(transaction?.amount || 0)}
+                      />
+                    )
+                  })
+                ) : (
+                  <EmptyContent content="No transactions available." />
+                )}
               </div>
             </HomeCard>
           </div>
 
           <div className="flex flex-col flex-grow">
             <HomeCard flexGrow title="Budgets" buttonLabel="See Details">
-              <div className="flex flex-grow flex-col gap-6 sm:grid sm:grid-cols-[3fr,1.1fr] sm:max-width-[30rem] sm:items-center sm:w-full lg:items-start lg:mt-[-1rem]">
-                <BudgetItem />
-                <div className="grid grid-cols-2 sm:flex sm:flex-col sm:justify-end sm:items-end sm:w-full gap-4 lg:mt-8">
-                  {budgets?.map((budget, index) => {
-                    return (
-                      <FinanceItem
-                        key={index}
-                        title={budget.categoryName}
-                        color={budget.theme}
-                        value={budget.budgetLimit}
-                      />
-                    )
-                  })}
+              {budgets && budgets.length ? (
+                <div className="flex flex-grow flex-col gap-6 sm:grid sm:grid-cols-[3fr,1.1fr] sm:max-width-[30rem] sm:items-center sm:w-full lg:items-start lg:mt-[-1rem]">
+                  <BudgetItem />
+                  <div className="grid grid-cols-2 sm:flex sm:flex-col sm:justify-end sm:items-end sm:w-full gap-4 lg:mt-8">
+                    {budgets?.map((budget, index) => {
+                      return (
+                        <FinanceItem
+                          key={index}
+                          title={budget.categoryName}
+                          color={budget.theme}
+                          value={budget.budgetLimit}
+                        />
+                      )
+                    })}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <EmptyContent content="No budgets available." />
+              )}
             </HomeCard>
 
             <HomeCard title="Recurring Bills" buttonLabel="See Details">
-              <div className="flex flex-grow flex-col sm:justify-end sm:items-end sm:w-full gap-4 pt-4">
-                <BillCard
-                  title="Paid Bills"
-                  value={formatToDollar(recurringBills?.paid?.total || 0)}
-                  borderColor="border-l-secondary-green"
-                />
-                <BillCard
-                  title="Total Upcoming"
-                  value={formatToDollar(recurringBills?.upcoming?.total || 0)}
-                  borderColor="border-l-secondary-yellow"
-                />
-                <BillCard
-                  title="Due Soon"
-                  value={formatToDollar(recurringBills?.dueSoon?.total || 0)}
-                  borderColor="border-l-secondary-cyan"
-                />
-              </div>
+              {recurringBills ? (
+                <div className="flex flex-grow flex-col sm:justify-end sm:items-end sm:w-full gap-4 pt-4">
+                  <BillCard
+                    title="Paid Bills"
+                    value={formatToDollar(recurringBills?.paid?.total || 0)}
+                    borderColor="border-l-secondary-green"
+                  />
+                  <BillCard
+                    title="Total Upcoming"
+                    value={formatToDollar(recurringBills?.upcoming?.total || 0)}
+                    borderColor="border-l-secondary-yellow"
+                  />
+                  <BillCard
+                    title="Due Soon"
+                    value={formatToDollar(recurringBills?.dueSoon?.total || 0)}
+                    borderColor="border-l-secondary-cyan"
+                  />
+                </div>
+              ) : (
+                <div>
+                  <EmptyContent content="No recurring bills available." />
+                </div>
+              )}
             </HomeCard>
           </div>
         </div>
