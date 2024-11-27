@@ -2,11 +2,14 @@ import AuthLayout from '@/components/layouts/authLayout.page'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { toast } from 'react-toastify'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
+import { notyf } from '@/lib/notyf'
+import { handleApiError } from '@/utils/handleApiError'
+import { ErrorMessage } from '@/components/shared/ErrorMessage'
+import { CustomButton } from '@/components/shared/CustomButton'
 
 const signInFormSchema = z.object({
   email: z.string().min(3, { message: 'E-mail is required.' }),
@@ -20,28 +23,31 @@ export default function Login() {
 
   const isRouteLoading = useLoadingOnRouteChange()
 
-  const { register, handleSubmit } = useForm<SignInFormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm<SignInFormData>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: { email: '', password: '' },
   })
 
   async function onSubmit(data: SignInFormData) {
     try {
-      const result = await signIn('credentials', {
+      const response = await signIn('credentials', {
         email: data.email,
         password: data.password,
         redirect: false,
       })
 
-      if (result?.error) {
-        toast.error(result?.error)
+      if (response?.error) {
+        notyf?.error(response?.error)
       } else {
-        toast.success('Welcome to the Finance App!')
+        notyf?.success('Welcome to the Finance App!')
         router.push('/')
       }
     } catch (error) {
-      toast.error('An unexpected error occurred. Please try again later.')
-      console.error(error)
+      handleApiError(error)
     }
   }
 
@@ -69,6 +75,7 @@ export default function Login() {
               placeholder="Your email here"
               {...register('email')}
             />
+            {errors?.email && <ErrorMessage message={errors.email.message} />}
           </div>
 
           <div>
@@ -85,11 +92,16 @@ export default function Login() {
               placeholder="Password"
               {...register('password')}
             />
+            {errors?.password && (
+              <ErrorMessage message={errors.password.message} />
+            )}
           </div>
 
-          <button className="font-semibold rounded-md p-3 items-center flex gap-2 transition-all duration-300 max-h-[60px] bg-gray-900 text-beige-100 hover:bg-gray-500 capitalize justify-center mt-8">
-            Login
-          </button>
+          <CustomButton
+            customContent={'Login'}
+            customContentLoading={'Loading...'}
+            isSubmitting={isSubmitting}
+          />
 
           <span className="text-sm flex items-center justify-center w-full text-gray-500 gap-2">
             <p>Need to create an account?</p>

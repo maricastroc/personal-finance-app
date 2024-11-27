@@ -14,7 +14,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         <Image src={LogoMobile} alt="Logo Mobile" />
       </header>
 
-      <div className="flex-1 flex items-center justify-center xl:grid xl:grid-cols-[1fr,1.15fr] xl:gap-8 w-full">
+      <div className="py-10 xl:py-0 flex-1 flex items-center justify-center xl:grid xl:grid-cols-[1fr,1.15fr] xl:gap-8 w-full">
         <div className="h-full w-full relative hidden xl:flex max-h-screen rounded-md overflow-hidden p-3">
           <div className="w-full h-full relative rounded-md overflow-hidden">
             <Image

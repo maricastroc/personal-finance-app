@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 import { BudgetModalForm } from './partials/BudgetModal'
+import { EmptyContent } from '@/components/shared/EmptyContent'
 
 export default function Budgets() {
   const { isSidebarOpen } = useAppContext()
@@ -74,66 +75,84 @@ export default function Budgets() {
                     style={{ margin: 'auto' }}
                   />
                 </span>
-              ) : (
+              ) : budgets?.length ? (
                 <BudgetItem isBudgetsScreen />
+              ) : (
+                <EmptyContent
+                  variant={'secondary'}
+                  content="No budget avaliable."
+                />
               )}
             </div>
             <div>
-              <h2 className="text-xl font-bold mt-6">Spending Summary</h2>
-              <div className="flex flex-col justify-end items-end w-full mt-5">
-                {isValidating
-                  ? Array.from({ length: 4 }).map((_, index) => (
-                      <>
-                        <span className="relative w-full rounded-full">
-                          <Skeleton
-                            key={index}
-                            variant="rounded"
-                            width={'100%'}
-                            height={20}
-                          />
-                        </span>
-                        {index !== 4 - 1 && (
-                          <span className="my-4 w-full h-[1px] bg-gray-200 text-gray-500" />
-                        )}
-                      </>
-                    ))
-                  : budgets?.map((budget, index) => {
-                      return (
-                        <>
-                          <FinanceItem
-                            isBudgetsPage={true}
-                            key={index}
-                            title={budget.categoryName}
-                            color={budget.theme}
-                            value={budget.budgetLimit}
-                            amountSpent={budget.amountSpent}
-                          />
-                          {index !== budgets.length - 1 && (
-                            <span className="my-4 w-full h-[1px] bg-gray-200 text-gray-500" />
-                          )}
-                        </>
-                      )
-                    })}
-              </div>
+              {isValidating ? (
+                Array.from({ length: 4 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col justify-start items-start w-full mt-5"
+                  >
+                    <span className="relative w-full rounded-full">
+                      <Skeleton variant="rounded" width={'100%'} height={20} />
+                    </span>
+                    {index !== 4 - 1 && (
+                      <span className="my-4 w-full h-[1px] bg-gray-200 text-gray-500" />
+                    )}
+                  </div>
+                ))
+              ) : (
+                <>
+                  {budgets && budgets?.length > 0 && (
+                    <>
+                      <div className="flex flex-col justify-start items-start w-full mt-5">
+                        <h2 className="text-xl font-bold my-6">
+                          Spending Summary
+                        </h2>
+                        {budgets?.map((budget, index) => (
+                          <>
+                            <FinanceItem
+                              key={index}
+                              isBudgetsPage={true}
+                              title={budget.categoryName}
+                              color={budget.theme}
+                              value={budget.budgetLimit}
+                              amountSpent={budget.amountSpent}
+                            />
+                            {index !== budgets.length - 1 && (
+                              <span className="my-4 w-full h-[1px] bg-gray-200 text-gray-500" />
+                            )}
+                          </>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
             </div>
           </div>
 
           <div className="flex flex-col w-full">
-            {isValidating
-              ? Array.from({ length: 3 }).map((_, index) => (
-                  <SkeletonBudgetCard key={index} />
-                ))
-              : budgets?.map((budget, index) => {
-                  return (
-                    <BudgetCard
-                      key={index}
-                      budgetId={budget.id}
-                      onSubmitForm={async (): Promise<void> => {
-                        await mutate()
-                      }}
-                    />
-                  )
-                })}
+            {isValidating ? (
+              Array.from({ length: 3 }).map((_, index) => (
+                <SkeletonBudgetCard key={index} />
+              ))
+            ) : budgets && budgets?.length ? (
+              budgets.map((budget) => (
+                <BudgetCard
+                  key={budget.id}
+                  budgetId={budget.id}
+                  onSubmitForm={async (): Promise<void> => {
+                    await mutate()
+                  }}
+                />
+              ))
+            ) : (
+              <div className="w-full lg:w-auto h-auto lg:mr-5 mt-8 flex-grow-0 flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
+                <EmptyContent
+                  variant={'secondary'}
+                  content="No budgets avaliable."
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

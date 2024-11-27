@@ -13,9 +13,9 @@ export const AvatarInput = ({
   inputFileRef,
 }: AvatarInputProps) => {
   return (
-    <div className="flex flex-col sm:mb-4 sm:grid sm:grid-cols-[1fr,3.2fr] items-center gap-4">
-      <div className="flex items-center justify-center border border-gray-300 rounded-full w-30 h-30">
-        <div className="flex items-center justify-center relative h-[7.5rem] w-[7.5rem]">
+    <div className="flex flex-col sm:mb-4 overflow-hidden sm:grid sm:grid-cols-[1fr,3.2fr] items-center gap-4">
+      <div className="flex  items-center justify-center border border-gray-300 rounded-full w-30 h-30">
+        <div className="flex items-center justify-center relative h-[7.5rem] min-w-[7.5rem]">
           {avatarPreview ? (
             <img
               src={avatarPreview || AVATAR_URL_DEFAULT}
@@ -35,17 +35,17 @@ export const AvatarInput = ({
         </div>
       </div>
 
-      <div className="flex flex-col w-full sm:max-w-[23.5rem]">
+      <div className="flex flex-col flex-grow-0">
         <label className="text-xs font-bold text-gray-500 mb-1">Avatar</label>
-        <div className="overflow-hidden truncate flex h-12 flex-col text-sm w-full rounded-md border border-beige-500 px-3 items-start justify-center">
+        <div className="overflow-hidden flex-grow-0 truncate flex h-12 flex-col text-sm w-full rounded-md border border-beige-500 px-3 items-start justify-center">
           <input
             type="file"
             ref={inputFileRef}
             style={{ display: 'none' }}
             onChange={onChange}
-            className="truncate"
+            className="truncate overflow-hidden"
           />
-          <span className="truncate w-full">
+          <span className="truncate max-w-[15rem]">
             {avatarPreview || 'No file selected'}
           </span>
         </div>

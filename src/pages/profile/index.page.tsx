@@ -116,7 +116,7 @@ export default function Profile() {
       if (data.password) formData.append('password', data.password)
 
       try {
-        const response = await api.put(`/profile/edit`, formData, {
+        const response = await api.put(`/profile`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
 

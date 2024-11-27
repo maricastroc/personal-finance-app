@@ -26,7 +26,6 @@ export default async function handler(
   }
 
   try {
-    // 1. Recuperar o usuário com base no userId para pegar o accountId
     const user = await prisma.user.findUnique({
       where: { id: userId },
     })
@@ -37,13 +36,9 @@ export default async function handler(
 
     const accountId = user.accountId
 
-    // 2. Recuperar todas as transações do usuário
     const transactions = await prisma.transaction.findMany({
       where: {
-        OR: [
-          { senderId: accountId }, // Transações enviadas pelo usuário
-          { recipientId: accountId }, // Transações recebidas pelo usuário
-        ],
+        OR: [{ senderId: accountId }, { recipientId: accountId }],
       },
       select: {
         amount: true,
@@ -52,26 +47,21 @@ export default async function handler(
       },
     })
 
-    // 3. Calcular o saldo atual, despesas e receitas
     let expenses = 0
     let incomes = 0
     let currentBalance = 0
 
     transactions.forEach((transaction) => {
       if (transaction.senderId === accountId) {
-        // Se sou o sender, é uma despesa
         expenses += transaction.amount
       }
       if (transaction.recipientId === accountId) {
-        // Se sou o recipient, é uma receita
         incomes += transaction.amount
       }
     })
 
-    // Calculando o currentBalance
     currentBalance = incomes - expenses + (user?.initialBalance || 0)
 
-    // Retornando o saldo atual, despesas e receitas
     return res.json({
       currentBalance,
       expenses,

@@ -26,7 +26,6 @@ export const SelectInput = ({
   defaultValue = null,
   variant = 'primary',
 }: SelectInputProps) => {
-  console.log(data)
   return (
     <Select.Root
       defaultValue={defaultValue || undefined}

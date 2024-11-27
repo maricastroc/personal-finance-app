@@ -28,7 +28,6 @@ export default async function handler(
   }
 
   try {
-    // Obtenha todos os Recurring Bills do usuário
     const recurringBills = await prisma.user.findMany({
       where: { id: String(userId) },
       include: {
@@ -42,13 +41,10 @@ export default async function handler(
 
     const bills = recurringBills[0].recurringBills
 
-    // Data de hoje
     const today = startOfDay(new Date())
 
-    // Data para comparar se está dentro de 3 dias
     const dueSoonDate = addDays(today, 3)
 
-    // Inicializando as categorias
     const result = {
       paid: {
         bills: [] as RecurringBill[],
@@ -64,35 +60,27 @@ export default async function handler(
       },
     }
 
-    // Classificar as bills nas categorias
     for (const bill of bills) {
-      // Cria uma data com base no dia de recorrência da fatura, mas no mês atual
       const recurrenceDate = new Date(
         today.getFullYear(),
         today.getMonth(),
         bill.recurrenceDay || 1,
       )
 
-      // Se a data de recorrência for antes de hoje, classifica como "paid"
       if (isBefore(recurrenceDate, today)) {
         result.paid.bills.push(bill)
         result.paid.total += bill.amount
-      }
-      // Se a data de recorrência for em até 3 dias, classifica como "due soon"
-      else if (
+      } else if (
         isWithinInterval(recurrenceDate, { start: today, end: dueSoonDate })
       ) {
         result.dueSoon.bills.push(bill)
         result.dueSoon.total += bill.amount
-      }
-      // Se a data de recorrência for no futuro e não dentro dos próximos 3 dias, classifica como "upcoming"
-      else {
+      } else {
         result.upcoming.bills.push(bill)
         result.upcoming.total += bill.amount
       }
     }
 
-    // Devolvendo o objeto completo com as categorias e totais
     return res.json({ recurringBills: result })
   } catch (error) {
     console.error(error)

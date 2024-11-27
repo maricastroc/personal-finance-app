@@ -87,7 +87,6 @@ export default async function handler(
     }
 
     let searchQuery
-    console.log(searchQuery)
 
     if (req.query.search && req.query.search !== '') {
       searchQuery = String(req.query.search).toLowerCase()
