@@ -7,6 +7,7 @@ export interface PotProps {
   targetAmount: number
   currentAmount: number
   themeId: string
+  themeColor?: string
   theme: ThemeProps
   userId: string
   user: UserProps

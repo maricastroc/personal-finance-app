@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { format } from 'date-fns'
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { BudgetModalForm } from './BudgetModal'
+import { BudgetModalForm } from '../partials/BudgetModal'
 import { useRouter } from 'next/router'
 import { DeleteBudgetModal } from './DeleteBudgetModal'
 

@@ -24,7 +24,7 @@ interface BalanceProps {
   currentBalance: number | undefined
 }
 
-interface AllPotsProps {
+export interface AllPotsProps {
   pots: PotProps[]
   totalCurrentAmount: number | undefined
 }

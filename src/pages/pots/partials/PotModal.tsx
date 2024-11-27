@@ -3,36 +3,38 @@ import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { SelectInput } from '@/components/shared/SelectInput'
 import { api } from '@/lib/axios'
 import { notyf } from '@/lib/notyf'
-import { CategoryProps } from '@/types/category'
 import { colors } from '@/utils/constants'
 import { handleApiError } from '@/utils/handleApiError'
-import useRequest from '@/utils/useRequest'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-interface EditBudgetModalProps {
+interface EditPotModalProps {
   onClose: () => void
-  categoryName?: string
-  budgetLimit?: number
-  theme?: string
-  budgetId?: string
+  targetAmount?: number
+  currentAmount?: number
+  themeColor?: string
+  potId?: string
+  name?: string
   isEdit?: boolean
   onSubmitForm: () => Promise<void>
 }
 
-const budgetFormSchema = () =>
+const potFormSchema = () =>
   z.object({
-    category: z.string().min(3, { message: 'Category is required.' }),
-    budgetLimit: z
+    name: z.string().min(3, { message: 'Name is required.' }),
+    targetAmount: z
       .number({ invalid_type_error: 'Amount must be a number.' })
       .min(1, { message: 'Amount must be greater than zero.' }),
-    theme: z.string().min(3, { message: 'Theme is required.' }),
+    currentAmount: z
+      .number({ invalid_type_error: 'Amount must be a number.' })
+      .optional(),
+    themeColor: z.string().min(3, { message: 'Theme is required.' }),
   })
 
-export type BudgetFormData = z.infer<ReturnType<typeof budgetFormSchema>>
+export type PotFormData = z.infer<ReturnType<typeof potFormSchema>>
 
 const themeOptions = colors.map((color) => ({
   label: (
@@ -47,44 +49,42 @@ const themeOptions = colors.map((color) => ({
   value: color.hex,
 }))
 
-export function BudgetModalForm({
+export function PotModalForm({
   onClose,
-  categoryName,
-  budgetLimit,
-  theme,
-  budgetId,
+  name,
+  targetAmount,
+  currentAmount,
+  themeColor,
+  potId,
   onSubmitForm,
   isEdit = false,
-}: EditBudgetModalProps) {
+}: EditPotModalProps) {
   const {
     register,
     handleSubmit,
-    reset,
     setValue,
+    reset,
     formState: { isSubmitting, errors },
-  } = useForm<BudgetFormData>({
-    resolver: zodResolver(budgetFormSchema()),
+  } = useForm<PotFormData>({
+    resolver: zodResolver(potFormSchema()),
     defaultValues: {
-      category: isEdit ? categoryName : '',
-      budgetLimit,
-      theme,
+      name: isEdit ? name : '',
+      targetAmount: isEdit ? targetAmount : 0,
+      themeColor: isEdit ? themeColor : '',
+      currentAmount: isEdit ? currentAmount : 0,
     },
   })
 
-  const { data: categories } = useRequest<CategoryProps[]>({
-    url: '/categories',
-    method: 'GET',
-  })
-
-  const handleEditBudget = async (data: BudgetFormData) => {
+  const handleEditPot = async (data: PotFormData) => {
     try {
       const payload = {
-        categoryName: data.category,
-        themeColor: data.theme,
-        amount: data.budgetLimit,
+        name: data.name,
+        themeColor: data.themeColor,
+        targetAmount: data.targetAmount,
+        currentAmount: data.currentAmount,
       }
 
-      const response = await api.put(`/budgets/${budgetId}`, payload, {
+      const response = await api.put(`/pots/${potId}`, payload, {
         headers: { 'Content-Type': 'application/json' },
       })
 
@@ -97,15 +97,15 @@ export function BudgetModalForm({
     }
   }
 
-  const handleCreateBudget = async (data: BudgetFormData) => {
+  const handleCreatePot = async (data: PotFormData) => {
     try {
       const payload = {
-        categoryName: data.category,
-        themeColor: data.theme,
-        amount: data.budgetLimit,
+        name: data.name,
+        themeColor: data.themeColor,
+        targetAmount: data.targetAmount,
       }
 
-      const response = await api.post(`/budgets/${budgetId}`, payload, {
+      const response = await api.post(`/pots/${potId}`, payload, {
         headers: { 'Content-Type': 'application/json' },
       })
 
@@ -131,54 +131,59 @@ export function BudgetModalForm({
         </Dialog.Close>
 
         <Dialog.Title className="text-xl font-semibold text-gray-900 mb-2 md:text-2xl">
-          {isEdit ? 'Edit Budget' : 'Add New Budget'}
+          {isEdit ? 'Edit Pot' : 'Add New Pot'}
         </Dialog.Title>
 
         <Dialog.Description className="flex flex-col w-full">
           <p className="text-sm text-gray-600">
             {isEdit
-              ? 'As your budgets change, feel free to update your spending limits.'
-              : 'Choose a category to set a spending budget. These categories can help you monitor spending.'}
+              ? 'If your saving targets change, feel free to update your pots.'
+              : 'Create a pot to set savings targets. These can help keep you on track as you save for special purchases.'}
           </p>
 
           <form
             className="mt-6"
             onSubmit={
               isEdit
-                ? handleSubmit(handleEditBudget)
-                : handleSubmit(handleCreateBudget)
+                ? handleSubmit(handleEditPot)
+                : handleSubmit(handleCreatePot)
             }
           >
-            <div className="flex flex-col">
+            <div className="flex flex-col mt-2">
               <label className="text-xs font-bold text-gray-500 mb-1">
-                Budget Category
+                Pot Name
               </label>
-              {categories && (
-                <SelectInput
-                  defaultValue={categoryName}
-                  data={categories}
-                  onSelect={(value: string) => setValue('category', value)}
-                  placeholder="Select a Category..."
-                />
-              )}
-              {errors.category && (
-                <ErrorMessage message={errors.category.message} />
-              )}
+              <input
+                type="text"
+                id="name"
+                className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
+                placeholder="Name"
+                {...register('name')}
+              />
+              {errors.name && <ErrorMessage message={errors.name.message} />}
             </div>
 
             <div className="flex flex-col mt-4">
-              <label className="text-xs font-bold text-gray-500 mb-1">
-                Maximum Spend ($)
+              <label
+                htmlFor="targetAmount"
+                className="text-xs font-bold text-gray-500 mb-1"
+              >
+                Target Amount ($)
               </label>
-              <input
-                type="number"
-                id="budgetLimit"
-                className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
-                placeholder="Maximum Spend"
-                {...register('budgetLimit', { valueAsNumber: true })}
-              />
-              {errors.budgetLimit && (
-                <ErrorMessage message={errors.budgetLimit.message} />
+              <div className="relative w-full">
+                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                  $
+                </span>
+                <input
+                  type="number"
+                  id="targetAmount"
+                  className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
+                  placeholder="Maximum Spend"
+                  {...register('targetAmount', { valueAsNumber: true })}
+                />
+              </div>
+              {errors.targetAmount && (
+                <ErrorMessage message={errors.targetAmount.message} />
               )}
             </div>
 
@@ -188,12 +193,14 @@ export function BudgetModalForm({
               </label>
               <SelectInput
                 variant="secondary"
-                defaultValue={theme}
+                defaultValue={themeColor}
                 data={themeOptions}
-                onSelect={(value: string) => setValue('theme', value)}
+                onSelect={(value: string) => setValue('themeColor', value)}
                 placeholder="Select a Color..."
               />
-              {errors.theme && <ErrorMessage message={errors.theme.message} />}
+              {errors.themeColor && (
+                <ErrorMessage message={errors.themeColor.message} />
+              )}
             </div>
 
             <CustomButton isSubmitting={isSubmitting} />
