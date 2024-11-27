@@ -67,9 +67,9 @@ export default function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
 
   return (
     <ResponsiveContainer
-      width="100%"
+      width={260}
       height={isBudgetsScreen ? 250 : 331.5}
-      style={{ maxWidth: '20rem', margin: '0 auto' }}
+      style={{ margin: '0 auto' }}
     >
       <PieChart>
         <Pie

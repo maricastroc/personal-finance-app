@@ -48,7 +48,7 @@ export function DeletePotModal({
         </Dialog.Close>
 
         <Dialog.Title className="text-xl font-semibold text-gray-900 mb-2 md:text-2xl">
-          {`Delete ${pot.name} Pot`}
+          {`Delete '${pot.name}'`}
         </Dialog.Title>
 
         <Dialog.Description className="flex flex-col w-full">

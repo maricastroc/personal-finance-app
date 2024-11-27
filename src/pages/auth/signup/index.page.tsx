@@ -141,16 +141,21 @@ export default function SignUp() {
             >
               Initial Balance ($)
             </label>
-            <input
-              type="text"
-              id="initialBalance"
-              className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-              placeholder="Your name here"
-              {...register('initialBalance')}
-            />
-            {errors.initialBalance && (
-              <ErrorMessage message={errors.initialBalance.message} />
-            )}
+            <div className="relative w-full">
+              <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                $
+              </span>
+              <input
+                type="number"
+                id="initialBalance"
+                className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
+                placeholder="Initial Balance"
+                {...register('initialBalance', { valueAsNumber: true })}
+              />
+              {errors.initialBalance && (
+                <ErrorMessage message={errors.initialBalance.message} />
+              )}
+            </div>
           </div>
 
           <div>

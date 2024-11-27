@@ -47,14 +47,14 @@ export const PotCard = ({ potId, onSubmitForm }: PotCardProps) => {
             onClick={() => setIsPotDropdownOpen(!isPotDropdownOpen)}
           />
           {isPotDropdownOpen && (
-            <div className="absolute top-[1.5rem] w-[7rem] gap-1 flex flex-col bg-white shadow-xl p-3 rounded-lg items-start text-start">
+            <div className="absolute top-[1.5rem] w-[8.5rem] gap-1 flex flex-col bg-white shadow-xl p-3 rounded-lg items-start text-start">
               <Dialog.Root open={isPotModalOpen}>
                 <Dialog.Trigger asChild>
                   <button
                     onClick={() => setIsPotModalOpen(true)}
-                    className="cursor-pointer hover:text-gray-500 text-sm text-gray-800 font-bold"
+                    className="cursor-pointer hover:text-gray-500 text-sm text-gray-800"
                   >
-                    Edit
+                    Edit Pot
                   </button>
                 </Dialog.Trigger>
                 {pot?.pot && (
@@ -82,9 +82,9 @@ export const PotCard = ({ potId, onSubmitForm }: PotCardProps) => {
                 <Dialog.Trigger asChild>
                   <button
                     onClick={() => setIsDeletePotModalOpen(true)}
-                    className="cursor-pointer hover:brightness-150 text-sm text-secondary-red font-bold"
+                    className="cursor-pointer hover:brightness-150 text-sm text-secondary-red"
                   >
-                    Delete
+                    Delete Pot
                   </button>
                 </Dialog.Trigger>
                 {pot && (

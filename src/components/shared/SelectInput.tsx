@@ -7,6 +7,7 @@ interface DataProps {
   value?: string | number
   id?: string | number
   name?: string | number
+  isUsed?: boolean
 }
 
 interface SelectInputProps {
@@ -83,16 +84,35 @@ export const SelectInput = ({
 
 const SelectItem = React.forwardRef(
   (
-    { children, value, ...props }: { children: React.ReactNode; value: string },
+    {
+      children,
+      value,
+      disabled,
+      ...props
+    }: {
+      children: React.ReactNode
+      value: string
+      disabled?: boolean
+    },
     ref: React.Ref<HTMLDivElement>,
   ) => (
     <Select.Item
       ref={ref}
       value={value}
-      className="flex items-center px-4 py-2 text-sm text-gray-900 rounded-md cursor-pointer hover:bg-blue-100 focus:bg-blue-100 focus:text-blue-900"
+      className={`flex items-center px-4 py-2 text-sm rounded-md cursor-pointer
+        ${
+          disabled
+            ? 'text-gray-400 cursor-not-allowed'
+            : 'text-gray-900 hover:bg-blue-100 focus:bg-blue-100 focus:text-blue-900'
+        }
+      `}
+      disabled={disabled}
       {...props}
     >
       <Select.ItemText>{children}</Select.ItemText>
+      {disabled && (
+        <span className="ml-auto text-xs text-red-500">Already used</span>
+      )}
     </Select.Item>
   ),
 )

@@ -59,27 +59,31 @@ export default function Budgets() {
           </Dialog.Root>
         </div>
 
-        {pots && pots?.pots?.length ? (
+        {isValidating ? (
+          <>
+            <div className="flex flex-col w-full lg:grid lg:grid-cols-2 gap-6">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <SkeletonPotCard key={index} />
+              ))}
+            </div>
+          </>
+        ) : pots && pots?.pots.length ? (
           <div className="flex flex-col w-full lg:grid lg:grid-cols-2 gap-6">
-            {isValidating
-              ? Array.from({ length: 4 }).map((_, index) => (
-                  <SkeletonPotCard key={index} />
-                ))
-              : pots?.pots.map((pot) => {
-                  return (
-                    <PotCard
-                      key={pot.id}
-                      potId={pot.id}
-                      onSubmitForm={async (): Promise<void> => {
-                        await mutate()
-                      }}
-                    />
-                  )
-                })}
+            {pots?.pots.map((pot) => {
+              return (
+                <PotCard
+                  key={pot.id}
+                  potId={pot.id}
+                  onSubmitForm={async (): Promise<void> => {
+                    await mutate()
+                  }}
+                />
+              )
+            })}
           </div>
         ) : (
-          <div className="flex-grow h-full">
-            <EmptyContent content="No pots available." variant="secondary" />
+          <div>
+            <EmptyContent variant="secondary" content="No pots available." />
           </div>
         )}
       </div>

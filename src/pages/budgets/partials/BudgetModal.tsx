@@ -170,16 +170,21 @@ export function BudgetModalForm({
               <label className="text-xs font-bold text-gray-500 mb-1">
                 Maximum Spend ($)
               </label>
-              <input
-                type="number"
-                id="budgetLimit"
-                className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
-                placeholder="Maximum Spend"
-                {...register('budgetLimit', { valueAsNumber: true })}
-              />
-              {errors.budgetLimit && (
-                <ErrorMessage message={errors.budgetLimit.message} />
-              )}
+              <div className="relative w-full">
+                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                  $
+                </span>
+                <input
+                  type="number"
+                  id="budgetLimit"
+                  className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
+                  placeholder="Maximum Spend"
+                  {...register('budgetLimit', { valueAsNumber: true })}
+                />
+                {errors.budgetLimit && (
+                  <ErrorMessage message={errors.budgetLimit.message} />
+                )}
+              </div>
             </div>
 
             <div className="flex flex-col mt-4">

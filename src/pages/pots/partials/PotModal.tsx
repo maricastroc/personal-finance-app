@@ -178,7 +178,7 @@ export function PotModalForm({
                   type="number"
                   id="targetAmount"
                   className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
-                  placeholder="Maximum Spend"
+                  placeholder="Target Amount"
                   {...register('targetAmount', { valueAsNumber: true })}
                 />
               </div>

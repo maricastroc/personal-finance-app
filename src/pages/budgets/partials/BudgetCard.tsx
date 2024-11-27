@@ -60,7 +60,7 @@ export default function BudgetCard({
   }
 
   return (
-    <div className="mt-8 flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
+    <div className="flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-2">
           <span
@@ -78,14 +78,14 @@ export default function BudgetCard({
             icon={faEllipsis}
           />
           {isBudgetDropdownOpen && (
-            <div className="absolute top-[1.5rem] w-[7rem] gap-1 flex flex-col bg-white shadow-xl p-3 rounded-lg items-start text-start">
+            <div className="absolute top-[1.5rem] w-[8.5rem] gap-1 flex flex-col bg-white shadow-xl p-3 rounded-lg items-start text-start">
               <Dialog.Root open={isBudgetModalOpen}>
                 <Dialog.Trigger asChild>
                   <button
                     onClick={() => setIsBudgetModalOpen(true)}
-                    className="cursor-pointer hover:text-gray-500 text-sm text-gray-800 font-bold"
+                    className="cursor-pointer hover:text-gray-500 text-sm text-gray-800"
                   >
-                    Edit
+                    Edit Budget
                   </button>
                 </Dialog.Trigger>
                 {budget?.budgetDetails && (
@@ -112,9 +112,9 @@ export default function BudgetCard({
                 <Dialog.Trigger asChild>
                   <button
                     onClick={() => setIsDeleteBudgetModalOpen(true)}
-                    className="cursor-pointer hover:brightness-150 text-sm text-secondary-red font-bold"
+                    className="cursor-pointer hover:brightness-150 text-sm text-secondary-red"
                   >
-                    Delete
+                    Delete Budget
                   </button>
                 </Dialog.Trigger>
                 {budget && (
@@ -143,7 +143,7 @@ export default function BudgetCard({
 
       <div className="mt-4 w-full h-[2rem] p-1 bg-beige-100 rounded-full">
         <div
-          className="h-full rounded-lg"
+          className="h-full rounded-full"
           style={{
             width: `${
               (budget?.budgetDetails?.percentageSpent || 0) > 100
