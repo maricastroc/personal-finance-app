@@ -18,6 +18,9 @@ import { TransactionCard } from './partials/TransactionCard'
 import { calculateTotalPages } from '@/utils/calculateTotalPages'
 import { useAppContext } from '@/contexts/AppContext'
 import { EmptyContent } from '@/components/shared/EmptyContent'
+import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { LoadingPage } from '@/components/shared/LoadingPage'
+import { useRouter } from 'next/router'
 
 const TransactionTable = ({
   transactions,
@@ -106,9 +109,15 @@ const TransactionTable = ({
 export default function Transactions() {
   const [currentPage, setCurrentPage] = useState(1)
 
+  const router = useRouter()
+
+  const { category } = router.query
+
   const [search, setSearch] = useState('')
 
-  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedCategory, setSelectedCategory] = useState(
+    (category as string) || 'all',
+  )
 
   const [selectedSortBy, setSelectedSortBy] = useState('latest')
 
@@ -119,6 +128,8 @@ export default function Transactions() {
   const [maxVisibleButtons, setMaxVisibleButtons] = useState(3)
 
   const { isSidebarOpen } = useAppContext()
+
+  const isRouteLoading = useLoadingOnRouteChange()
 
   const { data, isValidating } = useRequest<{
     transactions: TransactionProps[]
@@ -196,7 +207,9 @@ export default function Transactions() {
     return () => window.removeEventListener('resize', updateMaxVisibleButtons)
   }, [])
 
-  return (
+  return isRouteLoading ? (
+    <LoadingPage />
+  ) : (
     <Layout>
       <div
         className={`w-full px-4 py-5 flex-grow md:p-10 lg:pl-0 pb-20 md:pb-32 lg:pb-8 ${
@@ -254,6 +267,7 @@ export default function Transactions() {
                   <SelectInput
                     includeAll
                     placeholder="Select..."
+                    defaultValue={(category as string) || 'all'}
                     data={categories}
                     onSelect={(value: string) => setSelectedCategory(value)}
                   />

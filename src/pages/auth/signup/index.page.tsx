@@ -1,7 +1,13 @@
+import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import AuthLayout from '../../../components/layouts/authLayout.page'
+import { LoadingPage } from '@/components/shared/LoadingPage'
 
 export default function SignUp() {
-  return (
+  const isRouteLoading = useLoadingOnRouteChange()
+
+  return isRouteLoading ? (
+    <LoadingPage />
+  ) : (
     <AuthLayout>
       <div className="bg-white relative mx-4 px-5 py-6 rounded-md w-full max-w-[500px] xl:w-full flex flex-col justify-start xl:mx-auto">
         <h2 className="font-bold text-2xl">Sign Up</h2>

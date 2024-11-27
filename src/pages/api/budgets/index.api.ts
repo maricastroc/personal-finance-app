@@ -66,6 +66,7 @@ export default async function handler(
 
       // Retorna o budget com o valor gasto calculado
       return {
+        id: budget.id,
         categoryName: budget.category.name,
         amountSpent: totalSpentInCategory,
         budgetLimit: budget.amount, // O limite do orçamento

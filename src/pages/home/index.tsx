@@ -1,7 +1,9 @@
 import { FinanceCard } from './partials/FinanceCard'
-import { FinanceItem } from './partials/FinanceItem'
+import { FinanceItem } from '../../components/shared/FinanceItem'
 import { TransactionCard } from '@/components/shared/TransactionCard'
-import BudgetItem, { BudgetWithDetailsProps } from './partials/BudgetItem'
+import BudgetItem, {
+  BudgetWithDetailsProps,
+} from '../../components/shared/BudgetItem'
 import HomeCard from './partials/HomeCard'
 import { BillCard } from '@/pages/home/partials/BillCard'
 import Layout from '@/components/layouts/layout.page'
@@ -13,6 +15,8 @@ import { format } from 'date-fns'
 import { TransactionProps } from '@/types/transaction'
 import { useAppContext } from '@/contexts/AppContext'
 import { EmptyContent } from '@/components/shared/EmptyContent'
+import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { LoadingPage } from '@/components/shared/LoadingPage'
 
 interface BalanceProps {
   incomes: number | undefined
@@ -39,6 +43,8 @@ interface RecurringBillsResult {
 export default function Home() {
   const { isSidebarOpen } = useAppContext()
 
+  const isRouteLoading = useLoadingOnRouteChange()
+
   const { data: balance } = useRequest<BalanceProps>({
     url: '/balance',
     method: 'GET',
@@ -64,7 +70,9 @@ export default function Home() {
     method: 'GET',
   })
 
-  return (
+  return isRouteLoading ? (
+    <LoadingPage />
+  ) : (
     <Layout>
       <div
         className={`flex-grow px-4 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${

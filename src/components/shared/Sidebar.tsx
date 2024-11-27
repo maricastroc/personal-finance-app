@@ -70,7 +70,7 @@ function AsideItem({ item, active, menuShown }: Item) {
   return (
     <Link
       href={item.href}
-      className={`flex gap-4  ${
+      className={`flex gap-4 hover:brightness-150 ${
         menuShown && active
           ? 'bg-beige-100 border-l-4 border-l-secondary-green'
           : 'bg-transparent'

@@ -5,6 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'react-toastify'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
+import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { LoadingPage } from '@/components/shared/LoadingPage'
 
 const signInFormSchema = z.object({
   email: z.string().min(3, { message: 'E-mail is required.' }),
@@ -15,6 +17,8 @@ type SignInFormData = z.infer<typeof signInFormSchema>
 
 export default function Login() {
   const router = useRouter()
+
+  const isRouteLoading = useLoadingOnRouteChange()
 
   const { register, handleSubmit } = useForm<SignInFormData>({
     resolver: zodResolver(signInFormSchema),
@@ -41,7 +45,9 @@ export default function Login() {
     }
   }
 
-  return (
+  return isRouteLoading ? (
+    <LoadingPage />
+  ) : (
     <AuthLayout>
       <div className="bg-white relative mx-4 px-5 py-6 rounded-md w-full max-w-[500px] xl:w-full flex flex-col justify-start xl:mx-auto">
         <h2 className="font-bold text-2xl">Login</h2>

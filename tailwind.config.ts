@@ -47,9 +47,13 @@ export default {
         base: "1rem",
         sm: "0.875rem",
         xs: "0.8rem",
+        xxs: "0.75rem",
       },
       fontFamily: {
         sans: ["Public Sans", "sans-serif"], // Use a fonte 'Public Sans' como a fonte padrão
+      },
+      screens: {
+        'max-sm': { 'max': '500px' },  // Isso aplica estilos até 500px
       },
     },
   },

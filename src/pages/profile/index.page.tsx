@@ -15,6 +15,10 @@ import { UserProps } from '@/types/user'
 import { AvatarInput } from '@/components/shared/AvatarInput'
 import { PasswordSection } from '@/components/shared/PasswordSection'
 import { signOut } from 'next-auth/react'
+import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { LoadingPage } from '@/components/shared/LoadingPage'
+import { CustomButton } from '@/components/shared/CustomButton'
+import { ErrorMessage } from '@/components/shared/ErrorMessage'
 
 const editProfileFormSchema = (changePassword: boolean) =>
   z
@@ -58,6 +62,8 @@ export default function Profile() {
   const inputFileRef = useRef<HTMLInputElement>(null)
 
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+
+  const isRouteLoading = useLoadingOnRouteChange()
 
   const [changePassword, setChangePassword] = useState(false)
 
@@ -130,7 +136,9 @@ export default function Profile() {
     }
   }, [user, setValue])
 
-  return (
+  return isRouteLoading ? (
+    <LoadingPage />
+  ) : (
     <Layout>
       <div
         className={`w-full max-h-screen flex flex-col items-center justify-center p-4 pb-20 md:p-8 lg:p-12 overflow-y-scroll
@@ -171,11 +179,7 @@ export default function Profile() {
                 placeholder="Your name here"
                 {...register('name')}
               />
-              {errors.name && (
-                <span className="text-secondary-red font-semibold text-xs">
-                  {errors.name.message}
-                </span>
-              )}
+              {errors.name && <ErrorMessage message={errors.name.message} />}
             </div>
 
             <div className="flex flex-col">
@@ -192,11 +196,7 @@ export default function Profile() {
                 placeholder="Your email here"
                 {...register('email')}
               />
-              {errors.email && (
-                <span className="text-secondary-red font-semibold text-xs">
-                  {errors.email.message}
-                </span>
-              )}
+              {errors.email && <ErrorMessage message={errors.email.message} />}
             </div>
 
             <div className="flex flex-col">
@@ -214,9 +214,7 @@ export default function Profile() {
                 {...register('initialBalance')}
               />
               {errors.initialBalance && (
-                <span className="text-secondary-red font-semibold text-xs">
-                  {errors.initialBalance.message}
-                </span>
+                <ErrorMessage message={errors.initialBalance.message} />
               )}
             </div>
 
@@ -247,12 +245,7 @@ export default function Profile() {
               errors={errors}
             />
 
-            <button
-              disabled={isSubmitting}
-              className="font-semibold rounded-md p-3 items-center flex gap-2 transition-all duration-300 max-h-[60px] bg-gray-900 text-beige-100 hover:bg-gray-500 capitalize justify-center mt-8 disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed"
-            >
-              Save changes
-            </button>
+            <CustomButton isSubmitting={isSubmitting} />
 
             <span className="text-sm flex items-center justify-center w-full text-gray-500 gap-2">
               <p>Need to create an account?</p>

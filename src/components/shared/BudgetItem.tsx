@@ -1,6 +1,6 @@
 import { formatToDollar } from '@/utils/formatToDollar'
 import useRequest from '@/utils/useRequest'
-import React from 'react'
+import React, { useState } from 'react'
 import {
   PieChart,
   Pie,
@@ -10,14 +10,19 @@ import {
   TooltipProps,
 } from 'recharts'
 
+export interface BudgetItemProps {
+  isBudgetsScreen?: boolean
+}
+
 export interface BudgetWithDetailsProps {
+  id: string
   categoryName: string
   amountSpent: number
   theme: string
   budgetLimit: number
 }
 
-export default function BudgetItem() {
+export default function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
   const { data: budgets } = useRequest<BudgetWithDetailsProps[]>({
     url: '/budgets',
     method: 'GET',
@@ -33,6 +38,8 @@ export default function BudgetItem() {
   const amountSpentSum =
     budgets?.reduce((sum, budget) => sum + budget.amountSpent, 0) || 0
 
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+
   const tooltipContent = (props: TooltipProps<number, string>) => {
     const { active, payload } = props
 
@@ -41,7 +48,7 @@ export default function BudgetItem() {
       const percentage = ((value / budgetLimitSum) * 100).toFixed(2)
 
       return (
-        <div className="custom-tooltip bg-gray-600 text-gray-100 text-sm font-semibold p-2 rounded-md">
+        <div className="custom-tooltip bg-white text-gray-700 shadow-lg text-sm font-semibold p-2 rounded-md">
           <p>{`${name}: ${percentage}%`}</p>
         </div>
       )
@@ -50,10 +57,18 @@ export default function BudgetItem() {
     return null
   }
 
+  const handleMouseEnter = (index: number) => {
+    setActiveIndex(index)
+  }
+
+  const handleMouseLeave = () => {
+    setActiveIndex(null)
+  }
+
   return (
     <ResponsiveContainer
       width="100%"
-      height={331.5}
+      height={isBudgetsScreen ? 250 : 331.5}
       style={{ maxWidth: '20rem', margin: '0 auto' }}
     >
       <PieChart>
@@ -70,7 +85,12 @@ export default function BudgetItem() {
           stroke="none"
         >
           {budgets?.map((budget, index) => (
-            <Cell key={`cell-outer-${index}`} fill={budget.theme} />
+            <Cell
+              key={`cell-outer-${index}`}
+              fill={activeIndex === index ? `${budget.theme}80` : budget.theme} // Efeito de hover
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
+            />
           ))}
         </Pie>
 
@@ -88,11 +108,15 @@ export default function BudgetItem() {
           fillOpacity={0.7}
         >
           {budgets?.map((budget, index) => (
-            <Cell key={`cell-outer-${index}`} fill={budget.theme} />
+            <Cell
+              key={`cell-inner-${index}`}
+              fill={activeIndex === index ? `${budget.theme}98` : budget.theme}
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
+            />
           ))}
         </Pie>
 
-        {/* Usando Tooltip com conteúdo customizado */}
         <Tooltip content={tooltipContent} />
 
         <text
@@ -108,7 +132,7 @@ export default function BudgetItem() {
         </text>
         <text
           x="50%"
-          y="55%"
+          y="58%"
           textAnchor="middle"
           dominantBaseline="middle"
           fill="#696868"
