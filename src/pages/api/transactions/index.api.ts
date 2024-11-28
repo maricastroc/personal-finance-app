@@ -71,10 +71,10 @@ export default async function handler(
         orderBy = { date: 'asc' }
         break
       case 'a_to_z':
-        orderBy = { category: { name: 'asc' } }
+        orderBy = { recipient: { name: 'asc' } }
         break
       case 'z_to_a':
-        orderBy = { category: { name: 'desc' } }
+        orderBy = { recipient: { name: 'desc' } }
         break
       case 'highest':
         orderBy = { amount: 'desc' }
@@ -83,7 +83,7 @@ export default async function handler(
         orderBy = { amount: 'asc' }
         break
       default:
-        orderBy = { createdAt: 'desc' }
+        orderBy = { date: 'desc' }
     }
 
     let searchQuery

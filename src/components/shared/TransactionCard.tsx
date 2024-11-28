@@ -5,7 +5,7 @@ interface TransactionCardProps {
   avatarUrl: string | undefined | null
   date: string
   value: string
-  balance: 'expense' | 'income' | undefined
+  balance?: 'expense' | 'income' | undefined
   category?: string
   isBudgetsScreen?: boolean
 }

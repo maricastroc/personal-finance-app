@@ -50,10 +50,11 @@ export default {
         xxs: "0.75rem",
       },
       fontFamily: {
-        sans: ["Public Sans", "sans-serif"], // Use a fonte 'Public Sans' como a fonte padrão
+        sans: ["Public Sans", "sans-serif"], 
       },
       screens: {
-        'max-sm': { 'max': '500px' },  // Isso aplica estilos até 500px
+        'max-sm': { 'max': '500px' },
+        'max-md': { 'max': '768px' },
       },
     },
   },

@@ -15,6 +15,7 @@ interface SelectInputProps {
   includeAll?: boolean
   placeholder: string
   defaultValue?: string | null
+  contentWidth?: string | null
 }
 
 export const SelectInput = ({
@@ -24,6 +25,7 @@ export const SelectInput = ({
   existedCategories,
   placeholder,
   defaultValue = null,
+  contentWidth = null,
 }: SelectInputProps) => {
   return (
     <Select.Root
@@ -43,7 +45,9 @@ export const SelectInput = ({
       <Select.Portal>
         <Select.Content
           position="popper"
-          className="z-[10000] w-[290px] h-40 overflow-y-scroll mt-1 bg-white text-gray-600 rounded-md shadow-lg border border-gray-200"
+          className={`z-[10000] ${
+            contentWidth ? `w-[${contentWidth}px]` : 'w-[290px]'
+          } h-40 overflow-y-scroll mt-1 bg-white text-gray-600 rounded-md shadow-lg border border-gray-200`}
         >
           <Select.ScrollUpButton className="flex items-center justify-center text-gray-500 hover:text-gray-900">
             <ChevronUpIcon />

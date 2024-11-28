@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FinanceCard } from './partials/FinanceCard'
 import { FinanceItem } from '../../components/shared/FinanceItem'
 import { TransactionCard } from '@/components/shared/TransactionCard'
@@ -37,10 +38,18 @@ interface RecurringBillsWithDetails {
   total: number
 }
 
-interface RecurringBillsResult {
+export interface RecurringBillsResult {
   paid: RecurringBillsWithDetails
   upcoming: RecurringBillsWithDetails
   dueSoon: RecurringBillsWithDetails
+  allBills: RecurringBillProps[]
+  monthlyTotal: number
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
 }
 
 export default function Home() {
@@ -81,7 +90,7 @@ export default function Home() {
     if (!session.data?.user) {
       router.push('/auth/login')
     }
-  }, [session.data?.user, router])
+  }, [session.data?.user])
 
   return isRouteLoading ? (
     <LoadingPage />
@@ -113,7 +122,7 @@ export default function Home() {
 
         <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-6">
           <div className="flex flex-col">
-            <HomeCard title="Pots" buttonLabel="See Details">
+            <HomeCard routePath='/pots' title="Pots" buttonLabel="See Details">
               <div className="flex flex-col gap-5 md:grid md:grid-cols-2 lg:flex lg:flex-col">
                 <FinanceCard
                   icon={<img src="/assets/images/icon-pot.svg" alt="" />}
@@ -140,7 +149,7 @@ export default function Home() {
               </div>
             </HomeCard>
 
-            <HomeCard title="Transactions" buttonLabel="View All">
+            <HomeCard routePath='/transactions' title="Transactions" buttonLabel="View All">
               <div>
                 {transactions && transactions?.length ? (
                   transactions?.map((transaction, index) => {
@@ -171,7 +180,7 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col flex-grow">
-            <HomeCard flexGrow title="Budgets" buttonLabel="See Details">
+            <HomeCard flexGrow routePath='/budgets' title="Budgets" buttonLabel="See Details">
               {budgets && budgets.length ? (
                 <div className="flex flex-grow flex-col gap-6 sm:grid sm:grid-cols-[3fr,1.1fr] sm:max-width-[30rem] sm:items-center sm:w-full lg:items-start lg:mt-[-1rem]">
                   <BudgetItem />
@@ -193,7 +202,7 @@ export default function Home() {
               )}
             </HomeCard>
 
-            <HomeCard title="Recurring Bills" buttonLabel="See Details">
+            <HomeCard routePath='/recurring_bills' title="Recurring Bills" buttonLabel="See Details">
               {recurringBills ? (
                 <div className="flex flex-grow flex-col sm:justify-end sm:items-end sm:w-full gap-4 pt-4">
                   <BillCard

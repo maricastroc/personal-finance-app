@@ -13,7 +13,7 @@ import { PotModalForm } from './partials/PotModal'
 import { SkeletonPotCard } from './partials/SkeletonPotCard'
 import { EmptyContent } from '@/components/shared/EmptyContent'
 
-export default function Budgets() {
+export default function Pots() {
   const { isSidebarOpen } = useAppContext()
 
   const isRouteLoading = useLoadingOnRouteChange()

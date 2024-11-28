@@ -8,6 +8,9 @@ export interface RecurringBillProps {
   recurrenceFrequency?: string
   senderId: string
   recipientId: string
+  recipient: UserProps
+  sender: UserProps
   userId: string
   user: UserProps
+  status?: string
 }

@@ -7,7 +7,7 @@ export const SkeletonTransactionCard = () => {
         <span className="relative w-11 h-11 rounded-full">
           <Skeleton variant="circular" width={'100%'} height={'100%'} />
         </span>
-        <Skeleton variant="rounded" width={'100%'} height={12} />
+        <Skeleton variant="rounded" width={'100%'} height={16} />
       </div>
     </div>
   )
