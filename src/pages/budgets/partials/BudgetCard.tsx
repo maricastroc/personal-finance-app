@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { format } from 'date-fns'
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { BudgetModalForm } from '../partials/BudgetModal'
+import { BudgetModal } from '../partials/BudgetModal'
 import { useRouter } from 'next/router'
 import { DeleteBudgetModal } from './DeleteBudgetModal'
 
@@ -89,19 +89,19 @@ export default function BudgetCard({
                   </button>
                 </Dialog.Trigger>
                 {budget?.budgetDetails && (
-                  <BudgetModalForm
+                  <BudgetModal
                     isEdit
-                    onSubmitForm={async () => {
-                      await mutate()
-                      await onSubmitForm()
-                      setIsBudgetDropdownOpen(false)
-                    }}
                     budgetId={budgetId}
                     categoryName={budget?.budgetDetails.categoryName}
                     budgetLimit={budget?.budgetDetails.budgetLimit}
                     theme={budget?.budgetDetails.theme}
                     onClose={() => {
                       setIsBudgetModalOpen(false)
+                      setIsBudgetDropdownOpen(false)
+                    }}
+                    onSubmitForm={async () => {
+                      await mutate()
+                      await onSubmitForm()
                       setIsBudgetDropdownOpen(false)
                     }}
                   />

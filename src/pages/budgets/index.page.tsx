@@ -14,7 +14,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
-import { BudgetModalForm } from './partials/BudgetModal'
+import { BudgetModal } from './partials/BudgetModal'
 import { EmptyContent } from '@/components/shared/EmptyContent'
 
 export default function Budgets() {
@@ -32,6 +32,15 @@ export default function Budgets() {
     url: '/budgets',
     method: 'GET',
   })
+
+  function getBudgetCategories(budgets: BudgetWithDetailsProps[] | undefined) {
+    if (!budgets || budgets.length === 0) {
+      return []
+    }
+
+    const categories = budgets.map((budget) => budget.categoryName)
+    return Array.from(new Set(categories))
+  }
 
   return isRouteLoading ? (
     <LoadingPage />
@@ -54,8 +63,9 @@ export default function Budgets() {
                 Add New Budget
               </button>
             </Dialog.Trigger>
-            <BudgetModalForm
+            <BudgetModal
               onClose={() => setIsBudgetModalOpen(false)}
+              existedCategories={getBudgetCategories(budgets)}
               onSubmitForm={async (): Promise<void> => {
                 await mutate()
               }}

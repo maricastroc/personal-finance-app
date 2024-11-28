@@ -1,10 +1,11 @@
 import { CustomButton } from '@/components/shared/CustomButton'
 import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { SelectInput } from '@/components/shared/SelectInput'
+import { SelectTheme } from '@/components/shared/SelectTheme'
 import { api } from '@/lib/axios'
 import { notyf } from '@/lib/notyf'
 import { CategoryProps } from '@/types/category'
-import { colors } from '@/utils/constants'
+import { getThemeOptions } from '@/utils/getThemeOptions'
 import { handleApiError } from '@/utils/handleApiError'
 import useRequest from '@/utils/useRequest'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,6 +18,7 @@ interface EditBudgetModalProps {
   onClose: () => void
   categoryName?: string
   budgetLimit?: number
+  existedCategories?: string[]
   theme?: string
   budgetId?: string
   isEdit?: boolean
@@ -34,26 +36,14 @@ const budgetFormSchema = () =>
 
 export type BudgetFormData = z.infer<ReturnType<typeof budgetFormSchema>>
 
-const themeOptions = colors.map((color) => ({
-  label: (
-    <div className="flex items-center space-x-2">
-      <span
-        className="w-4 h-4 rounded-full"
-        style={{ backgroundColor: color.hex }}
-      ></span>
-      <span>{color.name}</span>
-    </div>
-  ),
-  value: color.hex,
-}))
-
-export function BudgetModalForm({
+export function BudgetModal({
   onClose,
   categoryName,
   budgetLimit,
   theme,
   budgetId,
   onSubmitForm,
+  existedCategories,
   isEdit = false,
 }: EditBudgetModalProps) {
   const {
@@ -70,7 +60,7 @@ export function BudgetModalForm({
       theme,
     },
   })
-
+  console.log(existedCategories)
   const { data: categories } = useRequest<CategoryProps[]>({
     url: '/categories',
     method: 'GET',
@@ -156,6 +146,7 @@ export function BudgetModalForm({
               {categories && (
                 <SelectInput
                   defaultValue={categoryName}
+                  existedCategories={existedCategories}
                   data={categories}
                   onSelect={(value: string) => setValue('category', value)}
                   placeholder="Select a Category..."
@@ -191,12 +182,10 @@ export function BudgetModalForm({
               <label className="text-xs font-bold text-gray-500 mb-1">
                 Theme Color
               </label>
-              <SelectInput
-                variant="secondary"
+              <SelectTheme
                 defaultValue={theme}
-                data={themeOptions}
+                data={getThemeOptions}
                 onSelect={(value: string) => setValue('theme', value)}
-                placeholder="Select a Color..."
               />
               {errors.theme && <ErrorMessage message={errors.theme.message} />}
             </div>

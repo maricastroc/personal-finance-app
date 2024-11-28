@@ -1,9 +1,9 @@
 import { CustomButton } from '@/components/shared/CustomButton'
 import { ErrorMessage } from '@/components/shared/ErrorMessage'
-import { SelectInput } from '@/components/shared/SelectInput'
+import { SelectTheme } from '@/components/shared/SelectTheme'
 import { api } from '@/lib/axios'
 import { notyf } from '@/lib/notyf'
-import { colors } from '@/utils/constants'
+import { getThemeOptions } from '@/utils/getThemeOptions'
 import { handleApiError } from '@/utils/handleApiError'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -35,19 +35,6 @@ const potFormSchema = () =>
   })
 
 export type PotFormData = z.infer<ReturnType<typeof potFormSchema>>
-
-const themeOptions = colors.map((color) => ({
-  label: (
-    <div className="flex items-center space-x-2">
-      <span
-        className="w-4 h-4 rounded-full"
-        style={{ backgroundColor: color.hex }}
-      ></span>
-      <span>{color.name}</span>
-    </div>
-  ),
-  value: color.hex,
-}))
 
 export function PotModalForm({
   onClose,
@@ -191,12 +178,10 @@ export function PotModalForm({
               <label className="text-xs font-bold text-gray-500 mb-1">
                 Theme Color
               </label>
-              <SelectInput
-                variant="secondary"
+              <SelectTheme
                 defaultValue={themeColor}
-                data={themeOptions}
+                data={getThemeOptions}
                 onSelect={(value: string) => setValue('themeColor', value)}
-                placeholder="Select a Color..."
               />
               {errors.themeColor && (
                 <ErrorMessage message={errors.themeColor.message} />
