@@ -17,6 +17,9 @@ import { useAppContext } from '@/contexts/AppContext'
 import { EmptyContent } from '@/components/shared/EmptyContent'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
+import { useSession } from 'next-auth/react'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 interface BalanceProps {
   incomes: number | undefined
@@ -42,6 +45,10 @@ interface RecurringBillsResult {
 
 export default function Home() {
   const { isSidebarOpen } = useAppContext()
+
+  const session = useSession()
+
+  const router = useRouter()
 
   const isRouteLoading = useLoadingOnRouteChange()
 
@@ -69,6 +76,12 @@ export default function Home() {
     url: '/transactions/latest',
     method: 'GET',
   })
+
+  useEffect(() => {
+    if (!session.data?.user) {
+      router.push('/auth/login')
+    }
+  }, [session.data?.user])
 
   return isRouteLoading ? (
     <LoadingPage />

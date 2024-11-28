@@ -5,7 +5,7 @@ import { Item, navList } from '@/utils/getNavList'
 import logo from '../../../public/assets/images/logo-large.svg'
 import logosm from '../../../public/assets/images/logo-small.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretLeft } from '@fortawesome/free-solid-svg-icons'
+import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons'
 
 type navProp = {
   isSidebarOpen: boolean
@@ -50,9 +50,9 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
         onClick={handleIsSidebarOpen}
       >
         <FontAwesomeIcon
-          icon={faCaretLeft}
+          icon={isSidebarOpen ? faCaretLeft : faCaretRight}
           className="text-gray-300"
-          style={{ fontSize: '1.5rem' }}
+          style={{ fontSize: '1.5rem', marginLeft: `${isSidebarOpen ? 0 : 20}` }}
         />
         <p
           className={`text-gray-300 font-semibold text-sm transition-all duration-500 ${
