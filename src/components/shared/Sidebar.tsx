@@ -52,7 +52,10 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
         <FontAwesomeIcon
           icon={isSidebarOpen ? faCaretLeft : faCaretRight}
           className="text-gray-300"
-          style={{ fontSize: '1.5rem', marginLeft: `${isSidebarOpen ? 0 : 20}` }}
+          style={{
+            fontSize: '1.5rem',
+            marginLeft: `${isSidebarOpen ? 0 : 20}`,
+          }}
         />
         <p
           className={`text-gray-300 font-semibold text-sm transition-all duration-500 ${

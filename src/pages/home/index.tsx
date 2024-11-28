@@ -81,7 +81,7 @@ export default function Home() {
     if (!session.data?.user) {
       router.push('/auth/login')
     }
-  }, [session.data?.user])
+  }, [session.data?.user, router])
 
   return isRouteLoading ? (
     <LoadingPage />
