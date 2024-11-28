@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { PotModalForm } from './PotModal'
 import * as Dialog from '@radix-ui/react-dialog'
 import { DeletePotModal } from './DeletePotModal'
+import { EditPotAmountModal } from './EditPotAmountModal'
 
 interface PotWithDetails {
   pot: PotProps
@@ -23,12 +24,25 @@ export const PotCard = ({ potId, onSubmitForm }: PotCardProps) => {
 
   const [isPotModalOpen, setIsPotModalOpen] = useState(false)
 
+  const [isWithdrawPotAmountModalOpen, setIsWithdrawPotAmountModalOpen] =
+    useState(false)
+
+  const [isAddPotAmountModalOpen, setIsAddPotAmountModalOpen] = useState(false)
+
   const [isDeletePotModalOpen, setIsDeletePotModalOpen] = useState(false)
 
   const { data: pot, mutate } = useRequest<PotWithDetails>({
     url: `/pots/${potId}`,
     method: 'GET',
   })
+
+  const originalPercentage = Math.max(
+    0,
+    Math.min(
+      100,
+      ((pot?.pot.currentAmount || 0) / (pot?.pot.targetAmount || 0)) * 100,
+    ),
+  )
 
   return (
     <div className="flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
@@ -138,17 +152,61 @@ export const PotCard = ({ potId, onSubmitForm }: PotCardProps) => {
       </div>
 
       <div className="flex items-center w-full gap-3 mt-12">
-        <button
-          className={`font-semibold rounded-md py-4 px-3 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-beige-100 text-grau-900 hover:brightness-90 capitalize justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed w-full`}
-        >
-          <FontAwesomeIcon icon={faPlus} style={{ fontSize: '0.7rem' }} />
-          Add Money
-        </button>
-        <button
-          className={`font-semibold rounded-md py-4 px-3 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-beige-100 text-grau-900 hover:brightness-90 capitalize justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed w-full`}
-        >
-          Withdraw
-        </button>
+        <Dialog.Root open={isAddPotAmountModalOpen}>
+          <Dialog.Trigger asChild>
+            <button
+              onClick={() => setIsAddPotAmountModalOpen(true)}
+              className={`font-semibold rounded-md py-4 px-3 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-beige-100 text-grau-900 hover:brightness-90 capitalize justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed w-full`}
+            >
+              <FontAwesomeIcon icon={faPlus} style={{ fontSize: '0.7rem' }} />
+              Add Money
+            </button>
+          </Dialog.Trigger>
+          {pot?.pot && (
+            <EditPotAmountModal
+              id={pot.pot.id}
+              originalPercentage={originalPercentage}
+              name={pot.pot.name}
+              currentAmount={pot?.pot.currentAmount}
+              themeColor={pot?.pot.theme.color}
+              targetAmount={pot?.pot.targetAmount}
+              onClose={() => setIsAddPotAmountModalOpen(false)}
+              onSubmitForm={async () => {
+                await mutate()
+                await onSubmitForm()
+                setIsPotDropdownOpen(false)
+              }}
+            />
+          )}
+        </Dialog.Root>
+        <Dialog.Root open={isWithdrawPotAmountModalOpen}>
+          <Dialog.Trigger asChild>
+            <button
+              onClick={() => setIsWithdrawPotAmountModalOpen(true)}
+              className={`font-semibold rounded-md py-4 px-3 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-beige-100 text-grau-900 hover:brightness-90 capitalize justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed w-full`}
+            >
+              <FontAwesomeIcon icon={faPlus} style={{ fontSize: '0.7rem' }} />
+              Withdraw
+            </button>
+          </Dialog.Trigger>
+          {pot?.pot && (
+            <EditPotAmountModal
+              isWithdraw
+              id={pot.pot.id}
+              name={pot.pot.name}
+              originalPercentage={originalPercentage}
+              currentAmount={pot?.pot.currentAmount}
+              themeColor={pot?.pot.theme.color}
+              targetAmount={pot?.pot.targetAmount}
+              onClose={() => setIsWithdrawPotAmountModalOpen(false)}
+              onSubmitForm={async () => {
+                await mutate()
+                await onSubmitForm()
+                setIsPotDropdownOpen(false)
+              }}
+            />
+          )}
+        </Dialog.Root>
       </div>
     </div>
   )
