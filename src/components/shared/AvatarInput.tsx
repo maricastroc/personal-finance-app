@@ -13,7 +13,7 @@ export const AvatarInput = ({
   inputFileRef,
 }: AvatarInputProps) => {
   return (
-    <div className="flex flex-col sm:mb-4 overflow-hidden sm:grid sm:grid-cols-[1fr,3.2fr] items-center gap-4">
+    <div className="flex flex-col w-full sm:mb-4 overflow-hidden sm:grid sm:grid-cols-[1fr,3.2fr] items-center gap-4">
       <div className="flex  items-center justify-center border border-gray-300 rounded-full w-30 h-30">
         <div className="flex items-center justify-center relative h-[7.5rem] min-w-[7.5rem]">
           {avatarPreview ? (
@@ -35,7 +35,7 @@ export const AvatarInput = ({
         </div>
       </div>
 
-      <div className="flex flex-col flex-grow-0">
+      <div className="flex flex-col flex-grow w-full">
         <label className="text-xs font-bold text-gray-500 mb-1">Avatar</label>
         <div className="overflow-hidden flex-grow-0 truncate flex h-12 flex-col text-sm w-full rounded-md border border-beige-500 px-3 items-start justify-center">
           <input
@@ -43,7 +43,7 @@ export const AvatarInput = ({
             ref={inputFileRef}
             style={{ display: 'none' }}
             onChange={onChange}
-            className="truncate overflow-hidden"
+            className="truncate overflow-hidden w-full"
           />
           <span className="truncate max-w-[15rem]">
             {avatarPreview || 'No file selected'}
