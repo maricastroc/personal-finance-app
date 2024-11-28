@@ -221,7 +221,7 @@ export default function Transactions() {
         <div className="mt-8 flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
           <div className="flex flex-col md:grid md:grid-cols-[1fr,2fr] lg:flex lg:flex-row lg:justify-between w-full gap-2 pb-6 md:gap-6">
             <div className="flex justify-between gap-3 items-center gap-y-10 lg:w-full xl:max-w-[28rem]">
-              <div className="h-12 text-sm truncate w-full grid items-center rounded-md border border-gray-500">
+              <div className="h-12 text-sm truncate w-full flex items-center rounded-md border border-gray-500">
                 <input
                   className="truncate w-full px-4 py-3 outline-none"
                   type="text"
