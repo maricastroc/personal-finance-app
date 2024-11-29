@@ -22,7 +22,7 @@ export interface BudgetWithDetailsProps {
   budgetLimit: number
 }
 
-export default function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
+export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
   const { data: budgets } = useRequest<BudgetWithDetailsProps[]>({
     url: '/budgets',
     method: 'GET',

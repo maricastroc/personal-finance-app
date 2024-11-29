@@ -1,24 +1,24 @@
-import Layout from '@/components/layouts/layout.page'
 import { api } from '@/lib/axios'
-import { handleApiError } from '@/utils/handleApiError'
-import useRequest from '@/utils/useRequest'
+import { useEffect, useRef, useState } from 'react'
+import { signOut } from 'next-auth/react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Checkbox from '@radix-ui/react-checkbox'
 import { CheckIcon, Cross2Icon } from '@radix-ui/react-icons'
 import { notyf } from '@/lib/notyf'
-
-import { useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { SignOut } from 'phosphor-react'
 import { UserProps } from '@/types/user'
+import Layout from '@/components/layouts/layout.page'
 import { AvatarInput } from '@/components/shared/AvatarInput'
 import { PasswordSection } from '@/components/shared/PasswordSection'
-import { signOut } from 'next-auth/react'
-import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { CustomButton } from '@/components/shared/CustomButton'
 import { ErrorMessage } from '@/components/shared/ErrorMessage'
+import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { handleApiError } from '@/utils/handleApiError'
+import useRequest from '@/utils/useRequest'
+import { NextSeo } from 'next-seo'
 
 const editProfileFormSchema = (changePassword: boolean) =>
   z
@@ -139,139 +139,144 @@ export default function Profile() {
   return isRouteLoading ? (
     <LoadingPage />
   ) : (
-    <Layout>
-      <div
-        className={`w-full flex flex-col items-center justify-center p-4 pb-20 md:p-8 lg:p-12 overflow-y-scroll
+    <>
+      <NextSeo title="Profile | Finance App" />
+      <Layout>
+        <div
+          className={`w-full flex flex-col items-center justify-center p-4 pb-20 md:p-8 lg:p-12 overflow-y-scroll
         }`}
-      >
-        <div className="bg-white relative w-full px-5 py-6 rounded-md max-w-[35rem] xl:w-full overflow-y-scroll flex flex-col justify-start scrollbar scrollbar-thumb-gray-500 scrollbar-track-transparent">
-          <div className="flex items-center justify-between w-full">
-            <h2 className="font-bold text-2xl">Update Details</h2>
-            <button className="bg-gray-900 p-2 rounded-full">
-              <SignOut
-                onClick={handleLogout}
-                size={20}
-                className="text-gray-100"
-              />
-            </button>
-          </div>
-          <form
-            className="flex flex-col py-8 gap-4"
-            onSubmit={handleSubmit(handleEditProfile)}
-          >
-            <AvatarInput
-              avatarPreview={avatarPreview}
-              onChange={handleAvatarChange}
-              inputFileRef={inputFileRef}
-            />
-
-            <div className="flex flex-col">
-              <label
-                htmlFor="name"
-                className="text-xs font-bold text-gray-500 mb-1"
-              >
-                Account Id
-              </label>
-              <input
-                disabled
-                type="text"
-                id="name"
-                value={user?.accountId}
-                className="text-sm w-full h-12 bg-gray-400 border border-gray-400 rounded-md text-gray-100 d:cursor-not-allowed px-3 items-center"
-                placeholder="Your name here"
-              />
-            </div>
-
-            <div className="flex flex-col">
-              <label
-                htmlFor="name"
-                className="text-xs font-bold text-gray-500 mb-1"
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-                placeholder="Your name here"
-                {...register('name')}
-              />
-              {errors.name && <ErrorMessage message={errors.name.message} />}
-            </div>
-
-            <div className="flex flex-col">
-              <label
-                htmlFor="email"
-                className="text-xs font-bold text-gray-500 mb-1"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-                placeholder="Your email here"
-                {...register('email')}
-              />
-              {errors.email && <ErrorMessage message={errors.email.message} />}
-            </div>
-
-            <div className="flex flex-col">
-              <label
-                htmlFor="initialBalance"
-                className="text-xs font-bold text-gray-500 mb-1"
-              >
-                Initial Balance ($)
-              </label>
-              <div className="relative w-full">
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
-                  $
-                </span>
-                <input
-                  type="number"
-                  step="0.01"
-                  id="initialBalance"
-                  className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
-                  placeholder="Initial Balance"
-                  {...register('initialBalance', { valueAsNumber: true })}
+        >
+          <div className="bg-white relative w-full px-5 py-6 rounded-md max-w-[35rem] xl:w-full overflow-y-scroll flex flex-col justify-start scrollbar scrollbar-thumb-gray-500 scrollbar-track-transparent">
+            <div className="flex items-center justify-between w-full">
+              <h2 className="font-bold text-2xl">Update Details</h2>
+              <button className="bg-gray-900 p-2 rounded-full">
+                <SignOut
+                  onClick={handleLogout}
+                  size={20}
+                  className="text-gray-100"
                 />
-                {errors.initialBalance && (
-                  <ErrorMessage message={errors.initialBalance.message} />
+              </button>
+            </div>
+            <form
+              className="flex flex-col py-8 gap-4"
+              onSubmit={handleSubmit(handleEditProfile)}
+            >
+              <AvatarInput
+                avatarPreview={avatarPreview}
+                onChange={handleAvatarChange}
+                inputFileRef={inputFileRef}
+              />
+
+              <div className="flex flex-col">
+                <label
+                  htmlFor="name"
+                  className="text-xs font-bold text-gray-500 mb-1"
+                >
+                  Account Id
+                </label>
+                <input
+                  disabled
+                  type="text"
+                  id="name"
+                  value={user?.accountId}
+                  className="text-sm w-full h-12 bg-gray-400 border border-gray-400 rounded-md text-gray-100 d:cursor-not-allowed px-3 items-center"
+                  placeholder="Your name here"
+                />
+              </div>
+
+              <div className="flex flex-col">
+                <label
+                  htmlFor="name"
+                  className="text-xs font-bold text-gray-500 mb-1"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
+                  placeholder="Your name here"
+                  {...register('name')}
+                />
+                {errors.name && <ErrorMessage message={errors.name.message} />}
+              </div>
+
+              <div className="flex flex-col">
+                <label
+                  htmlFor="email"
+                  className="text-xs font-bold text-gray-500 mb-1"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
+                  placeholder="Your email here"
+                  {...register('email')}
+                />
+                {errors.email && (
+                  <ErrorMessage message={errors.email.message} />
                 )}
               </div>
-            </div>
 
-            <div className="flex items-center justify-start w-full gap-2">
-              <Checkbox.Root
-                checked={changePassword}
-                onCheckedChange={(checked) =>
-                  setChangePassword(checked === true)
-                }
-                className="flex items-center justify-center relative w-4 h-4 rounded-sm border-2 border-gray-600 text-white 
+              <div className="flex flex-col">
+                <label
+                  htmlFor="initialBalance"
+                  className="text-xs font-bold text-gray-500 mb-1"
+                >
+                  Initial Balance ($)
+                </label>
+                <div className="relative w-full">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                    $
+                  </span>
+                  <input
+                    type="number"
+                    step="0.01"
+                    id="initialBalance"
+                    className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
+                    placeholder="Initial Balance"
+                    {...register('initialBalance', { valueAsNumber: true })}
+                  />
+                  {errors.initialBalance && (
+                    <ErrorMessage message={errors.initialBalance.message} />
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-start w-full gap-2">
+                <Checkbox.Root
+                  checked={changePassword}
+                  onCheckedChange={(checked) =>
+                    setChangePassword(checked === true)
+                  }
+                  className="flex items-center justify-center relative w-4 h-4 rounded-sm border-2 border-gray-600 text-white 
                         bg-transparent data-[state=checked]:bg-black data-[state=checked]:border-black"
-              >
-                <Checkbox.Indicator>
-                  {changePassword ? <CheckIcon /> : <Cross2Icon />}
-                </Checkbox.Indicator>
-              </Checkbox.Root>
-              <label
-                htmlFor="changePassword"
-                className="text-xs font-bold text-gray-500"
-              >
-                Change Password?
-              </label>
-            </div>
+                >
+                  <Checkbox.Indicator>
+                    {changePassword ? <CheckIcon /> : <Cross2Icon />}
+                  </Checkbox.Indicator>
+                </Checkbox.Root>
+                <label
+                  htmlFor="changePassword"
+                  className="text-xs font-bold text-gray-500"
+                >
+                  Change Password?
+                </label>
+              </div>
 
-            <PasswordSection
-              changePassword={changePassword}
-              register={register}
-              errors={errors}
-            />
+              <PasswordSection
+                changePassword={changePassword}
+                register={register}
+                errors={errors}
+              />
 
-            <CustomButton isSubmitting={isSubmitting} />
-          </form>
+              <CustomButton isSubmitting={isSubmitting} />
+            </form>
+          </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </>
   )
 }
