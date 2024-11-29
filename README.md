@@ -20,7 +20,7 @@ Users are able to:
 - Add money to and withdraw money from pots
 - View recurring bills and the status of each for the current month
 - Search and sort recurring bills
-- Edit Profile Data
+- Get user authentication and CRUD operations for personal information
 
 
 ## 📌 What did I learn?
@@ -35,8 +35,8 @@ The project provided an excellent opportunity to leverage Next.js API routes not
 
 - [Next.js](https://nextjs.org/)
 - [React](https://reactjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
 - [Typescript](https://www.typescriptlang.org/)
-- [Stitches](https://stitches.dev/)
 - [ESLint](https://eslint.org/)
 - [Prettier](https://prettier.io/)
 - [RadixUi](https://www.radix-ui.com/)
