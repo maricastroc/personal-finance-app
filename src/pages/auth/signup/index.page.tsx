@@ -18,9 +18,7 @@ const signUpFormSchema = z.object({
   password: z
     .string()
     .min(8, { message: 'Password must be at least 8 characters long.' }),
-  initialBalance: z
-    .string()
-    .min(1, { message: 'Initial balance value is required.' }),
+  initialBalance: z.number(),
   name: z.string().min(3, { message: 'Name is required.' }),
   avatarUrl: z
     .custom<File>((file) => file instanceof File && file.size > 0)
@@ -37,6 +35,8 @@ export default function SignUp() {
   const router = useRouter()
 
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+
+  const [createWithDemo, setCreateWithDemo] = useState(false)
 
   const {
     register,
@@ -66,15 +66,19 @@ export default function SignUp() {
     const formData = new FormData()
     formData.append('email', data.email)
     formData.append('name', data.name)
-    formData.append('initialBalance', data.initialBalance)
+    formData.append('initialBalance', data.initialBalance.toString())
     formData.append('password', data.password)
 
     if (data.avatarUrl) formData.append('avatarUrl', data.avatarUrl)
 
     try {
-      const response = await api.post(`/profile`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
+      const response = await api.post(
+        `${createWithDemo ? '/profile/with_demo' : '/profile'}`,
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        },
+      )
 
       notyf?.success(response.data.message)
 
@@ -175,6 +179,24 @@ export default function SignUp() {
             {errors.password && (
               <ErrorMessage message={errors.password.message} />
             )}
+          </div>
+
+          <div className="flex items-start justify-start w-full">
+            <input
+              checked={createWithDemo}
+              onChange={() => setCreateWithDemo(!createWithDemo)}
+              id="default-checkbox"
+              type="checkbox"
+              value=""
+              className="w-8 h-8 accent-gray-900 text-gray-900 bg-gray-100 border-gray-300 rounded"
+            />
+            <label
+              htmlFor="default-checkbox"
+              className="ms-2 text-sm text-gray-500 font-bold mt-[0.3rem]"
+            >
+              Create with demo? By selecting this option, your user will
+              automatically have transaction, budget, and pot data created.
+            </label>
           </div>
 
           <CustomButton

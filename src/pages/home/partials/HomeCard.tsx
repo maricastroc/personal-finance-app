@@ -26,7 +26,10 @@ export default function HomeCard({
     >
       <div className={`flex justify-between ${flexGrow && 'h-8'}`}>
         <h2 className="font-bold text-xl">{title}</h2>
-        <button className="flex items-center gap-2" onClick={() => router.push(routePath)}>
+        <button
+          className="flex items-center gap-2"
+          onClick={() => router.push(routePath)}
+        >
           <p className="text-sm text-gray-500">{buttonLabel}</p>
           <div className="relative h-3 w-3">
             <img src="/assets/images/icon-caret-right.svg" alt="" />

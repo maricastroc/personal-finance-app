@@ -170,6 +170,23 @@ export default function Profile() {
                 htmlFor="name"
                 className="text-xs font-bold text-gray-500 mb-1"
               >
+                Account Id
+              </label>
+              <input
+                disabled
+                type="text"
+                id="name"
+                value={user?.accountId}
+                className="text-sm w-full h-12 bg-gray-400 border border-gray-400 rounded-md text-gray-100 d:cursor-not-allowed px-3 items-center"
+                placeholder="Your name here"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label
+                htmlFor="name"
+                className="text-xs font-bold text-gray-500 mb-1"
+              >
                 Name
               </label>
               <input
@@ -251,16 +268,6 @@ export default function Profile() {
             />
 
             <CustomButton isSubmitting={isSubmitting} />
-
-            <span className="text-sm flex items-center justify-center w-full text-gray-500 gap-2">
-              <p>Need to create an account?</p>
-              <a
-                href="/auth/signup"
-                className="font-semibold underline underline-offset-4"
-              >
-                Sign up
-              </a>
-            </span>
           </form>
         </div>
       </div>

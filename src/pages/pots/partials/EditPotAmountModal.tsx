@@ -109,7 +109,10 @@ export function EditPotAmountModal({
       />
 
       <Dialog.Content className="fixed z-[999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] bg-white rounded-lg shadow-lg p-6 md:w-[560px] md:p-8">
-        <Dialog.Close className="absolute top-4 right-4 hover:bg-gray-900 hover:text-gray-100 transition-all duration-300 text-gray-500 p-[0.1rem] rounded-full border border-gray-900">
+        <Dialog.Close
+          onClick={onClose}
+          className="absolute top-4 right-4 hover:bg-gray-900 hover:text-gray-100 transition-all duration-300 text-gray-500 p-[0.1rem] rounded-full border border-gray-900"
+        >
           <X size={16} alt="Close modal" />
         </Dialog.Close>
 

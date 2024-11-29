@@ -17,6 +17,10 @@ import { useRouter } from 'next/router'
 import { PaginationSection } from '@/components/shared/PaginationSection/PaginationSection'
 import { SearchSection } from './partials/SearchSection'
 import { TransactionTable } from './partials/TransactionsTable'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import * as Dialog from '@radix-ui/react-dialog'
+import { TransferModalForm } from './partials/TransferModal'
 
 export default function Transactions() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -37,9 +41,11 @@ export default function Transactions() {
 
   const { isSidebarOpen } = useAppContext()
 
+  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false)
+
   const isRouteLoading = useLoadingOnRouteChange()
 
-  const { data, isValidating } = useRequest<{
+  const { data, isValidating, mutate } = useRequest<{
     transactions: TransactionProps[]
     pagination: {
       page: number
@@ -95,7 +101,29 @@ export default function Transactions() {
           isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
         }`}
       >
-        <h1 className="text-gray-900 font-bold text-3xl">Transactions</h1>
+        <div className="flex items-center justify-between w-full">
+          <h1 className="text-gray-900 font-bold text-3xl">Transactions</h1>
+          <Dialog.Root open={isTransferModalOpen}>
+            <Dialog.Trigger asChild>
+              <button
+                onClick={() => setIsTransferModalOpen(true)}
+                className={`font-semibold rounded-md p-3 px-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-gray-900 text-beige-100 hover:bg-gray-500 capitalize justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed`}
+              >
+                <FontAwesomeIcon icon={faPlus} className="max-sm:hidden" />
+                Transfer
+              </button>
+            </Dialog.Trigger>
+            {categories && (
+              <TransferModalForm
+                onSubmitForm={async (): Promise<void> => {
+                  await mutate()
+                }}
+                categories={categories}
+                onClose={() => setIsTransferModalOpen(false)}
+              />
+            )}
+          </Dialog.Root>
+        </div>
 
         <div className="mt-8 flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
           {categories && (

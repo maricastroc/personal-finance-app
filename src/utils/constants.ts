@@ -28,6 +28,25 @@ export const sortByFilters = [
   },
 ]
 
+export const recurrenceFrequencyOptions = [
+  {
+    id: 'Monthly',
+    name: 'Monthly',
+  },
+  {
+    id: 'Bimonthly',
+    name: 'Bimonthly',
+  },
+  {
+    id: 'Half-yearly',
+    name: 'Half-yearly',
+  },
+  {
+    id: 'Annual',
+    name: 'Annual',
+  },
+]
+
 export const colors = [
   { name: 'Green', hex: '#277c78' },
   { name: 'Yellow', hex: '#f2cdac' },

@@ -19,8 +19,11 @@ import { EmptyContent } from '@/components/shared/EmptyContent'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { UserProps } from '@/types/user'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
 
 interface BalanceProps {
   incomes: number | undefined
@@ -61,6 +64,24 @@ export default function Home() {
 
   const isRouteLoading = useLoadingOnRouteChange()
 
+  const [copied, setCopied] = useState(false)
+
+  const handleCopyAccoountId = async () => {
+    try {
+      await navigator.clipboard.writeText(profile?.accountId || '')
+      setCopied(true)
+
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy: ', err)
+    }
+  }
+
+  const { data: profile } = useRequest<UserProps>({
+    url: '/profile',
+    method: 'GET',
+  })
+
   const { data: balance } = useRequest<BalanceProps>({
     url: '/balance',
     method: 'GET',
@@ -87,9 +108,13 @@ export default function Home() {
   })
 
   useEffect(() => {
-    if (!session.data?.user) {
-      router.push('/auth/login')
-    }
+    const timer = setTimeout(() => {
+      if (!session.data?.user) {
+        router.push('/auth/login')
+      }
+    }, 3000)
+
+    return () => clearTimeout(timer)
   }, [session.data?.user])
 
   return isRouteLoading ? (
@@ -101,7 +126,24 @@ export default function Home() {
           isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
         }`}
       >
-        <h1 className="text-gray-900 font-bold text-3xl">Overview</h1>
+        <div className="flex flex-col">
+          <h1 className="text-gray-900 font-bold text-3xl">Overview</h1>
+          {profile && (
+            <div className="mt-4 flex flex-grow-0 max-w-[20rem] items-center gap-2 text-sm">
+              <p className="bg-white text-gray-900 p-2 py-1 rounded-md font-bold truncate">{`Your account ID: ${profile?.accountId}`}</p>
+              <button
+                onClick={handleCopyAccoountId}
+                className="bg-white hover:bg-gray-700 transition-all duration-300 text-gray-900 p-2 py-1 flex items-center text-xs font-bold rounded-md gap-2"
+              >
+                <FontAwesomeIcon
+                  icon={faCopy}
+                  className="w-4 h-4 cursor-pointer"
+                />
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+          )}
+        </div>
 
         <div className="grid md:grid-cols-3 gap-4 mt-8 md:h-[7.5rem] lg:mt-6 lg:gap-6">
           <FinanceCard
@@ -122,7 +164,7 @@ export default function Home() {
 
         <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-6">
           <div className="flex flex-col">
-            <HomeCard routePath='/pots' title="Pots" buttonLabel="See Details">
+            <HomeCard routePath="/pots" title="Pots" buttonLabel="See Details">
               <div className="flex flex-col gap-5 md:grid md:grid-cols-2 lg:flex lg:flex-col">
                 <FinanceCard
                   icon={<img src="/assets/images/icon-pot.svg" alt="" />}
@@ -149,7 +191,11 @@ export default function Home() {
               </div>
             </HomeCard>
 
-            <HomeCard routePath='/transactions' title="Transactions" buttonLabel="View All">
+            <HomeCard
+              routePath="/transactions"
+              title="Transactions"
+              buttonLabel="View All"
+            >
               <div>
                 {transactions && transactions?.length ? (
                   transactions?.map((transaction, index) => {
@@ -180,7 +226,12 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col flex-grow">
-            <HomeCard flexGrow routePath='/budgets' title="Budgets" buttonLabel="See Details">
+            <HomeCard
+              flexGrow
+              routePath="/budgets"
+              title="Budgets"
+              buttonLabel="See Details"
+            >
               {budgets && budgets.length ? (
                 <div className="flex flex-grow flex-col gap-6 sm:grid sm:grid-cols-[3fr,1.1fr] sm:max-width-[30rem] sm:items-center sm:w-full lg:items-start lg:mt-[-1rem]">
                   <BudgetItem />
@@ -202,7 +253,11 @@ export default function Home() {
               )}
             </HomeCard>
 
-            <HomeCard routePath='/recurring_bills' title="Recurring Bills" buttonLabel="See Details">
+            <HomeCard
+              routePath="/recurring_bills"
+              title="Recurring Bills"
+              buttonLabel="See Details"
+            >
               {recurringBills ? (
                 <div className="flex flex-grow flex-col sm:justify-end sm:items-end sm:w-full gap-4 pt-4">
                   <BillCard

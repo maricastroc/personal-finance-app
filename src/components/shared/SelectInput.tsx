@@ -29,6 +29,7 @@ export const SelectInput = ({
 }: SelectInputProps) => {
   return (
     <Select.Root
+      required
       defaultValue={defaultValue || undefined}
       onValueChange={onSelect}
     >
