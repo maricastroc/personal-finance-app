@@ -63,30 +63,32 @@ export default function Home() {
 
   const isRouteLoading = useLoadingOnRouteChange()
 
-  const { data: balance } = useRequest<BalanceProps>({
+  const { data: balance, isValidating: isValidatingBalance } = useRequest<BalanceProps>({
     url: '/balance',
     method: 'GET',
   })
 
-  const { data: allPots } = useRequest<AllPotsProps>({
+  const { data: allPots, isValidating: isValidatingPots } = useRequest<AllPotsProps>({
     url: '/pots',
     method: 'GET',
   })
 
-  const { data: budgets } = useRequest<BudgetWithDetailsProps[]>({
+  const { data: budgets, isValidating: isValidatingBudgets } = useRequest<BudgetWithDetailsProps[]>({
     url: '/budgets',
     method: 'GET',
   })
 
-  const { data: recurringBills } = useRequest<RecurringBillsResult>({
+  const { data: recurringBills, isValidating: isValidatingBills } = useRequest<RecurringBillsResult>({
     url: '/recurring_bills',
     method: 'GET',
   })
 
-  const { data: transactions } = useRequest<TransactionProps[]>({
+  const { data: transactions, isValidating: isValidatingTransactions } = useRequest<TransactionProps[]>({
     url: '/transactions/latest',
     method: 'GET',
   })
+
+  const isValidating = isValidatingBalance || isValidatingTransactions || isValidatingPots || isValidatingBudgets || isValidatingBills
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -98,7 +100,7 @@ export default function Home() {
     return () => clearTimeout(timer)
   }, [session.data?.user])
 
-  return isRouteLoading ? (
+  return (isRouteLoading || isValidating) ? (
     <LoadingPage />
   ) : (
     <>
