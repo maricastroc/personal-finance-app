@@ -1,40 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Personal Finance App
+![project](https://github.com/user-attachments/assets/47cdb744-a3ff-45dc-8d9d-60b23a92ff8a)
 
-## Getting Started
+## 📚 Project Description
 
-First, run the development server:
+This is a solution to the challenge [personal-finance-app]([https://www.frontendmentor.io/challenges/kanban-task-management-web-app-wgQLt-HlbB](https://www.frontendmentor.io/challenges/personal-finance-app-JfjtZgyMt1)).
+
+![challenge-difficulty-intermediate](https://img.shields.io/badge/Difficulty-GURU-f1b604?style=for-the-badge&amp;logo=frontendmentor)
+
+The project consists of fullstack financial management application that enables the management of transactions, budgets, pots, and recurring bills, while also providing an overview of all entities registered in the user's profile.
+
+Users are able to:
+
+- See all of the personal finance app data at-a-glance on the overview page
+- View all transactions on the transactions page with pagination for every ten transactions
+- Search, sort, create and filter transactions
+- Create, read, update, delete (CRUD) budgets and saving pots
+- View the latest three transactions for each budget category created
+- View progress towards each pot
+- Add money to and withdraw money from pots
+- View recurring bills and the status of each for the current month
+- Search and sort recurring bills
+- Get user authentication and CRUD operations for personal information
+
+
+## 📌 What did I learn?
+
+The project provided an excellent opportunity to leverage Next.js API routes not only for managing the endpoints required to perform CRUD operations but also for implementing the business logic that governs these operations. The database service utilized was Neon, which is powered by PostgreSQL.
+
+## 🔍 Links
+[Preview Site](https://maricastroc-kanban-b4og7dlw1-maricastrocs-projects.vercel.app/)
+
+## 💻 My Process
+### Built with:
+
+- [Next.js](https://nextjs.org/)
+- [React](https://reactjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Typescript](https://www.typescriptlang.org/)
+- [ESLint](https://eslint.org/)
+- [Prettier](https://prettier.io/)
+- [RadixUi](https://www.radix-ui.com/)
+- [Mui](https://mui.com/)
+- [Neon PostgreSQL](https://console.neon.tech)
+
+## ℹ️ How to run the application?
+
+> Clone the repository:
+
+```bash
+git clone https://github.com/maricastroc/kanban-app
+```
+
+> Install the dependencies:
+
+```bash
+npm install
+```
+
+> Rename the .env.example file to .env and add the necessary information to it.
+
+> Start the service:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+> ⏩ Access [http://localhost:3000](http://localhost:3000) to view the web application.
