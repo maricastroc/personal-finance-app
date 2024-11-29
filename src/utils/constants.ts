@@ -47,6 +47,9 @@ export const recurrenceFrequencyOptions = [
   },
 ]
 
+export const DEMO_LOGIN = 'demouser@email.com'
+export const DEMO_PASSWORD = 'demotest123!!'
+
 export const colors = [
   { name: 'Green', hex: '#277c78' },
   { name: 'Yellow', hex: '#f2cdac' },

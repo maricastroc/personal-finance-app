@@ -166,6 +166,7 @@ export function PotModalForm({
                 </span>
                 <input
                   type="number"
+                  step="0.01"
                   id="targetAmount"
                   className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
                   placeholder="Target Amount"

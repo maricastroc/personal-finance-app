@@ -2,6 +2,7 @@
 import { CustomButton } from '@/components/shared/CustomButton'
 import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { SelectInput } from '@/components/shared/SelectInput'
+import { SelectUser } from '@/components/shared/SelectUser'
 import { api } from '@/lib/axios'
 import { notyf } from '@/lib/notyf'
 import { CategoryProps } from '@/types/category'
@@ -11,11 +12,13 @@ import {
   recurrenceFrequencyOptions,
 } from '@/utils/constants'
 import { handleApiError } from '@/utils/handleApiError'
+import useRequest from '@/utils/useRequest'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useSession } from 'next-auth/react'
 
 import { X } from 'phosphor-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -63,6 +66,8 @@ export function TransferModalForm({
 }: TransferModalProps) {
   const [isRecurring, setIsRecurring] = useState(false)
 
+  const [recipientId, setRecipientId] = useState('')
+
   const [recipientUser, setRecipientUser] = useState<UserProps | null>(null)
 
   const [recurrenceDay, setRecurrenceDay] = useState(1)
@@ -73,6 +78,13 @@ export function TransferModalForm({
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const session = useSession()
+
+  const { data: users } = useRequest<UserProps[]>({
+    url: '/users',
+    method: 'GET',
+  })
+
   const daysInMonth = Array.from({ length: 31 }, (_, index) => ({
     id: String(index + 1),
     name: String(index + 1),
@@ -82,19 +94,19 @@ export function TransferModalForm({
     register,
     handleSubmit,
     reset,
-    watch,
+    setValue,
     formState: { isSubmitting, errors },
   } = useForm<TransferFormData>({
     resolver: zodResolver(transferFormSchema()),
     defaultValues: { amount: 0, description: '', recipientId: '' },
   })
-
+  console.log(errors)
   const handleTransfer = async (data: TransferFormData) => {
     const payload = {
       description: data.description || '',
-      recipientId: data.recipientId,
+      recipientId,
       categoryName: selectedCategory,
-      amount: data.amount,
+      amount: Number(data.amount),
       isRecurring,
       recurrenceFrequency,
       recurrenceDay,
@@ -102,9 +114,13 @@ export function TransferModalForm({
 
     try {
       const response = await api.post(`/transactions`, payload)
+
       setRecipientUser(response?.data?.profile || null)
+
       notyf?.success(response?.data?.message)
+
       await onSubmitForm()
+
       reset()
       setRecipientUser(null)
       onClose()
@@ -115,6 +131,7 @@ export function TransferModalForm({
 
   const handleFetchRecipientUser = async (recipientId: string) => {
     setIsLoading(true)
+
     try {
       const response = await api.get(`/profile/recipient/${recipientId}`)
       setRecipientUser(response?.data?.profile || null)
@@ -126,17 +143,20 @@ export function TransferModalForm({
     }
   }
 
-  const isFetchRecipientUserBtnDisabled =
-    isSubmitting ||
-    isLoading ||
-    watch()?.recipientId === undefined ||
-    watch()?.recipientId === ''
+  const handleSelectRecipient = async (value: string) => {
+    setRecipientId(value)
 
-  useEffect(() => {
-    if (recipientUser?.accountId !== watch().recipientId) {
-      setRecipientUser(null)
-    }
-  }, [recipientUser?.accountId, watch()?.recipientId])
+    setValue('recipientId', value)
+
+    await handleFetchRecipientUser(value)
+  }
+
+  const formattedUsers = users
+    ?.filter((user) => user.id !== session?.data?.user?.id)
+    .map((user) => ({
+      id: user.id,
+      name: user.name,
+    }))
 
   return (
     <Dialog.Portal>
@@ -169,18 +189,19 @@ export function TransferModalForm({
           </p>
 
           <form className="mt-6" onSubmit={handleSubmit(handleTransfer)}>
-            {/* Recipient ID */}
             <div className="flex flex-col mt-2">
               <label className="text-xs font-bold text-gray-500 mb-1">
-                Recipient Account ID
+                Recipient User
               </label>
-              <input
-                type="text"
-                id="recipientId"
-                className="text-sm w-full h-12 rounded-md border border-beige-500 px-3"
-                placeholder="Recipient ID"
-                {...register('recipientId')}
-              />
+              {users && formattedUsers && (
+                <SelectUser
+                  onSelect={async (value: string) => {
+                    await handleSelectRecipient(value)
+                  }}
+                  data={formattedUsers}
+                  placeholder="Select a Recipient"
+                />
+              )}
               {errors.recipientId && (
                 <ErrorMessage message={errors.recipientId.message} />
               )}
@@ -193,123 +214,110 @@ export function TransferModalForm({
               />
             )}
 
-            <button
-              type="button"
-              disabled={isFetchRecipientUserBtnDisabled}
-              onClick={() => handleFetchRecipientUser(watch().recipientId)}
-              className="disabled:bg-gray-400 disabled:border-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed mt-8 cursor-pointer w-full justify-center text-center font-semibold rounded-md p-3 items-center flex gap-2 transition-all duration-300 max-h-[60px] bg-transparent border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-gray-100"
-            >
-              {isSubmitting || isLoading ? 'Loading...' : 'Verify Recipient'}
-            </button>
+            <div className="flex flex-col mt-4">
+              <label className="text-xs font-bold text-gray-500 mb-1">
+                Description
+              </label>
+              <input
+                type="text"
+                id="description"
+                className="text-sm w-full h-12 rounded-md border border-beige-500 px-3"
+                placeholder="e.g: Dinner Payment"
+                {...register('description')}
+              />
+              {errors.description && (
+                <ErrorMessage message={errors.description.message} />
+              )}
+            </div>
 
-            {recipientUser && (
+            <div className="flex flex-col mt-4">
+              <label className="text-xs font-bold text-gray-500 mb-1">
+                Category
+              </label>
+              <SelectInput
+                placeholder="Select Category..."
+                defaultValue={'General'}
+                onSelect={(value: string) => setSelectedCategory(value)}
+                data={categories}
+              />
+            </div>
+
+            <div className="flex flex-col mt-4">
+              <label
+                htmlFor="amount"
+                className="text-xs font-bold text-gray-500 mb-1"
+              >
+                Amount ($)
+              </label>
+              <div className="relative w-full">
+                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                  $
+                </span>
+                <input
+                  type="number"
+                  step="0.01"
+                  id="amount"
+                  className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
+                  placeholder="Amount"
+                  {...register('amount', { valueAsNumber: true })}
+                />
+              </div>
+              {errors.amount && (
+                <ErrorMessage message={errors.amount.message} />
+              )}
+            </div>
+
+            <div className="flex items-center justify-start w-full mt-4 gap-2">
+              <input
+                checked={isRecurring}
+                onChange={() => setIsRecurring(!isRecurring)}
+                id="default-checkbox"
+                type="checkbox"
+                className="w-4 h-4 accent-gray-900"
+              />
+              <label
+                htmlFor="default-checkbox"
+                className="text-sm text-gray-500 font-bold"
+              >
+                Is Recurring?
+              </label>
+            </div>
+
+            {isRecurring && (
               <>
-                <div className="flex flex-col mt-8">
-                  <label className="text-xs font-bold text-gray-500 mb-1">
-                    Description
-                  </label>
-                  <input
-                    type="text"
-                    id="description"
-                    className="text-sm w-full h-12 rounded-md border border-beige-500 px-3"
-                    placeholder="e.g: Dinner Payment"
-                    {...register('description')}
-                  />
-                  {errors.description && (
-                    <ErrorMessage message={errors.description.message} />
-                  )}
-                </div>
-
                 <div className="flex flex-col mt-4">
                   <label className="text-xs font-bold text-gray-500 mb-1">
-                    Category
+                    Recurrence Frequency
                   </label>
                   <SelectInput
-                    placeholder="Select Category..."
-                    defaultValue={'General'}
-                    onSelect={(value: string) => setSelectedCategory(value)}
-                    data={categories}
+                    placeholder="Recurrence Frequency"
+                    defaultValue={'Monthly'}
+                    data={recurrenceFrequencyOptions}
+                    onSelect={setRecurrenceFrequency}
                   />
                 </div>
 
                 <div className="flex flex-col mt-4">
-                  <label
-                    htmlFor="amount"
-                    className="text-xs font-bold text-gray-500 mb-1"
-                  >
-                    Amount ($)
+                  <label className="text-xs font-bold text-gray-500 mb-1">
+                    Recurrence Day
                   </label>
-                  <div className="relative w-full">
-                    <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
-                      $
-                    </span>
-                    <input
-                      type="number"
-                      id="amount"
-                      className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
-                      placeholder="Amount"
-                      {...register('amount', { valueAsNumber: true })}
-                    />
-                  </div>
-                  {errors.amount && (
-                    <ErrorMessage message={errors.amount.message} />
-                  )}
-                </div>
-
-                <div className="flex items-center justify-start w-full mt-4 gap-2">
-                  <input
-                    checked={isRecurring}
-                    onChange={() => setIsRecurring(!isRecurring)}
-                    id="default-checkbox"
-                    type="checkbox"
-                    className="w-4 h-4 accent-gray-900"
+                  <SelectInput
+                    defaultValue={'1'}
+                    placeholder="Recurrence Day"
+                    data={daysInMonth}
+                    onSelect={(value: string) =>
+                      setRecurrenceDay(Number(value))
+                    }
                   />
-                  <label
-                    htmlFor="default-checkbox"
-                    className="text-sm text-gray-500 font-bold"
-                  >
-                    Is Recurring?
-                  </label>
                 </div>
-
-                {isRecurring && (
-                  <>
-                    <div className="flex flex-col mt-4">
-                      <label className="text-xs font-bold text-gray-500 mb-1">
-                        Recurrence Frequency
-                      </label>
-                      <SelectInput
-                        placeholder="Recurrence Frequency"
-                        defaultValue={'Monthly'}
-                        data={recurrenceFrequencyOptions}
-                        onSelect={setRecurrenceFrequency}
-                      />
-                    </div>
-
-                    <div className="flex flex-col mt-4">
-                      <label className="text-xs font-bold text-gray-500 mb-1">
-                        Recurrence Day
-                      </label>
-                      <SelectInput
-                        defaultValue={'1'}
-                        placeholder="Recurrence Day"
-                        data={daysInMonth}
-                        onSelect={(value: string) =>
-                          setRecurrenceDay(Number(value))
-                        }
-                      />
-                    </div>
-                  </>
-                )}
-
-                <CustomButton
-                  customContent={'Transfer'}
-                  customContentLoading={'Loading...'}
-                  type="submit"
-                  isSubmitting={isSubmitting}
-                />
               </>
             )}
+            <CustomButton
+              customContent={'Transfer'}
+              customContentLoading={'Loading...'}
+              type="submit"
+              isSubmitting={isSubmitting || isLoading}
+            />
           </form>
         </Dialog.Description>
       </Dialog.Content>

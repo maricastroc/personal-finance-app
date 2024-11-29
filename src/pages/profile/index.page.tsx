@@ -141,7 +141,7 @@ export default function Profile() {
   ) : (
     <Layout>
       <div
-        className={`w-full max-h-screen flex flex-col items-center justify-center p-4 pb-20 md:p-8 lg:p-12 overflow-y-scroll
+        className={`w-full flex flex-col items-center justify-center p-4 pb-20 md:p-8 lg:p-12 overflow-y-scroll
         }`}
       >
         <div className="bg-white relative w-full px-5 py-6 rounded-md max-w-[35rem] xl:w-full overflow-y-scroll flex flex-col justify-start scrollbar scrollbar-thumb-gray-500 scrollbar-track-transparent">
@@ -229,6 +229,7 @@ export default function Profile() {
                 </span>
                 <input
                   type="number"
+                  step="0.01"
                   id="initialBalance"
                   className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
                   placeholder="Initial Balance"

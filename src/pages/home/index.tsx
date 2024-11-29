@@ -19,11 +19,8 @@ import { EmptyContent } from '@/components/shared/EmptyContent'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { UserProps } from '@/types/user'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCopy } from '@fortawesome/free-solid-svg-icons'
 
 interface BalanceProps {
   incomes: number | undefined
@@ -63,24 +60,6 @@ export default function Home() {
   const router = useRouter()
 
   const isRouteLoading = useLoadingOnRouteChange()
-
-  const [copied, setCopied] = useState(false)
-
-  const handleCopyAccoountId = async () => {
-    try {
-      await navigator.clipboard.writeText(profile?.accountId || '')
-      setCopied(true)
-
-      setTimeout(() => setCopied(false), 2000)
-    } catch (err) {
-      console.error('Failed to copy: ', err)
-    }
-  }
-
-  const { data: profile } = useRequest<UserProps>({
-    url: '/profile',
-    method: 'GET',
-  })
 
   const { data: balance } = useRequest<BalanceProps>({
     url: '/balance',
@@ -126,24 +105,7 @@ export default function Home() {
           isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
         }`}
       >
-        <div className="flex flex-col">
-          <h1 className="text-gray-900 font-bold text-3xl">Overview</h1>
-          {profile && (
-            <div className="mt-4 flex flex-grow-0 max-w-[20rem] items-center gap-2 text-sm">
-              <p className="bg-white text-gray-900 p-2 py-1 rounded-md font-bold truncate">{`Your account ID: ${profile?.accountId}`}</p>
-              <button
-                onClick={handleCopyAccoountId}
-                className="bg-white hover:bg-gray-700 transition-all duration-300 text-gray-900 p-2 py-1 flex items-center text-xs font-bold rounded-md gap-2"
-              >
-                <FontAwesomeIcon
-                  icon={faCopy}
-                  className="w-4 h-4 cursor-pointer"
-                />
-                {copied ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
-          )}
-        </div>
+        <h1 className="text-gray-900 font-bold text-3xl">Overview</h1>
 
         <div className="grid md:grid-cols-3 gap-4 mt-8 md:h-[7.5rem] lg:mt-6 lg:gap-6">
           <FinanceCard

@@ -151,6 +151,7 @@ export default function SignUp() {
               </span>
               <input
                 type="number"
+                step="0.01"
                 id="initialBalance"
                 className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
                 placeholder="Initial Balance"

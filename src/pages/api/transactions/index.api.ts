@@ -172,7 +172,7 @@ export default async function handler(
     }
 
     const recipient = await prisma.user.findUnique({
-      where: { accountId: recipientId },
+      where: { id: recipientId },
     })
 
     if (!recipient) {
@@ -197,7 +197,7 @@ export default async function handler(
           description,
           amount,
           categoryId,
-          recipientId,
+          recipientId: recipient.accountId,
           senderId: accountId,
           userId,
           isRecurring,
@@ -233,7 +233,5 @@ export default async function handler(
       console.error('Error creating transaction:', error)
       return res.status(500).json({ message: 'Internal Server Error' })
     }
-  } else {
-    return res.status(405).json({ message: 'Method Not Allowed' })
   }
 }

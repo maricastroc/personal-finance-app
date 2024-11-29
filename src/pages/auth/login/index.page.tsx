@@ -10,6 +10,7 @@ import { notyf } from '@/lib/notyf'
 import { handleApiError } from '@/utils/handleApiError'
 import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { CustomButton } from '@/components/shared/CustomButton'
+import { DEMO_LOGIN, DEMO_PASSWORD } from '@/utils/constants'
 
 const signInFormSchema = z.object({
   email: z.string().min(3, { message: 'E-mail is required.' }),
@@ -37,6 +38,25 @@ export default function Login() {
       const response = await signIn('credentials', {
         email: data.email,
         password: data.password,
+        redirect: false,
+      })
+
+      if (response?.error) {
+        notyf?.error(response?.error)
+      } else {
+        notyf?.success('Welcome to the Finance App!')
+        router.push('/')
+      }
+    } catch (error) {
+      handleApiError(error)
+    }
+  }
+
+  async function onSubmitDemo() {
+    try {
+      const response = await signIn('credentials', {
+        email: DEMO_LOGIN,
+        password: DEMO_PASSWORD,
         redirect: false,
       })
 
@@ -103,15 +123,27 @@ export default function Login() {
             isSubmitting={isSubmitting}
           />
 
-          <span className="text-sm flex items-center justify-center w-full text-gray-500 gap-2">
-            <p>Need to create an account?</p>
-            <a
-              href="/auth/signup"
-              className="font-semibold underline underline-offset-4"
-            >
-              Sign up
-            </a>
-          </span>
+          <div className="flex flex-col gap-1">
+            <span className="text-sm flex items-center justify-center w-full text-gray-500 gap-2">
+              <p>Need to create an account?</p>
+              <a
+                href="/auth/signup"
+                className="font-semibold underline underline-offset-4"
+              >
+                Sign up
+              </a>
+            </span>
+            <span className="text-sm flex items-center justify-center w-full text-gray-500 gap-2">
+              <p>You&apos;re just browsing?</p>
+              <button
+                onClick={onSubmitDemo}
+                type="button"
+                className="font-semibold underline underline-offset-4"
+              >
+                See Demo
+              </button>
+            </span>
+          </div>
         </form>
       </div>
     </AuthLayout>
