@@ -29,7 +29,7 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
 
       setFilteredNavList(filteredNavList)
     }
-  }, [])
+  }, [session?.data?.user?.email])
 
   return (
     <aside

@@ -54,8 +54,8 @@ export default function Login() {
 
   async function onSubmitDemo() {
     try {
-      const demoLogin = process.env.NEXT_PUBLIC_DEMO_LOGIN;
-      const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD;
+      const demoLogin = process.env.NEXT_PUBLIC_DEMO_LOGIN
+      const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD
 
       const response = await signIn('credentials', {
         email: demoLogin,

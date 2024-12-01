@@ -20,7 +20,7 @@ export function Footer() {
 
       setFilteredNavList(filteredNavList)
     }
-  }, [])
+  }, [session?.data?.user?.email])
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 h-18 lg:hidden flex justify-between items-center bg-gray-900 px-4 pt-3 z-50">
