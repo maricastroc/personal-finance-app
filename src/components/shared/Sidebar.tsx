@@ -6,6 +6,8 @@ import logo from '../../../public/assets/images/logo-large.svg'
 import logosm from '../../../public/assets/images/logo-small.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons'
+import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 
 type navProp = {
   isSidebarOpen: boolean
@@ -14,6 +16,20 @@ type navProp = {
 
 export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
   const pathname = usePathname()
+
+  const session = useSession()
+
+  const [filteredNavList, setFilteredNavList] = useState(navList)
+
+  useEffect(() => {
+    if (session?.data?.user.email === process.env.NEXT_PUBLIC_DEMO_LOGIN) {
+      const filteredNavList = navList.filter((item) => {
+        return item.name !== 'Profile'
+      })
+
+      setFilteredNavList(filteredNavList)
+    }
+  }, [])
 
   return (
     <aside
@@ -35,7 +51,7 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
         </div>
 
         <div>
-          {navList.map((item, index) => (
+          {filteredNavList.map((item, index) => (
             <AsideItem
               key={index}
               item={item}

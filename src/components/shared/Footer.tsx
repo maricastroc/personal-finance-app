@@ -2,12 +2,29 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Item, navList } from '@/utils/getNavList'
+import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 
 export function Footer() {
   const pathname = usePathname()
+
+  const session = useSession()
+
+  const [filteredNavList, setFilteredNavList] = useState(navList)
+
+  useEffect(() => {
+    if (session?.data?.user.email === process.env.NEXT_PUBLIC_DEMO_LOGIN) {
+      const filteredNavList = navList.filter((item) => {
+        return item.name !== 'Profile'
+      })
+
+      setFilteredNavList(filteredNavList)
+    }
+  }, [])
+
   return (
     <nav className="fixed bottom-0 left-0 right-0 h-18 lg:hidden flex justify-between items-center bg-gray-900 px-4 pt-3 z-50">
-      {navList.map((item, index) => (
+      {filteredNavList.map((item, index) => (
         <AsideItem key={index} item={item} active={pathname === item.href} />
       ))}
     </nav>

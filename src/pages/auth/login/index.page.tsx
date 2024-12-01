@@ -8,7 +8,6 @@ import { LoadingPage } from '@/components/shared/LoadingPage'
 import AuthLayout from '@/components/layouts/authLayout.page'
 import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { CustomButton } from '@/components/shared/CustomButton'
-import { DEMO_LOGIN, DEMO_PASSWORD } from '@/utils/constants'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { handleApiError } from '@/utils/handleApiError'
 import { notyf } from '@/lib/notyf'
@@ -55,9 +54,12 @@ export default function Login() {
 
   async function onSubmitDemo() {
     try {
+      const demoLogin = process.env.NEXT_PUBLIC_DEMO_LOGIN;
+      const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD;
+
       const response = await signIn('credentials', {
-        email: DEMO_LOGIN,
-        password: DEMO_PASSWORD,
+        email: demoLogin,
+        password: demoPassword,
         redirect: false,
       })
 
