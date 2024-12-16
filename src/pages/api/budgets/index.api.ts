@@ -68,7 +68,6 @@ export default async function handler(
       }
     })
 
-
     return res.json({ budgets: budgetsWithDetails })
   } catch (error) {
     console.error(error)
