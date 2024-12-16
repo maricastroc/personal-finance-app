@@ -69,34 +69,31 @@ export default async function handler(
   }
 
   try {
-    // Busca as faturas com os filtros, ordenação, paginação e inclusão do recipient
     const recurringBills = await prisma.user.findMany({
       where: { id: String(userId) },
       include: {
         recurringBills: {
           where: {
-            // Filtro para o nome do recipient, se o searchQuery estiver presente
             recipient: {
               name: {
-                contains: searchQuery, // Filtra pelo nome do recipient
-                mode: 'insensitive', // Faz a busca sem considerar maiúsculas/minúsculas
+                contains: searchQuery,
+                mode: 'insensitive',
               },
             },
           },
-          orderBy, // Aplica a ordenação conforme o sortBy
-          skip, // Paginando os resultados
-          take: limit, // Limitando a quantidade de resultados por página
+          orderBy,
+          skip,
+          take: limit,
           include: {
-            recipient: true, // Inclui o recipient
+            recipient: true,
           },
         },
       },
     })
 
-    // Contagem total de faturas que atendem ao filtro de pesquisa
     const totalTransactions = await prisma.recurringBill.count({
       where: {
-        userId: String(userId), // Certificando-se de que estamos contando apenas as faturas do usuário
+        userId: String(userId),
         recipient: {
           name: {
             contains: searchQuery,
@@ -140,7 +137,6 @@ export default async function handler(
       },
     }
 
-    // Processando as faturas para categorizar como pagas, a vencer, ou futuras
     for (const bill of bills) {
       const recurrenceDate = new Date(
         today.getFullYear(),

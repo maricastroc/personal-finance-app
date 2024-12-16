@@ -11,6 +11,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { BudgetModal } from '../partials/BudgetModal'
 import { useRouter } from 'next/router'
 import { DeleteBudgetModal } from './DeleteBudgetModal'
+import { SkeletonTransactionCard } from '@/components/shared/SkeletonTransactionCard'
 
 interface DetailsProps {
   categoryName: string
@@ -43,7 +44,7 @@ export default function BudgetCard({
 
   const router = useRouter()
 
-  const { data: budget, mutate } = useRequest<BudgetWithDetailsProps>({
+  const { data: budget, mutate, isValidating } = useRequest<BudgetWithDetailsProps>({
     url: `/budgets/${budgetId}`,
     method: 'GET',
   })
@@ -63,13 +64,19 @@ export default function BudgetCard({
     <div className="flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-2">
-          <span
+          {isValidating ?           <h2 className="text-xl font-bold">
+          Loading...
+          </h2> : (
+            <>
+            <span
             className="w-[16px] h-[16px] rounded-full"
             style={{ backgroundColor: budget?.budgetDetails.theme }}
           />
           <h2 className="text-xl font-bold">
-            {budget?.budgetDetails.categoryName}
+          {budget?.budgetDetails.categoryName}
           </h2>
+            </>
+          )}
         </div>
         <div className="flex flex-col gap-2 items-end justify-end relative">
           <FontAwesomeIcon
@@ -190,7 +197,14 @@ export default function BudgetCard({
           </button>
         </div>
 
-        <div className="flex w-full flex-col mt-6">
+        {isValidating ? (
+          <div className="flex w-full flex-col mt-6">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <SkeletonTransactionCard />
+          ))}
+          </div>
+        ) : (
+          <div className="flex w-full flex-col mt-6">
           {budget?.transactions.map((transaction, index) => {
             return (
               <>
@@ -218,6 +232,7 @@ export default function BudgetCard({
             )
           })}
         </div>
+        )}
       </div>
     </div>
   )

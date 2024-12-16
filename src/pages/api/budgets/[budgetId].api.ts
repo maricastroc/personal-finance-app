@@ -64,6 +64,9 @@ export default async function handler(
           sender: true,
           recipient: true,
         },
+        orderBy: {
+          date: 'desc',
+        },
         take: 3,
       })
 

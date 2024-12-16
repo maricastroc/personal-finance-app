@@ -29,7 +29,7 @@ export default async function handler(
     // Obtenha o `accountId` do usuário
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { accountId: true }, // Pegando só o accountId
+      select: { accountId: true },
     })
 
     if (!user || !user.accountId) {
@@ -38,7 +38,6 @@ export default async function handler(
 
     const userAccountId = user.accountId
 
-    // Busca as transações do usuário, ordenando por createdAt (mais recentes primeiro)
     const transactions = await prisma.transaction.findMany({
       where: {
         userId: String(userId),
@@ -49,14 +48,12 @@ export default async function handler(
         recipient: true,
       },
       orderBy: {
-        date: 'desc', // Ordena pelas transações mais recentes
+        date: 'desc',
       },
       take: 5,
     })
 
-    // Modificar cada transação para adicionar o campo "balance"
     const transactionsWithBalance = transactions.map((transaction) => {
-      // Verifica se o senderId é igual ao accountId do usuário
       const balance =
         transaction.senderId === userAccountId ? 'expense' : 'income'
 
