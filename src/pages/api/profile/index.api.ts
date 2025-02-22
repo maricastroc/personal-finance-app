@@ -20,7 +20,6 @@ interface Updates {
   password?: string | undefined
   oldPassword?: string | undefined
   avatarUrl?: string | undefined
-  initialBalance?: number | undefined
 }
 
 const getSingleString = (
@@ -84,14 +83,10 @@ export default async function handler(
           name?: string
           email?: string
           password?: string
-          initialBalance?: string
           oldPassword?: string
         } = {
           name: fields.name ? getSingleString(fields.name) : undefined,
           email: fields.email ? getSingleString(fields.email) : undefined,
-          initialBalance: fields.initialBalance
-            ? getSingleString(fields.initialBalance)
-            : undefined,
           password: fields.password
             ? getSingleString(fields.password)
             : undefined,
@@ -102,10 +97,6 @@ export default async function handler(
 
         const updateUserSchema = z.object({
           name: z.string().optional(),
-          initialBalance: z
-            .string()
-            .transform((value) => (value ? parseFloat(value) : undefined))
-            .optional(),
           email: z.string().email('Invalid email').optional(),
           password: z
             .string()
@@ -206,10 +197,6 @@ export default async function handler(
             )
             .regex(/[0-9]/, 'Password must contain at least one number')
             .min(1, 'Password is required'),
-          initialBalance: z
-            .string()
-            .transform((value) => (value ? parseFloat(value) : 0))
-            .optional(),
         })
 
         const validatedFields = await createUserSchema.parseAsync({
@@ -217,9 +204,6 @@ export default async function handler(
           email: fields.email ? getSingleString(fields.email) : undefined,
           password: fields.password
             ? getSingleString(fields.password)
-            : undefined,
-          initialBalance: fields.initialBalance
-            ? getSingleString(fields.initialBalance)
             : undefined,
           avatarUrl: files.avatarUrl?.[0],
         })
@@ -257,7 +241,6 @@ export default async function handler(
             name: validatedFields.name,
             email: validatedFields.email,
             password: hashedPassword,
-            initialBalance: validatedFields.initialBalance ?? 0,
             avatarUrl: avatarUrl ?? null,
           },
         })
