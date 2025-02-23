@@ -59,6 +59,13 @@ npm install
 
 > Rename the .env.example file to .env and add the necessary information to it.
 
+> Generate the Prisma client and apply database migrations:
+
+```bash
+npm installnpx prisma generate
+npx prisma migrate dev
+```
+
 > Start the service:
 
 ```bash
