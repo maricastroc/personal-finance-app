@@ -62,7 +62,7 @@ npm install
 > Generate the Prisma client and apply database migrations:
 
 ```bash
-npm installnpx prisma generate
+npx prisma generate
 npx prisma migrate dev
 ```
 
