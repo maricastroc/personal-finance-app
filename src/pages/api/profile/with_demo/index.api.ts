@@ -127,6 +127,7 @@ export default async function handler(
 
         const dbData: any = {
           ...validatedFields,
+          password: hashedPassword,
           ...(avatarUrl && { avatarUrl }),
         }
 
