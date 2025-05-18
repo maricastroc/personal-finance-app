@@ -1,17 +1,51 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { IncomingForm } from 'formidable'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
 import { z } from 'zod'
 import bcrypt from 'bcrypt'
-import fs from 'fs'
-import path from 'path'
 import { prisma } from '@/lib/prisma'
 import { buildNextAuthOptions } from '../auth/[...nextauth].api'
+import { ALLOWED_MIME_TYPES, MAX_AVATAR_SIZE } from '@/utils/constants'
+
+let fs: any, path: any
+
+try {
+  if (typeof process !== 'undefined' && process.versions?.node) {
+    fs = require('fs')
+    path = require('path')
+  }
+} catch (e) {
+  console.warn('File system operations not available in this environment:', e)
+}
 
 export const config = {
   api: {
     bodyParser: false,
+    runtime: 'nodejs',
   },
+}
+
+const handleAvatarUpload = async (file: any) => {
+  if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+    throw new Error('Apenas imagens JPEG, PNG ou WebP são permitidas')
+  }
+
+  const fileContent = await fs.promises.readFile(file.filepath)
+
+  if (fileContent.length > MAX_AVATAR_SIZE) {
+    await fs.promises.unlink(file.filepath)
+    throw new Error('A imagem deve ter no máximo 2MB')
+  }
+
+  const base64Image = fileContent.toString('base64')
+  const dataURI = `data:${file.mimetype};base64,${base64Image}`
+
+  await fs.promises.unlink(file.filepath)
+
+  return dataURI
 }
 
 interface Updates {
@@ -69,7 +103,7 @@ export default async function handler(
       return res.status(400).json({ message: 'Unauthorized' })
     }
 
-    const form = new IncomingForm()
+    const form = new IncomingForm({ keepExtensions: true })
 
     form.parse(req, async (err, fields, files) => {
       if (err) {
@@ -129,22 +163,14 @@ export default async function handler(
           }
         }
 
-        let avatarUrl
+        let avatarUrl: string | undefined
 
         if (files.avatarUrl) {
           const avatarFile = Array.isArray(files.avatarUrl)
             ? files.avatarUrl[0]
             : files.avatarUrl
-          const avatarPath = path.join(
-            process.cwd(),
-            'public',
-            'assets',
-            'images',
-            'avatars',
-            avatarFile.originalFilename ?? '',
-          )
-          fs.renameSync(avatarFile.filepath, avatarPath)
-          avatarUrl = `/assets/images/avatars/${avatarFile.originalFilename}`
+
+          avatarUrl = await handleAvatarUpload(avatarFile)
         }
 
         const updates: Updates = { ...validatedFields }
@@ -197,6 +223,10 @@ export default async function handler(
             )
             .regex(/[0-9]/, 'Password must contain at least one number')
             .min(1, 'Password is required'),
+          initialBalance: z
+            .string()
+            .transform((value) => (value ? parseFloat(value) : 0))
+            .optional(),
         })
 
         const validatedFields = await createUserSchema.parseAsync({
@@ -205,7 +235,9 @@ export default async function handler(
           password: fields.password
             ? getSingleString(fields.password)
             : undefined,
-          avatarUrl: files.avatarUrl?.[0],
+          initialBalance: fields.initialBalance
+            ? getSingleString(fields.initialBalance)
+            : undefined,
         })
 
         const existingUser = await prisma.user.findUnique({
@@ -218,22 +250,14 @@ export default async function handler(
 
         const hashedPassword = await bcrypt.hash(validatedFields.password, 10)
 
-        let avatarUrl = null
+        let avatarUrl: string | undefined
 
         if (files.avatarUrl) {
           const avatarFile = Array.isArray(files.avatarUrl)
             ? files.avatarUrl[0]
             : files.avatarUrl
-          const avatarPath = path.join(
-            process.cwd(),
-            'public',
-            'assets',
-            'images',
-            'avatars',
-            avatarFile.originalFilename ?? '',
-          )
-          fs.renameSync(avatarFile.filepath, avatarPath)
-          avatarUrl = `/assets/images/avatars/${avatarFile.originalFilename}`
+
+          avatarUrl = await handleAvatarUpload(avatarFile)
         }
 
         const newUser = await prisma.user.create({

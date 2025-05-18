@@ -80,7 +80,6 @@ export function buildNextAuthOptions(
             id: user.id,
             name: user.name,
             email: user.email,
-            avatarUrl: user.avatarUrl,
           }
         },
       }),

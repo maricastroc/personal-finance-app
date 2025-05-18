@@ -32,9 +32,6 @@ const editProfileFormSchema = (changePassword: boolean) =>
             .string()
             .min(8, { message: 'Password must be at least 8 characters long.' })
         : z.string().optional(),
-      initialBalance: z
-        .string()
-        .min(1, { message: 'Initial balance value is required.' }),
       passwordConfirm: changePassword
         ? z
             .string()
@@ -108,7 +105,6 @@ export default function Profile() {
       const formData = new FormData()
       formData.append('email', data.email)
       formData.append('name', data.name)
-      formData.append('initialBalance', data.initialBalance)
       formData.append('user_id', user.id.toString())
 
       if (data.avatarUrl) formData.append('avatarUrl', data.avatarUrl)
@@ -132,7 +128,6 @@ export default function Profile() {
       setAvatarPreview(`${user.avatarUrl}`)
       setValue('name', user.name)
       setValue('email', user.email ?? '')
-      setValue('initialBalance', String(user.initialBalance) || '')
     }
   }, [user, setValue])
 
@@ -218,31 +213,6 @@ export default function Profile() {
                 {errors.email && (
                   <ErrorMessage message={errors.email.message} />
                 )}
-              </div>
-
-              <div className="flex flex-col">
-                <label
-                  htmlFor="initialBalance"
-                  className="text-xs font-bold text-gray-500 mb-1"
-                >
-                  Initial Balance ($)
-                </label>
-                <div className="relative w-full">
-                  <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
-                    $
-                  </span>
-                  <input
-                    type="number"
-                    step="0.01"
-                    id="initialBalance"
-                    className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
-                    placeholder="Initial Balance"
-                    {...register('initialBalance', { valueAsNumber: true })}
-                  />
-                  {errors.initialBalance && (
-                    <ErrorMessage message={errors.initialBalance.message} />
-                  )}
-                </div>
               </div>
 
               <div className="flex items-center justify-start w-full gap-2">

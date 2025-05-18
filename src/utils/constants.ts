@@ -68,3 +68,7 @@ export const colors = [
   { name: 'Orange', hex: '#b36c49' },
   { name: 'White', hex: '#ffffff' },
 ]
+
+export const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+
+export const MAX_AVATAR_SIZE = 2 * 1024 * 1024
