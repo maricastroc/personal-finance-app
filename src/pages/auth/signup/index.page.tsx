@@ -93,7 +93,16 @@ export default function SignUp() {
     <LoadingPage />
   ) : (
     <>
-      <NextSeo title="Sign Up | Finance App" />
+      <NextSeo
+        title="Sign Up | Finance App"
+        additionalMetaTags={[
+          {
+            name: 'viewport',
+            content:
+              'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
+          },
+        ]}
+      />
       <AuthLayout>
         <div className="bg-white overflow-y-scroll relative mx-4 px-5 py-6 rounded-md w-full max-w-[500px] xl:w-full flex flex-col justify-start xl:mx-auto xl:max-h-[90vh]">
           <h2 className="font-bold text-2xl">Sign Up</h2>

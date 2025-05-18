@@ -97,7 +97,16 @@ export default function Transactions() {
     <LoadingPage />
   ) : (
     <>
-      <NextSeo title="Transactions | Finance App" />
+      <NextSeo
+        title="Transactions | Finance App"
+        additionalMetaTags={[
+          {
+            name: 'viewport',
+            content:
+              'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
+          },
+        ]}
+      />
       <Layout>
         <div
           className={`w-full px-4 py-5 flex-grow md:p-10 lg:pl-0 pb-20 md:pb-32 lg:pb-8 ${

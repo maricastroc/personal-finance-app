@@ -135,7 +135,16 @@ export default function Profile() {
     <LoadingPage />
   ) : (
     <>
-      <NextSeo title="Profile | Finance App" />
+      <NextSeo
+        title="Profile | Finance App"
+        additionalMetaTags={[
+          {
+            name: 'viewport',
+            content:
+              'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
+          },
+        ]}
+      />
       <Layout>
         <div
           className={`w-full flex flex-col items-center justify-center p-4 pb-20 md:p-8 lg:p-12 overflow-y-scroll

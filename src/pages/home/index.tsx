@@ -115,7 +115,16 @@ export default function Home() {
     <LoadingPage />
   ) : (
     <>
-      <NextSeo title="Home | Finance App" />
+      <NextSeo
+        title="Home | Finance App"
+        additionalMetaTags={[
+          {
+            name: 'viewport',
+            content:
+              'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
+          },
+        ]}
+      />
       <Layout>
         <div
           className={`flex-grow px-4 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
