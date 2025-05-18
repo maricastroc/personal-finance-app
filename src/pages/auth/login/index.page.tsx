@@ -78,7 +78,16 @@ export default function Login() {
     <LoadingPage />
   ) : (
     <>
-      <NextSeo title="Login | Finance App" />
+      <NextSeo
+        title="Login | Finance App"
+        additionalMetaTags={[
+          {
+            name: 'viewport',
+            content:
+              'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
+          },
+        ]}
+      />
       <AuthLayout>
         <div className="bg-white relative mx-4 px-5 py-6 rounded-md w-full max-w-[500px] xl:w-full flex flex-col justify-start xl:mx-auto">
           <h2 className="font-bold text-2xl">Login</h2>
