@@ -1,5 +1,5 @@
-import { notyf } from '@/lib/notyf'
 import axios from 'axios'
+import toast from 'react-hot-toast'
 
 export function handleApiError(error: unknown) {
   if (axios.isAxiosError(error) && error.response) {
@@ -14,8 +14,8 @@ export function handleApiError(error: unknown) {
       errorMessage = Object.values(error.response.data.message).join(', ')
     }
 
-    notyf?.error(errorMessage)
+    toast?.error(errorMessage)
   } else {
-    notyf?.error('Ooops, something went wrong. Please try again later.')
+    toast?.error('Ooops, something went wrong. Please try again later.')
   }
 }

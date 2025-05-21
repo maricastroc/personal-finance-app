@@ -22,7 +22,6 @@ export function MobileRecurringBillCard({
   status,
   recurrenceFrequency,
 }: RecurringBillProps) {
-  console.log(status)
   return (
     <div
       className={`flex justify-between items-center border-b border-b-beige-100 py-4`}

@@ -73,7 +73,7 @@ export default function Budgets() {
                   className={`font-semibold rounded-md p-3 px-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-gray-900 text-beige-100 hover:bg-gray-500 capitalize justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed`}
                 >
                   <FontAwesomeIcon icon={faPlus} />
-                  Add New Budget
+                  Add Budget
                 </button>
               </Dialog.Trigger>
               <BudgetModal

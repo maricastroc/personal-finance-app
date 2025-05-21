@@ -42,16 +42,34 @@ export default async function handler(
       const filterByName = req.query.filterByName as string
       const sortBy = req.query.sortBy as string
       const skip = (page - 1) * limit
+      const searchQuery = req.query.search
+        ? String(req.query.search).trim()
+        : undefined
 
       const where: Prisma.TransactionWhereInput = {
-        userId: String(userId),
+        OR: [{ senderId: userAccountId }, { recipientId: userAccountId }],
+        ...(searchQuery && {
+          AND: [
+            {
+              OR: [
+                {
+                  sender: {
+                    name: { contains: searchQuery, mode: 'insensitive' },
+                  },
+                },
+                {
+                  recipient: {
+                    name: { contains: searchQuery, mode: 'insensitive' },
+                  },
+                },
+              ],
+            },
+          ],
+        }),
       }
 
-      if (
-        filterByName &&
-        filterByName !== 'all' &&
-        typeof filterByName === 'string'
-      ) {
+      // Adicionar filtro por categoria se existir
+      if (filterByName && filterByName !== 'all') {
         where.category = {
           name: {
             contains: filterByName.trim(),
@@ -60,7 +78,7 @@ export default async function handler(
         }
       }
 
-      let orderBy: Prisma.TransactionOrderByWithRelationInput = {}
+      let orderBy: Prisma.TransactionOrderByWithRelationInput = { date: 'desc' }
 
       switch (sortBy) {
         case 'latest':
@@ -81,51 +99,22 @@ export default async function handler(
         case 'lowest':
           orderBy = { amount: 'asc' }
           break
-        default:
-          orderBy = { date: 'desc' }
       }
 
-      let searchQuery
-
-      if (req.query.search && req.query.search !== '') {
-        searchQuery = String(req.query.search).toLowerCase()
-      }
-
-      const transactions = await prisma.transaction.findMany({
-        where: {
-          ...where,
-          ...(searchQuery && {
-            OR: [
-              {
-                sender: {
-                  name: {
-                    contains: searchQuery,
-                    mode: 'insensitive',
-                  },
-                },
-              },
-              {
-                recipient: {
-                  name: {
-                    contains: searchQuery,
-                    mode: 'insensitive',
-                  },
-                },
-              },
-            ],
-          }),
-        },
-        include: {
-          category: true,
-          sender: true,
-          recipient: true,
-        },
-        orderBy,
-        skip,
-        take: limit,
-      })
-
-      const totalTransactions = await prisma.transaction.count({ where })
+      const [transactions, totalTransactions] = await Promise.all([
+        prisma.transaction.findMany({
+          where,
+          include: {
+            category: true,
+            sender: true,
+            recipient: true,
+          },
+          orderBy,
+          skip,
+          take: limit,
+        }),
+        prisma.transaction.count({ where }),
+      ])
 
       const transactionsWithBalance = transactions.map((transaction) => {
         const balance =

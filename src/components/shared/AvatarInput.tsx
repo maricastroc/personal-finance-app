@@ -14,13 +14,13 @@ export const AvatarInput = ({
 }: AvatarInputProps) => {
   return (
     <div className="flex flex-col w-full sm:mb-4 overflow-hidden sm:grid sm:grid-cols-[1fr,3.2fr] items-center gap-4">
-      <div className="flex  items-center justify-center border border-gray-300 rounded-full w-30 h-30">
-        <div className="flex items-center justify-center relative h-[7.5rem] min-w-[7.5rem]">
+      <div className="flex  items-center justify-center border-2 border-gray-300 rounded-full w-30 h-30">
+        <div className="flex items-center justify-center relative h-[6.5rem] min-w-[6.5rem]">
           {avatarPreview ? (
             <img
               src={avatarPreview || AVATAR_URL_DEFAULT}
               alt="Avatar Preview"
-              className="rounded-full h-[7.5rem] w-[7.5rem]"
+              className="rounded-full h-[6.5rem] w-[6.5rem]"
             />
           ) : (
             <User className="w-16 h-16 text-gray-500" />

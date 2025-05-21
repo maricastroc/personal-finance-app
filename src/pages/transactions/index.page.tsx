@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import { TransactionProps } from '@/types/transaction'
@@ -22,6 +22,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import * as Dialog from '@radix-ui/react-dialog'
 import { format } from 'date-fns'
+import { useDebounce } from '@/utils/useDebounce'
 
 export default function Transactions() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -31,6 +32,8 @@ export default function Transactions() {
   const { category } = router.query
 
   const [search, setSearch] = useState('')
+
+  const [debouncedSearch, setDebouncedSearch] = useState('')
 
   const [selectedCategory, setSelectedCategory] = useState(
     (category as string) || 'all',
@@ -46,6 +49,15 @@ export default function Transactions() {
 
   const isRouteLoading = useLoadingOnRouteChange()
 
+  useDebounce(
+    () => {
+      setDebouncedSearch(search)
+      setCurrentPage(1)
+    },
+    500,
+    [search],
+  )
+
   const { data, isValidating, mutate } = useRequest<{
     transactions: TransactionProps[]
     pagination: {
@@ -57,7 +69,7 @@ export default function Transactions() {
   }>({
     url: `/transactions?page=${currentPage}&limit=10&filterByName=${selectedCategory.toLowerCase()}&sortBy=${formatToSnakeCase(
       selectedSortBy,
-    )}&search=${search}`,
+    )}&search=${debouncedSearch}`,
     method: 'GET',
   })
 
@@ -91,6 +103,16 @@ export default function Transactions() {
     updateMaxVisibleButtons()
     window.addEventListener('resize', updateMaxVisibleButtons)
     return () => window.removeEventListener('resize', updateMaxVisibleButtons)
+  }, [])
+
+  const handleSetCategory = useCallback((value: string) => {
+    setSelectedCategory(value)
+    setCurrentPage(1)
+  }, [])
+
+  const handleSetSortBy = useCallback((value: string) => {
+    setSelectedSortBy(value)
+    setCurrentPage(1)
   }, [])
 
   return isRouteLoading ? (
@@ -143,11 +165,9 @@ export default function Transactions() {
                 categories={categories}
                 category={category as string}
                 search={search}
-                handleSetSortBy={(value: string) => setSelectedSortBy(value)}
-                handleSetSearch={(value: string) => setSearch(value)}
-                handleSetCategory={(value: string) =>
-                  setSelectedCategory(value)
-                }
+                handleSetSortBy={handleSetSortBy}
+                handleSetSearch={setSearch}
+                handleSetCategory={handleSetCategory}
               />
             )}
 
@@ -190,7 +210,7 @@ export default function Transactions() {
                 currentPage={currentPage}
                 maxVisibleButtons={maxVisibleButtons}
                 totalPages={totalPages}
-                handleSetCurrentPage={(value: number) => setCurrentPage(value)}
+                handleSetCurrentPage={setCurrentPage}
               />
             </div>
           </div>

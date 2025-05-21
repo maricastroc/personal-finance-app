@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { CustomButton } from '@/components/shared/CustomButton'
 import { api } from '@/lib/axios'
-import { notyf } from '@/lib/notyf'
 import { formatToDollar } from '@/utils/formatToDollar'
 import { handleApiError } from '@/utils/handleApiError'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
 import { useState, useEffect } from 'react'
+import toast from 'react-hot-toast'
 
 interface EditPotAmountModalProps {
   name: string
@@ -82,7 +82,7 @@ export function EditPotAmountModal({
         headers: { 'Content-Type': 'application/json' },
       })
 
-      notyf?.success(response.data.message)
+      toast?.success(response.data.message)
       await onSubmitForm()
       onClose()
     } catch (error) {

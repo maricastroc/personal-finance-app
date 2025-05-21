@@ -4,7 +4,6 @@ import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { SelectInput } from '@/components/shared/SelectInput'
 import { SelectUser } from '@/components/shared/SelectUser'
 import { api } from '@/lib/axios'
-import { notyf } from '@/lib/notyf'
 import { CategoryProps } from '@/types/category'
 import { UserProps } from '@/types/user'
 import {
@@ -20,6 +19,7 @@ import { useSession } from 'next-auth/react'
 import { X } from 'phosphor-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { z } from 'zod'
 
 const transferFormSchema = () =>
@@ -100,7 +100,6 @@ export function TransferModalForm({
     resolver: zodResolver(transferFormSchema()),
     defaultValues: { amount: 0, description: '', recipientId: '' },
   })
-  console.log(errors)
   const handleTransfer = async (data: TransferFormData) => {
     const payload = {
       description: data.description || '',
@@ -117,7 +116,7 @@ export function TransferModalForm({
 
       setRecipientUser(response?.data?.profile || null)
 
-      notyf?.success(response?.data?.message)
+      toast?.success(response?.data?.message)
 
       await onSubmitForm()
 
@@ -135,7 +134,7 @@ export function TransferModalForm({
     try {
       const response = await api.get(`/profile/recipient/${recipientId}`)
       setRecipientUser(response?.data?.profile || null)
-      notyf?.success(response?.data?.message)
+      toast?.success(response?.data?.message)
     } catch (error) {
       handleApiError(error)
     } finally {

@@ -2,13 +2,13 @@ import { CustomButton } from '@/components/shared/CustomButton'
 import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { SelectTheme } from '@/components/shared/SelectTheme'
 import { api } from '@/lib/axios'
-import { notyf } from '@/lib/notyf'
 import { getThemeOptions } from '@/utils/getThemeOptions'
 import { handleApiError } from '@/utils/handleApiError'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { z } from 'zod'
 
 interface EditPotModalProps {
@@ -75,7 +75,7 @@ export function PotModalForm({
         headers: { 'Content-Type': 'application/json' },
       })
 
-      notyf?.success(response.data.message)
+      toast?.success(response.data.message)
       await onSubmitForm()
       reset()
       onClose()
@@ -96,7 +96,7 @@ export function PotModalForm({
         headers: { 'Content-Type': 'application/json' },
       })
 
-      notyf?.success(response.data.message)
+      toast?.success(response.data.message)
       await onSubmitForm()
       reset()
       onClose()

@@ -6,7 +6,6 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Checkbox from '@radix-ui/react-checkbox'
 import { CheckIcon, Cross2Icon } from '@radix-ui/react-icons'
-import { notyf } from '@/lib/notyf'
 import { SignOut } from 'phosphor-react'
 import { UserProps } from '@/types/user'
 import Layout from '@/components/layouts/layout.page'
@@ -19,6 +18,7 @@ import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { handleApiError } from '@/utils/handleApiError'
 import useRequest from '@/utils/useRequest'
 import { NextSeo } from 'next-seo'
+import toast from 'react-hot-toast'
 
 const editProfileFormSchema = (changePassword: boolean) =>
   z
@@ -86,7 +86,7 @@ export default function Profile() {
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/auth/login' })
-    notyf?.success('See you soon!')
+    toast?.success('See you soon!')
   }
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,7 +116,7 @@ export default function Profile() {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
 
-        notyf?.success(response.data.message)
+        toast?.success(response.data.message)
       } catch (error) {
         handleApiError(error)
       }

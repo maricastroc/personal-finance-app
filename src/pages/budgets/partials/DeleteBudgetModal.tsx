@@ -1,10 +1,10 @@
 import { api } from '@/lib/axios'
-import { notyf } from '@/lib/notyf'
 import { BudgetProps } from '@/types/budget'
 import { handleApiError } from '@/utils/handleApiError'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 
 interface DeleteBudgetModalProps {
   onClose: () => void
@@ -25,7 +25,7 @@ export function DeleteBudgetModal({
 
       const response = await api.delete(`/budgets/${budget.id}`)
 
-      notyf?.success(response.data.message)
+      toast?.success(response.data.message)
       await onSubmitForm()
       onClose()
     } catch (error) {

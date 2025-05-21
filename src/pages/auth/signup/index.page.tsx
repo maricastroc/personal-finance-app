@@ -3,23 +3,31 @@ import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import AuthLayout from '../../../components/layouts/authLayout.page'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { AvatarInput } from '@/components/shared/AvatarInput'
 import { CustomButton } from '@/components/shared/CustomButton'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { api } from '@/lib/axios'
-import { notyf } from '@/lib/notyf'
 import { handleApiError } from '@/utils/handleApiError'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { InputBase } from '@/components/core/InputBase'
+import { CurrencyInput } from '@/components/core/CurrencyInput'
+import { PasswordInput } from '@/components/core/PasswordInput'
+import { ImageCropper } from '@/components/shared/ImageCropper'
+import toast from 'react-hot-toast'
 
 const signUpFormSchema = z.object({
   email: z.string().min(3, { message: 'E-mail is required.' }),
   password: z
     .string()
     .min(8, { message: 'Password must be at least 8 characters long.' }),
-  initialBalance: z.number(),
+  initialBalance: z
+    .number({
+      required_error: 'Initial balance is required.',
+      invalid_type_error: 'Must be a valid number.',
+    })
+    .min(0, { message: 'Must be positive' }),
   name: z.string().min(3, { message: 'Name is required.' }),
   avatarUrl: z
     .custom<File>((file) => file instanceof File && file.size > 0)
@@ -39,8 +47,25 @@ export default function SignUp() {
 
   const [createWithDemo, setCreateWithDemo] = useState(false)
 
+  const [showCropper, setShowCropper] = useState(false)
+
+  const [originalImage, setOriginalImage] = useState<string | null>(null)
+
+  const handleCroppedImage = (croppedImage: string) => {
+    fetch(croppedImage)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const file = new File([blob], 'avatar.jpg', {
+          type: 'image/jpeg',
+        })
+        setValue('avatarUrl', file)
+        setAvatarPreview(croppedImage)
+        setShowCropper(false)
+      })
+  }
+
   const {
-    register,
+    control,
     handleSubmit,
     setValue,
     formState: { isSubmitting, errors },
@@ -56,7 +81,8 @@ export default function SignUp() {
 
       const reader = new FileReader()
       reader.onload = () => {
-        setAvatarPreview(reader.result as string)
+        setOriginalImage(reader.result as string)
+        setShowCropper(true)
       }
 
       reader.readAsDataURL(file)
@@ -81,7 +107,7 @@ export default function SignUp() {
         },
       )
 
-      notyf?.success(response.data.message)
+      toast?.success(response.data.message)
 
       router.push('/auth/login')
     } catch (error) {
@@ -104,6 +130,15 @@ export default function SignUp() {
         ]}
       />
       <AuthLayout>
+        {showCropper && originalImage && (
+          <ImageCropper
+            src={originalImage}
+            onCrop={handleCroppedImage}
+            aspectRatio={1}
+            onClose={() => setShowCropper(false)}
+          />
+        )}
+
         <div className="bg-white overflow-y-scroll relative mx-4 px-5 py-6 rounded-md w-full max-w-[500px] xl:w-full flex flex-col justify-start xl:mx-auto xl:max-h-[90vh]">
           <h2 className="font-bold text-2xl">Sign Up</h2>
           <form
@@ -116,83 +151,77 @@ export default function SignUp() {
               inputFileRef={inputFileRef}
             />
 
-            <div className="flex flex-col">
-              <label
-                htmlFor="name"
-                className="text-xs font-bold text-gray-500 mb-1"
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-                placeholder="Your name here"
-                {...register('name')}
-              />
-              {errors.name && <ErrorMessage message={errors.name.message} />}
-            </div>
-
-            <div className="flex flex-col">
-              <label
-                htmlFor="email"
-                className="text-xs font-bold text-gray-500 mb-1"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-                placeholder="Your email here"
-                {...register('email')}
-              />
-              {errors.email && <ErrorMessage message={errors.email.message} />}
-            </div>
-
-            <div className="flex flex-col">
-              <label
-                htmlFor="initialBalance"
-                className="text-xs font-bold text-gray-500 mb-1"
-              >
-                Initial Balance ($)
-              </label>
-              <div className="relative w-full">
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
-                  $
-                </span>
-                <input
-                  type="number"
-                  step="0.01"
-                  id="initialBalance"
-                  className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
-                  placeholder="Initial Balance"
-                  {...register('initialBalance', { valueAsNumber: true })}
+            <Controller
+              name="name"
+              control={control}
+              render={({ field, fieldState }) => (
+                <InputBase
+                  label="Name"
+                  id="name"
+                  type="text"
+                  placeholder="Your name here"
+                  error={fieldState.error?.message}
+                  {...field}
                 />
-                {errors.initialBalance && (
-                  <ErrorMessage message={errors.initialBalance.message} />
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="text-xs font-bold text-gray-500 mb-1"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-                placeholder="Password"
-                {...register('password')}
-              />
-              {errors.password && (
-                <ErrorMessage message={errors.password.message} />
               )}
-            </div>
+            />
+
+            <Controller
+              name="email"
+              control={control}
+              render={({ field, fieldState }) => (
+                <InputBase
+                  label="Email"
+                  id="email"
+                  type="email"
+                  placeholder="Your email here"
+                  error={fieldState.error?.message}
+                  {...field}
+                />
+              )}
+            />
+
+            <Controller
+              name="initialBalance"
+              control={control}
+              render={({
+                field: { value, onChange, ...field },
+                fieldState,
+              }) => (
+                <CurrencyInput
+                  label="Initial Balance"
+                  id="initialBalance"
+                  placeholder="Initial Balance"
+                  currencySymbol="$"
+                  value={value}
+                  onChange={(val) => {
+                    onChange(val)
+                    setValue('initialBalance', val as number, {
+                      shouldValidate: true,
+                    })
+                  }}
+                  error={fieldState.error?.message}
+                  {...field}
+                />
+              )}
+            />
+
+            <Controller
+              name="password"
+              control={control}
+              render={({ field, fieldState }) => (
+                <PasswordInput
+                  label="Password"
+                  id="password"
+                  placeholder="Password"
+                  className={`${
+                    errors.initialBalance?.message ? 'mt-5' : 'mt-0'
+                  }`}
+                  error={fieldState.error?.message}
+                  {...field}
+                />
+              )}
+            />
 
             <div className="flex items-start justify-start w-full">
               <input

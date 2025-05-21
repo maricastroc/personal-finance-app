@@ -15,6 +15,7 @@ import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { calculateTotalPages } from '@/utils/calculateTotalPages'
 import { PaginationSection } from '@/components/shared/PaginationSection/PaginationSection'
 import { NextSeo } from 'next-seo'
+import { useDebounce } from '@/utils/useDebounce'
 
 export default function RecurringBills() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -25,9 +26,20 @@ export default function RecurringBills() {
 
   const [search, setSearch] = useState('')
 
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+
   const isRouteLoading = useLoadingOnRouteChange()
 
   const [selectedSortBy, setSelectedSortBy] = useState('latest')
+
+  useDebounce(
+    () => {
+      setDebouncedSearch(search)
+      setCurrentPage(1)
+    },
+    500,
+    [search],
+  )
 
   const handleSetSearch = (value: string) => {
     setSearch(value)
@@ -41,7 +53,7 @@ export default function RecurringBills() {
     useRequest<RecurringBillsResult>({
       url: `/recurring_bills?page=${currentPage}&limit=10&sortBy=${formatToSnakeCase(
         selectedSortBy,
-      )}&search=${search}`,
+      )}&search=${debouncedSearch}`,
       method: 'GET',
     })
 

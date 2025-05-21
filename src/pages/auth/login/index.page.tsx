@@ -2,15 +2,16 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import AuthLayout from '@/components/layouts/authLayout.page'
-import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { CustomButton } from '@/components/shared/CustomButton'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { handleApiError } from '@/utils/handleApiError'
-import { notyf } from '@/lib/notyf'
+import { InputBase } from '@/components/core/InputBase'
+import { PasswordInput } from '@/components/core/PasswordInput'
+import toast from 'react-hot-toast'
 
 const signInFormSchema = z.object({
   email: z.string().min(3, { message: 'E-mail is required.' }),
@@ -25,26 +26,26 @@ export default function Login() {
   const isRouteLoading = useLoadingOnRouteChange()
 
   const {
-    register,
+    control,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: { email: '', password: '' },
   })
 
-  async function onSubmit(data: SignInFormData) {
+  async function handleLogin(email: string, password: string) {
     try {
       const response = await signIn('credentials', {
-        email: data.email,
-        password: data.password,
+        email,
+        password,
         redirect: false,
       })
 
       if (response?.error) {
-        notyf?.error(response?.error)
+        toast?.error(response.error)
       } else {
-        notyf?.success('Welcome to the Finance App!')
+        toast?.success('Welcome to the Finance App!')
         router.push('/')
       }
     } catch (error) {
@@ -52,26 +53,15 @@ export default function Login() {
     }
   }
 
+  async function onSubmit(data: SignInFormData) {
+    await handleLogin(data.email, data.password)
+  }
+
   async function onSubmitDemo() {
-    try {
-      const demoLogin = process.env.NEXT_PUBLIC_DEMO_LOGIN
-      const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD
-
-      const response = await signIn('credentials', {
-        email: demoLogin,
-        password: demoPassword,
-        redirect: false,
-      })
-
-      if (response?.error) {
-        notyf?.error(response?.error)
-      } else {
-        notyf?.success('Welcome to the Finance App!')
-        router.push('/')
-      }
-    } catch (error) {
-      handleApiError(error)
-    }
+    await handleLogin(
+      process.env.NEXT_PUBLIC_DEMO_LOGIN!,
+      process.env.NEXT_PUBLIC_DEMO_PASSWORD!,
+    )
   }
 
   return isRouteLoading ? (
@@ -95,41 +85,34 @@ export default function Login() {
             className="flex flex-col py-8 gap-4"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <div className="flex flex-col">
-              <label
-                htmlFor="email"
-                className="text-xs font-bold text-gray-500 mb-1"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-                placeholder="Your email here"
-                {...register('email')}
-              />
-              {errors?.email && <ErrorMessage message={errors.email.message} />}
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="text-xs font-bold text-gray-500 mb-1"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-                placeholder="Password"
-                {...register('password')}
-              />
-              {errors?.password && (
-                <ErrorMessage message={errors.password.message} />
+            <Controller
+              name="email"
+              control={control}
+              render={({ field, fieldState }) => (
+                <InputBase
+                  label="Email"
+                  id="email"
+                  type="email"
+                  placeholder="Your email here"
+                  error={fieldState.error?.message}
+                  {...field}
+                />
               )}
-            </div>
+            />
+
+            <Controller
+              name="password"
+              control={control}
+              render={({ field, fieldState }) => (
+                <PasswordInput
+                  label="Password"
+                  id="password"
+                  placeholder="Password"
+                  error={fieldState.error?.message}
+                  {...field}
+                />
+              )}
+            />
 
             <CustomButton
               customContent={'Login'}
