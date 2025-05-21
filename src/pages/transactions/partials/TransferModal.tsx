@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { CustomButton } from '@/components/shared/CustomButton'
+import { CustomButton } from '@/components/core/CustomButton'
 import { ErrorMessage } from '@/components/shared/ErrorMessage'
-import { SelectInput } from '@/components/shared/SelectInput'
+import { SelectInput } from '@/components/core/SelectInput'
 import { SelectUser } from '@/components/shared/SelectUser'
 import { api } from '@/lib/axios'
 import { CategoryProps } from '@/types/category'

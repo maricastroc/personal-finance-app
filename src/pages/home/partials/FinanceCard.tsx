@@ -1,9 +1,11 @@
+import { SkeletonFinanceCard } from '@/components/skeletons/SkeletonFinanceCard'
 import { ReactNode } from 'react'
 
 interface FinanceCardProps {
   title: string
   value: string
   variant?: 'primary' | 'secondary' | 'tertiary'
+  isValidating?: boolean
   icon?: ReactNode
 }
 
@@ -11,6 +13,7 @@ export function FinanceCard({
   title,
   value,
   variant = 'primary',
+  isValidating = false,
   icon,
 }: FinanceCardProps) {
   let cardClasses = ''
@@ -39,15 +42,19 @@ export function FinanceCard({
       valueClasses = 'text-beige-100'
   }
 
-  return (
-    <div
-      className={`flex items-center gap-2 h-full w-full p-4 rounded-lg md:h-32 lg:h-[7.4rem] ${cardClasses}`}
-    >
-      {icon && <div className="mr-4">{icon}</div>}
-      <div className="flex flex-col">
-        <p className={`text-sm ${titleClasses}`}>{title}</p>
-        <h2 className={`text-2xl font-semibold ${valueClasses}`}>{value}</h2>
+  return isValidating ? (
+    <SkeletonFinanceCard />
+  ) : (
+    <>
+      <div
+        className={`flex items-center gap-2 h-full w-full p-4 rounded-lg md:h-32 lg:h-[7.4rem] ${cardClasses}`}
+      >
+        {icon && <div className="mr-4">{icon}</div>}
+        <div className="flex flex-col">
+          <p className={`text-sm ${titleClasses}`}>{title}</p>
+          <h2 className={`text-2xl font-semibold ${valueClasses}`}>{value}</h2>
+        </div>
       </div>
-    </div>
+    </>
   )
 }

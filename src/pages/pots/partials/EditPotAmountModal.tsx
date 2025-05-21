@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { CustomButton } from '@/components/shared/CustomButton'
+import { CustomButton } from '@/components/core/CustomButton'
 import { api } from '@/lib/axios'
 import { formatToDollar } from '@/utils/formatToDollar'
 import { handleApiError } from '@/utils/handleApiError'

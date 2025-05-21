@@ -5,7 +5,7 @@ import {
   faFilter,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { SelectInput } from '@/components/shared/SelectInput'
+import { SelectInput } from '@/components/core/SelectInput'
 import { CategoryProps } from '@/types/category'
 import { sortByFilters } from '@/utils/constants'
 

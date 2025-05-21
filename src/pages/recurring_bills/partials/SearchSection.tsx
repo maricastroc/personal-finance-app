@@ -1,4 +1,4 @@
-import { SelectInput } from '@/components/shared/SelectInput'
+import { SelectInput } from '@/components/core/SelectInput'
 import { sortByFilters } from '@/utils/constants'
 import { faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

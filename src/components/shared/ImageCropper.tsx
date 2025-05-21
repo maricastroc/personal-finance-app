@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react'
 import Cropper from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
-import { CustomButton } from './CustomButton'
+import { CustomButton } from '../core/CustomButton'
 
 interface ImageCropperProps {
   src: string

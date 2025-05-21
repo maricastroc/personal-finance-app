@@ -1,4 +1,4 @@
-import { CustomButton } from '@/components/shared/CustomButton'
+import { CustomButton } from '@/components/core/CustomButton'
 import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { SelectTheme } from '@/components/shared/SelectTheme'
 import { api } from '@/lib/axios'
