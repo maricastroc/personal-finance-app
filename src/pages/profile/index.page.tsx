@@ -1,29 +1,33 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { api } from '@/lib/axios'
 import { useEffect, useRef, useState } from 'react'
 import { signOut } from 'next-auth/react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Checkbox from '@radix-ui/react-checkbox'
 import { CheckIcon, Cross2Icon } from '@radix-ui/react-icons'
-import { SignOut } from 'phosphor-react'
 import { UserProps } from '@/types/user'
 import Layout from '@/components/layouts/layout.page'
 import { AvatarInput } from '@/components/shared/AvatarInput'
-import { PasswordSection } from '@/components/shared/PasswordSection'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { CustomButton } from '@/components/shared/CustomButton'
-import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { handleApiError } from '@/utils/handleApiError'
 import useRequest from '@/utils/useRequest'
 import { NextSeo } from 'next-seo'
 import toast from 'react-hot-toast'
+import { InputBase } from '@/components/core/InputBase'
+import { PasswordInput } from '@/components/core/PasswordInput'
+import { ImageCropper } from '@/components/shared/ImageCropper'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
 
 const editProfileFormSchema = (changePassword: boolean) =>
   z
     .object({
       email: z.string().min(3, { message: 'E-mail is required.' }),
+      accountId: z.string().optional(),
       oldPassword: changePassword
         ? z.string().min(8, { message: 'Old password is required.' })
         : z.string().optional(),
@@ -64,16 +68,20 @@ export default function Profile() {
 
   const [changePassword, setChangePassword] = useState(false)
 
+  const [showCropper, setShowCropper] = useState(false)
+
+  const [originalImage, setOriginalImage] = useState<string | null>(null)
+
   const { data: user } = useRequest<UserProps>({
     url: '/profile',
     method: 'GET',
   })
 
   const {
-    register,
+    control,
     handleSubmit,
     setValue,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = useForm<EditProfileFormData>({
     resolver: zodResolver(editProfileFormSchema(changePassword)),
     defaultValues: {
@@ -89,13 +97,30 @@ export default function Profile() {
     toast?.success('See you soon!')
   }
 
+  const handleCroppedImage = (croppedImage: string) => {
+    fetch(croppedImage)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const file = new File([blob], 'avatar.jpg', {
+          type: 'image/jpeg',
+        })
+        setValue('avatarUrl', file)
+        setAvatarPreview(croppedImage)
+        setShowCropper(false)
+      })
+  }
+
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
-
     if (file) {
       setValue('avatarUrl', file)
+
       const reader = new FileReader()
-      reader.onload = () => setAvatarPreview(reader.result as string)
+      reader.onload = () => {
+        setOriginalImage(reader.result as string)
+        setShowCropper(true)
+      }
+
       reader.readAsDataURL(file)
     }
   }
@@ -131,6 +156,14 @@ export default function Profile() {
     }
   }, [user, setValue])
 
+  useEffect(() => {
+    if (!changePassword) {
+      setValue('oldPassword', '')
+      setValue('password', '')
+      setValue('passwordConfirm', '')
+    }
+  }, [changePassword])
+
   return isRouteLoading ? (
     <LoadingPage />
   ) : (
@@ -146,6 +179,15 @@ export default function Profile() {
         ]}
       />
       <Layout>
+        {showCropper && originalImage && (
+          <ImageCropper
+            src={originalImage}
+            onCrop={handleCroppedImage}
+            aspectRatio={1}
+            onClose={() => setShowCropper(false)}
+          />
+        )}
+
         <div
           className={`w-full flex flex-col items-center justify-center p-4 pb-20 md:p-8 lg:p-12 overflow-y-scroll
         }`}
@@ -153,12 +195,12 @@ export default function Profile() {
           <div className="bg-white relative w-full px-5 py-6 rounded-md max-w-[35rem] xl:w-full overflow-y-scroll flex flex-col justify-start scrollbar scrollbar-thumb-gray-500 scrollbar-track-transparent">
             <div className="flex items-center justify-between w-full">
               <h2 className="font-bold text-2xl">Update Details</h2>
-              <button className="bg-gray-900 p-2 rounded-full">
-                <SignOut
-                  onClick={handleLogout}
-                  size={20}
-                  className="text-gray-100"
-                />
+              <button
+                onClick={handleLogout}
+                className={`font-semibold rounded-md p-3 px-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-gray-900 text-beige-100 hover:bg-gray-500 capitalize justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed`}
+              >
+                <FontAwesomeIcon icon={faRightToBracket} />
+                <p className="hidden sm:block">Logout</p>
               </button>
             </div>
             <form
@@ -171,58 +213,51 @@ export default function Profile() {
                 inputFileRef={inputFileRef}
               />
 
-              <div className="flex flex-col">
-                <label
-                  htmlFor="name"
-                  className="text-xs font-bold text-gray-500 mb-1"
-                >
-                  Account Id
-                </label>
-                <input
-                  disabled
-                  type="text"
-                  id="name"
-                  value={user?.accountId}
-                  className="text-sm w-full h-12 bg-gray-400 border border-gray-400 rounded-md text-gray-100 d:cursor-not-allowed px-3 items-center"
-                  placeholder="Your name here"
-                />
-              </div>
-
-              <div className="flex flex-col">
-                <label
-                  htmlFor="name"
-                  className="text-xs font-bold text-gray-500 mb-1"
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-                  placeholder="Your name here"
-                  {...register('name')}
-                />
-                {errors.name && <ErrorMessage message={errors.name.message} />}
-              </div>
-
-              <div className="flex flex-col">
-                <label
-                  htmlFor="email"
-                  className="text-xs font-bold text-gray-500 mb-1"
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-                  placeholder="Your email here"
-                  {...register('email')}
-                />
-                {errors.email && (
-                  <ErrorMessage message={errors.email.message} />
+              <Controller
+                name="accountId"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <InputBase
+                    disabled
+                    label="Account ID"
+                    id="name"
+                    type="text"
+                    placeholder="Your Account ID"
+                    error={fieldState.error?.message}
+                    {...field}
+                  />
                 )}
-              </div>
+              />
+
+              <Controller
+                name="name"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <InputBase
+                    label="Name"
+                    id="name"
+                    type="text"
+                    placeholder="Your name here"
+                    error={fieldState.error?.message}
+                    {...field}
+                  />
+                )}
+              />
+
+              <Controller
+                name="email"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <InputBase
+                    label="Email"
+                    id="email"
+                    type="email"
+                    placeholder="Your email here"
+                    error={fieldState.error?.message}
+                    {...field}
+                  />
+                )}
+              />
 
               <div className="flex items-center justify-start w-full gap-2">
                 <Checkbox.Root
@@ -245,11 +280,49 @@ export default function Profile() {
                 </label>
               </div>
 
-              <PasswordSection
-                changePassword={changePassword}
-                register={register}
-                errors={errors}
-              />
+              {changePassword && (
+                <>
+                  <Controller
+                    name="oldPassword"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <PasswordInput
+                        label="Your current password"
+                        id="oldPassword"
+                        placeholder="Password"
+                        error={fieldState.error?.message}
+                        {...field}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="password"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <PasswordInput
+                        label="Your new password"
+                        id="password"
+                        placeholder="Password"
+                        error={fieldState.error?.message}
+                        {...field}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="passwordConfirm"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <PasswordInput
+                        label="Confirm new password"
+                        id="passwordConfirm"
+                        placeholder="Password"
+                        error={fieldState.error?.message}
+                        {...field}
+                      />
+                    )}
+                  />
+                </>
+              )}
 
               <CustomButton isSubmitting={isSubmitting} />
             </form>

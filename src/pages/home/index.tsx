@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { NextSeo } from 'next-seo'
 import { format } from 'date-fns'
 import { useAppContext } from '@/contexts/AppContext'
@@ -23,6 +23,9 @@ import { RecurringBillProps } from '@/types/recurringBills'
 import useRequest from '@/utils/useRequest'
 import { formatToDollar } from '@/utils/formatToDollar'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
+import toast from 'react-hot-toast'
 
 interface BalanceProps {
   incomes: number | undefined
@@ -63,6 +66,9 @@ export default function Home() {
 
   const isRouteLoading = useLoadingOnRouteChange()
 
+  const isDemoUser =
+    session?.data?.user.email === process.env.NEXT_PUBLIC_DEMO_LOGIN
+
   const { data: balance, isValidating: isValidatingBalance } =
     useRequest<BalanceProps>({
       url: '/balance',
@@ -101,6 +107,11 @@ export default function Home() {
     isValidatingBudgets ||
     isValidatingBills
 
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/auth/login' })
+    toast?.success('See you soon!')
+  }
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!session.data?.user) {
@@ -131,7 +142,20 @@ export default function Home() {
             isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
           }`}
         >
-          <h1 className="text-gray-900 font-bold text-3xl">Overview</h1>
+          <div className="flex items-center justify-between w-full mb-8">
+            <h1 className="text-gray(-900 font-bold text-3xl">Overview</h1>
+            <button
+              onClick={() => handleLogout()}
+              className={`font-semibold rounded-md p-3 px-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-gray-900 text-beige-100 hover:bg-gray-500 capitalize justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed`}
+            >
+              {isDemoUser ? (
+                <FontAwesomeIcon icon={faRightToBracket} />
+              ) : (
+                <FontAwesomeIcon icon={faRightToBracket} />
+              )}
+              {isDemoUser ? 'Login' : 'Logout'}
+            </button>
+          </div>
 
           <div className="grid md:grid-cols-3 gap-4 mt-8 md:h-[7.5rem] lg:mt-6 lg:gap-6">
             <FinanceCard
