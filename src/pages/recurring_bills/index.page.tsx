@@ -120,12 +120,10 @@ export default function RecurringBills() {
               />
 
               <div className="hidden md:flex overflow-x-auto mt-5">
-                {recurringBills && (
-                  <RecurringBillsTable
+                <RecurringBillsTable
                     recurringBills={recurringBills?.allBills}
                     isValidating={isValidating}
                   />
-                )}
               </div>
 
               <div className="flex flex-col md:hidden">

@@ -160,8 +160,7 @@ export default function Transactions() {
           </div>
 
           <div className="mt-8 flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
-            {categories && (
-              <SearchSection
+            <SearchSection
                 categories={categories}
                 category={category as string}
                 search={search}
@@ -169,7 +168,6 @@ export default function Transactions() {
                 handleSetSearch={setSearch}
                 handleSetCategory={handleSetCategory}
               />
-            )}
 
             <TransactionTable
               transactions={transactions}

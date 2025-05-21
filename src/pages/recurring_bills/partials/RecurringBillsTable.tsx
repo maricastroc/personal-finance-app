@@ -13,7 +13,7 @@ export const RecurringBillsTable = ({
   recurringBills,
   isValidating,
 }: {
-  recurringBills: RecurringBillProps[]
+  recurringBills: RecurringBillProps[] | undefined
   isValidating: boolean
 }) => (
   <table className="min-w-full table-fixed">
