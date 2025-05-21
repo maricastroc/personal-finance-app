@@ -153,21 +153,19 @@ export default function Budgets() {
               </div>
 
               <div className="flex flex-col w-full gap-6">
-                {isValidating ? (
-                  Array.from({ length: 3 }).map((_, index) => (
-                    <SkeletonBudgetCard key={index} />
-                  ))
-                ) : (
-                  budgets?.map((budget) => (
-                    <BudgetCard
-                      key={budget.id}
-                      budgetId={budget.id}
-                      onSubmitForm={async (): Promise<void> => {
-                        await mutate()
-                      }}
-                    />
-                  ))
-                )}
+                {isValidating
+                  ? Array.from({ length: 3 }).map((_, index) => (
+                      <SkeletonBudgetCard key={index} />
+                    ))
+                  : budgets?.map((budget) => (
+                      <BudgetCard
+                        key={budget.id}
+                        budgetId={budget.id}
+                        onSubmitForm={async (): Promise<void> => {
+                          await mutate()
+                        }}
+                      />
+                    ))}
               </div>
             </div>
           ) : (

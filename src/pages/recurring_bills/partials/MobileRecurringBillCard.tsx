@@ -38,7 +38,7 @@ export function MobileRecurringBillCard({
             />
           </span>
           <p
-            className={`text-gray-900 font-bold overflow-hidden text-sm max-sm:truncate max-sm:whitespace-nowrap max-sm:max-w-[5rem] md:text-sm md:max-w-[12rem]`}
+            className={`text-gray-900 font-bold overflow-hidden text-sm max-sm:truncate max-sm:whitespace-nowrap max-sm:max-w-[40vw] md:text-sm md:max-w-[12rem]`}
           >
             {name}
           </p>

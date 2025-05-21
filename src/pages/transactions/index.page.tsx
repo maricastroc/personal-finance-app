@@ -161,13 +161,13 @@ export default function Transactions() {
 
           <div className="mt-8 flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
             <SearchSection
-                categories={categories}
-                category={category as string}
-                search={search}
-                handleSetSortBy={handleSetSortBy}
-                handleSetSearch={setSearch}
-                handleSetCategory={handleSetCategory}
-              />
+              categories={categories}
+              category={category as string}
+              search={search}
+              handleSetSortBy={handleSetSortBy}
+              handleSetSearch={setSearch}
+              handleSetCategory={handleSetCategory}
+            />
 
             <TransactionTable
               transactions={transactions}

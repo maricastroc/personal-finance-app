@@ -75,15 +75,15 @@ export const SearchSection = ({
 
       <div className="hidden md:flex w-full gap-5 items-center md:justify-end">
         <div className="md:max-w-[13rem] lg:max-w-[16rem] w-full flex items-center justify-center gap-2">
-            <p className="text-sm">Category</p>
-            <SelectInput
-              includeAll
-              placeholder="Select..."
-              defaultValue={(category as string) || 'all'}
-              data={categories || []}
-              onSelect={(value: string) => handleSetCategory(value)}
-            />
-          </div>
+          <p className="text-sm">Category</p>
+          <SelectInput
+            includeAll
+            placeholder="Select..."
+            defaultValue={(category as string) || 'all'}
+            data={categories || []}
+            onSelect={(value: string) => handleSetCategory(value)}
+          />
+        </div>
 
         <div className="md:min-w-[11rem] md:max-w-[13rem] lg:max-w-[16rem] w-full flex items-center justify-center gap-2">
           <p className="whitespace-nowrap text-sm">Sort by</p>
