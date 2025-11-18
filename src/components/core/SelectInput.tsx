@@ -9,16 +9,18 @@ interface DataProps {
 }
 
 interface SelectInputProps {
+  label: string
   data: DataProps[]
   existedCategories?: string[]
   onSelect: (value: string) => void
   includeAll?: boolean
   placeholder: string
   defaultValue?: string | null
-  contentWidth?: string | null
+  contentWidth?: number | null
 }
 
 export const SelectInput = ({
+  label,
   data,
   onSelect,
   includeAll = false,
@@ -29,13 +31,14 @@ export const SelectInput = ({
 }: SelectInputProps) => {
   return (
     <Select.Root
-      required
       defaultValue={defaultValue || undefined}
       onValueChange={onSelect}
     >
+      <label className="sr-only">{label}</label>
+
       <Select.Trigger
-        className="h-12 flex items-center justify-between w-full px-4 py-2 text-sm  text-gray-900 bg-white border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-transparent"
-        aria-label="Category"
+        className="h-12 flex items-center justify-between w-full px-4 py-2 text-sm text-gray-900 bg-white border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+        aria-label={label}
       >
         <Select.Value className="text-gray-900" placeholder={placeholder} />
         <Select.Icon className="ml-2 text-gray-900">
@@ -46,22 +49,25 @@ export const SelectInput = ({
       <Select.Portal>
         <Select.Content
           position="popper"
-          className={`z-[10000] ${
-            contentWidth ? `w-[${contentWidth}px]` : 'w-[290px]'
-          } h-40 overflow-y-scroll mt-1 bg-white text-gray-600 rounded-md shadow-lg border border-gray-200`}
+          className="z-[10000] mt-1 bg-white text-gray-600 rounded-md shadow-lg border border-gray-200 max-h-40 overflow-y-auto"
+          style={contentWidth ? { width: `${contentWidth}px` } : {}}
         >
-          <Select.ScrollUpButton className="flex items-center justify-center text-gray-500 hover:text-gray-900">
+          <Select.ScrollUpButton
+            className="flex items-center justify-center text-gray-500 hover:text-gray-900"
+            aria-label="Scroll up"
+          >
             <ChevronUpIcon />
           </Select.ScrollUpButton>
 
           <Select.Viewport className="p-1">
             <Select.Group>
               {includeAll && <SelectItem value="all">All</SelectItem>}
+
               {data.map((item, index) => (
                 <SelectItem
                   key={index}
-                  value={item.name as string}
-                  disabled={existedCategories?.includes(item?.name as string)}
+                  value={String(item.name)}
+                  disabled={existedCategories?.includes(String(item.name))}
                 >
                   {item.name}
                 </SelectItem>
@@ -69,7 +75,10 @@ export const SelectInput = ({
             </Select.Group>
           </Select.Viewport>
 
-          <Select.ScrollDownButton className="flex items-center justify-center text-gray-500 hover:text-gray-900">
+          <Select.ScrollDownButton
+            className="flex items-center justify-center text-gray-500 hover:text-gray-900"
+            aria-label="Scroll down"
+          >
             <ChevronDownIcon />
           </Select.ScrollDownButton>
         </Select.Content>
@@ -95,14 +104,16 @@ const SelectItem = React.forwardRef(
     <Select.Item
       ref={ref}
       value={value}
-      className={`flex items-center px-4 py-2 text-sm rounded-md cursor-pointer
+      disabled={disabled}
+      className={`
+        flex items-center px-4 py-2 text-sm rounded-md
+        focus:outline-none focus:ring-2 focus:ring-blue-500
         ${
           disabled
             ? 'text-gray-400 cursor-not-allowed'
-            : 'text-gray-900 hover:bg-blue-100 focus:bg-blue-100 focus:text-blue-900'
+            : 'text-gray-900 cursor-pointer hover:bg-blue-100 focus:bg-blue-100'
         }
       `}
-      disabled={disabled}
       {...props}
     >
       <Select.ItemText>{children}</Select.ItemText>

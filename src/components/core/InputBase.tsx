@@ -11,23 +11,30 @@ export function InputBase({
   error,
   containerClassName = '',
   className = '',
+  id,
+  required,
   ...props
 }: InputBaseProps) {
+  const errorId = error ? `${id}-error` : undefined
+
   return (
     <div className={`flex flex-col ${containerClassName}`}>
       {label && (
-        <label
-          htmlFor={props.id}
-          className="text-xs font-bold text-gray-500 mb-1"
-        >
+        <label htmlFor={id} className="text-xs font-bold text-gray-500 mb-1">
           {label}
         </label>
       )}
+
       <input
-        className={`text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center ${className}`}
+        id={id}
+        aria-invalid={!!error}
+        aria-describedby={errorId}
+        required={required}
+        className={`text-sm w-full h-12 rounded-md border border-beige-500 px-3 focus:border-beige-500 items-center focus:outline-none focus:ring-gray-900 focus:ring-2 focus:ring-offset-2 ${className}`}
         {...props}
       />
-      {error && <ErrorMessage message={error} />}
+
+      {error && <ErrorMessage message={error} id={errorId} />}
     </div>
   )
 }

@@ -18,24 +18,34 @@ export function PasswordSection({
     <>
       <div>
         <label
-          htmlFor="password"
+          htmlFor="oldPassword"
           className="text-xs font-bold text-gray-500 mb-1"
         >
-          Actual Password
+          Current Password
         </label>
+
         <input
           type="password"
-          id="password"
-          className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-          placeholder="Password"
+          id="oldPassword"
+          className="text-sm w-full h-12 rounded-md border border-beige-500 px-3"
+          placeholder="Enter your current password"
+          aria-invalid={!!errors.oldPassword}
+          aria-describedby={
+            errors.oldPassword ? 'oldPassword-error' : undefined
+          }
           {...register('oldPassword')}
         />
+
         {errors.oldPassword && (
-          <span className="text-secondary-red font-semibold text-xs">
+          <span
+            id="oldPassword-error"
+            className="text-secondary-red font-semibold text-xs"
+          >
             {errors.oldPassword.message}
           </span>
         )}
       </div>
+
       <div>
         <label
           htmlFor="password"
@@ -43,35 +53,52 @@ export function PasswordSection({
         >
           New Password
         </label>
+
         <input
           type="password"
           id="password"
-          className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-          placeholder="Password"
+          className="text-sm w-full h-12 rounded-md border border-beige-500 px-3"
+          placeholder="Enter a new password"
+          aria-invalid={!!errors.password}
+          aria-describedby={errors.password ? 'password-error' : undefined}
           {...register('password')}
         />
+
         {errors.password && (
-          <span className="text-secondary-red font-semibold text-xs">
+          <span
+            id="password-error"
+            className="text-secondary-red font-semibold text-xs"
+          >
             {errors.password.message}
           </span>
         )}
       </div>
+
       <div>
         <label
-          htmlFor="password"
+          htmlFor="passwordConfirm"
           className="text-xs font-bold text-gray-500 mb-1"
         >
           Confirm New Password
         </label>
+
         <input
           type="password"
           id="passwordConfirm"
-          className="text-sm w-full h-12 rounded-md border border-beige-500 px-3 items-center"
-          placeholder="Password"
+          className="text-sm w-full h-12 rounded-md border border-beige-500 px-3"
+          placeholder="Re-enter your new password"
+          aria-invalid={!!errors.passwordConfirm}
+          aria-describedby={
+            errors.passwordConfirm ? 'passwordConfirm-error' : undefined
+          }
           {...register('passwordConfirm')}
         />
+
         {errors.passwordConfirm && (
-          <span className="text-secondary-red font-semibold text-xs">
+          <span
+            id="passwordConfirm-error"
+            className="text-secondary-red font-semibold text-xs"
+          >
             {errors.passwordConfirm.message}
           </span>
         )}

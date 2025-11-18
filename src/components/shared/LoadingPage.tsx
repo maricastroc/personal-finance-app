@@ -12,7 +12,14 @@ export function LoadingPage() {
           isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
         }`}
       >
-        <CircularProgress size="3rem" style={{ color: '#597c7c' }} />
+        <CircularProgress
+          size="3rem"
+          className="text-[#597c7c]"
+          role="status"
+          aria-label="Loading, please wait"
+        />
+
+        <span className="sr-only">Loading…</span>
       </div>
     </Layout>
   )

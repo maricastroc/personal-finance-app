@@ -1,5 +1,6 @@
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { ReactNode } from 'react'
+import clsx from 'clsx'
 
 interface HomeCardProps {
   title: string
@@ -16,26 +17,35 @@ export default function HomeCard({
   routePath,
   flexGrow = false,
 }: HomeCardProps) {
-  const router = useRouter()
-
   return (
     <div
-      className={`bg-white rounded-md grid gap-4 md:gap-5 mt-8 px-5 py-6 md:p-8 lg:mt-6 ${
-        flexGrow && 'flex-grow'
-      }`}
+      className={clsx(
+        'bg-white rounded-md grid gap-4 md:gap-5 mt-8 px-5 py-6 md:p-8 lg:mt-6',
+        { 'flex-grow': flexGrow },
+      )}
     >
-      <div className={`flex justify-between ${flexGrow && 'h-8'}`}>
+      <div className={clsx('flex justify-between', { 'h-8': flexGrow })}>
         <h2 className="font-bold text-xl">{title}</h2>
-        <button
-          className="flex items-center gap-2"
-          onClick={() => router.push(routePath)}
+
+        <Link
+          href={routePath}
+          aria-label={`Go to ${title} details`}
+          className="
+            flex items-center gap-2
+            focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2
+          "
         >
           <p className="text-sm text-gray-500">{buttonLabel}</p>
-          <div className="relative h-3 w-3">
-            <img src="/assets/images/icon-caret-right.svg" alt="" />
-          </div>
-        </button>
+
+          <img
+            src="/assets/images/icon-caret-right.svg"
+            alt=""
+            aria-hidden="true"
+            className="h-3 w-3"
+          />
+        </Link>
       </div>
+
       {children}
     </div>
   )

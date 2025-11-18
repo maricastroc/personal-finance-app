@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import { Footer } from '../shared/Footer'
-import { Sidebar } from '../shared/Sidebar'
 import { useAppContext } from '@/contexts/AppContext'
+import { Sidebar } from '../shared/Sidebar'
 
 interface LayoutProps {
   children: ReactNode

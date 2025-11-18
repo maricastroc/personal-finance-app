@@ -16,25 +16,32 @@ export function FinanceItem({
   isBudgetsPage = false,
 }: FinanceItemProps) {
   return (
-    <div className={`flex items-center w-full`}>
+    <div
+      className="flex items-center w-full"
+      role="group"
+      aria-label={`${title}: ${formatToDollar(value)}`}
+    >
       <span
+        aria-hidden="true"
         className={`w-1 rounded-md mr-3 ${!isBudgetsPage ? 'h-14' : 'h-6'}`}
-        style={{ backgroundColor: `${color}` }}
+        style={{ backgroundColor: color }}
       />
+
       <div
-        className={`flex gap-4 ${!isBudgetsPage && 'flex-col'} ${
-          isBudgetsPage && 'w-full justify-between'
+        className={`flex gap-4 ${
+          !isBudgetsPage ? 'flex-col' : 'w-full justify-between'
         }`}
       >
         <p className="text-gray-500 text-xs">{title}</p>
+
         <div className="flex items-center">
           <h2 className="text-sm font-bold text-gray-900">
             {formatToDollar(value || 0)}
           </h2>
-          {isBudgetsPage && amountSpent && (
+
+          {isBudgetsPage && amountSpent !== undefined && (
             <p className="ml-1 text-xs text-gray-500">
-              {' '}
-              of {formatToDollar(amountSpent || 0)}
+              of {formatToDollar(amountSpent)}
             </p>
           )}
         </div>

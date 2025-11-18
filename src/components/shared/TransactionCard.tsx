@@ -5,7 +5,7 @@ interface TransactionCardProps {
   avatarUrl: string | undefined | null
   date: string
   value: string
-  balance?: 'expense' | 'income' | undefined
+  balance?: 'expense' | 'income'
   category?: string
   isBudgetsScreen?: boolean
 }
@@ -19,6 +19,9 @@ export function TransactionCard({
   category,
   isBudgetsScreen = false,
 }: TransactionCardProps) {
+  const isPlaceholder = !avatarUrl
+  const altText = isPlaceholder ? '' : `${name}'s avatar`
+
   return (
     <div
       className={`flex justify-between items-center border-b border-b-beige-100 py-4 ${
@@ -30,21 +33,20 @@ export function TransactionCard({
           isBudgetsScreen ? 'max-sm:gap-0' : ''
         }`}
       >
-        <span
-          className={`relative w-11 h-11 rounded-full ${
+        <div
+          className={`relative w-11 h-11 rounded-full overflow-hidden ${
             isBudgetsScreen ? 'max-sm:w-9 max-sm:h-9 md:w-11 md:h-11' : ''
           }`}
         >
           <img
             src={avatarUrl || AVATAR_URL_DEFAULT}
-            alt=""
-            className="rounded-full"
+            alt={altText}
+            aria-hidden={isPlaceholder ? 'true' : undefined}
+            className="rounded-full object-cover w-full h-full"
           />
-        </span>
+        </div>
 
-        <div
-          className={`flex flex-col gap-1 items-start text-start overflow-hidden max-sm:pl-2 sm:pl-0`}
-        >
+        <div className="flex flex-col gap-1 items-start text-start overflow-hidden max-sm:pl-2 sm:pl-0">
           <p
             className={`text-gray-900 font-bold text-sm ${
               isBudgetsScreen
@@ -54,10 +56,12 @@ export function TransactionCard({
           >
             {name}
           </p>
+
           {category && <p className="text-gray-500 text-xs">{category}</p>}
         </div>
       </div>
 
+      {/* RIGHT BLOCK */}
       <div className="flex flex-col gap-1 items-end pl-2 text-end">
         <p
           className={`font-bold text-sm ${
@@ -66,6 +70,7 @@ export function TransactionCard({
         >
           {balance === 'income' ? '+' : '-'} {value}
         </p>
+
         <p className="text-gray-500 text-xs">{date}</p>
       </div>
     </div>
