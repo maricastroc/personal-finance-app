@@ -194,6 +194,7 @@ export function TransferModalForm({
               </label>
               {users && formattedUsers && (
                 <SelectUser
+                  label="Recipient"
                   onSelect={async (value: string) => {
                     await handleSelectRecipient(value)
                   }}
@@ -202,7 +203,10 @@ export function TransferModalForm({
                 />
               )}
               {errors.recipientId && (
-                <ErrorMessage message={errors.recipientId.message} />
+                <ErrorMessage
+                  id="recipient-error"
+                  message={errors.recipientId.message}
+                />
               )}
             </div>
 
@@ -225,7 +229,10 @@ export function TransferModalForm({
                 {...register('description')}
               />
               {errors.description && (
-                <ErrorMessage message={errors.description.message} />
+                <ErrorMessage
+                  id="description-error"
+                  message={errors.description.message}
+                />
               )}
             </div>
 
@@ -234,6 +241,7 @@ export function TransferModalForm({
                 Category
               </label>
               <SelectInput
+                label="Category"
                 placeholder="Select Category..."
                 defaultValue={'General'}
                 onSelect={(value: string) => setSelectedCategory(value)}
@@ -262,7 +270,10 @@ export function TransferModalForm({
                 />
               </div>
               {errors.amount && (
-                <ErrorMessage message={errors.amount.message} />
+                <ErrorMessage
+                  id="amount-error"
+                  message={errors.amount.message}
+                />
               )}
             </div>
 
@@ -289,6 +300,7 @@ export function TransferModalForm({
                     Recurrence Frequency
                   </label>
                   <SelectInput
+                    label="Recurrence Frequency"
                     placeholder="Recurrence Frequency"
                     defaultValue={'Monthly'}
                     data={recurrenceFrequencyOptions}
@@ -301,6 +313,7 @@ export function TransferModalForm({
                     Recurrence Day
                   </label>
                   <SelectInput
+                    label="Recurrence Day"
                     defaultValue={'1'}
                     placeholder="Recurrence Day"
                     data={daysInMonth}

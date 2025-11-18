@@ -17,7 +17,7 @@ interface EditPotAmountModalProps {
   originalPercentage: number
   isWithdraw?: boolean
   onClose: () => void
-  onSubmitForm: () => Promise<void>
+  onSubmitForm: () => void | Promise<void>
 }
 
 export function EditPotAmountModal({
@@ -37,21 +37,18 @@ export function EditPotAmountModal({
 
   const [calculatedValues, setCalculatedValues] = useState({
     inputPercentage: 0,
-    newPercentage: 0,
-    newAmount: 0,
+    newPercentage: originalPercentage,
+    newAmount: currentAmount,
   })
 
   useEffect(() => {
-    const inputAmount = inputValue || 0
+    const amount = Math.max(0, inputValue || 0)
 
-    const inputPercentage = Math.max(
-      0,
-      Math.min(100, (inputAmount / targetAmount) * 100),
-    )
+    const inputPercentage = Math.min(100, (amount / targetAmount) * 100)
 
     const newAmount = isWithdraw
-      ? currentAmount - inputAmount
-      : currentAmount + inputAmount
+      ? currentAmount - amount
+      : currentAmount + amount
 
     const newPercentage = Math.max(
       0,
@@ -63,7 +60,7 @@ export function EditPotAmountModal({
       newPercentage,
       newAmount,
     })
-  }, [inputValue, currentAmount, targetAmount, isWithdraw])
+  }, [inputValue, currentAmount, isWithdraw, targetAmount])
 
   const { inputPercentage, newPercentage, newAmount } = calculatedValues
 
@@ -82,7 +79,7 @@ export function EditPotAmountModal({
         headers: { 'Content-Type': 'application/json' },
       })
 
-      toast?.success(response.data.message)
+      toast.success(response.data.message)
       await onSubmitForm()
       onClose()
     } catch (error) {
@@ -103,108 +100,111 @@ export function EditPotAmountModal({
 
   return (
     <Dialog.Portal>
-      <Dialog.Overlay
-        className="fixed inset-0 z-[990] bg-black bg-opacity-70"
-        onClick={onClose}
-      />
+      <Dialog.Overlay className="fixed inset-0 z-[990] bg-black bg-opacity-70" />
 
-      <Dialog.Content className="fixed z-[999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] bg-white rounded-lg shadow-lg p-6 md:w-[560px] md:p-8">
+      <Dialog.Content
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="edit-pot-title"
+        className="fixed z-[999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] bg-white rounded-lg shadow-lg p-6 md:w-[560px] md:p-8 outline-none"
+      >
         <Dialog.Close
           onClick={onClose}
           className="absolute top-4 right-4 hover:bg-gray-900 hover:text-gray-100 transition-all duration-300 text-gray-500 p-[0.1rem] rounded-full border border-gray-900"
         >
-          <X size={16} alt="Close modal" />
+          <X size={16} aria-hidden="true" />
+          <span className="sr-only">Close modal</span>
         </Dialog.Close>
 
-        <Dialog.Title className="text-xl max-w-[90%] font-semibold text-gray-900 mb-2 md:text-2xl">
+        <Dialog.Title
+          id="edit-pot-title"
+          className="text-xl max-w-[90%] font-semibold text-gray-900 mb-2 md:text-2xl"
+        >
           {isWithdraw ? `Withdraw from '${name}'` : `Add to '${name}'`}
         </Dialog.Title>
 
-        <Dialog.Description className="flex flex-col w-full">
-          <p className="text-sm text-gray-600">
-            {isWithdraw
-              ? 'Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot.'
-              : 'Add money to your pot to increase your savings. This will add to the amount you have in this pot.'}
-          </p>
-
-          <div className="flex flex-col w-full mt-6">
-            <div className="flex items-center justify-between w-full">
-              <p className="text-gray-500 text-sm">New Amount</p>
-              <h2 className="text-3xl font-bold">
-                {formatToDollar(newAmount)}
-              </h2>
-            </div>
-          </div>
-
-          <div className="mt-4 w-full h-[0.9rem] bg-beige-100 rounded-full relative overflow-hidden">
-            <div
-              className="absolute h-full"
-              style={{
-                width: `${
-                  isWithdraw
-                    ? originalPercentage - inputPercentage
-                    : originalPercentage
-                }%`,
-                backgroundColor: themeColor,
-                borderTopLeftRadius: '0.45rem',
-                borderBottomLeftRadius: '0.45rem',
-                transition: 'width 0.3s ease',
-              }}
-            />
-            <div
-              className={`absolute h-full ${
-                isWithdraw ? 'bg-secondary-red' : 'bg-secondary-green'
-              }`}
-              style={{
-                width: `${inputPercentage}%`,
-                left: isWithdraw
-                  ? `calc(${originalPercentage}% - ${inputPercentage}%)`
-                  : `${originalPercentage}%`,
-                borderTopRightRadius: '0.45rem',
-                borderBottomRightRadius: '0.45rem',
-                transition: 'width 0.3s ease, left 0.3s ease',
-                borderLeft: `3px solid white`,
-              }}
-            />
-          </div>
-
-          <div className="flex flex-col w-full mt-3">
-            <div className="flex items-center justify-between w-full">
-              <p className="text-gray-500 font-bold text-xs">
-                {newPercentage.toFixed(2)}%
-              </p>
-              <p className="text-gray-500 text-xs">{`Target of ${formatToDollar(
-                targetAmount,
-              )}`}</p>
-            </div>
-          </div>
-
-          <div className="flex flex-col mt-8">
-            <label
-              htmlFor="targetAmount"
-              className="text-xs font-bold text-gray-500 mb-1"
-            >
-              {isWithdraw ? 'Amount to Withdraw ($)' : 'Amount to Add ($)'}
-            </label>
-            <div className="relative w-full">
-              <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
-                $
-              </span>
-              <input
-                type="number"
-                step="0.01"
-                id="targetAmount"
-                className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
-                placeholder="Target Amount"
-                onChange={(e) => setInputValue(Number(e.target.value) || 0)}
-              />
-            </div>
-          </div>
-          <CustomButton
-            onClick={() => handleEditPot()}
-            isSubmitting={isSubmitting}
-          />
+        <Dialog.Description className="flex flex-col w-full text-sm text-gray-600">
+          {isWithdraw
+            ? 'Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot.'
+            : 'Add money to your pot to increase your savings. This will add to the amount you have in this pot.'}
         </Dialog.Description>
+
+        <div className="flex flex-col w-full mt-6">
+          <div className="flex items-center justify-between w-full">
+            <p className="text-gray-500 text-sm">New Amount</p>
+            <h2 className="text-3xl font-bold">{formatToDollar(newAmount)}</h2>
+          </div>
+        </div>
+
+        <div className="mt-4 w-full h-[0.9rem] bg-beige-100 rounded-full relative overflow-hidden">
+          <div
+            className="absolute h-full"
+            style={{
+              width: `${
+                isWithdraw
+                  ? originalPercentage - inputPercentage
+                  : originalPercentage
+              }%`,
+              backgroundColor: themeColor,
+              borderTopLeftRadius: '0.45rem',
+              borderBottomLeftRadius: '0.45rem',
+              transition: 'width 0.3s ease',
+            }}
+          />
+
+          <div
+            className={`absolute h-full ${
+              isWithdraw ? 'bg-secondary-red' : 'bg-secondary-green'
+            }`}
+            style={{
+              width: `${inputPercentage}%`,
+              left: isWithdraw
+                ? `calc(${originalPercentage}% - ${inputPercentage}%)`
+                : `${originalPercentage}%`,
+              borderTopRightRadius: '0.45rem',
+              borderBottomRightRadius: '0.45rem',
+              transition: 'width 0.3s ease, left 0.3s ease',
+              borderLeft: '3px solid white',
+            }}
+          />
+        </div>
+
+        <div className="flex flex-col w-full mt-3">
+          <div className="flex items-center justify-between w-full">
+            <p className="text-gray-500 font-bold text-xs">
+              {newPercentage.toFixed(2)}%
+            </p>
+            <p className="text-gray-500 text-xs">{`Target of ${formatToDollar(
+              targetAmount,
+            )}`}</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col mt-8">
+          <label
+            htmlFor="pot-amount-input"
+            className="text-xs font-bold text-gray-500 mb-1"
+          >
+            {isWithdraw ? 'Amount to Withdraw ($)' : 'Amount to Add ($)'}
+          </label>
+
+          <div className="relative w-full">
+            <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+              $
+            </span>
+
+            <input
+              id="pot-amount-input"
+              type="number"
+              step="0.01"
+              className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
+              placeholder="Enter amount"
+              onChange={(e) => setInputValue(Number(e.target.value) || 0)}
+            />
+          </div>
+        </div>
+
+        <CustomButton onClick={handleEditPot} isSubmitting={isSubmitting} />
       </Dialog.Content>
     </Dialog.Portal>
   )

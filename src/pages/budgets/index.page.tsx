@@ -1,7 +1,4 @@
 import { useState } from 'react'
-import * as Dialog from '@radix-ui/react-dialog'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { Skeleton } from '@mui/material'
 import { NextSeo } from 'next-seo'
 import { useAppContext } from '@/contexts/AppContext'
@@ -10,14 +7,15 @@ import { LoadingPage } from '@/components/shared/LoadingPage'
 import {
   BudgetItem,
   BudgetWithDetailsProps,
-} from '../../components/shared/BudgetItem'
-import { FinanceItem } from '../../components/shared/FinanceItem'
+} from '@/components/shared/BudgetItem'
 import Layout from '@/components/layouts/layout.page'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import useRequest from '@/utils/useRequest'
-import BudgetCard from './partials/BudgetCard'
-import { SkeletonBudgetCard } from '@/pages/budgets/partials/SkeletonBudgetCard'
-import { BudgetModal } from './partials/BudgetModal'
+import { SkeletonBudgetCard } from './partials/SkeletonBudgetCard'
+import BudgetCard from './BudgetCard'
+import { PageHeader } from './partials/PageHeader'
+import { SkeletonSection } from './partials/SkeletonSection'
+import { BudgetsList } from './partials/BudgetsList'
 
 export default function Budgets() {
   const { isSidebarOpen } = useAppContext()
@@ -30,19 +28,19 @@ export default function Budgets() {
     data: budgets,
     mutate,
     isValidating,
-  } = useRequest<BudgetWithDetailsProps[]>({
-    url: '/budgets',
-    method: 'GET',
-  })
-
-  function getBudgetCategories(budgets: BudgetWithDetailsProps[] | undefined) {
-    if (!budgets || budgets.length === 0) {
-      return []
-    }
-
-    const categories = budgets.map((budget) => budget.categoryName)
-    return Array.from(new Set(categories))
-  }
+  } = useRequest<BudgetWithDetailsProps[]>(
+    {
+      url: '/budgets',
+      method: 'GET',
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      dedupingInterval: 20000,
+      focusThrottleInterval: 30000,
+      keepPreviousData: true,
+    },
+  )
 
   return isRouteLoading ? (
     <LoadingPage />
@@ -58,39 +56,32 @@ export default function Budgets() {
           },
         ]}
       />
+
       <Layout>
-        <div
+        <main
+          role="main"
           className={`px-4 md:px-10 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
             isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
           }`}
         >
-          <div className="flex items-center justify-between w-full mb-8">
-            <h1 className="text-gray-900 font-bold text-3xl">Budgets</h1>
-            <Dialog.Root open={isBudgetModalOpen}>
-              <Dialog.Trigger asChild>
-                <button
-                  onClick={() => setIsBudgetModalOpen(true)}
-                  className={`font-semibold rounded-md p-3 px-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-gray-900 text-beige-100 hover:bg-gray-500 capitalize justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed`}
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                  Add Budget
-                </button>
-              </Dialog.Trigger>
-              <BudgetModal
-                onClose={() => setIsBudgetModalOpen(false)}
-                existedCategories={getBudgetCategories(budgets)}
-                onSubmitForm={async (): Promise<void> => {
-                  await mutate()
-                }}
-              />
-            </Dialog.Root>
-          </div>
+          <PageHeader
+            budgets={budgets}
+            mutate={mutate}
+            setIsBudgetModalOpen={setIsBudgetModalOpen}
+            isBudgetModalOpen={isBudgetModalOpen}
+          />
 
           {budgets?.length || isValidating ? (
             <div className="h-auto flex flex-col gap-6 w-full lg:grid lg:grid-cols-[1fr,1.4fr] items-start">
-              <div className="w-full lg:w-auto h-auto flex-grow-0 flex flex-col md:grid md:grid-cols-[1fr,2fr] md:gap-10 lg:flex lg:flex-col lg:gap-8 bg-white px-5 py-6 rounded-md md:p-10">
+              <section
+                aria-labelledby="spending-summary-title"
+                className="w-full lg:w-auto h-auto flex-grow-0 flex flex-col md:grid md:grid-cols-[1fr,2fr] md:gap-10 lg:flex lg:flex-col lg:gap-8 bg-white px-5 py-6 rounded-md md:p-10"
+              >
                 {isValidating ? (
-                  <span className="relative w-full mx-auto rounded-full">
+                  <span
+                    className="relative w-full mx-auto rounded-full"
+                    aria-busy="true"
+                  >
                     <Skeleton
                       variant="circular"
                       width={250}
@@ -102,57 +93,20 @@ export default function Budgets() {
                   <BudgetItem isBudgetsScreen />
                 )}
 
-                <div>
+                <div className="mt-6">
                   {isValidating ? (
-                    Array.from({ length: 4 }).map((_, index) => (
-                      <div
-                        key={index}
-                        className="flex flex-col justify-start items-start w-full mt-5"
-                      >
-                        <span className="relative w-full rounded-full">
-                          <Skeleton
-                            variant="rounded"
-                            width={'100%'}
-                            height={20}
-                          />
-                        </span>
-                        {index !== 4 - 1 && (
-                          <span className="my-4 w-full h-[1px] bg-gray-200 text-gray-500" />
-                        )}
-                      </div>
-                    ))
+                    <SkeletonSection />
                   ) : (
-                    <>
-                      {budgets && budgets.length > 0 && (
-                        <>
-                          <div className="flex flex-col justify-start items-start w-full mt-5">
-                            <h2 className="text-xl font-bold my-6 md:mt-0">
-                              Spending Summary
-                            </h2>
-                            {budgets?.map((budget, index) => (
-                              <>
-                                <FinanceItem
-                                  key={index}
-                                  isBudgetsPage={true}
-                                  title={budget.categoryName}
-                                  color={budget.theme}
-                                  value={budget.budgetLimit}
-                                  amountSpent={budget.amountSpent}
-                                />
-                                {index !== budgets.length - 1 && (
-                                  <span className="my-3 w-full h-[1px] bg-gray-200 text-gray-500" />
-                                )}
-                              </>
-                            ))}
-                          </div>
-                        </>
-                      )}
-                    </>
+                    budgets &&
+                    budgets.length > 0 && <BudgetsList budgets={budgets} />
                   )}
                 </div>
-              </div>
+              </section>
 
-              <div className="flex flex-col w-full gap-6">
+              <section
+                aria-label="Budget Cards List"
+                className="flex flex-col w-full gap-6"
+              >
                 {isValidating
                   ? Array.from({ length: 3 }).map((_, index) => (
                       <SkeletonBudgetCard key={index} />
@@ -161,22 +115,22 @@ export default function Budgets() {
                       <BudgetCard
                         key={budget.id}
                         budgetId={budget.id}
-                        onSubmitForm={async (): Promise<void> => {
+                        onSubmitForm={async () => {
                           await mutate()
                         }}
                       />
                     ))}
-              </div>
+              </section>
             </div>
           ) : (
-            <div className="w-full bg-white px-5 py-6 rounded-md md:p-10">
+            <section className="w-full bg-white px-5 py-6 rounded-md md:p-10">
               <EmptyContent
-                variant={'secondary'}
+                variant="secondary"
                 content="No budgets available."
               />
-            </div>
+            </section>
           )}
-        </div>
+        </main>
       </Layout>
     </>
   )

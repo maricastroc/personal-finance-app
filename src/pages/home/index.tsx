@@ -18,7 +18,7 @@ import { BudgetsSection } from './partials/BudgetsSection'
 import { RecurringBillsSection } from './partials/RecurringBillsSection'
 import { TransactionsSection } from './partials/TransactionsSection'
 import { PotsSection } from './partials/PotsSection'
-import { Header } from './partials/Header'
+import { PageHeader } from './partials/PageHeader'
 
 interface BalanceProps {
   incomes: number | undefined
@@ -154,7 +154,7 @@ export default function Home() {
             isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
           }`}
         >
-          <Header />
+          <PageHeader />
 
           <section className="grid md:grid-cols-3 gap-4 mt-8 md:h-[7.5rem] lg:mt-6 lg:gap-6">
             <FinanceCard

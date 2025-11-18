@@ -4,7 +4,7 @@ import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 
-export const Header = () => {
+export const PageHeader = () => {
   const session = useSession()
 
   const router = useRouter()
@@ -23,6 +23,7 @@ export const Header = () => {
 
       <button
         onClick={isDemoUser ? () => router.push('/auth/login') : handleLogout}
+        type="button"
         className="font-semibold rounded-md p-3 px-4 flex gap-2 items-center transition-all duration-300 max-h-[60px] text-sm bg-gray-900 text-beige-100 hover:bg-gray-500"
       >
         <FontAwesomeIcon icon={faRightToBracket} />

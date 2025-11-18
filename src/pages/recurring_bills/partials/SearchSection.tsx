@@ -55,8 +55,8 @@ export const SearchSection = ({
         <div className="max-md:hidden md:flex md:min-w-[11rem] md:max-w-[15rem] lg:max-w-[16rem] w-full flex items-center justify-center gap-2">
           <p className="whitespace-nowrap text-sm">Sort by</p>
           <SelectInput
+            label="Sort"
             placeholder="Sort by..."
-            contentWidth={'180'}
             data={sortByFilters}
             onSelect={(value: string) => handleSetSelectedSortBy(value)}
           />
@@ -65,6 +65,7 @@ export const SearchSection = ({
       {isSortBySelectOpen && (
         <div className="flex mt-4 md:hidden items-center justify-center gap-2">
           <SelectInput
+            label="Sort"
             placeholder="Sort by..."
             data={sortByFilters}
             onSelect={(value: string) => handleSetSelectedSortBy(value)}

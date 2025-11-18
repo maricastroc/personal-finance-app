@@ -15,6 +15,9 @@ import toast from 'react-hot-toast'
 import { z } from 'zod'
 
 interface EditBudgetModalProps {
+  id: string
+  isOpen: boolean
+  onOpenChange: (value: boolean) => void
   onClose: () => void
   categoryName?: string
   budgetLimit?: number
@@ -37,13 +40,16 @@ const budgetFormSchema = () =>
 export type BudgetFormData = z.infer<ReturnType<typeof budgetFormSchema>>
 
 export function BudgetModal({
+  id,
+  isOpen,
+  onOpenChange,
   onClose,
   categoryName,
   budgetLimit,
   theme,
   budgetId,
-  onSubmitForm,
   existedCategories,
+  onSubmitForm,
   isEdit = false,
 }: EditBudgetModalProps) {
   const {
@@ -56,8 +62,8 @@ export function BudgetModal({
     resolver: zodResolver(budgetFormSchema()),
     defaultValues: {
       category: isEdit ? categoryName : '',
-      budgetLimit,
-      theme,
+      budgetLimit: isEdit ? budgetLimit : undefined,
+      theme: isEdit ? theme : '',
     },
   })
 
@@ -74,11 +80,9 @@ export function BudgetModal({
         amount: data.budgetLimit,
       }
 
-      const response = await api.put(`/budgets/${budgetId}`, payload, {
-        headers: { 'Content-Type': 'application/json' },
-      })
+      const response = await api.put(`/budgets/${budgetId}`, payload)
 
-      toast?.success(response.data.message)
+      toast.success(response.data.message)
       await onSubmitForm()
       reset()
       onClose()
@@ -95,11 +99,9 @@ export function BudgetModal({
         amount: data.budgetLimit,
       }
 
-      const response = await api.post(`/budgets/${budgetId}`, payload, {
-        headers: { 'Content-Type': 'application/json' },
-      })
+      const response = await api.post(`/budgets`, payload)
 
-      toast?.success(response.data.message)
+      toast.success(response.data.message)
       await onSubmitForm()
       reset()
       onClose()
@@ -109,30 +111,42 @@ export function BudgetModal({
   }
 
   return (
-    <Dialog.Portal>
-      <Dialog.Overlay
-        className="fixed inset-0 z-[990] bg-black bg-opacity-70"
-        onClick={onClose}
-      />
+    <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 z-[990] bg-black bg-opacity-70" />
 
-      <Dialog.Content className="fixed z-[999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] bg-white rounded-lg shadow-lg p-6 md:w-[560px] md:p-8">
-        <Dialog.Close
-          onClick={onClose}
-          className="absolute top-4 right-4 hover:bg-gray-900 hover:text-gray-100 transition-all duration-300 text-gray-500  p-[0.1rem] rounded-full border border-gray-900"
+        <Dialog.Content
+          id={id}
+          aria-labelledby={`${id}-title`}
+          aria-describedby={`${id}-desc`}
+          className="fixed z-[999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                    w-[90vw] md:w-[560px] bg-white rounded-lg shadow-lg p-6 md:p-8"
         >
-          <X size={16} alt="Close modal" />
-        </Dialog.Close>
+          <Dialog.Close
+            aria-label="Close modal"
+            onClick={onClose}
+            className="absolute top-4 right-4 hover:bg-gray-900 hover:text-gray-100
+              transition-all duration-300 text-gray-500 p-[0.1rem]
+              rounded-full border border-gray-900 focus:outline-offset-2"
+          >
+            <X size={16} />
+          </Dialog.Close>
 
-        <Dialog.Title className="text-xl font-semibold text-gray-900 mb-2 md:text-2xl">
-          {isEdit ? 'Edit Budget' : 'Add New Budget'}
-        </Dialog.Title>
+          <Dialog.Title
+            id={`${id}-title`}
+            className="text-xl md:text-2xl font-semibold text-gray-900 mb-2"
+          >
+            {isEdit ? 'Edit Budget' : 'Add New Budget'}
+          </Dialog.Title>
 
-        <Dialog.Description className="flex flex-col w-full">
-          <p className="text-sm text-gray-600">
+          <Dialog.Description
+            id={`${id}-desc`}
+            className="text-sm text-gray-600 mb-4"
+          >
             {isEdit
               ? 'As your budgets change, feel free to update your spending limits.'
               : 'Choose a category to set a spending budget. These categories can help you monitor spending.'}
-          </p>
+          </Dialog.Description>
 
           <form
             className="mt-6"
@@ -143,61 +157,94 @@ export function BudgetModal({
             }
           >
             <div className="flex flex-col">
-              <label className="text-xs font-bold text-gray-500 mb-1">
+              <label
+                htmlFor="category"
+                className="text-xs font-bold text-gray-500 mb-1"
+              >
                 Budget Category
               </label>
+
               {categories && (
                 <SelectInput
+                  label="Category"
                   defaultValue={categoryName}
                   existedCategories={existedCategories}
                   data={categories}
                   onSelect={(value: string) => setValue('category', value)}
                   placeholder="Select a Category..."
+                  aria-describedby={
+                    errors.category ? 'category-error' : undefined
+                  }
                 />
               )}
+
               {errors.category && (
-                <ErrorMessage message={errors.category.message} />
+                <ErrorMessage
+                  id="category-error"
+                  message={errors.category.message}
+                />
               )}
             </div>
 
+            {/* LIMIT */}
             <div className="flex flex-col mt-4">
-              <label className="text-xs font-bold text-gray-500 mb-1">
+              <label
+                htmlFor="budgetLimit"
+                className="text-xs font-bold text-gray-500 mb-1"
+              >
                 Maximum Spend ($)
               </label>
+
               <div className="relative w-full">
                 <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
                   $
                 </span>
+
                 <input
                   type="number"
-                  step="0.01"
                   id="budgetLimit"
+                  step="0.01"
                   className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
                   placeholder="Maximum Spend"
                   {...register('budgetLimit', { valueAsNumber: true })}
+                  aria-describedby={
+                    errors.budgetLimit ? 'budget-limit-error' : undefined
+                  }
                 />
-                {errors.budgetLimit && (
-                  <ErrorMessage message={errors.budgetLimit.message} />
-                )}
               </div>
+
+              {errors.budgetLimit && (
+                <ErrorMessage
+                  id="budget-limit-error"
+                  message={errors.budgetLimit.message}
+                />
+              )}
             </div>
 
+            {/* THEME */}
             <div className="flex flex-col mt-4">
-              <label className="text-xs font-bold text-gray-500 mb-1">
+              <label
+                htmlFor="theme"
+                className="text-xs font-bold text-gray-500 mb-1"
+              >
                 Theme Color
               </label>
+
               <SelectTheme
                 defaultValue={theme}
                 data={getThemeOptions}
                 onSelect={(value: string) => setValue('theme', value)}
               />
-              {errors.theme && <ErrorMessage message={errors.theme.message} />}
+
+              {errors.theme && (
+                <ErrorMessage id="theme-error" message={errors.theme.message} />
+              )}
             </div>
 
-            <CustomButton isSubmitting={isSubmitting} />
+            <CustomButton type="submit" isSubmitting={isSubmitting} />
           </form>
-        </Dialog.Description>
-      </Dialog.Content>
-    </Dialog.Portal>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   )
 }
