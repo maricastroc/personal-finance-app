@@ -1,6 +1,7 @@
 import { Item } from '@/utils/getNavList'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Tooltip } from 'react-tooltip';
 
 export function AsideItem({ item, active, menuShown }: Item) {
   return (
@@ -24,6 +25,8 @@ export function AsideItem({ item, active, menuShown }: Item) {
       <div className="relative h-6 w-6">
         <Image
           src={active ? item.iconActive : item.icon}
+          data-tooltip-id={item.name}
+                      data-tooltip-content={item.name}
           alt=""
           role="presentation"
           fill
@@ -39,6 +42,12 @@ export function AsideItem({ item, active, menuShown }: Item) {
           {item.name}
         </p>
       )}
+
+      <Tooltip
+        id={item.name}
+        place="right"
+        className="custom-tooltip"
+      />
     </Link>
   )
 }
