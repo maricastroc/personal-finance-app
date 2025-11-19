@@ -7,6 +7,7 @@ export function AsideItem({ item, active, menuShown }: Item) {
     <Link
       href={item.href}
       aria-current={active ? 'page' : undefined}
+      aria-label={!menuShown ? item.name : undefined} 
       className={`
         flex gap-4 hover:brightness-150 focus:outline-none
         focus:outline-2 focus:outline-white focus:outline-offset-2
@@ -23,7 +24,8 @@ export function AsideItem({ item, active, menuShown }: Item) {
       <div className="relative h-6 w-6">
         <Image
           src={active ? item.iconActive : item.icon}
-          alt={menuShown ? `${item.name} icon` : item.name}
+          alt=""
+          role="presentation"
           fill
         />
       </div>

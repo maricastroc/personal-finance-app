@@ -43,6 +43,7 @@ function AsideItem({ item, active }: Item) {
     <Link
       href={item.href}
       aria-current={active ? 'page' : undefined}
+      aria-label={item.name}
       className={`flex flex-col gap-2
         ${
           active
