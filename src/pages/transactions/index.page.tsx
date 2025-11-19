@@ -11,7 +11,7 @@ import { LoadingPage } from "@/components/shared/LoadingPage";
 import { PaginationSection } from "@/components/shared/PaginationSection/PaginationSection";
 import { SearchSection } from "./partials/SearchSection";
 import { TransactionTable } from "./partials/TransactionsTable";
-import { TransferModalForm } from "./partials/TransferModal";
+import { TransferFormModal } from "./partials/TransferFormModal";
 import { TransactionCard } from "./partials/TransactionCard";
 import useRequest from "@/utils/useRequest";
 import { formatToSnakeCase } from "@/utils/formatToSnakeCase";
@@ -23,30 +23,22 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import * as Dialog from "@radix-ui/react-dialog";
 import { format } from "date-fns";
 import { useDebounce } from "@/utils/useDebounce";
+import { PageTitle } from "@/components/shared/PageTitle";
+import { PrimaryButton } from "@/components/core/PrimaryButton";
 
 export default function Transactions() {
   const [currentPage, setCurrentPage] = useState(1);
-
-  const router = useRouter();
-
-  const { category } = router.query;
-
-  const [search, setSearch] = useState("");
-
   const [debouncedSearch, setDebouncedSearch] = useState("");
-
-  const [selectedCategory, setSelectedCategory] = useState(
-    (category as string) || "all"
-  );
-
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedSortBy, setSelectedSortBy] = useState("latest");
-
   const [maxVisibleButtons, setMaxVisibleButtons] = useState(3);
-
-  const { isSidebarOpen } = useAppContext();
-
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
 
+  const router = useRouter();
+  const { category } = router.query;
+
+  const { isSidebarOpen } = useAppContext();
   const isRouteLoading = useLoadingOnRouteChange();
 
   useDebounce(
@@ -75,24 +67,19 @@ export default function Transactions() {
     },
     {
       revalidateOnFocus: false,
-      revalidateIfStale: true,
+      keepPreviousData: true,
       dedupingInterval: 20000,
       focusThrottleInterval: 30000,
-      keepPreviousData: true,
     }
   );
 
   const { data: categories } = useRequest<CategoryProps[]>(
-    {
-      url: "/categories",
-      method: "GET",
-    },
+    { url: "/categories", method: "GET" },
     {
       revalidateOnFocus: false,
-      revalidateIfStale: true,
+      keepPreviousData: true,
       dedupingInterval: 20000,
       focusThrottleInterval: 30000,
-      keepPreviousData: true,
     }
   );
 
@@ -108,19 +95,15 @@ export default function Transactions() {
   const totalPages = calculateTotalPages(pagination.total, pagination.limit);
 
   useEffect(() => {
-    const updateMaxVisibleButtons = () => {
-      if (window.innerWidth >= 1024) {
-        setMaxVisibleButtons(6);
-      } else if (window.innerWidth >= 768) {
-        setMaxVisibleButtons(4);
-      } else {
-        setMaxVisibleButtons(3);
-      }
+    const updateMax = () => {
+      if (window.innerWidth >= 1024) setMaxVisibleButtons(6);
+      else if (window.innerWidth >= 768) setMaxVisibleButtons(4);
+      else setMaxVisibleButtons(3);
     };
 
-    updateMaxVisibleButtons();
-    window.addEventListener("resize", updateMaxVisibleButtons);
-    return () => window.removeEventListener("resize", updateMaxVisibleButtons);
+    updateMax();
+    window.addEventListener("resize", updateMax);
+    return () => window.removeEventListener("resize", updateMax);
   }, []);
 
   const handleSetCategory = useCallback((value: string) => {
@@ -133,50 +116,52 @@ export default function Transactions() {
     setCurrentPage(1);
   }, []);
 
-  return isRouteLoading ? (
-    <LoadingPage />
-  ) : (
+  if (isRouteLoading) return <LoadingPage />;
+
+  return (
     <>
-      <NextSeo
-        title="Transactions | Finance App"
-        additionalMetaTags={[
-          {
-            name: "viewport",
-            content: "width=device-width, initial-scale=1.0",
-          },
-        ]}
-      />
+      <NextSeo title="Transactions | Finance App" />
+
       <Layout>
-        <div
+        <main
           className={`w-full px-4 py-5 flex-grow md:p-10 lg:pl-0 pb-20 md:pb-32 lg:pb-8 ${
             isSidebarOpen ? "lg:pr-10" : "lg:pr-20"
           }`}
+          aria-labelledby="transactions-title"
         >
           <div className="flex items-center justify-between w-full">
-            <h1 className="text-gray-900 font-bold text-3xl">Transactions</h1>
-            <Dialog.Root open={isTransferModalOpen}>
+            <PageTitle title="Transactions" />
+
+            <Dialog.Root
+              open={isTransferModalOpen}
+              onOpenChange={setIsTransferModalOpen}
+            >
               <Dialog.Trigger asChild>
-                <button
-                  onClick={() => setIsTransferModalOpen(true)}
-                  className={`font-semibold rounded-md p-3 px-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-gray-900 text-beige-100 hover:bg-gray-500 capitalize justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed`}
+                <PrimaryButton
+                  aria-haspopup="dialog"
+                  aria-expanded={isTransferModalOpen}
+                  aria-controls="transfer-form-modal"
+                  className="mt-0 max-w-[5rem] sm:max-w-[8rem] text-sm"
                 >
-                  <FontAwesomeIcon icon={faPlus} className="max-sm:hidden" />
+                  <FontAwesomeIcon icon={faPlus} className="hidden sm:block" />
                   Transfer
-                </button>
+                </PrimaryButton>
               </Dialog.Trigger>
+
               {categories && (
-                <TransferModalForm
+                <TransferFormModal
+                  id="transfer-form-modal"
+                  categories={categories}
                   onSubmitForm={async (): Promise<void> => {
                     await mutate();
                   }}
-                  categories={categories}
                   onClose={() => setIsTransferModalOpen(false)}
                 />
               )}
             </Dialog.Root>
           </div>
 
-          <div className="mt-8 flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
+          <section className="mt-8 flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
             <SearchSection
               categories={categories}
               category={category as string}
@@ -191,35 +176,37 @@ export default function Transactions() {
               isValidating={isValidating}
             />
 
-            <div className="flex flex-col md:hidden">
+            <div
+              className="flex flex-col md:hidden"
+              aria-label="Transaction list"
+            >
               {isValidating ? (
-                Array.from({ length: 9 }).map((_, index) => (
-                  <SkeletonTransactionCard key={index} />
+                Array.from({ length: 9 }).map((_, i) => (
+                  <SkeletonTransactionCard key={i} />
                 ))
-              ) : transactions?.length ? (
-                transactions.map((transaction, index) => (
+              ) : transactions.length ? (
+                transactions.map((t, index) => (
                   <TransactionCard
                     key={index}
                     name={
-                      transaction.balance === "income"
-                        ? transaction.sender.name
-                        : transaction.recipient.name
+                      t.balance === "income" ? t.sender.name : t.recipient.name
                     }
-                    balance={transaction.balance}
+                    balance={t.balance}
                     avatarUrl={
-                      transaction.balance === "income"
-                        ? transaction.sender.avatarUrl
-                        : transaction.recipient.avatarUrl
+                      t.balance === "income"
+                        ? t.sender.avatarUrl
+                        : t.recipient.avatarUrl
                     }
-                    date={format(transaction.date, "MMM dd, yyyy")}
-                    value={formatToDollar(transaction.amount || 0)}
-                    category={transaction.category?.name}
+                    date={format(t.date, "MMM dd, yyyy")}
+                    value={formatToDollar(t.amount || 0)}
+                    category={t.category?.name}
                   />
                 ))
               ) : (
                 <EmptyContent content="No transactions available" />
               )}
             </div>
+
             <div className="flex items-center justify-between gap-2 mt-6">
               <PaginationSection
                 currentPage={currentPage}
@@ -228,8 +215,8 @@ export default function Transactions() {
                 handleSetCurrentPage={setCurrentPage}
               />
             </div>
-          </div>
-        </div>
+          </section>
+        </main>
       </Layout>
     </>
   );

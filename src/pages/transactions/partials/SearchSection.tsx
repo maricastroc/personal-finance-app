@@ -27,6 +27,7 @@ export const SearchSection = ({
   handleSetSortBy,
 }: SearchSectionProps) => {
   const [isCategoriesSelectOpen, setIsCategoriesSelectOpen] = useState(false);
+
   const [isSortBySelectOpen, setIsSortBySelectOpen] = useState(false);
 
   return (

@@ -21,12 +21,17 @@ import { PageTitle } from "@/components/shared/PageTitle";
 
 export default function RecurringBills() {
   const [currentPage, setCurrentPage] = useState(1);
+
   const [maxVisibleButtons, setMaxVisibleButtons] = useState(3);
+
   const [search, setSearch] = useState("");
+
   const [debouncedSearch, setDebouncedSearch] = useState("");
+
   const [selectedSortBy, setSelectedSortBy] = useState("latest");
 
   const { isSidebarOpen } = useAppContext();
+
   const isRouteLoading = useLoadingOnRouteChange();
 
   useDebounce(

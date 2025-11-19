@@ -69,7 +69,7 @@ export function PotFormModal({
       currentAmount: isEdit ? currentAmount : 0,
     },
   });
-  console.log(potId, isEdit, targetAmount);
+
   const handleEditPot = async (data: PotFormData) => {
     try {
       const payload = {
