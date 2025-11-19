@@ -7,7 +7,7 @@ export const getThemeOptions = colors.map((color) => ({
         className={`w-4 mr-2 h-4 rounded-full ${
           color.name.toLowerCase() === 'white' ? 'border border-gray-800' : ''
         }`}
-        style={{ backgroundColor: color.hex }}
+        style={{ backgroundColor: color.hex, marginRight: 4 }}
       ></span>
       <span>{color.name}</span>
     </div>

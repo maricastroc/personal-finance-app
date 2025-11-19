@@ -7,7 +7,7 @@ import Layout from '@/components/layouts/layout.page'
 import { EmptyContent } from '@/components/shared/EmptyContent'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 
-import { PotModalForm } from './partials/PotModalForm'
+import { PotFormModal } from './partials/PotFormModal'
 import { SkeletonPotCard } from './partials/SkeletonPotCard'
 import { AllPotsProps } from '../home'
 import useRequest from '@/utils/useRequest'
@@ -68,7 +68,7 @@ export default function Pots() {
             setIsOpen={setIsPotModalOpen}
             modalId="pot-modal"
           >
-            <PotModalForm
+            <PotFormModal
               id="pot-modal"
               onClose={() => setIsPotModalOpen(false)}
               onSubmitForm={async () => await mutate()}

@@ -58,7 +58,7 @@ export default async function handler(
         percentageSpent: percentageSpent.toFixed(2),
       }
 
-      return res.json({ pot: potWithDetails })
+      return res.json({ potWithDetails })
     } catch (error) {
       console.error(error)
       return res.status(500).json({ error: 'An error occurred' })

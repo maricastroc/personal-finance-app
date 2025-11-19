@@ -10,7 +10,7 @@ import { PotCardValue } from './partials/PotCardValue'
 import { PotProgressBar } from './partials/PotProgressBar'
 import { PotAmountButtons } from './partials/PotAmountButtons'
 import { DeletePotModal } from '../DeletePotModal'
-import { EditPotAmountModal } from '../EditPotAmountModal'
+import { PotFormModal } from '../PotFormModal'
 
 interface PotCardProps {
   potId: string
@@ -30,7 +30,7 @@ export const PotCard = ({ potId, onSubmitForm }: PotCardProps) => {
 
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false)
 
-  const { data: pot, mutate } = useRequest<PotWithDetails>(
+  const { data, mutate } = useRequest<PotWithDetails>(
     {
       url: `/pots/${potId}`,
       method: 'GET',
@@ -50,35 +50,37 @@ export const PotCard = ({ potId, onSubmitForm }: PotCardProps) => {
     setIsDropdownOpen(false)
   }
 
-  if (!pot) return null
+  if (!data?.pot) return null
 
-  const percentage = pot.percentageSpent
+  const percentage = data?.percentageSpent
+
+  const pot = data?.pot
 
   const originalPercentage = Math.max(
     0,
-    Math.min(100, (pot.pot.currentAmount / pot.pot.targetAmount) * 100),
+    Math.min(100, (pot?.currentAmount / pot?.targetAmount) * 100),
   )
 
   return (
     <div className="flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
       <PotCardHeader
-        pot={pot.pot}
+        pot={pot}
         isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
         setIsEditOpen={setIsEditOpen}
         setIsDeleteOpen={setIsDeleteOpen}
       />
 
-      <PotCardValue pot={pot.pot} />
+      <PotCardValue pot={pot} />
 
       <PotProgressBar
         percentage={percentage}
-        color={pot.pot.theme.color}
-        target={pot.pot.targetAmount}
+        color={pot.theme.color}
+        target={pot.targetAmount}
       />
 
       <PotAmountButtons
-        pot={pot.pot}
+        pot={pot}
         originalPercentage={originalPercentage}
         isAddOpen={isAddOpen}
         setIsAddOpen={setIsAddOpen}
@@ -98,19 +100,20 @@ export const PotCard = ({ potId, onSubmitForm }: PotCardProps) => {
             setIsDeleteOpen(false)
             setIsDropdownOpen(false)
           }}
-          pot={pot.pot}
+          pot={pot}
         />
       </Dialog.Root>
 
       <Dialog.Root open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <EditPotAmountModal
-          id={pot.pot.id}
-          originalPercentage={originalPercentage}
-          name={pot.pot.name}
-          currentAmount={pot?.pot.currentAmount}
-          themeColor={pot?.pot.theme.color}
-          targetAmount={pot?.pot.targetAmount}
+        <PotFormModal
+          isEdit
+          id="pot-modal"
+          name={pot?.name}
+          targetAmount={pot?.targetAmount}
+          currentAmount={pot?.currentAmount}
+          themeColor={pot?.theme?.color}
           onClose={() => setIsAddOpen(false)}
+          potId={potId}
           onSubmitForm={async () => {
             await mutate()
             await onSubmitForm()

@@ -10,11 +10,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
 import { AxiosResponse } from 'axios'
 import { X } from 'phosphor-react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
 
-interface EditPotModalProps {
+interface PotFormModalProps {
   id: string
   onClose: () => void
   targetAmount?: number
@@ -42,7 +43,7 @@ const potFormSchema = () =>
 
 export type PotFormData = z.infer<ReturnType<typeof potFormSchema>>
 
-export function PotModalForm({
+export function PotFormModal({
   id,
   onClose,
   name,
@@ -52,7 +53,7 @@ export function PotModalForm({
   potId,
   onSubmitForm,
   isEdit = false,
-}: EditPotModalProps) {
+}: PotFormModalProps) {
   const {
     register,
     handleSubmit,
@@ -68,7 +69,7 @@ export function PotModalForm({
       currentAmount: isEdit ? currentAmount : 0,
     },
   })
-
+  console.log(potId, isEdit, targetAmount)
   const handleEditPot = async (data: PotFormData) => {
     try {
       const payload = {
@@ -107,6 +108,17 @@ export function PotModalForm({
       handleApiError(error)
     }
   }
+
+  useEffect(() => {
+    if (isEdit) {
+      reset({
+        name,
+        targetAmount,
+        currentAmount,
+        themeColor,
+      })
+    }
+  }, [isEdit, name, themeColor, targetAmount, currentAmount, reset])
 
   return (
     <Dialog.Portal>

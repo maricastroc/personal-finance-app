@@ -96,12 +96,14 @@ const SelectItem = React.forwardRef(
         text-gray-900
         hover:bg-blue-100 
         focus:bg-blue-100 
-        focus:text-blue-900
+        focus:text-blue-900 gap-10
         outline-none
       "
       {...props}
     >
-      <Select.ItemText>{children}</Select.ItemText>
+      <Select.ItemText className="flex items-center gap-2">
+        {children}
+      </Select.ItemText>
     </Select.Item>
   ),
 )

@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import { PotProps } from '@/types/pot'
 import { EditPotAmountModal } from '../../EditPotAmountModal'
@@ -56,7 +56,7 @@ export function PotAmountButtons({
             onClick={() => setIsWithdrawOpen(true)}
             className="bg-beige-100 w-full rounded-md py-4 px-3 hover:brightness-90"
           >
-            <FontAwesomeIcon icon={faPlus} className="text-sm mr-1" />
+            <FontAwesomeIcon icon={faMinus} className="text-sm mr-1" />
             Withdraw
           </button>
         </Dialog.Trigger>
