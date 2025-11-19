@@ -66,17 +66,35 @@ export default function Transactions() {
       total: number
       totalPages: number
     }
-  }>({
-    url: `/transactions?page=${currentPage}&limit=10&filterByName=${selectedCategory.toLowerCase()}&sortBy=${formatToSnakeCase(
-      selectedSortBy,
-    )}&search=${debouncedSearch}`,
-    method: 'GET',
-  })
+  }>(
+    {
+      url: `/transactions?page=${currentPage}&limit=10&filterByName=${selectedCategory.toLowerCase()}&sortBy=${formatToSnakeCase(
+        selectedSortBy,
+      )}&search=${debouncedSearch}`,
+      method: 'GET',
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      dedupingInterval: 20000,
+      focusThrottleInterval: 30000,
+      keepPreviousData: true,
+    },
+  )
 
-  const { data: categories } = useRequest<CategoryProps[]>({
-    url: '/categories',
-    method: 'GET',
-  })
+  const { data: categories } = useRequest<CategoryProps[]>(
+    {
+      url: '/categories',
+      method: 'GET',
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      dedupingInterval: 20000,
+      focusThrottleInterval: 30000,
+      keepPreviousData: true,
+    },
+  )
 
   const transactions = data?.transactions || []
 

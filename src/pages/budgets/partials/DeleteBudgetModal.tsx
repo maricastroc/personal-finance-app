@@ -1,3 +1,5 @@
+import { DeleteButton } from '@/components/core/DeleteButton'
+import { PrimaryButton } from '@/components/core/PrimaryButton'
 import { api } from '@/lib/axios'
 import { BudgetProps } from '@/types/budget'
 import { handleApiError } from '@/utils/handleApiError'
@@ -81,29 +83,23 @@ export function DeleteBudgetModal({
           </Dialog.Description>
 
           <div className="flex flex-col w-full gap-4 mt-10">
-            <button
+            <DeleteButton
               type="button"
               disabled={isSubmitting}
               onClick={handleDeleteBudget}
-              className="font-semibold rounded-md p-3 px-4 flex items-center justify-center
-                bg-secondary-red text-beige-100 text-sm
-                hover:brightness-125 transition-all duration-300
-                disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed"
             >
-              Yes, delete permanently
-            </button>
+              Yes, confirm deletion
+            </DeleteButton>
 
-            <button
+            <PrimaryButton
               type="button"
               disabled={isSubmitting}
               onClick={onClose}
-              className="font-semibold rounded-md p-3 px-4 flex items-center justify-center
-                bg-beige-100 text-gray-900 text-sm
-                hover:brightness-90 transition-all duration-300
-                disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed"
+              variant="secondary"
+              className="mt-0 text-sm"
             >
               No, I want to go back
-            </button>
+            </PrimaryButton>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

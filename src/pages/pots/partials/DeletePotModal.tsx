@@ -1,3 +1,5 @@
+import { DeleteButton } from '@/components/core/DeleteButton'
+import { PrimaryButton } from '@/components/core/PrimaryButton'
 import { api } from '@/lib/axios'
 import { PotProps } from '@/types/pot'
 import { handleApiError } from '@/utils/handleApiError'
@@ -70,23 +72,23 @@ export function DeletePotModal({
         </Dialog.Description>
 
         <div className="flex flex-col w-full gap-4 mt-10">
-          <button
+          <DeleteButton
             type="button"
             disabled={isSubmitting}
             onClick={handleDeletePot}
-            className="font-semibold rounded-md p-3 px-4 flex gap-2 transition-all duration-300 text-sm bg-secondary-red text-beige-100 hover:brightness-125 justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed"
           >
             Yes, confirm deletion
-          </button>
+          </DeleteButton>
 
-          <button
+          <PrimaryButton
             type="button"
             disabled={isSubmitting}
             onClick={onClose}
-            className="font-semibold rounded-md p-3 px-4 flex gap-2 transition-all duration-300 text-sm bg-beige-100 text-gray-900 hover:brightness-90 justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed"
+            variant="secondary"
+            className="mt-0 text-sm"
           >
             No, I want to go back
-          </button>
+          </PrimaryButton>
         </div>
       </Dialog.Content>
     </Dialog.Portal>

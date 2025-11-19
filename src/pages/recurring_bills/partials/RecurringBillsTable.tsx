@@ -30,53 +30,58 @@ export const RecurringBillsTable = ({
         </th>
       </tr>
     </thead>
+
     <tbody>
       {isValidating ? (
         Array.from({ length: 9 }).map((_, index) => (
           <tr key={index} className="border-t">
-            <td colSpan={4} className="px-4 py-2">
+            <td colSpan={3} className="px-4 py-2">
               <SkeletonTransactionCard />
             </td>
           </tr>
         ))
       ) : recurringBills && recurringBills.length > 0 ? (
-        recurringBills.map((recurringBill) => (
-          <tr key={recurringBill.id} className="border-t">
+        recurringBills.map((bill) => (
+          <tr key={bill.id} className="border-t">
             <td className="px-4 py-2 text-left">
               <RecurringBillCard
-                name={recurringBill.recipient.name}
-                avatarUrl={recurringBill.recipient.avatarUrl}
+                name={bill.recipient.name}
+                avatarUrl={bill.recipient.avatarUrl}
               />
             </td>
+
             <td className="text-xs text-gray-600 px-4 py-2 text-left">
               <div className="flex items-center gap-2">
                 {`${capitalizeFirstLetter(
-                  recurringBill.recurrenceFrequency,
-                )} - ${getOrdinalSuffix(recurringBill.recurrenceDay || '')}`}
-                {recurringBill.status === 'paid' && (
+                  bill.recurrenceFrequency,
+                )} - ${getOrdinalSuffix(bill.recurrenceDay || '')}`}
+
+                {bill.status === 'paid' && (
                   <Image src={iconBillPaid} alt="" width={12} />
                 )}
-                {recurringBill.status === 'due soon' && (
+
+                {bill.status === 'due soon' && (
                   <Image src={iconBillDue} alt="" width={12} />
                 )}
               </div>
             </td>
+
             <td className="text-sm text-gray-600 px-4 py-2 text-right">
               <span
                 className={`font-bold ${
-                  recurringBill?.status === 'due soon'
+                  bill.status === 'due soon'
                     ? 'text-secondary-red'
                     : 'text-gray-900'
                 }`}
               >
-                {formatToDollar(recurringBill.amount)}
+                {formatToDollar(bill.amount)}
               </span>
             </td>
           </tr>
         ))
       ) : (
         <tr>
-          <td colSpan={4} className="px-4 py-2">
+          <td colSpan={3} className="px-4 py-2">
             <EmptyContent content="No recurring bills available." />
           </td>
         </tr>
