@@ -28,10 +28,10 @@ export function BudgetCardTransactions({
         <button
           onClick={onSeeAll}
           aria-label="See all transactions"
-          className="flex items-center gap-2 hover:opacity-80"
           type="button"
+          className="flex items-center gap-2 hover:opacity-80"
         >
-          <p className="text-sm text-gray-500">See All</p>
+          <span className="text-sm text-gray-500">See All</span>
           <img
             src="/assets/images/icon-caret-right.svg"
             alt=""
@@ -44,36 +44,35 @@ export function BudgetCardTransactions({
       {isLoading ? (
         <div className="flex flex-col mt-6">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} aria-hidden="true">
-              <SkeletonTransactionCard />
-            </div>
+            <SkeletonTransactionCard key={i} aria-hidden="true" />
           ))}
         </div>
       ) : (
         <ul className="flex flex-col mt-6">
-          {transactions.map((t, i) => (
-            <li key={t.id || i}>
-              <TransactionCard
-                isBudgetsScreen
-                name={t.balance === 'income' ? t.sender.name : t.recipient.name}
-                balance={t.balance}
-                avatarUrl={
-                  t.balance === 'income'
-                    ? t.sender.avatarUrl
-                    : t.recipient.avatarUrl
-                }
-                date={format(t.date, 'MMM dd, yyyy')}
-                value={formatToDollar(t.amount)}
-              />
+          {transactions.map((t, i) => {
+            const isIncome = t.balance === 'income'
+            const user = isIncome ? t.sender : t.recipient
 
-              {i !== transactions.length - 1 && (
-                <span
-                  aria-hidden="true"
-                  className="w-full h-px bg-gray-200 my-1"
+            return (
+              <li key={t.id ?? i}>
+                <TransactionCard
+                  isBudgetsScreen
+                  name={user.name}
+                  balance={t.balance}
+                  avatarUrl={user.avatarUrl}
+                  date={format(t.date, 'MMM dd, yyyy')}
+                  value={formatToDollar(t.amount)}
                 />
-              )}
-            </li>
-          ))}
+
+                {i < transactions.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="w-full h-px bg-gray-200 my-1"
+                  />
+                )}
+              </li>
+            )
+          })}
         </ul>
       )}
     </section>

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { CustomButton } from '@/components/core/CustomButton'
+import { PrimaryButton } from '@/components/core/PrimaryButton'
 import { api } from '@/lib/axios'
 import { formatToDollar } from '@/utils/formatToDollar'
 import { handleApiError } from '@/utils/handleApiError'
@@ -204,7 +204,9 @@ export function EditPotAmountModal({
           </div>
         </div>
 
-        <CustomButton onClick={handleEditPot} isSubmitting={isSubmitting} />
+        <PrimaryButton onClick={handleEditPot} isSubmitting={isSubmitting}>
+          Save Changes
+        </PrimaryButton>
       </Dialog.Content>
     </Dialog.Portal>
   )

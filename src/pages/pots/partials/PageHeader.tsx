@@ -1,10 +1,12 @@
+import { PrimaryButton } from '@/components/core/PrimaryButton'
+import { PageTitle } from '@/components/shared/PageTitle'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ReactNode } from 'react'
 
 interface PageHeaderProps {
-  title: string
   buttonLabel: string
-  icon?: ReactNode
   isOpen: boolean
   setIsOpen: (open: boolean) => void
   modalId: string
@@ -12,9 +14,7 @@ interface PageHeaderProps {
 }
 
 export function PageHeader({
-  title,
   buttonLabel,
-  icon,
   isOpen,
   setIsOpen,
   modalId,
@@ -22,19 +22,19 @@ export function PageHeader({
 }: PageHeaderProps) {
   return (
     <header className="flex items-center justify-between w-full mb-8">
-      <h1 className="text-gray-900 font-bold text-3xl">{title}</h1>
+      <PageTitle title="Pots" />
 
       <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
         <Dialog.Trigger asChild>
-          <button
+          <PrimaryButton
             aria-haspopup="dialog"
             aria-expanded={isOpen}
             aria-controls={modalId}
-            className="font-semibold rounded-md p-3 px-4 flex gap-2 items-center transition-all duration-300 max-h-[60px] text-sm bg-gray-900 text-beige-100 hover:bg-gray-500"
+            className="mt-0 max-w-[8rem] text-sm"
           >
-            {icon}
+            <FontAwesomeIcon icon={faPlus} />
             {buttonLabel}
-          </button>
+          </PrimaryButton>
         </Dialog.Trigger>
 
         {children}

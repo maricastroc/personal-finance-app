@@ -11,7 +11,7 @@ import { UserProps } from '@/types/user'
 import Layout from '@/components/layouts/layout.page'
 import { AvatarInput } from '@/components/core/AvatarInput'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-import { CustomButton } from '@/components/core/CustomButton'
+import { PrimaryButton } from '@/components/core/PrimaryButton'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { handleApiError } from '@/utils/handleApiError'
 import useRequest from '@/utils/useRequest'
@@ -323,7 +323,9 @@ export default function Profile() {
                 </>
               )}
 
-              <CustomButton isSubmitting={isSubmitting} />
+              <PrimaryButton isSubmitting={isSubmitting}>
+                Save Changes
+              </PrimaryButton>
             </form>
           </div>
         </div>

@@ -2,7 +2,7 @@
 import React, { useRef, useEffect } from 'react'
 import Cropper from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
-import { CustomButton } from '../core/CustomButton'
+import { PrimaryButton } from '../core/PrimaryButton'
 
 interface ImageCropperProps {
   src: string
@@ -73,14 +73,15 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
         />
 
         <div className="flex w-full justify-center gap-2 mt-4">
-          <CustomButton
+          <PrimaryButton
             ref={closeButtonRef}
             variant="outline"
-            customContent="Cancel"
             onClick={onClose}
-          />
+          >
+            Cancel
+          </PrimaryButton>
 
-          <CustomButton customContent="Crop Image" onClick={handleCrop} />
+          <PrimaryButton onClick={handleCrop}>Crop Image</PrimaryButton>
         </div>
       </div>
     </div>

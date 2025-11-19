@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CustomButton } from '@/components/core/CustomButton'
+import { PrimaryButton } from '@/components/core/PrimaryButton'
 import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { SelectTheme } from '@/components/shared/SelectTheme'
 import { api } from '@/lib/axios'
@@ -218,7 +218,9 @@ export function PotFormModal({
             )}
           </div>
 
-          <CustomButton type="submit" isSubmitting={isSubmitting} />
+          <PrimaryButton isSubmitting={isSubmitting}>
+            Save Changes
+          </PrimaryButton>
         </form>
       </Dialog.Content>
     </Dialog.Portal>

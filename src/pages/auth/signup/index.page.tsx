@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import AuthLayout from '../../../components/layouts/authLayout.page'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-import { CustomButton } from '@/components/core/CustomButton'
+import { PrimaryButton } from '@/components/core/PrimaryButton'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
@@ -164,11 +164,9 @@ export default function SignUp() {
             </label>
           </fieldset>
 
-          <CustomButton
-            isSubmitting={isSubmitting}
-            customContent={'Create Account'}
-            customContentLoading={'Loading...'}
-          />
+          <PrimaryButton isSubmitting={isSubmitting}>
+            Create account
+          </PrimaryButton>
 
           <p className="text-sm flex items-center justify-center w-full text-gray-500 gap-2">
             Already have an account?

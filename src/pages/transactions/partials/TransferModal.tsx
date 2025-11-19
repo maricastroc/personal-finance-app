@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { CustomButton } from '@/components/core/CustomButton'
+import { PrimaryButton } from '@/components/core/PrimaryButton'
 import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { SelectInput } from '@/components/core/SelectInput'
 import { SelectUser } from '@/components/shared/SelectUser'
@@ -324,12 +324,12 @@ export function TransferModalForm({
                 </div>
               </>
             )}
-            <CustomButton
-              customContent={'Transfer'}
-              customContentLoading={'Loading...'}
+            <PrimaryButton
               type="submit"
               isSubmitting={isSubmitting || isLoading}
-            />
+            >
+              Transfer
+            </PrimaryButton>
           </form>
         </Dialog.Description>
       </Dialog.Content>

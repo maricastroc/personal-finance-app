@@ -8,7 +8,7 @@ export function LoadingPage() {
   return (
     <Layout>
       <div
-        className={`flex grow items-center justify-center w-full h-full ${
+        className={`flex grow items-center justify-center w-full h-full min-h-[100vh] ${
           isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
         }`}
       >

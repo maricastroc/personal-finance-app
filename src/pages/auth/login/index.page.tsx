@@ -9,7 +9,7 @@ import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
 import { handleApiError } from '@/utils/handleApiError'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import AuthLayout from '@/components/layouts/authLayout.page'
-import { CustomButton } from '@/components/core/CustomButton'
+import { PrimaryButton } from '@/components/core/PrimaryButton'
 import { InputBase } from '@/components/core/InputBase'
 import { PasswordInput } from '@/components/core/PasswordInput'
 import { TextLink } from '@/components/core/TextLink'
@@ -114,12 +114,7 @@ export default function Login() {
               />
             )}
           />
-
-          <CustomButton
-            customContent="Login"
-            customContentLoading="Loading..."
-            isSubmitting={isSubmitting}
-          />
+          <PrimaryButton isSubmitting={isSubmitting}>Login</PrimaryButton>
 
           <section className="flex flex-col gap-1">
             <p className="text-sm flex items-center justify-center w-full text-gray-500 gap-2">

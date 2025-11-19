@@ -6,6 +6,8 @@ import { getBudgetsCategories } from '@/utils/getBudgetsCategories'
 import { BudgetWithDetailsProps } from '@/components/shared/BudgetItem'
 import { AxiosResponse } from 'axios'
 import { KeyedMutator } from 'swr'
+import { PrimaryButton } from '@/components/core/PrimaryButton'
+import { PageTitle } from '@/components/shared/PageTitle'
 
 interface PageHeaderProps {
   isBudgetModalOpen: boolean
@@ -27,19 +29,19 @@ export const PageHeader = ({
       className="flex items-center justify-between w-full mb-8"
       aria-label="Budgets Header"
     >
-      <h1 className="text-gray-900 font-bold text-3xl">Budgets</h1>
+      <PageTitle title="Budgets" />
 
       <Dialog.Root open={isBudgetModalOpen} onOpenChange={setIsBudgetModalOpen}>
         <Dialog.Trigger asChild>
-          <button
+          <PrimaryButton
             aria-haspopup="dialog"
             aria-expanded={isBudgetModalOpen}
             aria-controls="budget-modal"
-            className="font-semibold rounded-md p-3 px-4 flex gap-2 items-center transition-all duration-300 max-h-[60px] text-sm bg-gray-900 text-beige-100 hover:bg-gray-500 capitalize focus:outline-offset-2"
+            className="mt-0 max-w-[8rem] text-sm"
           >
             <FontAwesomeIcon icon={faPlus} />
             Add Budget
-          </button>
+          </PrimaryButton>
         </Dialog.Trigger>
 
         <BudgetModal

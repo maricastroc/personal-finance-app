@@ -1,4 +1,4 @@
-import { CustomButton } from '@/components/core/CustomButton'
+import { PrimaryButton } from '@/components/core/PrimaryButton'
 import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { SelectInput } from '@/components/core/SelectInput'
 import { SelectTheme } from '@/components/shared/SelectTheme'
@@ -241,7 +241,9 @@ export function BudgetModal({
               )}
             </div>
 
-            <CustomButton type="submit" isSubmitting={isSubmitting} />
+            <PrimaryButton isSubmitting={isSubmitting}>
+              Save Changes
+            </PrimaryButton>
           </form>
         </Dialog.Content>
       </Dialog.Portal>

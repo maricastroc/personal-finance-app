@@ -1,21 +1,21 @@
 import clsx from 'clsx'
-import React, { forwardRef, ButtonHTMLAttributes } from 'react'
+import React, { forwardRef, ButtonHTMLAttributes, ReactNode } from 'react'
 
-interface CustomButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface PrimaryButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isSubmitting?: boolean
-  customContent?: string | null
-  customContentLoading?: string | null
+  children: ReactNode
   variant?: 'default' | 'outline'
+  className?: string
 }
 
-export const CustomButton = forwardRef<HTMLButtonElement, CustomButtonProps>(
+export const PrimaryButton = forwardRef<HTMLButtonElement, PrimaryButtonProps>(
   (
     {
       isSubmitting = false,
-      customContent = null,
-      customContentLoading = null,
+      children,
       variant = 'default',
       disabled,
+      className,
       ...props
     },
     ref,
@@ -37,15 +37,13 @@ export const CustomButton = forwardRef<HTMLButtonElement, CustomButtonProps>(
         aria-busy={isSubmitting}
         aria-live="polite"
         disabled={isSubmitting || disabled}
-        className={clsx(baseClasses, variantClasses[variant])}
+        className={clsx(baseClasses, variantClasses[variant], className)}
         {...props}
       >
-        {isSubmitting
-          ? customContentLoading || 'Loading...'
-          : customContent || 'Save changes'}
+        {isSubmitting ? 'Loading...' : children}
       </button>
     )
   },
 )
 
-CustomButton.displayName = 'CustomButton'
+PrimaryButton.displayName = 'PrimaryButton'

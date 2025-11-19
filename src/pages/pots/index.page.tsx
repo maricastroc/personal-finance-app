@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { NextSeo } from 'next-seo'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useAppContext } from '@/contexts/AppContext'
 import Layout from '@/components/layouts/layout.page'
 import { EmptyContent } from '@/components/shared/EmptyContent'
@@ -61,9 +59,7 @@ export default function Pots() {
           }`}
         >
           <PageHeader
-            title="Pots"
             buttonLabel="Add Pot"
-            icon={<FontAwesomeIcon icon={faPlus} />}
             isOpen={isPotModalOpen}
             setIsOpen={setIsPotModalOpen}
             modalId="pot-modal"

@@ -72,7 +72,6 @@ export function DeleteBudgetModal({
             Delete “{budget.category.name}”
           </Dialog.Title>
 
-          {/* Description */}
           <Dialog.Description
             id={`${id}-desc`}
             className="flex flex-col w-full text-sm text-gray-600"
