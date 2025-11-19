@@ -1,7 +1,7 @@
-import { prisma } from '@/lib/prisma'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { prisma } from "@/lib/prisma";
+import { NextApiRequest, NextApiResponse } from "next";
 
-import { getServerSession } from 'next-auth'
+import { getServerSession } from "next-auth";
 import {
   isBefore,
   startOfDay,
@@ -9,30 +9,30 @@ import {
   isWithinInterval,
   endOfMonth,
   startOfMonth,
-} from 'date-fns'
-import { RecurringBill } from '@prisma/client'
-import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
+} from "date-fns";
+import { RecurringBill } from "@prisma/client";
+import { buildNextAuthOptions } from "../../auth/[...nextauth].api";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
-  if (req.method !== 'GET') return res.status(405).end()
+  if (req.method !== "GET") return res.status(405).end();
 
   const session = await getServerSession(
     req,
     res,
-    buildNextAuthOptions(req, res),
-  )
+    buildNextAuthOptions(req, res)
+  );
 
   if (!session) {
-    return res.status(400).json({ message: 'Unauthorized' })
+    return res.status(400).json({ message: "Unauthorized" });
   }
 
-  const userId = session?.user?.id?.toString()
+  const userId = session?.user?.id?.toString();
 
   if (!userId) {
-    return res.status(400).json({ message: 'User ID is required' })
+    return res.status(400).json({ message: "User ID is required" });
   }
 
   try {
@@ -45,18 +45,18 @@ export default async function handler(
           },
         },
       },
-    })
+    });
 
     if (recurringBills.length === 0 || !recurringBills[0]?.recurringBills) {
-      return res.status(404).json({ message: 'No recurring bills found' })
+      return res.status(404).json({ message: "No recurring bills found" });
     }
 
-    const bills = recurringBills[0].recurringBills
+    const bills = recurringBills[0].recurringBills;
 
-    const today = startOfDay(new Date())
-    const dueSoonDate = addDays(today, 3)
-    const startOfMonthDate = startOfMonth(today)
-    const endOfMonthDate = endOfMonth(today)
+    const today = startOfDay(new Date());
+    const dueSoonDate = addDays(today, 3);
+    const startOfMonthDate = startOfMonth(today);
+    const endOfMonthDate = endOfMonth(today);
 
     const result = {
       paid: {
@@ -72,14 +72,14 @@ export default async function handler(
         total: 0,
       },
       monthlyTotal: 0,
-    }
+    };
 
     for (const bill of bills) {
       const recurrenceDate = new Date(
         today.getFullYear(),
         today.getMonth(),
-        bill.recurrenceDay || 1,
-      )
+        bill.recurrenceDay || 1
+      );
 
       if (
         isWithinInterval(recurrenceDate, {
@@ -87,26 +87,26 @@ export default async function handler(
           end: endOfMonthDate,
         })
       ) {
-        result.monthlyTotal += bill.amount
+        result.monthlyTotal += bill.amount;
       }
 
       if (isBefore(recurrenceDate, today)) {
-        result.paid.bills.push(bill)
-        result.paid.total += bill.amount
+        result.paid.bills.push(bill);
+        result.paid.total += bill.amount;
       } else if (
         isWithinInterval(recurrenceDate, { start: today, end: dueSoonDate })
       ) {
-        result.dueSoon.bills.push(bill)
-        result.dueSoon.total += bill.amount
+        result.dueSoon.bills.push(bill);
+        result.dueSoon.total += bill.amount;
       } else {
-        result.upcoming.bills.push(bill)
-        result.upcoming.total += bill.amount
+        result.upcoming.bills.push(bill);
+        result.upcoming.total += bill.amount;
       }
     }
 
-    return res.json({ recurringBills: result })
+    return res.json({ recurringBills: result });
   } catch (error) {
-    console.error(error)
-    return res.status(500).json({ error: 'An error occurred' })
+    console.error(error);
+    return res.status(500).json({ error: "An error occurred" });
   }
 }

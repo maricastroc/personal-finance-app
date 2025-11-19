@@ -1,7 +1,7 @@
 interface Props {
-  percentage: number
-  color: string
-  target: number
+  percentage: number;
+  color: string;
+  target: number;
 }
 
 export function PotProgressBar({ percentage, color, target }: Props) {
@@ -22,5 +22,5 @@ export function PotProgressBar({ percentage, color, target }: Props) {
         <p className="text-gray-500 text-xs">Target of ${target}</p>
       </div>
     </>
-  )
+  );
 }

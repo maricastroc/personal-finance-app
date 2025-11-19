@@ -1,30 +1,30 @@
-import { CaretLeft, CaretRight } from 'phosphor-react'
-import { ButtonHTMLAttributes } from 'react'
+import { CaretLeft, CaretRight } from "phosphor-react";
+import { ButtonHTMLAttributes } from "react";
 
 interface PaginationBtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  number: number
-  variant?: 'default' | 'left' | 'right'
+  number: number;
+  variant?: "default" | "left" | "right";
 }
 
 export function PaginationBtn({
   number,
-  variant = 'default',
+  variant = "default",
   ...rest
 }: PaginationBtnProps) {
-  let content
+  let content;
 
   switch (variant) {
-    case 'default':
-      content = number
-      break
-    case 'left':
-      content = <CaretLeft />
-      break
-    case 'right':
-      content = <CaretRight />
-      break
+    case "default":
+      content = number;
+      break;
+    case "left":
+      content = <CaretLeft />;
+      break;
+    case "right":
+      content = <CaretRight />;
+      break;
     default:
-      content = number
+      content = number;
   }
 
   return (
@@ -34,5 +34,5 @@ export function PaginationBtn({
     >
       {content}
     </button>
-  )
+  );
 }

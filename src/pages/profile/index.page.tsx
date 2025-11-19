@@ -1,47 +1,47 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { api } from '@/lib/axios'
-import { useEffect, useRef, useState } from 'react'
-import { signOut } from 'next-auth/react'
-import { Controller, useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as Checkbox from '@radix-ui/react-checkbox'
-import { CheckIcon, Cross2Icon } from '@radix-ui/react-icons'
-import { UserProps } from '@/types/user'
-import Layout from '@/components/layouts/layout.page'
-import { AvatarInput } from '@/components/core/AvatarInput'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { PrimaryButton } from '@/components/core/PrimaryButton'
-import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
-import { handleApiError } from '@/utils/handleApiError'
-import useRequest from '@/utils/useRequest'
-import { NextSeo } from 'next-seo'
-import toast from 'react-hot-toast'
-import { InputBase } from '@/components/core/InputBase'
-import { PasswordInput } from '@/components/core/PasswordInput'
-import { ImageCropper } from '@/components/shared/ImageCropper'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
+import { api } from "@/lib/axios";
+import { useEffect, useRef, useState } from "react";
+import { signOut } from "next-auth/react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as Checkbox from "@radix-ui/react-checkbox";
+import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
+import { UserProps } from "@/types/user";
+import Layout from "@/components/layouts/layout.page";
+import { AvatarInput } from "@/components/core/AvatarInput";
+import { LoadingPage } from "@/components/shared/LoadingPage";
+import { PrimaryButton } from "@/components/core/PrimaryButton";
+import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
+import { handleApiError } from "@/utils/handleApiError";
+import useRequest from "@/utils/useRequest";
+import { NextSeo } from "next-seo";
+import toast from "react-hot-toast";
+import { InputBase } from "@/components/core/InputBase";
+import { PasswordInput } from "@/components/core/PasswordInput";
+import { ImageCropper } from "@/components/shared/ImageCropper";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
 const editProfileFormSchema = (changePassword: boolean) =>
   z
     .object({
-      email: z.string().min(3, { message: 'E-mail is required.' }),
+      email: z.string().min(3, { message: "E-mail is required." }),
       accountId: z.string().optional(),
       oldPassword: changePassword
-        ? z.string().min(8, { message: 'Old password is required.' })
+        ? z.string().min(8, { message: "Old password is required." })
         : z.string().optional(),
       password: changePassword
         ? z
             .string()
-            .min(8, { message: 'Password must be at least 8 characters long.' })
+            .min(8, { message: "Password must be at least 8 characters long." })
         : z.string().optional(),
       passwordConfirm: changePassword
         ? z
             .string()
-            .min(8, { message: 'Password must be at least 8 characters long.' })
+            .min(8, { message: "Password must be at least 8 characters long." })
         : z.string().optional(),
-      name: z.string().min(3, { message: 'Name is required.' }),
+      name: z.string().min(3, { message: "Name is required." }),
       avatarUrl: z
         .custom<File>((file) => file instanceof File && file.size > 0)
         .optional(),
@@ -51,31 +51,31 @@ const editProfileFormSchema = (changePassword: boolean) =>
         changePassword ? data.password === data.passwordConfirm : true,
       {
         message: "Passwords don't match",
-        path: ['passwordConfirm'],
-      },
-    )
+        path: ["passwordConfirm"],
+      }
+    );
 
 export type EditProfileFormData = z.infer<
   ReturnType<typeof editProfileFormSchema>
->
+>;
 
 export default function Profile() {
-  const inputFileRef = useRef<HTMLInputElement>(null)
+  const inputFileRef = useRef<HTMLInputElement>(null);
 
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
-  const isRouteLoading = useLoadingOnRouteChange()
+  const isRouteLoading = useLoadingOnRouteChange();
 
-  const [changePassword, setChangePassword] = useState(false)
+  const [changePassword, setChangePassword] = useState(false);
 
-  const [showCropper, setShowCropper] = useState(false)
+  const [showCropper, setShowCropper] = useState(false);
 
-  const [originalImage, setOriginalImage] = useState<string | null>(null)
+  const [originalImage, setOriginalImage] = useState<string | null>(null);
 
   const { data: user } = useRequest<UserProps>({
-    url: '/profile',
-    method: 'GET',
-  })
+    url: "/profile",
+    method: "GET",
+  });
 
   const {
     control,
@@ -85,84 +85,84 @@ export default function Profile() {
   } = useForm<EditProfileFormData>({
     resolver: zodResolver(editProfileFormSchema(changePassword)),
     defaultValues: {
-      email: '',
-      name: '',
-      password: '',
-      passwordConfirm: '',
+      email: "",
+      name: "",
+      password: "",
+      passwordConfirm: "",
     },
-  })
+  });
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: '/auth/login' })
-    toast?.success('See you soon!')
-  }
+    await signOut({ callbackUrl: "/auth/login" });
+    toast?.success("See you soon!");
+  };
 
   const handleCroppedImage = (croppedImage: string) => {
     fetch(croppedImage)
       .then((res) => res.blob())
       .then((blob) => {
-        const file = new File([blob], 'avatar.jpg', {
-          type: 'image/jpeg',
-        })
-        setValue('avatarUrl', file)
-        setAvatarPreview(croppedImage)
-        setShowCropper(false)
-      })
-  }
+        const file = new File([blob], "avatar.jpg", {
+          type: "image/jpeg",
+        });
+        setValue("avatarUrl", file);
+        setAvatarPreview(croppedImage);
+        setShowCropper(false);
+      });
+  };
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      setValue('avatarUrl', file)
+      setValue("avatarUrl", file);
 
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onload = () => {
-        setOriginalImage(reader.result as string)
-        setShowCropper(true)
-      }
+        setOriginalImage(reader.result as string);
+        setShowCropper(true);
+      };
 
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   async function handleEditProfile(data: EditProfileFormData) {
     if (user) {
-      const formData = new FormData()
-      formData.append('email', data.email)
-      formData.append('name', data.name)
-      formData.append('user_id', user.id.toString())
+      const formData = new FormData();
+      formData.append("email", data.email);
+      formData.append("name", data.name);
+      formData.append("user_id", user.id.toString());
 
-      if (data.avatarUrl) formData.append('avatarUrl', data.avatarUrl)
-      if (data.oldPassword) formData.append('oldPassword', data.oldPassword)
-      if (data.password) formData.append('password', data.password)
+      if (data.avatarUrl) formData.append("avatarUrl", data.avatarUrl);
+      if (data.oldPassword) formData.append("oldPassword", data.oldPassword);
+      if (data.password) formData.append("password", data.password);
 
       try {
         const response = await api.put(`/profile`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
+          headers: { "Content-Type": "multipart/form-data" },
+        });
 
-        toast?.success(response.data.message)
+        toast?.success(response.data.message);
       } catch (error) {
-        handleApiError(error)
+        handleApiError(error);
       }
     }
   }
 
   useEffect(() => {
     if (user) {
-      setAvatarPreview(`${user.avatarUrl}`)
-      setValue('name', user.name)
-      setValue('email', user.email ?? '')
+      setAvatarPreview(`${user.avatarUrl}`);
+      setValue("name", user.name);
+      setValue("email", user.email ?? "");
     }
-  }, [user, setValue])
+  }, [user, setValue]);
 
   useEffect(() => {
     if (!changePassword) {
-      setValue('oldPassword', '')
-      setValue('password', '')
-      setValue('passwordConfirm', '')
+      setValue("oldPassword", "");
+      setValue("password", "");
+      setValue("passwordConfirm", "");
     }
-  }, [changePassword])
+  }, [changePassword]);
 
   return isRouteLoading ? (
     <LoadingPage />
@@ -172,8 +172,8 @@ export default function Profile() {
         title="Profile | Finance App"
         additionalMetaTags={[
           {
-            name: 'viewport',
-            content: 'width=device-width, initial-scale=1.0',
+            name: "viewport",
+            content: "width=device-width, initial-scale=1.0",
           },
         ]}
       />
@@ -331,5 +331,5 @@ export default function Profile() {
         </div>
       </Layout>
     </>
-  )
+  );
 }

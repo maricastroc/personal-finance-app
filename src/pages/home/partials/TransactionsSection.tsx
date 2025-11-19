@@ -1,14 +1,14 @@
-import { SkeletonTransactionsSection } from '@/components/skeletons/SkeletonTransactionsSection'
-import { TransactionProps } from '@/types/transaction'
-import HomeCard from './HomeCard'
-import { TransactionCard } from '@/components/shared/TransactionCard'
-import { formatToDollar } from '@/utils/formatToDollar'
-import { EmptyContent } from '@/components/shared/EmptyContent'
-import { format } from 'date-fns'
+import { SkeletonTransactionsSection } from "@/components/skeletons/SkeletonTransactionsSection";
+import { TransactionProps } from "@/types/transaction";
+import HomeCard from "./HomeCard";
+import { TransactionCard } from "@/components/shared/TransactionCard";
+import { formatToDollar } from "@/utils/formatToDollar";
+import { EmptyContent } from "@/components/shared/EmptyContent";
+import { format } from "date-fns";
 
 interface TransactionsSectionProps {
-  isValidating: boolean
-  transactions: TransactionProps[] | undefined
+  isValidating: boolean;
+  transactions: TransactionProps[] | undefined;
 }
 
 export const TransactionsSection = ({
@@ -30,17 +30,17 @@ export const TransactionsSection = ({
               <TransactionCard
                 key={index}
                 name={
-                  transaction.balance === 'income'
+                  transaction.balance === "income"
                     ? transaction.sender.name
                     : transaction.recipient.name
                 }
                 balance={transaction.balance}
                 avatarUrl={
-                  transaction.balance === 'income'
+                  transaction.balance === "income"
                     ? transaction.sender.avatarUrl
                     : transaction.recipient.avatarUrl
                 }
-                date={format(transaction.date, 'MMM dd, yyyy')}
+                date={format(transaction.date, "MMM dd, yyyy")}
                 value={formatToDollar(transaction.amount || 0)}
               />
             ))
@@ -50,5 +50,5 @@ export const TransactionsSection = ({
         </div>
       )}
     </HomeCard>
-  )
-}
+  );
+};

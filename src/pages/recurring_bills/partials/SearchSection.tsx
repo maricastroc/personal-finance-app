@@ -1,14 +1,14 @@
-import { SelectInput } from '@/components/core/SelectInput'
-import { sortByFilters } from '@/utils/constants'
-import { faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { MagnifyingGlass, X } from 'phosphor-react'
-import { useState } from 'react'
+import { SelectInput } from "@/components/core/SelectInput";
+import { sortByFilters } from "@/utils/constants";
+import { faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { MagnifyingGlass, X } from "phosphor-react";
+import { useState } from "react";
 
 interface SearchSectionProps {
-  search: string
-  handleSetSearch: (value: string) => void
-  handleSetSelectedSortBy: (value: string) => void
+  search: string;
+  handleSetSearch: (value: string) => void;
+  handleSetSelectedSortBy: (value: string) => void;
 }
 
 export const SearchSection = ({
@@ -16,7 +16,7 @@ export const SearchSection = ({
   handleSetSearch,
   handleSetSelectedSortBy,
 }: SearchSectionProps) => {
-  const [isSortBySelectOpen, setIsSortBySelectOpen] = useState(false)
+  const [isSortBySelectOpen, setIsSortBySelectOpen] = useState(false);
 
   return (
     <div className="flex flex-col mb-6">
@@ -39,7 +39,7 @@ export const SearchSection = ({
             <X
               aria-hidden="true"
               className="pr-4 flex w-[2.2rem] h-[2.2rem] shrink-0 cursor-pointer"
-              onClick={() => handleSetSearch('')}
+              onClick={() => handleSetSearch("")}
             />
           ) : (
             <MagnifyingGlass
@@ -83,5 +83,5 @@ export const SearchSection = ({
         </div>
       )}
     </div>
-  )
-}
+  );
+};

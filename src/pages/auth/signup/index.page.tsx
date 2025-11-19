@@ -1,36 +1,36 @@
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import { NextSeo } from 'next-seo'
-import AuthLayout from '@/components/layouts/authLayout.page'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { PrimaryButton } from '@/components/core/PrimaryButton'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller, useForm } from 'react-hook-form'
-import { api } from '@/lib/axios'
-import { handleApiError } from '@/utils/handleApiError'
-import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
-import { InputBase } from '@/components/core/InputBase'
-import { PasswordInput } from '@/components/core/PasswordInput'
-import toast from 'react-hot-toast'
-import { TextLink } from '@/components/core/TextLink'
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
+import AuthLayout from "@/components/layouts/authLayout.page";
+import { LoadingPage } from "@/components/shared/LoadingPage";
+import { PrimaryButton } from "@/components/core/PrimaryButton";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { api } from "@/lib/axios";
+import { handleApiError } from "@/utils/handleApiError";
+import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
+import { InputBase } from "@/components/core/InputBase";
+import { PasswordInput } from "@/components/core/PasswordInput";
+import toast from "react-hot-toast";
+import { TextLink } from "@/components/core/TextLink";
 
 const signUpFormSchema = z.object({
-  email: z.string().min(3, { message: 'E-mail is required.' }),
+  email: z.string().min(3, { message: "E-mail is required." }),
   password: z
     .string()
-    .min(8, { message: 'Password must be at least 8 characters long.' }),
-  name: z.string().min(3, { message: 'Name is required.' }),
-})
+    .min(8, { message: "Password must be at least 8 characters long." }),
+  name: z.string().min(3, { message: "Name is required." }),
+});
 
-type SignUpFormData = z.infer<typeof signUpFormSchema>
+type SignUpFormData = z.infer<typeof signUpFormSchema>;
 
 export default function SignUp() {
-  const isRouteLoading = useLoadingOnRouteChange()
+  const isRouteLoading = useLoadingOnRouteChange();
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const [createWithDemo, setCreateWithDemo] = useState(false)
+  const [createWithDemo, setCreateWithDemo] = useState(false);
 
   const {
     control,
@@ -38,30 +38,30 @@ export default function SignUp() {
     formState: { isSubmitting },
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpFormSchema),
-    defaultValues: { email: '', password: '', name: '' },
-  })
+    defaultValues: { email: "", password: "", name: "" },
+  });
 
   async function handleSignUp(data: SignUpFormData) {
-    const formData = new FormData()
+    const formData = new FormData();
 
-    formData.append('email', data.email)
-    formData.append('name', data.name)
-    formData.append('password', data.password)
+    formData.append("email", data.email);
+    formData.append("name", data.name);
+    formData.append("password", data.password);
 
     try {
       const response = await api.post(
-        `${createWithDemo ? '/profile/with_demo' : '/profile'}`,
+        `${createWithDemo ? "/profile/with_demo" : "/profile"}`,
         formData,
         {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        },
-      )
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
-      toast?.success(response.data.message)
+      toast?.success(response.data.message);
 
-      router.push('/auth/login')
+      router.push("/auth/login");
     } catch (error) {
-      handleApiError(error)
+      handleApiError(error);
     }
   }
 
@@ -73,8 +73,8 @@ export default function SignUp() {
         title="Sign Up | Finance App"
         additionalMetaTags={[
           {
-            name: 'viewport',
-            content: 'width=device-width, initial-scale=1.0',
+            name: "viewport",
+            content: "width=device-width, initial-scale=1.0",
           },
         ]}
       />
@@ -175,5 +175,5 @@ export default function SignUp() {
         </form>
       </AuthLayout>
     </>
-  )
+  );
 }

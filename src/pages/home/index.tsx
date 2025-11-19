@@ -1,137 +1,137 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
-import { NextSeo } from 'next-seo'
-import { useAppContext } from '@/contexts/AppContext'
-import Layout from '@/components/layouts/layout.page'
-import { BudgetWithDetailsProps } from '@/components/shared/BudgetItem'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { FinanceCard } from './partials/FinanceCard'
-import { PotProps } from '@/types/pot'
-import { TransactionProps } from '@/types/transaction'
-import { RecurringBillProps } from '@/types/recurringBills'
-import useRequest from '@/utils/useRequest'
-import { formatToDollar } from '@/utils/formatToDollar'
-import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
-import { BudgetsSection } from './partials/BudgetsSection'
-import { RecurringBillsSection } from './partials/RecurringBillsSection'
-import { TransactionsSection } from './partials/TransactionsSection'
-import { PotsSection } from './partials/PotsSection'
-import { PageHeader } from './partials/PageHeader'
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { NextSeo } from "next-seo";
+import { useAppContext } from "@/contexts/AppContext";
+import Layout from "@/components/layouts/layout.page";
+import { BudgetWithDetailsProps } from "@/components/shared/BudgetItem";
+import { LoadingPage } from "@/components/shared/LoadingPage";
+import { FinanceCard } from "./partials/FinanceCard";
+import { PotProps } from "@/types/pot";
+import { TransactionProps } from "@/types/transaction";
+import { RecurringBillProps } from "@/types/recurringBills";
+import useRequest from "@/utils/useRequest";
+import { formatToDollar } from "@/utils/formatToDollar";
+import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
+import { BudgetsSection } from "./partials/BudgetsSection";
+import { RecurringBillsSection } from "./partials/RecurringBillsSection";
+import { TransactionsSection } from "./partials/TransactionsSection";
+import { PotsSection } from "./partials/PotsSection";
+import { PageHeader } from "./partials/PageHeader";
 
 interface BalanceProps {
-  incomes: number | undefined
-  expenses: number | undefined
-  currentBalance: number | undefined
+  incomes: number | undefined;
+  expenses: number | undefined;
+  currentBalance: number | undefined;
 }
 
 export interface AllPotsProps {
-  pots: PotProps[]
-  totalCurrentAmount: number | undefined
+  pots: PotProps[];
+  totalCurrentAmount: number | undefined;
 }
 
 interface RecurringBillsWithDetails {
-  bills: RecurringBillProps[]
-  total: number
+  bills: RecurringBillProps[];
+  total: number;
 }
 
 export interface RecurringBillsResult {
-  paid: RecurringBillsWithDetails
-  upcoming: RecurringBillsWithDetails
-  dueSoon: RecurringBillsWithDetails
-  allBills: RecurringBillProps[]
-  monthlyTotal: number
+  paid: RecurringBillsWithDetails;
+  upcoming: RecurringBillsWithDetails;
+  dueSoon: RecurringBillsWithDetails;
+  allBills: RecurringBillProps[];
+  monthlyTotal: number;
   pagination: {
-    page: number
-    limit: number
-    total: number
-    totalPages: number
-  }
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
 export default function Home() {
-  const { isSidebarOpen } = useAppContext()
+  const { isSidebarOpen } = useAppContext();
 
-  const session = useSession()
+  const session = useSession();
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const isRouteLoading = useLoadingOnRouteChange()
+  const isRouteLoading = useLoadingOnRouteChange();
 
   const { data: balance, isValidating: isValidatingBalance } =
     useRequest<BalanceProps>(
-      { url: '/balance', method: 'GET' },
+      { url: "/balance", method: "GET" },
       {
         revalidateOnFocus: false,
         revalidateIfStale: true,
         dedupingInterval: 20000,
         focusThrottleInterval: 30000,
         keepPreviousData: true,
-      },
-    )
+      }
+    );
 
   const { data: allPots, isValidating: isValidatingPots } =
     useRequest<AllPotsProps>(
-      { url: '/pots', method: 'GET' },
+      { url: "/pots", method: "GET" },
       {
         revalidateOnFocus: false,
         revalidateIfStale: true,
         dedupingInterval: 20000,
         focusThrottleInterval: 30000,
         keepPreviousData: true,
-      },
-    )
+      }
+    );
 
   const { data: budgets, isValidating: isValidatingBudgets } = useRequest<
     BudgetWithDetailsProps[]
   >(
-    { url: '/budgets', method: 'GET' },
+    { url: "/budgets", method: "GET" },
     {
       revalidateOnFocus: false,
       revalidateIfStale: true,
       dedupingInterval: 20000,
       focusThrottleInterval: 30000,
       keepPreviousData: true,
-    },
-  )
+    }
+  );
 
   const { data: recurringBills, isValidating: isValidatingBills } =
     useRequest<RecurringBillsResult>(
-      { url: '/recurring_bills', method: 'GET' },
+      { url: "/recurring_bills", method: "GET" },
       {
         revalidateOnFocus: false,
         revalidateIfStale: true,
         dedupingInterval: 20000,
         focusThrottleInterval: 30000,
         keepPreviousData: true,
-      },
-    )
+      }
+    );
 
   const { data: transactions, isValidating: isValidatingTransactions } =
     useRequest<TransactionProps[]>(
-      { url: '/transactions/latest', method: 'GET' },
+      { url: "/transactions/latest", method: "GET" },
       {
         revalidateOnFocus: false,
         revalidateIfStale: true,
         dedupingInterval: 20000,
         focusThrottleInterval: 30000,
         keepPreviousData: true,
-      },
-    )
+      }
+    );
 
   const isValidating =
     isValidatingBalance ||
     isValidatingTransactions ||
     isValidatingPots ||
     isValidatingBudgets ||
-    isValidatingBills
+    isValidatingBills;
 
   useEffect(() => {
-    if (session.status === 'unauthenticated') {
-      router.push('/auth/login')
+    if (session.status === "unauthenticated") {
+      router.push("/auth/login");
     }
-  }, [session.status])
+  }, [session.status]);
 
   return isRouteLoading ? (
     <LoadingPage />
@@ -141,8 +141,8 @@ export default function Home() {
         title="Home | Finance App"
         additionalMetaTags={[
           {
-            name: 'viewport',
-            content: 'width=device-width, initial-scale=1.0',
+            name: "viewport",
+            content: "width=device-width, initial-scale=1.0",
           },
         ]}
       />
@@ -150,7 +150,7 @@ export default function Home() {
       <Layout>
         <div
           className={`flex-grow px-4 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
-            isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
+            isSidebarOpen ? "lg:pr-10" : "lg:pr-20"
           }`}
         >
           <PageHeader />
@@ -195,5 +195,5 @@ export default function Home() {
         </div>
       </Layout>
     </>
-  )
+  );
 }

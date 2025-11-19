@@ -1,18 +1,18 @@
-import { CategoryProps } from './category'
-import { UserProps } from './user'
+import { CategoryProps } from "./category";
+import { UserProps } from "./user";
 
 export interface TransactionProps {
-  id: string
-  description: string
-  amount: number
-  date: Date
-  isRecurring: boolean
-  senderId: string
-  recipientId: string
-  userId: string
-  user: UserProps
-  balance?: 'expense' | 'income'
-  sender: UserProps
-  recipient: UserProps
-  category?: CategoryProps
+  id: string;
+  description: string;
+  amount: number;
+  date: Date;
+  isRecurring: boolean;
+  senderId: string;
+  recipientId: string;
+  userId: string;
+  user: UserProps;
+  balance?: "expense" | "income";
+  sender: UserProps;
+  recipient: UserProps;
+  category?: CategoryProps;
 }

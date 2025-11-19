@@ -1,23 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { PrimaryButton } from '@/components/core/PrimaryButton'
-import { api } from '@/lib/axios'
-import { formatToDollar } from '@/utils/formatToDollar'
-import { handleApiError } from '@/utils/handleApiError'
-import * as Dialog from '@radix-ui/react-dialog'
-import { X } from 'phosphor-react'
-import { useState, useEffect } from 'react'
-import toast from 'react-hot-toast'
+import { PrimaryButton } from "@/components/core/PrimaryButton";
+import { api } from "@/lib/axios";
+import { formatToDollar } from "@/utils/formatToDollar";
+import { handleApiError } from "@/utils/handleApiError";
+import * as Dialog from "@radix-ui/react-dialog";
+import { X } from "phosphor-react";
+import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 interface EditPotAmountModalProps {
-  name: string
-  id: string
-  currentAmount: number
-  targetAmount: number
-  themeColor: string
-  originalPercentage: number
-  isWithdraw?: boolean
-  onClose: () => void
-  onSubmitForm: () => void | Promise<void>
+  name: string;
+  id: string;
+  currentAmount: number;
+  targetAmount: number;
+  themeColor: string;
+  originalPercentage: number;
+  isWithdraw?: boolean;
+  onClose: () => void;
+  onSubmitForm: () => void | Promise<void>;
 }
 
 export function EditPotAmountModal({
@@ -31,72 +31,72 @@ export function EditPotAmountModal({
   originalPercentage,
   isWithdraw = false,
 }: EditPotAmountModalProps) {
-  const [inputValue, setInputValue] = useState<number>(0)
+  const [inputValue, setInputValue] = useState<number>(0);
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [calculatedValues, setCalculatedValues] = useState({
     inputPercentage: 0,
     newPercentage: originalPercentage,
     newAmount: currentAmount,
-  })
+  });
 
   useEffect(() => {
-    const amount = Math.max(0, inputValue || 0)
+    const amount = Math.max(0, inputValue || 0);
 
-    const inputPercentage = Math.min(100, (amount / targetAmount) * 100)
+    const inputPercentage = Math.min(100, (amount / targetAmount) * 100);
 
     const newAmount = isWithdraw
       ? currentAmount - amount
-      : currentAmount + amount
+      : currentAmount + amount;
 
     const newPercentage = Math.max(
       0,
-      Math.min(100, (newAmount / targetAmount) * 100),
-    )
+      Math.min(100, (newAmount / targetAmount) * 100)
+    );
 
     setCalculatedValues({
       inputPercentage,
       newPercentage,
       newAmount,
-    })
-  }, [inputValue, currentAmount, isWithdraw, targetAmount])
+    });
+  }, [inputValue, currentAmount, isWithdraw, targetAmount]);
 
-  const { inputPercentage, newPercentage, newAmount } = calculatedValues
+  const { inputPercentage, newPercentage, newAmount } = calculatedValues;
 
   const handleEditPot = async () => {
     try {
-      setIsSubmitting(true)
+      setIsSubmitting(true);
 
       const payload = {
         name,
         themeColor,
         targetAmount,
         currentAmount: newAmount,
-      }
+      };
 
       const response = await api.put(`/pots/${id}`, payload, {
-        headers: { 'Content-Type': 'application/json' },
-      })
+        headers: { "Content-Type": "application/json" },
+      });
 
-      toast.success(response.data.message)
-      await onSubmitForm()
-      onClose()
+      toast.success(response.data.message);
+      await onSubmitForm();
+      onClose();
     } catch (error) {
-      handleApiError(error)
+      handleApiError(error);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   useEffect(() => {
-    setInputValue(0)
+    setInputValue(0);
     setCalculatedValues({
       inputPercentage: 0,
       newPercentage: originalPercentage,
       newAmount: currentAmount,
-    })
-  }, [onClose])
+    });
+  }, [onClose]);
 
   return (
     <Dialog.Portal>
@@ -125,8 +125,8 @@ export function EditPotAmountModal({
 
         <Dialog.Description className="flex flex-col w-full text-sm text-gray-600">
           {isWithdraw
-            ? 'Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot.'
-            : 'Add money to your pot to increase your savings. This will add to the amount you have in this pot.'}
+            ? "Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot."
+            : "Add money to your pot to increase your savings. This will add to the amount you have in this pot."}
         </Dialog.Description>
 
         <div className="flex flex-col w-full mt-6">
@@ -146,25 +146,25 @@ export function EditPotAmountModal({
                   : originalPercentage
               }%`,
               backgroundColor: themeColor,
-              borderTopLeftRadius: '0.45rem',
-              borderBottomLeftRadius: '0.45rem',
-              transition: 'width 0.3s ease',
+              borderTopLeftRadius: "0.45rem",
+              borderBottomLeftRadius: "0.45rem",
+              transition: "width 0.3s ease",
             }}
           />
 
           <div
             className={`absolute h-full ${
-              isWithdraw ? 'bg-secondary-red' : 'bg-secondary-green'
+              isWithdraw ? "bg-secondary-red" : "bg-secondary-green"
             }`}
             style={{
               width: `${inputPercentage}%`,
               left: isWithdraw
                 ? `calc(${originalPercentage}% - ${inputPercentage}%)`
                 : `${originalPercentage}%`,
-              borderTopRightRadius: '0.45rem',
-              borderBottomRightRadius: '0.45rem',
-              transition: 'width 0.3s ease, left 0.3s ease',
-              borderLeft: '3px solid white',
+              borderTopRightRadius: "0.45rem",
+              borderBottomRightRadius: "0.45rem",
+              transition: "width 0.3s ease, left 0.3s ease",
+              borderLeft: "3px solid white",
             }}
           />
         </div>
@@ -175,7 +175,7 @@ export function EditPotAmountModal({
               {newPercentage.toFixed(2)}%
             </p>
             <p className="text-gray-500 text-xs">{`Target of ${formatToDollar(
-              targetAmount,
+              targetAmount
             )}`}</p>
           </div>
         </div>
@@ -185,7 +185,7 @@ export function EditPotAmountModal({
             htmlFor="pot-amount-input"
             className="text-xs font-bold text-gray-500 mb-1"
           >
-            {isWithdraw ? 'Amount to Withdraw ($)' : 'Amount to Add ($)'}
+            {isWithdraw ? "Amount to Withdraw ($)" : "Amount to Add ($)"}
           </label>
 
           <div className="relative w-full">
@@ -209,5 +209,5 @@ export function EditPotAmountModal({
         </PrimaryButton>
       </Dialog.Content>
     </Dialog.Portal>
-  )
+  );
 }

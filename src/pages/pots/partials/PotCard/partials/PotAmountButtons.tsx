@@ -1,18 +1,18 @@
-import * as Dialog from '@radix-ui/react-dialog'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
+import * as Dialog from "@radix-ui/react-dialog";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
-import { PotProps } from '@/types/pot'
-import { EditPotAmountModal } from '../../EditPotAmountModal'
+import { PotProps } from "@/types/pot";
+import { EditPotAmountModal } from "../../EditPotAmountModal";
 
 interface Props {
-  pot: PotProps
-  originalPercentage: number
-  isAddOpen: boolean
-  setIsAddOpen: (v: boolean) => void
-  isWithdrawOpen: boolean
-  setIsWithdrawOpen: (v: boolean) => void
-  refreshAll: () => void
+  pot: PotProps;
+  originalPercentage: number;
+  isAddOpen: boolean;
+  setIsAddOpen: (v: boolean) => void;
+  isWithdrawOpen: boolean;
+  setIsWithdrawOpen: (v: boolean) => void;
+  refreshAll: () => void;
 }
 
 export function PotAmountButtons({
@@ -74,5 +74,5 @@ export function PotAmountButtons({
         />
       </Dialog.Root>
     </div>
-  )
+  );
 }

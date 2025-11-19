@@ -1,9 +1,9 @@
-import { formatToDollar } from '@/utils/formatToDollar'
+import { formatToDollar } from "@/utils/formatToDollar";
 
 interface BudgetCardLimitInfoProps {
-  limit: number
-  pct: number
-  theme: string
+  limit: number;
+  pct: number;
+  theme: string;
 }
 
 export function BudgetCardLimitInfo({
@@ -24,5 +24,5 @@ export function BudgetCardLimitInfo({
         />
       </div>
     </>
-  )
+  );
 }

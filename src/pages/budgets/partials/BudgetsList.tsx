@@ -1,8 +1,8 @@
-import { BudgetWithDetailsProps } from '@/components/shared/BudgetItem'
-import { FinanceItem } from '@/components/shared/FinanceItem'
+import { BudgetWithDetailsProps } from "@/components/shared/BudgetItem";
+import { FinanceItem } from "@/components/shared/FinanceItem";
 
 interface BudgetsListProps {
-  budgets: BudgetWithDetailsProps[]
+  budgets: BudgetWithDetailsProps[];
 }
 
 export const BudgetsList = ({ budgets }: BudgetsListProps) => {
@@ -30,5 +30,5 @@ export const BudgetsList = ({ budgets }: BudgetsListProps) => {
         </div>
       ))}
     </div>
-  )
-}
+  );
+};

@@ -1,15 +1,15 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
-import { PotProps } from '@/types/pot'
-import { PotActionsDropdown } from './PotActionsDropdown'
+import { PotProps } from "@/types/pot";
+import { PotActionsDropdown } from "./PotActionsDropdown";
 
 interface HeaderProps {
-  pot: PotProps
-  isDropdownOpen: boolean
-  setIsDropdownOpen: (v: boolean) => void
-  setIsEditOpen: (v: boolean) => void
-  setIsDeleteOpen: (v: boolean) => void
+  pot: PotProps;
+  isDropdownOpen: boolean;
+  setIsDropdownOpen: (v: boolean) => void;
+  setIsEditOpen: (v: boolean) => void;
+  setIsDeleteOpen: (v: boolean) => void;
 }
 
 export function PotCardHeader({
@@ -44,5 +44,5 @@ export function PotCardHeader({
         />
       </div>
     </div>
-  )
+  );
 }

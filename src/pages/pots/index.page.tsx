@@ -1,23 +1,23 @@
-import { useState } from 'react'
-import { NextSeo } from 'next-seo'
-import { useAppContext } from '@/contexts/AppContext'
-import Layout from '@/components/layouts/layout.page'
-import { EmptyContent } from '@/components/shared/EmptyContent'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { PotFormModal } from './partials/PotFormModal'
-import { SkeletonPotCard } from './partials/SkeletonPotCard'
-import { PageHeader } from './partials/PageHeader'
-import { PotCard } from './partials/PotCard'
-import { AllPotsProps } from '../home'
-import useRequest from '@/utils/useRequest'
-import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
+import { useState } from "react";
+import { NextSeo } from "next-seo";
+import { useAppContext } from "@/contexts/AppContext";
+import Layout from "@/components/layouts/layout.page";
+import { EmptyContent } from "@/components/shared/EmptyContent";
+import { LoadingPage } from "@/components/shared/LoadingPage";
+import { PotFormModal } from "./partials/PotFormModal";
+import { SkeletonPotCard } from "./partials/SkeletonPotCard";
+import { PageHeader } from "./partials/PageHeader";
+import { PotCard } from "./partials/PotCard";
+import { AllPotsProps } from "../home";
+import useRequest from "@/utils/useRequest";
+import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
 
 export default function Pots() {
-  const { isSidebarOpen } = useAppContext()
+  const { isSidebarOpen } = useAppContext();
 
-  const isRouteLoading = useLoadingOnRouteChange()
+  const isRouteLoading = useLoadingOnRouteChange();
 
-  const [isPotModalOpen, setIsPotModalOpen] = useState(false)
+  const [isPotModalOpen, setIsPotModalOpen] = useState(false);
 
   const {
     data: pots,
@@ -25,8 +25,8 @@ export default function Pots() {
     isValidating,
   } = useRequest<AllPotsProps>(
     {
-      url: '/pots',
-      method: 'GET',
+      url: "/pots",
+      method: "GET",
     },
     {
       revalidateOnFocus: false,
@@ -34,10 +34,10 @@ export default function Pots() {
       dedupingInterval: 20000,
       focusThrottleInterval: 30000,
       keepPreviousData: true,
-    },
-  )
+    }
+  );
 
-  if (isRouteLoading) return <LoadingPage />
+  if (isRouteLoading) return <LoadingPage />;
 
   return (
     <>
@@ -45,8 +45,8 @@ export default function Pots() {
         title="Pots | Finance App"
         additionalMetaTags={[
           {
-            name: 'viewport',
-            content: 'width=device-width, initial-scale=1.0',
+            name: "viewport",
+            content: "width=device-width, initial-scale=1.0",
           },
         ]}
       />
@@ -54,7 +54,7 @@ export default function Pots() {
       <Layout>
         <div
           className={`px-4 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
-            isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
+            isSidebarOpen ? "lg:pr-10" : "lg:pr-20"
           }`}
         >
           <PageHeader
@@ -92,5 +92,5 @@ export default function Pots() {
         </div>
       </Layout>
     </>
-  )
+  );
 }

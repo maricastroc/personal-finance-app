@@ -1,17 +1,17 @@
-import { DeleteButton } from '@/components/core/DeleteButton'
-import { PrimaryButton } from '@/components/core/PrimaryButton'
-import { api } from '@/lib/axios'
-import { PotProps } from '@/types/pot'
-import { handleApiError } from '@/utils/handleApiError'
-import * as Dialog from '@radix-ui/react-dialog'
-import { X } from 'phosphor-react'
-import { useState } from 'react'
-import toast from 'react-hot-toast'
+import { DeleteButton } from "@/components/core/DeleteButton";
+import { PrimaryButton } from "@/components/core/PrimaryButton";
+import { api } from "@/lib/axios";
+import { PotProps } from "@/types/pot";
+import { handleApiError } from "@/utils/handleApiError";
+import * as Dialog from "@radix-ui/react-dialog";
+import { X } from "phosphor-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 interface DeletePotModalProps {
-  onClose: () => void
-  pot: PotProps
-  onSubmitForm: () => Promise<void>
+  onClose: () => void;
+  pot: PotProps;
+  onSubmitForm: () => Promise<void>;
 }
 
 export function DeletePotModal({
@@ -19,23 +19,23 @@ export function DeletePotModal({
   onClose,
   onSubmitForm,
 }: DeletePotModalProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleDeletePot = async () => {
     try {
-      setIsSubmitting(true)
+      setIsSubmitting(true);
 
-      const response = await api.delete(`/pots/${pot.id}`)
-      toast?.success(response.data.message)
+      const response = await api.delete(`/pots/${pot.id}`);
+      toast?.success(response.data.message);
 
-      await onSubmitForm()
-      onClose()
+      await onSubmitForm();
+      onClose();
     } catch (error) {
-      handleApiError(error)
+      handleApiError(error);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <Dialog.Portal>
@@ -92,5 +92,5 @@ export function DeletePotModal({
         </div>
       </Dialog.Content>
     </Dialog.Portal>
-  )
+  );
 }

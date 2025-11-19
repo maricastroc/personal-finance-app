@@ -1,5 +1,5 @@
 export interface ThemeProps {
-  id: string
-  color: string
-  description: string
+  id: string;
+  color: string;
+  description: string;
 }

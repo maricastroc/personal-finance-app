@@ -1,15 +1,15 @@
-import { SkeletonPot } from '@/components/skeletons/SkeletonPot'
-import { AllPotsProps } from '..'
-import HomeCard from './HomeCard'
-import { FinanceCard } from './FinanceCard'
-import { formatToDollar } from '@/utils/formatToDollar'
-import { PotProps } from '@/types/pot'
-import { FinanceItem } from '@/components/shared/FinanceItem'
-import { EmptyContent } from '@/components/shared/EmptyContent'
+import { SkeletonPot } from "@/components/skeletons/SkeletonPot";
+import { AllPotsProps } from "..";
+import HomeCard from "./HomeCard";
+import { FinanceCard } from "./FinanceCard";
+import { formatToDollar } from "@/utils/formatToDollar";
+import { PotProps } from "@/types/pot";
+import { FinanceItem } from "@/components/shared/FinanceItem";
+import { EmptyContent } from "@/components/shared/EmptyContent";
 
 interface PotsSectionProps {
-  isValidating: boolean
-  allPots: AllPotsProps | undefined
+  isValidating: boolean;
+  allPots: AllPotsProps | undefined;
 }
 
 export const PotsSection = ({ isValidating, allPots }: PotsSectionProps) => {
@@ -46,5 +46,5 @@ export const PotsSection = ({ isValidating, allPots }: PotsSectionProps) => {
         )}
       </div>
     </HomeCard>
-  )
-}
+  );
+};

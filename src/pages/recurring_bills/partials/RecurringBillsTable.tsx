@@ -1,20 +1,20 @@
-import { RecurringBillProps } from '@/types/recurringBills'
-import { formatToDollar } from '@/utils/formatToDollar'
-import { RecurringBillCard } from './RecurringBillCard'
-import { getOrdinalSuffix } from '@/utils/getOrdinalSuffix'
-import { EmptyContent } from '@/components/shared/EmptyContent'
-import { SkeletonTransactionCard } from '@/components/shared/SkeletonTransactionCard'
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
-import iconBillPaid from '/public/assets/images/icon-bill-paid.svg'
-import iconBillDue from '/public/assets/images/icon-bill-due.svg'
-import Image from 'next/image'
+import { RecurringBillProps } from "@/types/recurringBills";
+import { formatToDollar } from "@/utils/formatToDollar";
+import { RecurringBillCard } from "./RecurringBillCard";
+import { getOrdinalSuffix } from "@/utils/getOrdinalSuffix";
+import { EmptyContent } from "@/components/shared/EmptyContent";
+import { SkeletonTransactionCard } from "@/components/shared/SkeletonTransactionCard";
+import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
+import iconBillPaid from "/public/assets/images/icon-bill-paid.svg";
+import iconBillDue from "/public/assets/images/icon-bill-due.svg";
+import Image from "next/image";
 
 export const RecurringBillsTable = ({
   recurringBills,
   isValidating,
 }: {
-  recurringBills: RecurringBillProps[] | undefined
-  isValidating: boolean
+  recurringBills: RecurringBillProps[] | undefined;
+  isValidating: boolean;
 }) => (
   <table className="min-w-full table-fixed">
     <thead>
@@ -53,14 +53,14 @@ export const RecurringBillsTable = ({
             <td className="text-xs text-gray-600 px-4 py-2 text-left">
               <div className="flex items-center gap-2">
                 {`${capitalizeFirstLetter(
-                  bill.recurrenceFrequency,
-                )} - ${getOrdinalSuffix(bill.recurrenceDay || '')}`}
+                  bill.recurrenceFrequency
+                )} - ${getOrdinalSuffix(bill.recurrenceDay || "")}`}
 
-                {bill.status === 'paid' && (
+                {bill.status === "paid" && (
                   <Image src={iconBillPaid} alt="" width={12} />
                 )}
 
-                {bill.status === 'due soon' && (
+                {bill.status === "due soon" && (
                   <Image src={iconBillDue} alt="" width={12} />
                 )}
               </div>
@@ -69,9 +69,9 @@ export const RecurringBillsTable = ({
             <td className="text-sm text-gray-600 px-4 py-2 text-right">
               <span
                 className={`font-bold ${
-                  bill.status === 'due soon'
-                    ? 'text-secondary-red'
-                    : 'text-gray-900'
+                  bill.status === "due soon"
+                    ? "text-secondary-red"
+                    : "text-gray-900"
                 }`}
               >
                 {formatToDollar(bill.amount)}
@@ -88,4 +88,4 @@ export const RecurringBillsTable = ({
       )}
     </tbody>
   </table>
-)
+);

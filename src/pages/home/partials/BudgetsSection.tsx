@@ -1,15 +1,15 @@
 import {
   BudgetItem,
   BudgetWithDetailsProps,
-} from '@/components/shared/BudgetItem'
-import HomeCard from './HomeCard'
-import { SkeletonBudgetSection } from '@/components/skeletons/SkeletonBudgetSection'
-import { FinanceItem } from '@/components/shared/FinanceItem'
-import { EmptyContent } from '@/components/shared/EmptyContent'
+} from "@/components/shared/BudgetItem";
+import HomeCard from "./HomeCard";
+import { SkeletonBudgetSection } from "@/components/skeletons/SkeletonBudgetSection";
+import { FinanceItem } from "@/components/shared/FinanceItem";
+import { EmptyContent } from "@/components/shared/EmptyContent";
 
 interface BudgetsSectionProps {
-  isValidating: boolean
-  budgets: BudgetWithDetailsProps[] | undefined
+  isValidating: boolean;
+  budgets: BudgetWithDetailsProps[] | undefined;
 }
 
 export const BudgetsSection = ({
@@ -43,5 +43,5 @@ export const BudgetsSection = ({
         <EmptyContent content="No budgets available." />
       )}
     </HomeCard>
-  )
-}
+  );
+};

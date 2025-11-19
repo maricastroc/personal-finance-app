@@ -1,11 +1,11 @@
-import { PaginationBtn } from './partials/PaginationButton'
-import { PaginationButtons } from './partials/PaginationButtons'
+import { PaginationBtn } from "./partials/PaginationButton";
+import { PaginationButtons } from "./partials/PaginationButtons";
 
 interface PaginationSectionProps {
-  currentPage: number
-  maxVisibleButtons: number
-  totalPages: number
-  handleSetCurrentPage: (value: number) => void
+  currentPage: number;
+  maxVisibleButtons: number;
+  totalPages: number;
+  handleSetCurrentPage: (value: number) => void;
 }
 
 export const PaginationSection = ({
@@ -37,5 +37,5 @@ export const PaginationSection = ({
         onClick={() => handleSetCurrentPage(currentPage + 1)}
       />
     </>
-  )
-}
+  );
+};

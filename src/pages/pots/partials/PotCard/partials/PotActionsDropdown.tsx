@@ -1,10 +1,10 @@
-import { useOutsideAndEscape } from '@/hooks/useClickOutside'
+import { useOutsideAndEscape } from "@/hooks/useClickOutside";
 
 interface Props {
-  isOpen: boolean
-  setIsOpen: (v: boolean) => void
-  setIsEditOpen: (v: boolean) => void
-  setIsDeleteOpen: (v: boolean) => void
+  isOpen: boolean;
+  setIsOpen: (v: boolean) => void;
+  setIsEditOpen: (v: boolean) => void;
+  setIsDeleteOpen: (v: boolean) => void;
 }
 
 export function PotActionsDropdown({
@@ -17,9 +17,9 @@ export function PotActionsDropdown({
     enabled: isOpen,
     onClickOutside: () => setIsOpen(false),
     onEscape: () => setIsOpen(false),
-  })
+  });
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return (
     <div
@@ -28,8 +28,8 @@ export function PotActionsDropdown({
     >
       <button
         onClick={() => {
-          setIsEditOpen(true)
-          setIsOpen(false)
+          setIsEditOpen(true);
+          setIsOpen(false);
         }}
         className="text-sm text-left text-gray-800 hover:text-gray-500"
       >
@@ -40,13 +40,13 @@ export function PotActionsDropdown({
 
       <button
         onClick={() => {
-          setIsDeleteOpen(true)
-          setIsOpen(false)
+          setIsDeleteOpen(true);
+          setIsOpen(false);
         }}
         className="text-sm text-left text-secondary-red hover:brightness-125"
       >
         Delete Pot
       </button>
     </div>
-  )
+  );
 }

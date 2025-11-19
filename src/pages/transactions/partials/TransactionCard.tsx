@@ -1,12 +1,12 @@
-import { AVATAR_URL_DEFAULT } from '@/utils/constants'
+import { AVATAR_URL_DEFAULT } from "@/utils/constants";
 
 interface TransactionCardProps {
-  name: string
-  avatarUrl: string | undefined | null
-  date: string
-  value: string
-  balance: 'expense' | 'income' | undefined
-  category?: string
+  name: string;
+  avatarUrl: string | undefined | null;
+  date: string;
+  value: string;
+  balance: "expense" | "income" | undefined;
+  category?: string;
 }
 export function TransactionCard({
   avatarUrl,
@@ -38,13 +38,13 @@ export function TransactionCard({
       <div className="flex flex-col md:hidden gap-1 items-end pl-2 text-end">
         <p
           className={`font-bold text-sm ${
-            balance === 'income' ? 'text-secondary-green' : 'text-gray-900'
+            balance === "income" ? "text-secondary-green" : "text-gray-900"
           }`}
         >
-          {balance === 'income' ? '+' : '-'} {value}
+          {balance === "income" ? "+" : "-"} {value}
         </p>
         <p className="text-gray-500 text-xs">{date}</p>
       </div>
     </div>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-import { AVATAR_URL_DEFAULT } from '@/utils/constants'
+import { AVATAR_URL_DEFAULT } from "@/utils/constants";
 
 interface RecurringBillProps {
-  name: string
-  avatarUrl: string | undefined | null
+  name: string;
+  avatarUrl: string | undefined | null;
 }
 
 export function RecurringBillCard({ avatarUrl, name }: RecurringBillProps) {
@@ -18,5 +18,5 @@ export function RecurringBillCard({ avatarUrl, name }: RecurringBillProps) {
         {name}
       </span>
     </div>
-  )
+  );
 }

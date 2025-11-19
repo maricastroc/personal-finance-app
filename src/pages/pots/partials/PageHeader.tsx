@@ -1,16 +1,16 @@
-import { PrimaryButton } from '@/components/core/PrimaryButton'
-import { PageTitle } from '@/components/shared/PageTitle'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import * as Dialog from '@radix-ui/react-dialog'
-import { ReactNode } from 'react'
+import { PrimaryButton } from "@/components/core/PrimaryButton";
+import { PageTitle } from "@/components/shared/PageTitle";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Dialog from "@radix-ui/react-dialog";
+import { ReactNode } from "react";
 
 interface PageHeaderProps {
-  buttonLabel: string
-  isOpen: boolean
-  setIsOpen: (open: boolean) => void
-  modalId: string
-  children: ReactNode
+  buttonLabel: string;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  modalId: string;
+  children: ReactNode;
 }
 
 export function PageHeader({
@@ -40,5 +40,5 @@ export function PageHeader({
         {children}
       </Dialog.Root>
     </header>
-  )
+  );
 }

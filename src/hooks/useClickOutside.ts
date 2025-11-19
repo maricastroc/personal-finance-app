@@ -1,39 +1,39 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from "react";
 
 export function useOutsideAndEscape<T extends HTMLElement>({
   enabled = true,
   onEscape,
   onClickOutside,
 }: {
-  enabled?: boolean
-  onEscape?: () => void
-  onClickOutside?: () => void
+  enabled?: boolean;
+  onEscape?: () => void;
+  onClickOutside?: () => void;
 }) {
-  const ref = useRef<T>(null)
+  const ref = useRef<T>(null);
 
   useEffect(() => {
-    if (!enabled) return
+    if (!enabled) return;
 
     function handleClickOutside(event: MouseEvent) {
       if (ref.current && !ref.current.contains(event.target as Node)) {
-        onClickOutside?.()
+        onClickOutside?.();
       }
     }
 
     function handleEscape(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        onEscape?.()
+      if (event.key === "Escape") {
+        onEscape?.();
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside)
-    document.addEventListener('keydown', handleEscape)
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('keydown', handleEscape)
-    }
-  }, [enabled, onEscape, onClickOutside])
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [enabled, onEscape, onClickOutside]);
 
-  return ref
+  return ref;
 }

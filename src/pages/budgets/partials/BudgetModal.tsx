@@ -1,43 +1,43 @@
-import { PrimaryButton } from '@/components/core/PrimaryButton'
-import { ErrorMessage } from '@/components/shared/ErrorMessage'
-import { SelectInput } from '@/components/core/SelectInput'
-import { SelectTheme } from '@/components/shared/SelectTheme'
-import { api } from '@/lib/axios'
-import { CategoryProps } from '@/types/category'
-import { getThemeOptions } from '@/utils/getThemeOptions'
-import { handleApiError } from '@/utils/handleApiError'
-import useRequest from '@/utils/useRequest'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as Dialog from '@radix-ui/react-dialog'
-import { X } from 'phosphor-react'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { z } from 'zod'
+import { PrimaryButton } from "@/components/core/PrimaryButton";
+import { ErrorMessage } from "@/components/shared/ErrorMessage";
+import { SelectInput } from "@/components/core/SelectInput";
+import { SelectTheme } from "@/components/shared/SelectTheme";
+import { api } from "@/lib/axios";
+import { CategoryProps } from "@/types/category";
+import { getThemeOptions } from "@/utils/getThemeOptions";
+import { handleApiError } from "@/utils/handleApiError";
+import useRequest from "@/utils/useRequest";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as Dialog from "@radix-ui/react-dialog";
+import { X } from "phosphor-react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { z } from "zod";
 
 interface EditBudgetModalProps {
-  id: string
-  isOpen: boolean
-  onOpenChange: (value: boolean) => void
-  onClose: () => void
-  categoryName?: string
-  budgetLimit?: number
-  existedCategories?: string[]
-  theme?: string
-  budgetId?: string
-  isEdit?: boolean
-  onSubmitForm: () => Promise<void>
+  id: string;
+  isOpen: boolean;
+  onOpenChange: (value: boolean) => void;
+  onClose: () => void;
+  categoryName?: string;
+  budgetLimit?: number;
+  existedCategories?: string[];
+  theme?: string;
+  budgetId?: string;
+  isEdit?: boolean;
+  onSubmitForm: () => Promise<void>;
 }
 
 const budgetFormSchema = () =>
   z.object({
-    category: z.string().min(3, { message: 'Category is required.' }),
+    category: z.string().min(3, { message: "Category is required." }),
     budgetLimit: z
-      .number({ invalid_type_error: 'Amount must be a number.' })
-      .min(1, { message: 'Amount must be greater than zero.' }),
-    theme: z.string().min(3, { message: 'Theme is required.' }),
-  })
+      .number({ invalid_type_error: "Amount must be a number." })
+      .min(1, { message: "Amount must be greater than zero." }),
+    theme: z.string().min(3, { message: "Theme is required." }),
+  });
 
-export type BudgetFormData = z.infer<ReturnType<typeof budgetFormSchema>>
+export type BudgetFormData = z.infer<ReturnType<typeof budgetFormSchema>>;
 
 export function BudgetModal({
   id,
@@ -61,16 +61,16 @@ export function BudgetModal({
   } = useForm<BudgetFormData>({
     resolver: zodResolver(budgetFormSchema()),
     defaultValues: {
-      category: isEdit ? categoryName : '',
+      category: isEdit ? categoryName : "",
       budgetLimit: isEdit ? budgetLimit : undefined,
-      theme: isEdit ? theme : '',
+      theme: isEdit ? theme : "",
     },
-  })
+  });
 
   const { data: categories } = useRequest<CategoryProps[]>({
-    url: '/categories',
-    method: 'GET',
-  })
+    url: "/categories",
+    method: "GET",
+  });
 
   const handleEditBudget = async (data: BudgetFormData) => {
     try {
@@ -78,18 +78,18 @@ export function BudgetModal({
         categoryName: data.category,
         themeColor: data.theme,
         amount: data.budgetLimit,
-      }
+      };
 
-      const response = await api.put(`/budgets/${budgetId}`, payload)
+      const response = await api.put(`/budgets/${budgetId}`, payload);
 
-      toast.success(response.data.message)
-      await onSubmitForm()
-      reset()
-      onClose()
+      toast.success(response.data.message);
+      await onSubmitForm();
+      reset();
+      onClose();
     } catch (error) {
-      handleApiError(error)
+      handleApiError(error);
     }
-  }
+  };
 
   const handleCreateBudget = async (data: BudgetFormData) => {
     try {
@@ -97,18 +97,18 @@ export function BudgetModal({
         categoryName: data.category,
         themeColor: data.theme,
         amount: data.budgetLimit,
-      }
+      };
 
-      const response = await api.post(`/budgets`, payload)
+      const response = await api.post(`/budgets`, payload);
 
-      toast.success(response.data.message)
-      await onSubmitForm()
-      reset()
-      onClose()
+      toast.success(response.data.message);
+      await onSubmitForm();
+      reset();
+      onClose();
     } catch (error) {
-      handleApiError(error)
+      handleApiError(error);
     }
-  }
+  };
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
@@ -136,7 +136,7 @@ export function BudgetModal({
             id={`${id}-title`}
             className="text-xl md:text-2xl font-semibold text-gray-900 mb-2"
           >
-            {isEdit ? 'Edit Budget' : 'Add New Budget'}
+            {isEdit ? "Edit Budget" : "Add New Budget"}
           </Dialog.Title>
 
           <Dialog.Description
@@ -144,8 +144,8 @@ export function BudgetModal({
             className="text-sm text-gray-600 mb-4"
           >
             {isEdit
-              ? 'As your budgets change, feel free to update your spending limits.'
-              : 'Choose a category to set a spending budget. These categories can help you monitor spending.'}
+              ? "As your budgets change, feel free to update your spending limits."
+              : "Choose a category to set a spending budget. These categories can help you monitor spending."}
           </Dialog.Description>
 
           <form
@@ -170,10 +170,10 @@ export function BudgetModal({
                   defaultValue={categoryName}
                   existedCategories={existedCategories}
                   data={categories}
-                  onSelect={(value: string) => setValue('category', value)}
+                  onSelect={(value: string) => setValue("category", value)}
                   placeholder="Select a Category..."
                   aria-describedby={
-                    errors.category ? 'category-error' : undefined
+                    errors.category ? "category-error" : undefined
                   }
                 />
               )}
@@ -206,9 +206,9 @@ export function BudgetModal({
                   step="0.01"
                   className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
                   placeholder="Maximum Spend"
-                  {...register('budgetLimit', { valueAsNumber: true })}
+                  {...register("budgetLimit", { valueAsNumber: true })}
                   aria-describedby={
-                    errors.budgetLimit ? 'budget-limit-error' : undefined
+                    errors.budgetLimit ? "budget-limit-error" : undefined
                   }
                 />
               </div>
@@ -233,7 +233,7 @@ export function BudgetModal({
               <SelectTheme
                 defaultValue={theme}
                 data={getThemeOptions}
-                onSelect={(value: string) => setValue('theme', value)}
+                onSelect={(value: string) => setValue("theme", value)}
               />
 
               {errors.theme && (
@@ -248,5 +248,5 @@ export function BudgetModal({
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-  )
+  );
 }

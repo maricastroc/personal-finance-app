@@ -1,6 +1,6 @@
-import { formatToDollar } from '@/utils/formatToDollar'
-import useRequest from '@/utils/useRequest'
-import React, { useState } from 'react'
+import { formatToDollar } from "@/utils/formatToDollar";
+import useRequest from "@/utils/useRequest";
+import React, { useState } from "react";
 import {
   PieChart,
   Pie,
@@ -8,63 +8,63 @@ import {
   ResponsiveContainer,
   Tooltip,
   TooltipProps,
-} from 'recharts'
+} from "recharts";
 
 export interface BudgetItemProps {
-  isBudgetsScreen?: boolean
+  isBudgetsScreen?: boolean;
 }
 
 export interface BudgetWithDetailsProps {
-  id: string
-  categoryName: string
-  amountSpent: number
-  theme: string
-  budgetLimit: number
+  id: string;
+  categoryName: string;
+  amountSpent: number;
+  theme: string;
+  budgetLimit: number;
 }
 
 export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const { data: budgets } = useRequest<BudgetWithDetailsProps[]>({
-    url: '/budgets',
-    method: 'GET',
-  })
+    url: "/budgets",
+    method: "GET",
+  });
 
   if (!budgets?.length) {
     return (
       <p className="text-gray-500 text-center" role="status">
         No budgets available
       </p>
-    )
+    );
   }
 
-  const budgetLimitSum = budgets.reduce((sum, b) => sum + b.budgetLimit, 0)
-  const amountSpentSum = budgets.reduce((sum, b) => sum + b.amountSpent, 0)
+  const budgetLimitSum = budgets.reduce((sum, b) => sum + b.budgetLimit, 0);
+  const amountSpentSum = budgets.reduce((sum, b) => sum + b.amountSpent, 0);
 
   const data = budgets.map((b) => ({
     name: b.categoryName,
     value: b.budgetLimit,
     theme: b.theme,
-  }))
+  }));
 
   const tooltipContent = (props: TooltipProps<number, string>) => {
-    const { active, payload } = props
+    const { active, payload } = props;
 
     if (active && payload && payload.length) {
-      const { name, value } = payload[0].payload
+      const { name, value } = payload[0].payload;
       const percentage = budgetLimitSum
         ? ((value / budgetLimitSum) * 100).toFixed(2)
-        : '0.00'
+        : "0.00";
 
       return (
         <div className="custom-tooltip bg-white text-gray-700 shadow-lg text-sm font-semibold p-2 rounded-md">
           <p>{`${name}: ${percentage}%`}</p>
         </div>
-      )
+      );
     }
 
-    return null
-  }
+    return null;
+  };
 
   return (
     <div
@@ -72,14 +72,14 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
       className="flex justify-center"
     >
       <span className="sr-only">
-        Total spent {formatToDollar(amountSpentSum)} out of a limit of{' '}
+        Total spent {formatToDollar(amountSpentSum)} out of a limit of{" "}
         {formatToDollar(budgetLimitSum)}.
       </span>
 
       <ResponsiveContainer
         width={260}
         height={isBudgetsScreen ? 250 : 331.5}
-        style={{ margin: '0 auto' }}
+        style={{ margin: "0 auto" }}
       >
         <PieChart>
           <Pie
@@ -155,5 +155,5 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
         </PieChart>
       </ResponsiveContainer>
     </div>
-  )
+  );
 }

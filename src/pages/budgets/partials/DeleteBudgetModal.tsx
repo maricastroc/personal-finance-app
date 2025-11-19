@@ -1,20 +1,20 @@
-import { DeleteButton } from '@/components/core/DeleteButton'
-import { PrimaryButton } from '@/components/core/PrimaryButton'
-import { api } from '@/lib/axios'
-import { BudgetProps } from '@/types/budget'
-import { handleApiError } from '@/utils/handleApiError'
-import * as Dialog from '@radix-ui/react-dialog'
-import { X } from 'phosphor-react'
-import { useState } from 'react'
-import toast from 'react-hot-toast'
+import { DeleteButton } from "@/components/core/DeleteButton";
+import { PrimaryButton } from "@/components/core/PrimaryButton";
+import { api } from "@/lib/axios";
+import { BudgetProps } from "@/types/budget";
+import { handleApiError } from "@/utils/handleApiError";
+import * as Dialog from "@radix-ui/react-dialog";
+import { X } from "phosphor-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 interface DeleteBudgetModalProps {
-  id: string
-  isOpen: boolean
-  onOpenChange: (value: boolean) => void
-  onClose: () => void
-  budget: BudgetProps
-  onSubmitForm: () => Promise<void>
+  id: string;
+  isOpen: boolean;
+  onOpenChange: (value: boolean) => void;
+  onClose: () => void;
+  budget: BudgetProps;
+  onSubmitForm: () => Promise<void>;
 }
 
 export function DeleteBudgetModal({
@@ -25,22 +25,22 @@ export function DeleteBudgetModal({
   budget,
   onSubmitForm,
 }: DeleteBudgetModalProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleDeleteBudget = async () => {
     try {
-      setIsSubmitting(true)
-      const response = await api.delete(`/budgets/${budget.id}`)
+      setIsSubmitting(true);
+      const response = await api.delete(`/budgets/${budget.id}`);
 
-      toast.success(response.data.message)
-      await onSubmitForm()
-      onClose()
+      toast.success(response.data.message);
+      await onSubmitForm();
+      onClose();
     } catch (error) {
-      handleApiError(error)
+      handleApiError(error);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
@@ -104,5 +104,5 @@ export function DeleteBudgetModal({
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-  )
+  );
 }

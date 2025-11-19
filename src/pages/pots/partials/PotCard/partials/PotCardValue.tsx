@@ -1,5 +1,5 @@
-import { formatToDollar } from '@/utils/formatToDollar'
-import { PotProps } from '@/types/pot'
+import { formatToDollar } from "@/utils/formatToDollar";
+import { PotProps } from "@/types/pot";
 
 export function PotCardValue({ pot }: { pot: PotProps }) {
   return (
@@ -9,5 +9,5 @@ export function PotCardValue({ pot }: { pot: PotProps }) {
         {formatToDollar(pot.currentAmount)}
       </h2>
     </div>
-  )
+  );
 }

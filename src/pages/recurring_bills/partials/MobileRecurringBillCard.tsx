@@ -1,17 +1,17 @@
-import { AVATAR_URL_DEFAULT } from '@/utils/constants'
-import { formatToDollar } from '@/utils/formatToDollar'
-import { getOrdinalSuffix } from '@/utils/getOrdinalSuffix'
-import iconBillPaid from '/public/assets/images/icon-bill-paid.svg'
-import iconBillDue from '/public/assets/images/icon-bill-due.svg'
-import Image from 'next/image'
+import { AVATAR_URL_DEFAULT } from "@/utils/constants";
+import { formatToDollar } from "@/utils/formatToDollar";
+import { getOrdinalSuffix } from "@/utils/getOrdinalSuffix";
+import iconBillPaid from "/public/assets/images/icon-bill-paid.svg";
+import iconBillDue from "/public/assets/images/icon-bill-due.svg";
+import Image from "next/image";
 
 interface RecurringBillProps {
-  name: string
-  avatarUrl: string | undefined | null
-  recurrenceFrequency: string
-  recurrenceDay: string
-  amount: number
-  status: string
+  name: string;
+  avatarUrl: string | undefined | null;
+  recurrenceFrequency: string;
+  recurrenceDay: string;
+  amount: number;
+  status: string;
 }
 
 export function MobileRecurringBillCard({
@@ -49,15 +49,15 @@ export function MobileRecurringBillCard({
             className="text-xs text-gray-600 py-2 text-left"
           >
             {`${recurrenceFrequency} - ${getOrdinalSuffix(
-              recurrenceDay || '',
+              recurrenceDay || ""
             )}`}
           </time>
 
-          {status === 'paid' && (
+          {status === "paid" && (
             <Image src={iconBillPaid} alt="Bill paid" width={12} />
           )}
 
-          {status === 'due soon' && (
+          {status === "due soon" && (
             <Image src={iconBillDue} alt="Bill due soon" width={12} />
           )}
         </div>
@@ -66,12 +66,12 @@ export function MobileRecurringBillCard({
       <div className="text-sm text-gray-600 px-4 py-2 text-right">
         <span
           className={`font-bold ${
-            status === 'due soon' ? 'text-secondary-red' : 'text-gray-900'
+            status === "due soon" ? "text-secondary-red" : "text-gray-900"
           }`}
         >
           {formatToDollar(amount)}
         </span>
       </div>
     </article>
-  )
+  );
 }

@@ -1,12 +1,12 @@
-import { useOutsideAndEscape } from '@/hooks/useClickOutside'
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useState } from 'react'
+import { useOutsideAndEscape } from "@/hooks/useClickOutside";
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 
 interface BudgetCardMenuProps {
-  budgetId: string
-  onEdit: () => void
-  onDelete: () => void
+  budgetId: string;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
 export function BudgetCardMenu({
@@ -14,13 +14,13 @@ export function BudgetCardMenu({
   onEdit,
   onDelete,
 }: BudgetCardMenuProps) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   const dropdownRef = useOutsideAndEscape<HTMLDivElement>({
     enabled: open,
     onClickOutside: () => setOpen(false),
     onEscape: () => setOpen(false),
-  })
+  });
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -63,5 +63,5 @@ export function BudgetCardMenu({
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -1,47 +1,47 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { PrimaryButton } from '@/components/core/PrimaryButton'
-import { ErrorMessage } from '@/components/shared/ErrorMessage'
-import { SelectTheme } from '@/components/shared/SelectTheme'
-import { api } from '@/lib/axios'
-import { AllPotsProps } from '@/pages/home'
-import { getThemeOptions } from '@/utils/getThemeOptions'
-import { handleApiError } from '@/utils/handleApiError'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as Dialog from '@radix-ui/react-dialog'
-import { AxiosResponse } from 'axios'
-import { X } from 'phosphor-react'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { z } from 'zod'
+import { PrimaryButton } from "@/components/core/PrimaryButton";
+import { ErrorMessage } from "@/components/shared/ErrorMessage";
+import { SelectTheme } from "@/components/shared/SelectTheme";
+import { api } from "@/lib/axios";
+import { AllPotsProps } from "@/pages/home";
+import { getThemeOptions } from "@/utils/getThemeOptions";
+import { handleApiError } from "@/utils/handleApiError";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as Dialog from "@radix-ui/react-dialog";
+import { AxiosResponse } from "axios";
+import { X } from "phosphor-react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { z } from "zod";
 
 interface PotFormModalProps {
-  id: string
-  onClose: () => void
-  targetAmount?: number
-  currentAmount?: number
-  themeColor?: string
-  potId?: string
-  name?: string
-  isEdit?: boolean
+  id: string;
+  onClose: () => void;
+  targetAmount?: number;
+  currentAmount?: number;
+  themeColor?: string;
+  potId?: string;
+  name?: string;
+  isEdit?: boolean;
   onSubmitForm: () => Promise<
     void | AxiosResponse<AllPotsProps, any> | undefined
-  >
+  >;
 }
 
 const potFormSchema = () =>
   z.object({
-    name: z.string().min(3, { message: 'Name is required.' }),
+    name: z.string().min(3, { message: "Name is required." }),
     targetAmount: z
-      .number({ invalid_type_error: 'Amount must be a number.' })
-      .min(1, { message: 'Amount must be greater than zero.' }),
+      .number({ invalid_type_error: "Amount must be a number." })
+      .min(1, { message: "Amount must be greater than zero." }),
     currentAmount: z
-      .number({ invalid_type_error: 'Amount must be a number.' })
+      .number({ invalid_type_error: "Amount must be a number." })
       .optional(),
-    themeColor: z.string().min(3, { message: 'Theme is required.' }),
-  })
+    themeColor: z.string().min(3, { message: "Theme is required." }),
+  });
 
-export type PotFormData = z.infer<ReturnType<typeof potFormSchema>>
+export type PotFormData = z.infer<ReturnType<typeof potFormSchema>>;
 
 export function PotFormModal({
   id,
@@ -63,13 +63,13 @@ export function PotFormModal({
   } = useForm<PotFormData>({
     resolver: zodResolver(potFormSchema()),
     defaultValues: {
-      name: isEdit ? name : '',
+      name: isEdit ? name : "",
       targetAmount: isEdit ? targetAmount : 0,
-      themeColor: isEdit ? themeColor : '',
+      themeColor: isEdit ? themeColor : "",
       currentAmount: isEdit ? currentAmount : 0,
     },
-  })
-  console.log(potId, isEdit, targetAmount)
+  });
+  console.log(potId, isEdit, targetAmount);
   const handleEditPot = async (data: PotFormData) => {
     try {
       const payload = {
@@ -77,18 +77,18 @@ export function PotFormModal({
         themeColor: data.themeColor,
         targetAmount: data.targetAmount,
         currentAmount: data.currentAmount,
-      }
+      };
 
-      const response = await api.put(`/pots/${potId}`, payload)
+      const response = await api.put(`/pots/${potId}`, payload);
 
-      toast?.success(response.data.message)
-      await onSubmitForm()
-      reset()
-      onClose()
+      toast?.success(response.data.message);
+      await onSubmitForm();
+      reset();
+      onClose();
     } catch (error) {
-      handleApiError(error)
+      handleApiError(error);
     }
-  }
+  };
 
   const handleCreatePot = async (data: PotFormData) => {
     try {
@@ -96,18 +96,18 @@ export function PotFormModal({
         name: data.name,
         themeColor: data.themeColor,
         targetAmount: data.targetAmount,
-      }
+      };
 
-      const response = await api.post(`/pots/${potId}`, payload)
+      const response = await api.post(`/pots/${potId}`, payload);
 
-      toast?.success(response.data.message)
-      await onSubmitForm()
-      reset()
-      onClose()
+      toast?.success(response.data.message);
+      await onSubmitForm();
+      reset();
+      onClose();
     } catch (error) {
-      handleApiError(error)
+      handleApiError(error);
     }
-  }
+  };
 
   useEffect(() => {
     if (isEdit) {
@@ -116,9 +116,9 @@ export function PotFormModal({
         targetAmount,
         currentAmount,
         themeColor,
-      })
+      });
     }
-  }, [isEdit, name, themeColor, targetAmount, currentAmount, reset])
+  }, [isEdit, name, themeColor, targetAmount, currentAmount, reset]);
 
   return (
     <Dialog.Portal>
@@ -140,13 +140,13 @@ export function PotFormModal({
         </Dialog.Close>
 
         <Dialog.Title className="text-xl font-semibold text-gray-900 mb-2 md:text-2xl">
-          {isEdit ? 'Edit Pot' : 'Add New Pot'}
+          {isEdit ? "Edit Pot" : "Add New Pot"}
         </Dialog.Title>
 
         <Dialog.Description className="flex flex-col w-full text-sm text-gray-600 mb-4">
           {isEdit
-            ? 'If your saving targets change, feel free to update your pots.'
-            : 'Create a pot to set savings targets. These can help keep you on track as you save for special purchases.'}
+            ? "If your saving targets change, feel free to update your pots."
+            : "Create a pot to set savings targets. These can help keep you on track as you save for special purchases."}
         </Dialog.Description>
 
         <form
@@ -164,7 +164,7 @@ export function PotFormModal({
               id="name"
               className="text-sm w-full h-12 rounded-md border border-beige-500 px-3"
               placeholder="Name"
-              {...register('name')}
+              {...register("name")}
             />
             {errors.name && (
               <ErrorMessage id="pot-name-error" message={errors.name.message} />
@@ -187,7 +187,7 @@ export function PotFormModal({
                 id="targetAmount"
                 className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
                 placeholder="Target Amount"
-                {...register('targetAmount', { valueAsNumber: true })}
+                {...register("targetAmount", { valueAsNumber: true })}
               />
             </div>
 
@@ -207,7 +207,7 @@ export function PotFormModal({
             <SelectTheme
               defaultValue={themeColor}
               data={getThemeOptions}
-              onSelect={(value) => setValue('themeColor', value)}
+              onSelect={(value) => setValue("themeColor", value)}
             />
 
             {errors.themeColor && (
@@ -224,5 +224,5 @@ export function PotFormModal({
         </form>
       </Dialog.Content>
     </Dialog.Portal>
-  )
+  );
 }

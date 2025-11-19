@@ -1,10 +1,10 @@
-import { Skeleton } from '@mui/material'
+import { Skeleton } from "@mui/material";
 
 const SkeletonTransactionItem = () => (
   <div className="flex items-center justify-center w-full bg-white">
     <Skeleton variant="rounded" width="100%" height={45} />
   </div>
-)
+);
 
 export const SkeletonTransactionsSection = () => {
   return (
@@ -13,5 +13,5 @@ export const SkeletonTransactionsSection = () => {
         <SkeletonTransactionItem key={index} />
       ))}
     </div>
-  )
-}
+  );
+};

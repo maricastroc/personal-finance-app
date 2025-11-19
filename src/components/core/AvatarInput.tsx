@@ -1,10 +1,10 @@
-import { AVATAR_URL_DEFAULT } from '@/utils/constants'
-import { Pencil, User } from 'phosphor-react'
+import { AVATAR_URL_DEFAULT } from "@/utils/constants";
+import { Pencil, User } from "phosphor-react";
 
 interface AvatarInputProps {
-  avatarPreview: string | null
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-  inputFileRef: React.RefObject<HTMLInputElement>
+  avatarPreview: string | null;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  inputFileRef: React.RefObject<HTMLInputElement>;
 }
 
 export const AvatarInput = ({
@@ -54,10 +54,10 @@ export const AvatarInput = ({
             className="hidden"
           />
           <span className="truncate max-w-[15rem]">
-            {avatarPreview ? 'Selected avatar' : 'No file selected.'}
+            {avatarPreview ? "Selected avatar" : "No file selected."}
           </span>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

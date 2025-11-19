@@ -1,15 +1,15 @@
-import { CircularProgress } from '@mui/material'
-import Layout from '../layouts/layout.page'
-import { useAppContext } from '@/contexts/AppContext'
+import { CircularProgress } from "@mui/material";
+import Layout from "../layouts/layout.page";
+import { useAppContext } from "@/contexts/AppContext";
 
 export function LoadingPage() {
-  const { isSidebarOpen } = useAppContext()
+  const { isSidebarOpen } = useAppContext();
 
   return (
     <Layout>
       <div
         className={`flex grow items-center justify-center w-full h-full min-h-[100vh] ${
-          isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
+          isSidebarOpen ? "lg:pr-10" : "lg:pr-20"
         }`}
       >
         <CircularProgress
@@ -22,5 +22,5 @@ export function LoadingPage() {
         <span className="sr-only">Loading…</span>
       </div>
     </Layout>
-  )
+  );
 }

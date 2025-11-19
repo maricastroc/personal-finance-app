@@ -1,4 +1,4 @@
-import { Skeleton } from '@mui/material'
+import { Skeleton } from "@mui/material";
 
 export const SkeletonPotCard = () => {
   return (
@@ -27,5 +27,5 @@ export const SkeletonPotCard = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,21 +1,21 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
   faArrowDownWideShort,
   faFilter,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { SelectInput } from '@/components/core/SelectInput'
-import { CategoryProps } from '@/types/category'
-import { sortByFilters } from '@/utils/constants'
-import { SearchInput } from '@/components/core/SearchInput'
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { SelectInput } from "@/components/core/SelectInput";
+import { CategoryProps } from "@/types/category";
+import { sortByFilters } from "@/utils/constants";
+import { SearchInput } from "@/components/core/SearchInput";
 
 interface SearchSectionProps {
-  search: string
-  category: string | null | undefined
-  categories: CategoryProps[] | undefined
-  handleSetSearch: (value: string) => void
-  handleSetCategory: (value: string) => void
-  handleSetSortBy: (value: string) => void
+  search: string;
+  category: string | null | undefined;
+  categories: CategoryProps[] | undefined;
+  handleSetSearch: (value: string) => void;
+  handleSetCategory: (value: string) => void;
+  handleSetSortBy: (value: string) => void;
 }
 
 export const SearchSection = ({
@@ -26,8 +26,8 @@ export const SearchSection = ({
   handleSetCategory,
   handleSetSortBy,
 }: SearchSectionProps) => {
-  const [isCategoriesSelectOpen, setIsCategoriesSelectOpen] = useState(false)
-  const [isSortBySelectOpen, setIsSortBySelectOpen] = useState(false)
+  const [isCategoriesSelectOpen, setIsCategoriesSelectOpen] = useState(false);
+  const [isSortBySelectOpen, setIsSortBySelectOpen] = useState(false);
 
   return (
     <section
@@ -72,7 +72,7 @@ export const SearchSection = ({
             label="Category"
             includeAll
             placeholder="Select..."
-            defaultValue={(category as string) || 'all'}
+            defaultValue={(category as string) || "all"}
             data={categories || []}
             onSelect={handleSetCategory}
           />
@@ -115,5 +115,5 @@ export const SearchSection = ({
         </div>
       )}
     </section>
-  )
-}
+  );
+};

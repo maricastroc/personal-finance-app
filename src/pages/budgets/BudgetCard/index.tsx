@@ -1,44 +1,44 @@
-import useRequest from '@/utils/useRequest'
-import { useState } from 'react'
-import { BudgetCardHeader } from './BudgetCardHeader'
-import { TransactionProps } from '@/types/transaction'
-import { BudgetProps } from '@/types/budget'
-import { BudgetCardMenu } from './BudgetCardMenu'
-import { BudgetCardLimitInfo } from './BudgetCardLimitInfo'
-import { BudgetCardSpentInfo } from './BudgetCardSpentInfo'
-import { BudgetCardTransactions } from './BudgetCardTransactions'
-import { BudgetModal } from '../partials/BudgetModal'
-import { DeleteBudgetModal } from '../partials/DeleteBudgetModal'
-import { useRouter } from 'next/router'
+import useRequest from "@/utils/useRequest";
+import { useState } from "react";
+import { BudgetCardHeader } from "./BudgetCardHeader";
+import { TransactionProps } from "@/types/transaction";
+import { BudgetProps } from "@/types/budget";
+import { BudgetCardMenu } from "./BudgetCardMenu";
+import { BudgetCardLimitInfo } from "./BudgetCardLimitInfo";
+import { BudgetCardSpentInfo } from "./BudgetCardSpentInfo";
+import { BudgetCardTransactions } from "./BudgetCardTransactions";
+import { BudgetModal } from "../partials/BudgetModal";
+import { DeleteBudgetModal } from "../partials/DeleteBudgetModal";
+import { useRouter } from "next/router";
 
 interface DetailsProps {
-  categoryName: string
-  amountSpent: number
-  theme: string
-  budgetLimit: number
-  percentageSpent: number
+  categoryName: string;
+  amountSpent: number;
+  theme: string;
+  budgetLimit: number;
+  percentageSpent: number;
 }
 
 interface BudgetCardProps {
-  budgetId: string
-  onSubmitForm: () => Promise<void>
+  budgetId: string;
+  onSubmitForm: () => Promise<void>;
 }
 
 interface BudgetWithDetailsProps {
-  budget: BudgetProps
-  budgetDetails: DetailsProps
-  transactions: TransactionProps[]
+  budget: BudgetProps;
+  budgetDetails: DetailsProps;
+  transactions: TransactionProps[];
 }
 
 export default function BudgetCard({
   budgetId,
   onSubmitForm,
 }: BudgetCardProps) {
-  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const {
     data: budget,
@@ -47,7 +47,7 @@ export default function BudgetCard({
   } = useRequest<BudgetWithDetailsProps>(
     {
       url: `/budgets/${budgetId}`,
-      method: 'GET',
+      method: "GET",
     },
     {
       revalidateOnFocus: false,
@@ -55,20 +55,20 @@ export default function BudgetCard({
       dedupingInterval: 20000,
       focusThrottleInterval: 30000,
       keepPreviousData: true,
-    },
-  )
+    }
+  );
 
-  const pct = Math.min(100, budget?.budgetDetails.percentageSpent || 0)
+  const pct = Math.min(100, budget?.budgetDetails.percentageSpent || 0);
 
   const free =
     (budget?.budgetDetails.budgetLimit || 0) -
-    (budget?.budgetDetails.amountSpent || 0)
+    (budget?.budgetDetails.amountSpent || 0);
 
   return (
     <section className="flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
       <BudgetCardHeader
-        categoryName={budget?.budgetDetails.categoryName || ''}
-        theme={budget?.budgetDetails.theme || ''}
+        categoryName={budget?.budgetDetails.categoryName || ""}
+        theme={budget?.budgetDetails.theme || ""}
         isLoading={isValidating}
       >
         <BudgetCardMenu
@@ -81,7 +81,7 @@ export default function BudgetCard({
       <BudgetCardLimitInfo
         limit={budget?.budgetDetails.budgetLimit || 0}
         pct={pct}
-        theme={budget?.budgetDetails.theme || ''}
+        theme={budget?.budgetDetails.theme || ""}
       />
 
       <BudgetCardSpentInfo
@@ -94,7 +94,7 @@ export default function BudgetCard({
         isLoading={isValidating}
         onSeeAll={() =>
           router.push({
-            pathname: '/transactions',
+            pathname: "/transactions",
             query: { category: budget?.budgetDetails.categoryName },
           })
         }
@@ -112,8 +112,8 @@ export default function BudgetCard({
           budgetLimit={budget.budgetDetails.budgetLimit}
           theme={budget.budgetDetails.theme}
           onSubmitForm={async () => {
-            await mutate()
-            await onSubmitForm()
+            await mutate();
+            await onSubmitForm();
           }}
         />
       )}
@@ -126,11 +126,11 @@ export default function BudgetCard({
           onClose={() => setIsDeleteOpen(false)}
           budget={budget.budget}
           onSubmitForm={async () => {
-            await mutate()
-            await onSubmitForm()
+            await mutate();
+            await onSubmitForm();
           }}
         />
       )}
     </section>
-  )
+  );
 }

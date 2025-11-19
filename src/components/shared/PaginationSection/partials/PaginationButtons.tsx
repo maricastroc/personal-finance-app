@@ -1,10 +1,10 @@
-import { PaginationBtn } from './PaginationButton'
+import { PaginationBtn } from "./PaginationButton";
 
 interface PaginationButtonsProps {
-  currentPage: number
-  maxVisibleButtons: number
-  totalPages: number
-  handleSetCurrentPage: (value: number) => void
+  currentPage: number;
+  maxVisibleButtons: number;
+  totalPages: number;
+  handleSetCurrentPage: (value: number) => void;
 }
 
 export const PaginationButtons = ({
@@ -13,9 +13,12 @@ export const PaginationButtons = ({
   totalPages,
   handleSetCurrentPage,
 }: PaginationButtonsProps) => {
-  const buttons = []
-  const startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2))
-  const endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1)
+  const buttons = [];
+  const startPage = Math.max(
+    1,
+    currentPage - Math.floor(maxVisibleButtons / 2)
+  );
+  const endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
 
   for (let i = startPage; i <= endPage; i++) {
     buttons.push(
@@ -24,16 +27,16 @@ export const PaginationButtons = ({
         number={i}
         onClick={() => handleSetCurrentPage(i)}
         disabled={currentPage === i}
-      />,
-    )
+      />
+    );
   }
 
   if (startPage > 1) {
-    buttons.unshift(<span key="start-ellipsis">...</span>)
+    buttons.unshift(<span key="start-ellipsis">...</span>);
   }
   if (endPage < totalPages) {
-    buttons.push(<span key="end-ellipsis">...</span>)
+    buttons.push(<span key="end-ellipsis">...</span>);
   }
 
-  return buttons
-}
+  return buttons;
+};

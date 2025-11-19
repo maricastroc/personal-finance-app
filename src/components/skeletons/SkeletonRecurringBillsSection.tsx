@@ -1,13 +1,13 @@
-import { Skeleton } from '@mui/material'
+import { Skeleton } from "@mui/material";
 
-const SkeletonBillCard = ({ height = '5rem' }: { height?: string }) => (
+const SkeletonBillCard = ({ height = "5rem" }: { height?: string }) => (
   <div
     className="flex flex-col items-start justify-center gap-2 w-full p-4 rounded-lg bg-beige-100"
     style={{ height }}
   >
     <Skeleton variant="rounded" width="100%" height={24} />
   </div>
-)
+);
 
 export const SkeletonRecurringBillsSection = () => {
   return (
@@ -16,5 +16,5 @@ export const SkeletonRecurringBillsSection = () => {
       <SkeletonBillCard height="5rem" />
       <SkeletonBillCard height="6rem" />
     </div>
-  )
-}
+  );
+};

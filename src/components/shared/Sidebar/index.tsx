@@ -1,31 +1,31 @@
-import Image from 'next/image'
-import { usePathname } from 'next/navigation'
-import { navList } from '@/utils/getNavList'
-import logo from '/public/assets/images/logo-large.svg'
-import logosm from '/public/assets/images/logo-small.svg'
-import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
-import { AsideItem } from './partials/AsideItem'
-import { SidebarToggleButton } from './partials/SidebarToggleButton'
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { navList } from "@/utils/getNavList";
+import logo from "/public/assets/images/logo-large.svg";
+import logosm from "/public/assets/images/logo-small.svg";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { AsideItem } from "./partials/AsideItem";
+import { SidebarToggleButton } from "./partials/SidebarToggleButton";
 
 type navProp = {
-  isSidebarOpen: boolean
-  handleIsSidebarOpen: () => void
-}
+  isSidebarOpen: boolean;
+  handleIsSidebarOpen: () => void;
+};
 
 export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
-  const pathname = usePathname()
-  const session = useSession()
+  const pathname = usePathname();
+  const session = useSession();
 
-  const [filteredNavList, setFilteredNavList] = useState(navList)
+  const [filteredNavList, setFilteredNavList] = useState(navList);
 
   useEffect(() => {
     if (session?.data?.user.email === process.env.NEXT_PUBLIC_DEMO_LOGIN) {
-      setFilteredNavList(navList.filter((item) => item.name !== 'Profile'))
+      setFilteredNavList(navList.filter((item) => item.name !== "Profile"));
     } else {
-      setFilteredNavList(navList)
+      setFilteredNavList(navList);
     }
-  }, [session?.data?.user?.email])
+  }, [session?.data?.user?.email]);
 
   return (
     <aside
@@ -33,18 +33,18 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
       className={`
         fixed hidden left-0 top-0 bottom-0 bg-gray-900 rounded-r-xl lg:flex 
         flex-col justify-between py-12
-        ${isSidebarOpen ? 'lg:w-[240px]' : 'lg:w-[88px]'}
+        ${isSidebarOpen ? "lg:w-[240px]" : "lg:w-[88px]"}
         transition-all duration-500 z-50
       `}
     >
       <div
         className={`flex flex-col gap-20 ${
-          isSidebarOpen ? '' : 'justify-center items-center'
+          isSidebarOpen ? "" : "justify-center items-center"
         }`}
       >
         <div
           className={`relative h-[22px] ${
-            isSidebarOpen ? 'ml-6 w-[121px]' : 'w-[24px]'
+            isSidebarOpen ? "ml-6 w-[121px]" : "w-[24px]"
           }`}
         >
           <Image
@@ -56,7 +56,7 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
 
         <nav
           aria-label="Main navigation"
-          className={`${!isSidebarOpen && 'flex flex-col gap-8'}`}
+          className={`${!isSidebarOpen && "flex flex-col gap-8"}`}
         >
           {filteredNavList.map((item, index) => (
             <AsideItem
@@ -74,5 +74,5 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
         onToggle={handleIsSidebarOpen}
       />
     </aside>
-  )
+  );
 }

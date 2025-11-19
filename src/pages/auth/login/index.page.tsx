@@ -1,29 +1,29 @@
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/router'
-import { NextSeo } from 'next-seo'
-import { z } from 'zod'
-import { Controller, useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
-import { handleApiError } from '@/utils/handleApiError'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import AuthLayout from '@/components/layouts/authLayout.page'
-import { PrimaryButton } from '@/components/core/PrimaryButton'
-import { InputBase } from '@/components/core/InputBase'
-import { PasswordInput } from '@/components/core/PasswordInput'
-import { TextLink } from '@/components/core/TextLink'
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
+import { z } from "zod";
+import { Controller, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
+import { handleApiError } from "@/utils/handleApiError";
+import { LoadingPage } from "@/components/shared/LoadingPage";
+import AuthLayout from "@/components/layouts/authLayout.page";
+import { PrimaryButton } from "@/components/core/PrimaryButton";
+import { InputBase } from "@/components/core/InputBase";
+import { PasswordInput } from "@/components/core/PasswordInput";
+import { TextLink } from "@/components/core/TextLink";
 
 const signInFormSchema = z.object({
-  email: z.string().min(3, { message: 'E-mail is required.' }),
-  password: z.string().min(3, { message: 'Password is required.' }),
-})
+  email: z.string().min(3, { message: "E-mail is required." }),
+  password: z.string().min(3, { message: "Password is required." }),
+});
 
-type SignInFormData = z.infer<typeof signInFormSchema>
+type SignInFormData = z.infer<typeof signInFormSchema>;
 
 export default function Login() {
-  const router = useRouter()
-  const isRouteLoading = useLoadingOnRouteChange()
+  const router = useRouter();
+  const isRouteLoading = useLoadingOnRouteChange();
 
   const {
     control,
@@ -31,37 +31,37 @@ export default function Login() {
     formState: { isSubmitting },
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInFormSchema),
-    defaultValues: { email: '', password: '' },
-  })
+    defaultValues: { email: "", password: "" },
+  });
 
   async function handleLogin(email: string, password: string) {
     try {
-      const response = await signIn('credentials', {
+      const response = await signIn("credentials", {
         email,
         password,
         redirect: false,
-      })
+      });
 
       if (response?.error) {
-        toast.error(response.error)
+        toast.error(response.error);
       } else {
-        toast.success('Welcome to the Finance App!')
-        router.push('/')
+        toast.success("Welcome to the Finance App!");
+        router.push("/");
       }
     } catch (error) {
-      handleApiError(error)
+      handleApiError(error);
     }
   }
 
   async function onSubmit(data: SignInFormData) {
-    await handleLogin(data.email, data.password)
+    await handleLogin(data.email, data.password);
   }
 
   async function onSubmitDemo() {
     await handleLogin(
       process.env.NEXT_PUBLIC_DEMO_LOGIN!,
-      process.env.NEXT_PUBLIC_DEMO_PASSWORD!,
-    )
+      process.env.NEXT_PUBLIC_DEMO_PASSWORD!
+    );
   }
 
   return isRouteLoading ? (
@@ -72,8 +72,8 @@ export default function Login() {
         title="Login | Finance App"
         additionalMetaTags={[
           {
-            name: 'viewport',
-            content: 'width=device-width, initial-scale=1.0',
+            name: "viewport",
+            content: "width=device-width, initial-scale=1.0",
           },
         ]}
       />
@@ -137,5 +137,5 @@ export default function Login() {
         </form>
       </AuthLayout>
     </>
-  )
+  );
 }

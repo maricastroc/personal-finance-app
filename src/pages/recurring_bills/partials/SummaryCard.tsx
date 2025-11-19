@@ -1,10 +1,10 @@
-import { RecurringBillsResult } from '@/pages/home'
-import { formatToDollar } from '@/utils/formatToDollar'
-import { Skeleton } from '@mui/material'
+import { RecurringBillsResult } from "@/pages/home";
+import { formatToDollar } from "@/utils/formatToDollar";
+import { Skeleton } from "@mui/material";
 
 interface SummaryCardProps {
-  recurringBills: RecurringBillsResult | undefined
-  isValidating: boolean
+  recurringBills: RecurringBillsResult | undefined;
+  isValidating: boolean;
 }
 
 export const SummaryCard = ({
@@ -39,7 +39,7 @@ export const SummaryCard = ({
               <p className="text-xs text-gray-500">Paid Bills</p>
               <p className="font-bold text-gray-900 text-xs">
                 {`${recurringBills?.paid.bills.length} (${formatToDollar(
-                  recurringBills?.paid.total || 0,
+                  recurringBills?.paid.total || 0
                 )})`}
               </p>
             </div>
@@ -55,7 +55,7 @@ export const SummaryCard = ({
               <p className="text-xs text-gray-500">Total Upcoming</p>
               <p className="font-bold text-gray-900 text-xs">
                 {`${recurringBills?.upcoming.bills.length} (${formatToDollar(
-                  recurringBills?.upcoming.total || 0,
+                  recurringBills?.upcoming.total || 0
                 )})`}
               </p>
             </div>
@@ -71,7 +71,7 @@ export const SummaryCard = ({
               <p className="text-xs text-secondary-red">Due Soon</p>
               <p className="font-bold text-secondary-red text-xs">
                 {`${recurringBills?.dueSoon.bills.length} (${formatToDollar(
-                  recurringBills?.dueSoon.total || 0,
+                  recurringBills?.dueSoon.total || 0
                 )})`}
               </p>
             </div>
@@ -79,5 +79,5 @@ export const SummaryCard = ({
         )}
       </div>
     </section>
-  )
-}
+  );
+};

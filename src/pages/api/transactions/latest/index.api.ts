@@ -1,28 +1,28 @@
-import { prisma } from '@/lib/prisma'
-import { NextApiRequest, NextApiResponse } from 'next'
-import { getServerSession } from 'next-auth'
-import { buildNextAuthOptions } from '../../auth/[...nextauth].api'
+import { prisma } from "@/lib/prisma";
+import { NextApiRequest, NextApiResponse } from "next";
+import { getServerSession } from "next-auth";
+import { buildNextAuthOptions } from "../../auth/[...nextauth].api";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
-  if (req.method !== 'GET') return res.status(405).end()
+  if (req.method !== "GET") return res.status(405).end();
 
   const session = await getServerSession(
     req,
     res,
-    buildNextAuthOptions(req, res),
-  )
+    buildNextAuthOptions(req, res)
+  );
 
   if (!session) {
-    return res.status(400).json({ message: 'Unauthorized' })
+    return res.status(400).json({ message: "Unauthorized" });
   }
 
-  const userId = session?.user?.id?.toString()
+  const userId = session?.user?.id?.toString();
 
   if (!userId) {
-    return res.status(400).json({ message: 'User ID is required' })
+    return res.status(400).json({ message: "User ID is required" });
   }
 
   try {
@@ -30,13 +30,13 @@ export default async function handler(
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { accountId: true },
-    })
+    });
 
     if (!user || !user.accountId) {
-      return res.status(404).json({ message: 'User account not found' })
+      return res.status(404).json({ message: "User account not found" });
     }
 
-    const userAccountId = user.accountId
+    const userAccountId = user.accountId;
 
     const transactions = await prisma.transaction.findMany({
       where: {
@@ -48,24 +48,24 @@ export default async function handler(
         recipient: true,
       },
       orderBy: {
-        date: 'desc',
+        date: "desc",
       },
       take: 5,
-    })
+    });
 
     const transactionsWithBalance = transactions.map((transaction) => {
       const balance =
-        transaction.senderId === userAccountId ? 'expense' : 'income'
+        transaction.senderId === userAccountId ? "expense" : "income";
 
       return {
         ...transaction,
         balance,
-      }
-    })
+      };
+    });
 
-    return res.status(200).json({ transactions: transactionsWithBalance })
+    return res.status(200).json({ transactions: transactionsWithBalance });
   } catch (error) {
-    console.error('Error fetching transactions:', error)
-    return res.status(500).json({ message: 'Internal Server Error' })
+    console.error("Error fetching transactions:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 }

@@ -1,13 +1,13 @@
-import HomeCard from './HomeCard'
-import { EmptyContent } from '@/components/shared/EmptyContent'
-import { SkeletonRecurringBillsSection } from '@/components/skeletons/SkeletonRecurringBillsSection'
-import { BillCard } from './BillCard'
-import { formatToDollar } from '@/utils/formatToDollar'
-import { RecurringBillsResult } from '..'
+import HomeCard from "./HomeCard";
+import { EmptyContent } from "@/components/shared/EmptyContent";
+import { SkeletonRecurringBillsSection } from "@/components/skeletons/SkeletonRecurringBillsSection";
+import { BillCard } from "./BillCard";
+import { formatToDollar } from "@/utils/formatToDollar";
+import { RecurringBillsResult } from "..";
 
 interface RecurringBillsSectionProps {
-  isValidating: boolean
-  recurringBills: RecurringBillsResult | undefined
+  isValidating: boolean;
+  recurringBills: RecurringBillsResult | undefined;
 }
 
 export const RecurringBillsSection = ({
@@ -44,5 +44,5 @@ export const RecurringBillsSection = ({
         <EmptyContent content="No recurring bills available." />
       )}
     </HomeCard>
-  )
-}
+  );
+};

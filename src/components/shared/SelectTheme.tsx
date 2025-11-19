@@ -1,16 +1,16 @@
-import React, { ReactNode } from 'react'
-import * as Select from '@radix-ui/react-select'
-import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
+import React, { ReactNode } from "react";
+import * as Select from "@radix-ui/react-select";
+import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
 interface DataProps {
-  label: ReactNode
-  value: string | number
+  label: ReactNode;
+  value: string | number;
 }
 
 interface SelectThemeProps {
-  data: DataProps[]
-  onSelect: (value: string) => void
-  defaultValue?: string | null
+  data: DataProps[];
+  onSelect: (value: string) => void;
+  defaultValue?: string | null;
 }
 
 export const SelectTheme = ({
@@ -73,8 +73,8 @@ export const SelectTheme = ({
         </Select.Content>
       </Select.Portal>
     </Select.Root>
-  )
-}
+  );
+};
 
 const SelectItem = React.forwardRef(
   (
@@ -83,10 +83,10 @@ const SelectItem = React.forwardRef(
       value,
       ...props
     }: {
-      children: React.ReactNode
-      value: string
+      children: React.ReactNode;
+      value: string;
     },
-    ref: React.Ref<HTMLDivElement>,
+    ref: React.Ref<HTMLDivElement>
   ) => (
     <Select.Item
       ref={ref}
@@ -105,7 +105,7 @@ const SelectItem = React.forwardRef(
         {children}
       </Select.ItemText>
     </Select.Item>
-  ),
-)
+  )
+);
 
-SelectItem.displayName = 'SelectItem'
+SelectItem.displayName = "SelectItem";

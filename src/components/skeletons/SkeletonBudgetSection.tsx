@@ -1,5 +1,5 @@
-import { useScreenSize } from '@/utils/useScreenSize'
-import { Skeleton } from '@mui/material'
+import { useScreenSize } from "@/utils/useScreenSize";
+import { Skeleton } from "@mui/material";
 
 const SkeletonRow = () => (
   <div className="flex md:flex-col items-center gap-4 w-full">
@@ -9,11 +9,11 @@ const SkeletonRow = () => (
       </span>
     ))}
   </div>
-)
+);
 
 export const SkeletonBudgetSection = () => {
-  const isMobile = useScreenSize(768)
-  const size = isMobile ? 190 : 240
+  const isMobile = useScreenSize(768);
+  const size = isMobile ? 190 : 240;
 
   return (
     <div className="flex max-h-[30rem] flex-col bg-white justify-center gap-6 items-center px-5 py-6 rounded-md md:gap-4 md:grid md:grid-cols-[2fr,1fr] md:p-10">
@@ -23,5 +23,5 @@ export const SkeletonBudgetSection = () => {
         <SkeletonRow />
       </div>
     </div>
-  )
-}
+  );
+};

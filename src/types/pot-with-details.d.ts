@@ -1,4 +1,4 @@
 interface PotWithDetails {
-  pot: PotProps
-  percentageSpent: number
+  pot: PotProps;
+  percentageSpent: number;
 }

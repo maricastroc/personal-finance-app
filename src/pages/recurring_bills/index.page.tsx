@@ -1,58 +1,58 @@
-import { useEffect, useState } from 'react'
-import { NextSeo } from 'next-seo'
-import { useAppContext } from '@/contexts/AppContext'
-import { RecurringBillsResult } from '../home'
-import { SummaryCard } from './partials/SummaryCard'
-import { MobileRecurringBillCard } from './partials/MobileRecurringBillCard'
-import { SearchSection } from './partials/SearchSection'
-import { TotalBillsCard } from './partials/TotalBillsCard'
-import { RecurringBillsTable } from './partials/RecurringBillsTable'
-import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
-import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
-import useRequest from '@/utils/useRequest'
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
-import { calculateTotalPages } from '@/utils/calculateTotalPages'
-import { useDebounce } from '@/utils/useDebounce'
-import { SkeletonTransactionCard } from '@/components/shared/SkeletonTransactionCard'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import Layout from '@/components/layouts/layout.page'
-import { PaginationSection } from '@/components/shared/PaginationSection/PaginationSection'
-import { PageTitle } from '@/components/shared/PageTitle'
+import { useEffect, useState } from "react";
+import { NextSeo } from "next-seo";
+import { useAppContext } from "@/contexts/AppContext";
+import { RecurringBillsResult } from "../home";
+import { SummaryCard } from "./partials/SummaryCard";
+import { MobileRecurringBillCard } from "./partials/MobileRecurringBillCard";
+import { SearchSection } from "./partials/SearchSection";
+import { TotalBillsCard } from "./partials/TotalBillsCard";
+import { RecurringBillsTable } from "./partials/RecurringBillsTable";
+import { formatToSnakeCase } from "@/utils/formatToSnakeCase";
+import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
+import useRequest from "@/utils/useRequest";
+import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
+import { calculateTotalPages } from "@/utils/calculateTotalPages";
+import { useDebounce } from "@/utils/useDebounce";
+import { SkeletonTransactionCard } from "@/components/shared/SkeletonTransactionCard";
+import { LoadingPage } from "@/components/shared/LoadingPage";
+import Layout from "@/components/layouts/layout.page";
+import { PaginationSection } from "@/components/shared/PaginationSection/PaginationSection";
+import { PageTitle } from "@/components/shared/PageTitle";
 
 export default function RecurringBills() {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [maxVisibleButtons, setMaxVisibleButtons] = useState(3)
-  const [search, setSearch] = useState('')
-  const [debouncedSearch, setDebouncedSearch] = useState('')
-  const [selectedSortBy, setSelectedSortBy] = useState('latest')
+  const [currentPage, setCurrentPage] = useState(1);
+  const [maxVisibleButtons, setMaxVisibleButtons] = useState(3);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [selectedSortBy, setSelectedSortBy] = useState("latest");
 
-  const { isSidebarOpen } = useAppContext()
-  const isRouteLoading = useLoadingOnRouteChange()
+  const { isSidebarOpen } = useAppContext();
+  const isRouteLoading = useLoadingOnRouteChange();
 
   useDebounce(
     () => {
-      setDebouncedSearch(search)
-      setCurrentPage(1)
+      setDebouncedSearch(search);
+      setCurrentPage(1);
     },
     500,
-    [search],
-  )
+    [search]
+  );
 
   const handleSetSearch = (value: string) => {
-    setSearch(value)
-  }
+    setSearch(value);
+  };
 
   const handleSetSelectedSortBy = (value: string) => {
-    setSelectedSortBy(value)
-  }
+    setSelectedSortBy(value);
+  };
 
   const { data: recurringBills, isValidating } =
     useRequest<RecurringBillsResult>(
       {
         url: `/recurring_bills?page=${currentPage}&limit=10&sortBy=${formatToSnakeCase(
-          selectedSortBy,
+          selectedSortBy
         )}&search=${debouncedSearch}`,
-        method: 'GET',
+        method: "GET",
       },
       {
         revalidateOnFocus: false,
@@ -60,14 +60,14 @@ export default function RecurringBills() {
         dedupingInterval: 20000,
         focusThrottleInterval: 30000,
         keepPreviousData: true,
-      },
-    )
+      }
+    );
 
   const { data: recurringBillsResume, isValidating: isValidatingResume } =
     useRequest<RecurringBillsResult>(
       {
         url: `/recurring_bills/resume`,
-        method: 'GET',
+        method: "GET",
       },
       {
         revalidateOnFocus: false,
@@ -75,36 +75,36 @@ export default function RecurringBills() {
         dedupingInterval: 20000,
         focusThrottleInterval: 30000,
         keepPreviousData: true,
-      },
-    )
+      }
+    );
 
   const pagination = recurringBills?.pagination || {
     page: 1,
     limit: 10,
     total: 0,
     totalPages: 1,
-  }
+  };
 
-  const totalPages = calculateTotalPages(pagination.total, pagination.limit)
+  const totalPages = calculateTotalPages(pagination.total, pagination.limit);
 
   useEffect(() => {
     const updateMaxVisibleButtons = () => {
       if (window.innerWidth >= 1024) {
-        setMaxVisibleButtons(6)
+        setMaxVisibleButtons(6);
       } else if (window.innerWidth >= 768) {
-        setMaxVisibleButtons(4)
+        setMaxVisibleButtons(4);
       } else {
-        setMaxVisibleButtons(3)
+        setMaxVisibleButtons(3);
       }
-    }
+    };
 
-    updateMaxVisibleButtons()
-    window.addEventListener('resize', updateMaxVisibleButtons)
-    return () => window.removeEventListener('resize', updateMaxVisibleButtons)
-  }, [])
+    updateMaxVisibleButtons();
+    window.addEventListener("resize", updateMaxVisibleButtons);
+    return () => window.removeEventListener("resize", updateMaxVisibleButtons);
+  }, []);
 
   if (isRouteLoading) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
 
   return (
@@ -113,8 +113,8 @@ export default function RecurringBills() {
         title="Recurring Bills | Finance App"
         additionalMetaTags={[
           {
-            name: 'viewport',
-            content: 'width=device-width, initial-scale=1.0',
+            name: "viewport",
+            content: "width=device-width, initial-scale=1.0",
           },
         ]}
       />
@@ -123,7 +123,7 @@ export default function RecurringBills() {
         <div
           role="main"
           className={`px-4 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
-            isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
+            isSidebarOpen ? "lg:pr-10" : "lg:pr-20"
           }`}
         >
           <header className="mb-8">
@@ -177,14 +177,14 @@ export default function RecurringBills() {
                   recurringBills.allBills.map((bill) => (
                     <MobileRecurringBillCard
                       key={bill.id}
-                      recurrenceDay={bill.recurrenceDay || ''}
+                      recurrenceDay={bill.recurrenceDay || ""}
                       recurrenceFrequency={
-                        capitalizeFirstLetter(bill.recurrenceFrequency) || ''
+                        capitalizeFirstLetter(bill.recurrenceFrequency) || ""
                       }
                       amount={bill.amount}
                       name={bill.recipient.name}
                       avatarUrl={bill.recipient.avatarUrl}
-                      status={bill?.status || ''}
+                      status={bill?.status || ""}
                     />
                   ))
                 ) : (
@@ -209,5 +209,5 @@ export default function RecurringBills() {
         </div>
       </Layout>
     </>
-  )
+  );
 }

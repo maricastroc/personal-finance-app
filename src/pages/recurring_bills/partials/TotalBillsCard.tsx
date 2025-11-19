@@ -1,10 +1,10 @@
-import { formatToDollar } from '@/utils/formatToDollar'
-import Image from 'next/image'
-import iconRecurringBills from '/public/assets/images/icon-recurring-bills.svg'
-import { RecurringBillsResult } from '@/pages/home'
+import { formatToDollar } from "@/utils/formatToDollar";
+import Image from "next/image";
+import iconRecurringBills from "/public/assets/images/icon-recurring-bills.svg";
+import { RecurringBillsResult } from "@/pages/home";
 
 interface TotalBillsCardProps {
-  recurringBills: RecurringBillsResult | undefined
+  recurringBills: RecurringBillsResult | undefined;
 }
 
 export const TotalBillsCard = ({ recurringBills }: TotalBillsCardProps) => {
@@ -25,5 +25,5 @@ export const TotalBillsCard = ({ recurringBills }: TotalBillsCardProps) => {
         </h2>
       </div>
     </section>
-  )
-}
+  );
+};

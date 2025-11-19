@@ -1,16 +1,16 @@
-import { EmptyContent } from '@/components/shared/EmptyContent'
-import { formatToDollar } from '@/utils/formatToDollar'
-import { format } from 'date-fns'
-import { TransactionCard } from './TransactionCard'
-import { SkeletonTransactionCard } from '@/components/shared/SkeletonTransactionCard'
-import { TransactionProps } from '@/types/transaction'
+import { EmptyContent } from "@/components/shared/EmptyContent";
+import { formatToDollar } from "@/utils/formatToDollar";
+import { format } from "date-fns";
+import { TransactionCard } from "./TransactionCard";
+import { SkeletonTransactionCard } from "@/components/shared/SkeletonTransactionCard";
+import { TransactionProps } from "@/types/transaction";
 
 export const TransactionTable = ({
   transactions,
   isValidating,
 }: {
-  transactions: TransactionProps[]
-  isValidating: boolean
+  transactions: TransactionProps[];
+  isValidating: boolean;
 }) => (
   <div className="hidden md:flex overflow-x-auto mt-6">
     <table className="min-w-full table-fixed">
@@ -45,17 +45,17 @@ export const TransactionTable = ({
               <td className="px-4 py-2 text-left">
                 <TransactionCard
                   name={
-                    transaction.balance === 'income'
+                    transaction.balance === "income"
                       ? transaction.sender.name
                       : transaction.recipient.name
                   }
                   balance={transaction.balance}
                   avatarUrl={
-                    transaction.balance === 'income'
+                    transaction.balance === "income"
                       ? transaction.sender.avatarUrl
                       : transaction.recipient.avatarUrl
                   }
-                  date={format(transaction.date, 'MMM dd, yyyy')}
+                  date={format(transaction.date, "MMM dd, yyyy")}
                   value={formatToDollar(transaction.amount || 0)}
                   category={transaction.category?.name}
                 />
@@ -64,14 +64,14 @@ export const TransactionTable = ({
                 {transaction.category?.name}
               </td>
               <td className="text-xs text-gray-600 px-4 py-2 text-left">
-                {format(transaction.date, 'MMM dd, yyyy')}
+                {format(transaction.date, "MMM dd, yyyy")}
               </td>
               <td className="text-xs text-gray-600 px-4 py-2 text-right">
                 <span
                   className={`font-bold ${
-                    transaction.balance === 'income'
-                      ? 'text-secondary-green'
-                      : 'text-gray-900'
+                    transaction.balance === "income"
+                      ? "text-secondary-green"
+                      : "text-gray-900"
                   }`}
                 >
                   {formatToDollar(transaction.amount)}
@@ -89,4 +89,4 @@ export const TransactionTable = ({
       </tbody>
     </table>
   </div>
-)
+);

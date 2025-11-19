@@ -1,13 +1,13 @@
-import { prisma } from '@/lib/prisma'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { prisma } from "@/lib/prisma";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
-  if (req.method !== 'GET') return res.status(405).end()
+  if (req.method !== "GET") return res.status(405).end();
 
-  const users = await prisma.user.findMany()
+  const users = await prisma.user.findMany();
 
-  return res.json({ users })
+  return res.json({ users });
 }

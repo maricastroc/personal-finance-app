@@ -1,12 +1,12 @@
-import { CategoryProps } from '@/types/category'
+import { CategoryProps } from "@/types/category";
 
 export function mapCategoriesForSelect(
   allCategories: CategoryProps[],
-  existedCategories: string[],
+  existedCategories: string[]
 ) {
   return allCategories.map((category) => ({
     label: category.name,
     value: category.name,
     isUsed: existedCategories.includes(category.name),
-  }))
+  }));
 }

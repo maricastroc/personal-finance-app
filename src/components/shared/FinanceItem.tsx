@@ -1,11 +1,11 @@
-import { formatToDollar } from '@/utils/formatToDollar'
+import { formatToDollar } from "@/utils/formatToDollar";
 
 interface FinanceItemProps {
-  title: string
-  value: number
-  color: string
-  isBudgetsPage?: boolean
-  amountSpent?: number
+  title: string;
+  value: number;
+  color: string;
+  isBudgetsPage?: boolean;
+  amountSpent?: number;
 }
 
 export function FinanceItem({
@@ -23,13 +23,13 @@ export function FinanceItem({
     >
       <span
         aria-hidden="true"
-        className={`w-1 rounded-md mr-3 ${!isBudgetsPage ? 'h-14' : 'h-6'}`}
+        className={`w-1 rounded-md mr-3 ${!isBudgetsPage ? "h-14" : "h-6"}`}
         style={{ backgroundColor: color }}
       />
 
       <div
         className={`flex gap-4 ${
-          !isBudgetsPage ? 'flex-col' : 'w-full justify-between'
+          !isBudgetsPage ? "flex-col" : "w-full justify-between"
         }`}
       >
         <p className="text-gray-500 text-xs">{title}</p>
@@ -47,5 +47,5 @@ export function FinanceItem({
         </div>
       </div>
     </div>
-  )
+  );
 }

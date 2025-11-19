@@ -1,10 +1,10 @@
-import { colors } from './constants'
+import { colors } from "./constants";
 
 export const getColorElement = (hex: string) => {
-  const color = colors.find((color) => color.hex === hex)
+  const color = colors.find((color) => color.hex === hex);
 
   if (!color) {
-    return <span className="text-red-500">Color not found</span>
+    return <span className="text-red-500">Color not found</span>;
   }
 
   return (
@@ -15,5 +15,5 @@ export const getColorElement = (hex: string) => {
       ></span>
       <span>{color.name}</span>
     </div>
-  )
-}
+  );
+};

@@ -1,15 +1,15 @@
-import { Public_Sans } from 'next/font/google'
-import '@/styles/globals.css'
-import { AppProps } from 'next/app'
-import { AppProvider } from '@/contexts/AppContext'
-import 'react-toastify/dist/ReactToastify.css'
-import { SessionProvider } from 'next-auth/react'
-import { Toaster } from 'react-hot-toast'
+import { Public_Sans } from "next/font/google";
+import "@/styles/globals.css";
+import { AppProps } from "next/app";
+import { AppProvider } from "@/contexts/AppContext";
+import "react-toastify/dist/ReactToastify.css";
+import { SessionProvider } from "next-auth/react";
+import { Toaster } from "react-hot-toast";
 
 const font = Public_Sans({
-  subsets: ['latin'],
-  weight: ['400', '700', '800', '900'],
-})
+  subsets: ["latin"],
+  weight: ["400", "700", "800", "900"],
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -17,19 +17,19 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Toaster
         toastOptions={{
           style: {
-            backgroundColor: '#201f24',
-            color: '#fff',
+            backgroundColor: "#201f24",
+            color: "#fff",
           },
           success: {
             style: {
-              backgroundColor: '#201f24',
-              color: '#fff',
+              backgroundColor: "#201f24",
+              color: "#fff",
             },
           },
           error: {
             style: {
-              backgroundColor: '#201f24',
-              color: '#fff',
+              backgroundColor: "#201f24",
+              color: "#fff",
             },
           },
         }}
@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </div>
       </AppProvider>
     </SessionProvider>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;

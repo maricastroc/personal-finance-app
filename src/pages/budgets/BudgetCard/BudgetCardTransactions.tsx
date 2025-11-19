@@ -1,13 +1,13 @@
-import { SkeletonTransactionCard } from '@/components/shared/SkeletonTransactionCard'
-import { TransactionCard } from '@/components/shared/TransactionCard'
-import { TransactionProps } from '@/types/transaction'
-import { formatToDollar } from '@/utils/formatToDollar'
-import { format } from 'date-fns'
+import { SkeletonTransactionCard } from "@/components/shared/SkeletonTransactionCard";
+import { TransactionCard } from "@/components/shared/TransactionCard";
+import { TransactionProps } from "@/types/transaction";
+import { formatToDollar } from "@/utils/formatToDollar";
+import { format } from "date-fns";
 
 interface BudgetCardTransactionsProps {
-  transactions: TransactionProps[]
-  isLoading: boolean
-  onSeeAll: () => void
+  transactions: TransactionProps[];
+  isLoading: boolean;
+  onSeeAll: () => void;
 }
 
 export function BudgetCardTransactions({
@@ -50,8 +50,8 @@ export function BudgetCardTransactions({
       ) : (
         <ul className="flex flex-col mt-6">
           {transactions.map((t, i) => {
-            const isIncome = t.balance === 'income'
-            const user = isIncome ? t.sender : t.recipient
+            const isIncome = t.balance === "income";
+            const user = isIncome ? t.sender : t.recipient;
 
             return (
               <li key={t.id ?? i}>
@@ -60,7 +60,7 @@ export function BudgetCardTransactions({
                   name={user.name}
                   balance={t.balance}
                   avatarUrl={user.avatarUrl}
-                  date={format(t.date, 'MMM dd, yyyy')}
+                  date={format(t.date, "MMM dd, yyyy")}
                   value={formatToDollar(t.amount)}
                 />
 
@@ -71,10 +71,10 @@ export function BudgetCardTransactions({
                   />
                 )}
               </li>
-            )
+            );
           })}
         </ul>
       )}
     </section>
-  )
+  );
 }

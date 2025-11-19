@@ -1,32 +1,32 @@
 // https://github.com/vercel/swr/blob/main/examples/axios-typescript/libs/useRequest.ts
-import useSWR, { SWRConfiguration, SWRResponse } from 'swr'
-import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
-import { api } from '@/lib/axios'
+import useSWR, { SWRConfiguration, SWRResponse } from "swr";
+import { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import { api } from "@/lib/axios";
 
-export type GetRequest = AxiosRequestConfig | null
+export type GetRequest = AxiosRequestConfig | null;
 
 interface Return<Data, Error>
   extends Pick<
     SWRResponse<AxiosResponse<Data>, AxiosError<Error>>,
-    'isValidating' | 'error' | 'mutate'
+    "isValidating" | "error" | "mutate"
   > {
-  data: Data | undefined
-  response: AxiosResponse<Data> | undefined
+  data: Data | undefined;
+  response: AxiosResponse<Data> | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  pagination: any
+  pagination: any;
 }
 
 export interface Config<Data = unknown, Error = unknown>
   extends Omit<
     SWRConfiguration<AxiosResponse<Data>, AxiosError<Error>>,
-    'fallbackData'
+    "fallbackData"
   > {
-  fallbackData?: Data
+  fallbackData?: Data;
 }
 
 export default function useRequest<Data = unknown, Error = unknown>(
   request: GetRequest,
-  { fallbackData, ...config }: Config<Data, Error> = {},
+  { fallbackData, ...config }: Config<Data, Error> = {}
 ): Return<Data, Error> {
   const {
     data: response,
@@ -48,23 +48,23 @@ export default function useRequest<Data = unknown, Error = unknown>(
         fallbackData &&
         ({
           status: 200,
-          statusText: 'InitialData',
+          statusText: "InitialData",
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           config: request!,
           headers: {},
           data: fallbackData,
         } as AxiosResponse<Data>),
-    },
-  )
+    }
+  );
 
   const responseData =
-    response && response.data && (Object.values(response.data)[0] as Data)
+    response && response.data && (Object.values(response.data)[0] as Data);
 
-  const pagination = { ...response?.data }
+  const pagination = { ...response?.data };
 
   return {
     data:
-      typeof responseData === 'number'
+      typeof responseData === "number"
         ? response && response.data
         : responseData,
     response,
@@ -72,5 +72,5 @@ export default function useRequest<Data = unknown, Error = unknown>(
     isValidating,
     mutate,
     pagination,
-  }
+  };
 }

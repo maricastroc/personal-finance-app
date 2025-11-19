@@ -1,28 +1,28 @@
-import { useState } from 'react'
-import { Skeleton } from '@mui/material'
-import { NextSeo } from 'next-seo'
-import { useAppContext } from '@/contexts/AppContext'
-import { EmptyContent } from '@/components/shared/EmptyContent'
-import { LoadingPage } from '@/components/shared/LoadingPage'
+import { useState } from "react";
+import { Skeleton } from "@mui/material";
+import { NextSeo } from "next-seo";
+import { useAppContext } from "@/contexts/AppContext";
+import { EmptyContent } from "@/components/shared/EmptyContent";
+import { LoadingPage } from "@/components/shared/LoadingPage";
 import {
   BudgetItem,
   BudgetWithDetailsProps,
-} from '@/components/shared/BudgetItem'
-import Layout from '@/components/layouts/layout.page'
-import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
-import useRequest from '@/utils/useRequest'
-import { SkeletonBudgetCard } from './partials/SkeletonBudgetCard'
-import BudgetCard from './BudgetCard'
-import { PageHeader } from './partials/PageHeader'
-import { SkeletonSection } from './partials/SkeletonSection'
-import { BudgetsList } from './partials/BudgetsList'
+} from "@/components/shared/BudgetItem";
+import Layout from "@/components/layouts/layout.page";
+import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
+import useRequest from "@/utils/useRequest";
+import { SkeletonBudgetCard } from "./partials/SkeletonBudgetCard";
+import BudgetCard from "./BudgetCard";
+import { PageHeader } from "./partials/PageHeader";
+import { SkeletonSection } from "./partials/SkeletonSection";
+import { BudgetsList } from "./partials/BudgetsList";
 
 export default function Budgets() {
-  const { isSidebarOpen } = useAppContext()
+  const { isSidebarOpen } = useAppContext();
 
-  const isRouteLoading = useLoadingOnRouteChange()
+  const isRouteLoading = useLoadingOnRouteChange();
 
-  const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false)
+  const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
 
   const {
     data: budgets,
@@ -30,8 +30,8 @@ export default function Budgets() {
     isValidating,
   } = useRequest<BudgetWithDetailsProps[]>(
     {
-      url: '/budgets',
-      method: 'GET',
+      url: "/budgets",
+      method: "GET",
     },
     {
       revalidateOnFocus: false,
@@ -39,8 +39,8 @@ export default function Budgets() {
       dedupingInterval: 20000,
       focusThrottleInterval: 30000,
       keepPreviousData: true,
-    },
-  )
+    }
+  );
 
   return isRouteLoading ? (
     <LoadingPage />
@@ -50,8 +50,8 @@ export default function Budgets() {
         title="Budgets | Finance App"
         additionalMetaTags={[
           {
-            name: 'viewport',
-            content: 'width=device-width, initial-scale=1.0',
+            name: "viewport",
+            content: "width=device-width, initial-scale=1.0",
           },
         ]}
       />
@@ -60,7 +60,7 @@ export default function Budgets() {
         <section
           role="main"
           className={`px-4 md:px-10 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
-            isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
+            isSidebarOpen ? "lg:pr-10" : "lg:pr-20"
           }`}
         >
           <PageHeader
@@ -85,7 +85,7 @@ export default function Budgets() {
                       variant="circular"
                       width={250}
                       height={250}
-                      style={{ margin: 'auto' }}
+                      style={{ margin: "auto" }}
                     />
                   </span>
                 ) : (
@@ -115,7 +115,7 @@ export default function Budgets() {
                         key={budget.id}
                         budgetId={budget.id}
                         onSubmitForm={async () => {
-                          await mutate()
+                          await mutate();
                         }}
                       />
                     ))}
@@ -132,5 +132,5 @@ export default function Budgets() {
         </section>
       </Layout>
     </>
-  )
+  );
 }

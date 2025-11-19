@@ -1,8 +1,8 @@
-import { formatToDollar } from '@/utils/formatToDollar'
+import { formatToDollar } from "@/utils/formatToDollar";
 
 interface BudgetCardSpentInfoProps {
-  spent: number
-  free: number
+  spent: number;
+  free: number;
 }
 
 export function BudgetCardSpentInfo({ spent, free }: BudgetCardSpentInfoProps) {
@@ -32,5 +32,5 @@ export function BudgetCardSpentInfo({ spent, free }: BudgetCardSpentInfoProps) {
         </div>
       </div>
     </dl>
-  )
+  );
 }

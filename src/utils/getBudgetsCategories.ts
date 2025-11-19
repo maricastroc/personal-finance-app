@@ -1,12 +1,12 @@
-import { BudgetWithDetailsProps } from '@/components/shared/BudgetItem'
+import { BudgetWithDetailsProps } from "@/components/shared/BudgetItem";
 
 export function getBudgetsCategories(
-  budgets: BudgetWithDetailsProps[] | undefined,
+  budgets: BudgetWithDetailsProps[] | undefined
 ) {
   if (!budgets || budgets.length === 0) {
-    return []
+    return [];
   }
 
-  const categories = budgets.map((budget) => budget.categoryName)
-  return Array.from(new Set(categories))
+  const categories = budgets.map((budget) => budget.categoryName);
+  return Array.from(new Set(categories));
 }

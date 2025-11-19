@@ -1,19 +1,19 @@
-import { ReactNode } from 'react'
-import { Footer } from '../shared/Footer'
-import { useAppContext } from '@/contexts/AppContext'
-import { Sidebar } from '../shared/Sidebar'
+import { ReactNode } from "react";
+import { Footer } from "../shared/Footer";
+import { useAppContext } from "@/contexts/AppContext";
+import { Sidebar } from "../shared/Sidebar";
 
 interface LayoutProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { isSidebarOpen, handleIsSidebarOpen } = useAppContext()
+  const { isSidebarOpen, handleIsSidebarOpen } = useAppContext();
 
   return (
     <div
       className={`flex flex-col w-screen min-h-screen h-full ${
-        isSidebarOpen ? 'lg:pl-[17rem]' : 'lg:pl-[10rem]'
+        isSidebarOpen ? "lg:pl-[17rem]" : "lg:pl-[10rem]"
       }`}
     >
       <Sidebar
@@ -29,5 +29,5 @@ export default function Layout({ children }: LayoutProps) {
         <Footer />
       </footer>
     </div>
-  )
+  );
 }

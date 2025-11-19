@@ -1,21 +1,21 @@
-import { ErrorMessage } from '../shared/ErrorMessage'
+import { ErrorMessage } from "../shared/ErrorMessage";
 
 export type InputBaseProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  label?: string
-  error?: string
-  containerClassName?: string
-}
+  label?: string;
+  error?: string;
+  containerClassName?: string;
+};
 
 export function InputBase({
   label,
   error,
-  containerClassName = '',
-  className = '',
+  containerClassName = "",
+  className = "",
   id,
   required,
   ...props
 }: InputBaseProps) {
-  const errorId = error ? `${id}-error` : undefined
+  const errorId = error ? `${id}-error` : undefined;
 
   return (
     <div className={`flex flex-col ${containerClassName}`}>
@@ -36,5 +36,5 @@ export function InputBase({
 
       {error && <ErrorMessage message={error} id={errorId} />}
     </div>
-  )
+  );
 }

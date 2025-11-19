@@ -1,11 +1,11 @@
-import { colors } from './constants'
+import { colors } from "./constants";
 
 export const getThemeOptions = colors.map((color) => ({
   label: (
     <div className="flex items-center space-x-2">
       <span
         className={`w-4 mr-2 h-4 rounded-full ${
-          color.name.toLowerCase() === 'white' ? 'border border-gray-800' : ''
+          color.name.toLowerCase() === "white" ? "border border-gray-800" : ""
         }`}
         style={{ backgroundColor: color.hex, marginRight: 4 }}
       ></span>
@@ -13,4 +13,4 @@ export const getThemeOptions = colors.map((color) => ({
     </div>
   ),
   value: color.hex,
-}))
+}));

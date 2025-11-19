@@ -1,22 +1,22 @@
-import React from 'react'
-import * as Select from '@radix-ui/react-select'
-import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
+import React from "react";
+import * as Select from "@radix-ui/react-select";
+import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
 interface DataProps {
-  id?: string | number
-  name?: string | number
-  isUsed?: boolean
+  id?: string | number;
+  name?: string | number;
+  isUsed?: boolean;
 }
 
 interface SelectInputProps {
-  label: string
-  data: DataProps[]
-  existedCategories?: string[]
-  onSelect: (value: string) => void
-  includeAll?: boolean
-  placeholder: string
-  defaultValue?: string | null
-  contentWidth?: number | null
+  label: string;
+  data: DataProps[];
+  existedCategories?: string[];
+  onSelect: (value: string) => void;
+  includeAll?: boolean;
+  placeholder: string;
+  defaultValue?: string | null;
+  contentWidth?: number | null;
 }
 
 export const SelectInput = ({
@@ -84,8 +84,8 @@ export const SelectInput = ({
         </Select.Content>
       </Select.Portal>
     </Select.Root>
-  )
-}
+  );
+};
 
 const SelectItem = React.forwardRef(
   (
@@ -95,11 +95,11 @@ const SelectItem = React.forwardRef(
       disabled,
       ...props
     }: {
-      children: React.ReactNode
-      value: string
-      disabled?: boolean
+      children: React.ReactNode;
+      value: string;
+      disabled?: boolean;
     },
-    ref: React.Ref<HTMLDivElement>,
+    ref: React.Ref<HTMLDivElement>
   ) => (
     <Select.Item
       ref={ref}
@@ -110,8 +110,8 @@ const SelectItem = React.forwardRef(
         focus:outline-none focus:ring-2 focus:ring-blue-500
         ${
           disabled
-            ? 'text-gray-400 cursor-not-allowed'
-            : 'text-gray-900 cursor-pointer hover:bg-blue-100 focus:bg-blue-100'
+            ? "text-gray-400 cursor-not-allowed"
+            : "text-gray-900 cursor-pointer hover:bg-blue-100 focus:bg-blue-100"
         }
       `}
       {...props}
@@ -121,7 +121,7 @@ const SelectItem = React.forwardRef(
         <span className="ml-auto text-xs text-gray-500">Already used</span>
       )}
     </Select.Item>
-  ),
-)
+  )
+);
 
-SelectItem.displayName = 'SelectItem'
+SelectItem.displayName = "SelectItem";

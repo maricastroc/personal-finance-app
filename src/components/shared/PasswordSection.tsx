@@ -1,18 +1,18 @@
-import { EditProfileFormData } from '@/pages/profile/index.page'
-import { UseFormRegister, FieldErrors } from 'react-hook-form'
+import { EditProfileFormData } from "@/pages/profile/index.page";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 
 type PasswordSectionProps = {
-  changePassword: boolean
-  register: UseFormRegister<EditProfileFormData>
-  errors: FieldErrors<EditProfileFormData>
-}
+  changePassword: boolean;
+  register: UseFormRegister<EditProfileFormData>;
+  errors: FieldErrors<EditProfileFormData>;
+};
 
 export function PasswordSection({
   changePassword,
   register,
   errors,
 }: PasswordSectionProps) {
-  if (!changePassword) return null
+  if (!changePassword) return null;
 
   return (
     <>
@@ -31,9 +31,9 @@ export function PasswordSection({
           placeholder="Enter your current password"
           aria-invalid={!!errors.oldPassword}
           aria-describedby={
-            errors.oldPassword ? 'oldPassword-error' : undefined
+            errors.oldPassword ? "oldPassword-error" : undefined
           }
-          {...register('oldPassword')}
+          {...register("oldPassword")}
         />
 
         {errors.oldPassword && (
@@ -60,8 +60,8 @@ export function PasswordSection({
           className="text-sm w-full h-12 rounded-md border border-beige-500 px-3"
           placeholder="Enter a new password"
           aria-invalid={!!errors.password}
-          aria-describedby={errors.password ? 'password-error' : undefined}
-          {...register('password')}
+          aria-describedby={errors.password ? "password-error" : undefined}
+          {...register("password")}
         />
 
         {errors.password && (
@@ -89,9 +89,9 @@ export function PasswordSection({
           placeholder="Re-enter your new password"
           aria-invalid={!!errors.passwordConfirm}
           aria-describedby={
-            errors.passwordConfirm ? 'passwordConfirm-error' : undefined
+            errors.passwordConfirm ? "passwordConfirm-error" : undefined
           }
-          {...register('passwordConfirm')}
+          {...register("passwordConfirm")}
         />
 
         {errors.passwordConfirm && (
@@ -104,5 +104,5 @@ export function PasswordSection({
         )}
       </div>
     </>
-  )
+  );
 }

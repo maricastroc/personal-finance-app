@@ -1,13 +1,13 @@
-import Link from 'next/link'
-import { ReactNode } from 'react'
-import clsx from 'clsx'
+import Link from "next/link";
+import { ReactNode } from "react";
+import clsx from "clsx";
 
 interface HomeCardProps {
-  title: string
-  buttonLabel: string
-  children: ReactNode
-  flexGrow?: boolean
-  routePath: string
+  title: string;
+  buttonLabel: string;
+  children: ReactNode;
+  flexGrow?: boolean;
+  routePath: string;
 }
 
 export default function HomeCard({
@@ -20,11 +20,11 @@ export default function HomeCard({
   return (
     <div
       className={clsx(
-        'bg-white rounded-md grid gap-4 md:gap-5 mt-8 px-5 py-6 md:p-8 lg:mt-6',
-        { 'flex-grow': flexGrow },
+        "bg-white rounded-md grid gap-4 md:gap-5 mt-8 px-5 py-6 md:p-8 lg:mt-6",
+        { "flex-grow": flexGrow }
       )}
     >
-      <div className={clsx('flex justify-between', { 'h-8': flexGrow })}>
+      <div className={clsx("flex justify-between", { "h-8": flexGrow })}>
         <h2 className="font-bold text-xl">{title}</h2>
 
         <Link
@@ -48,5 +48,5 @@ export default function HomeCard({
 
       {children}
     </div>
-  )
+  );
 }

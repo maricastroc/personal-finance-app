@@ -1,50 +1,50 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { PrimaryButton } from '@/components/core/PrimaryButton'
-import { ErrorMessage } from '@/components/shared/ErrorMessage'
-import { SelectInput } from '@/components/core/SelectInput'
-import { SelectUser } from '@/components/shared/SelectUser'
-import { api } from '@/lib/axios'
-import { CategoryProps } from '@/types/category'
-import { UserProps } from '@/types/user'
+import { PrimaryButton } from "@/components/core/PrimaryButton";
+import { ErrorMessage } from "@/components/shared/ErrorMessage";
+import { SelectInput } from "@/components/core/SelectInput";
+import { SelectUser } from "@/components/shared/SelectUser";
+import { api } from "@/lib/axios";
+import { CategoryProps } from "@/types/category";
+import { UserProps } from "@/types/user";
 import {
   AVATAR_URL_DEFAULT,
   recurrenceFrequencyOptions,
-} from '@/utils/constants'
-import { handleApiError } from '@/utils/handleApiError'
-import useRequest from '@/utils/useRequest'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as Dialog from '@radix-ui/react-dialog'
-import { useSession } from 'next-auth/react'
+} from "@/utils/constants";
+import { handleApiError } from "@/utils/handleApiError";
+import useRequest from "@/utils/useRequest";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as Dialog from "@radix-ui/react-dialog";
+import { useSession } from "next-auth/react";
 
-import { X } from 'phosphor-react'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { z } from 'zod'
+import { X } from "phosphor-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { z } from "zod";
 
 const transferFormSchema = () =>
   z.object({
-    amount: z.number().min(1, { message: 'Amount must be greater than zero.' }),
+    amount: z.number().min(1, { message: "Amount must be greater than zero." }),
     description: z.string().optional(),
     recurrenceDay: z.number().optional(),
     recurrenceFrequency: z.string().optional(),
-    recipientId: z.string().min(3, { message: 'Recipient ID is required.' }),
-  })
+    recipientId: z.string().min(3, { message: "Recipient ID is required." }),
+  });
 
-export type TransferFormData = z.infer<ReturnType<typeof transferFormSchema>>
+export type TransferFormData = z.infer<ReturnType<typeof transferFormSchema>>;
 
 interface TransferModalProps {
-  onClose: () => void
-  onSubmitForm: () => Promise<void>
-  categories: CategoryProps[]
+  onClose: () => void;
+  onSubmitForm: () => Promise<void>;
+  categories: CategoryProps[];
 }
 
 const RecipientUser = ({
   avatarUrl,
   name,
 }: {
-  avatarUrl: string
-  name: string
+  avatarUrl: string;
+  name: string;
 }) => (
   <div className="flex flex-col mt-3">
     <label className="text-xs font-bold text-gray-500 mb-1">Recipient</label>
@@ -57,38 +57,38 @@ const RecipientUser = ({
       <p className="text-gray-900 font-bold text-xs">{name}</p>
     </div>
   </div>
-)
+);
 
 export function TransferModalForm({
   onClose,
   onSubmitForm,
   categories,
 }: TransferModalProps) {
-  const [isRecurring, setIsRecurring] = useState(false)
+  const [isRecurring, setIsRecurring] = useState(false);
 
-  const [recipientId, setRecipientId] = useState('')
+  const [recipientId, setRecipientId] = useState("");
 
-  const [recipientUser, setRecipientUser] = useState<UserProps | null>(null)
+  const [recipientUser, setRecipientUser] = useState<UserProps | null>(null);
 
-  const [recurrenceDay, setRecurrenceDay] = useState(1)
+  const [recurrenceDay, setRecurrenceDay] = useState(1);
 
-  const [recurrenceFrequency, setRecurrenceFrequency] = useState('Monthly')
+  const [recurrenceFrequency, setRecurrenceFrequency] = useState("Monthly");
 
-  const [selectedCategory, setSelectedCategory] = useState('General')
+  const [selectedCategory, setSelectedCategory] = useState("General");
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
-  const session = useSession()
+  const session = useSession();
 
   const { data: users } = useRequest<UserProps[]>({
-    url: '/users',
-    method: 'GET',
-  })
+    url: "/users",
+    method: "GET",
+  });
 
   const daysInMonth = Array.from({ length: 31 }, (_, index) => ({
     id: String(index + 1),
     name: String(index + 1),
-  }))
+  }));
 
   const {
     register,
@@ -98,80 +98,80 @@ export function TransferModalForm({
     formState: { isSubmitting, errors },
   } = useForm<TransferFormData>({
     resolver: zodResolver(transferFormSchema()),
-    defaultValues: { amount: 0, description: '', recipientId: '' },
-  })
+    defaultValues: { amount: 0, description: "", recipientId: "" },
+  });
   const handleTransfer = async (data: TransferFormData) => {
     const payload = {
-      description: data.description || '',
+      description: data.description || "",
       recipientId,
       categoryName: selectedCategory,
       amount: Number(data.amount),
       isRecurring,
       recurrenceFrequency,
       recurrenceDay,
-    }
+    };
 
     try {
-      const response = await api.post(`/transactions`, payload)
+      const response = await api.post(`/transactions`, payload);
 
-      setRecipientUser(response?.data?.profile || null)
+      setRecipientUser(response?.data?.profile || null);
 
-      toast?.success(response?.data?.message)
+      toast?.success(response?.data?.message);
 
-      await onSubmitForm()
+      await onSubmitForm();
 
-      reset()
-      setRecipientUser(null)
-      onClose()
+      reset();
+      setRecipientUser(null);
+      onClose();
     } catch (error) {
-      handleApiError(error)
+      handleApiError(error);
     }
-  }
+  };
 
   const handleFetchRecipientUser = async (recipientId: string) => {
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      const response = await api.get(`/profile/recipient/${recipientId}`)
-      setRecipientUser(response?.data?.profile || null)
-      toast?.success(response?.data?.message)
+      const response = await api.get(`/profile/recipient/${recipientId}`);
+      setRecipientUser(response?.data?.profile || null);
+      toast?.success(response?.data?.message);
     } catch (error) {
-      handleApiError(error)
+      handleApiError(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleSelectRecipient = async (value: string) => {
-    setRecipientId(value)
+    setRecipientId(value);
 
-    setValue('recipientId', value)
+    setValue("recipientId", value);
 
-    await handleFetchRecipientUser(value)
-  }
+    await handleFetchRecipientUser(value);
+  };
 
   const formattedUsers = users
     ?.filter((user) => user.id !== session?.data?.user?.id)
     .map((user) => ({
       id: user.id,
       name: user.name,
-    }))
+    }));
 
   return (
     <Dialog.Portal>
       <Dialog.Overlay
         className="fixed inset-0 z-[990] bg-black bg-opacity-70"
         onClick={() => {
-          onClose()
-          setRecipientUser(null)
-          reset()
+          onClose();
+          setRecipientUser(null);
+          reset();
         }}
       />
       <Dialog.Content className="max-h-[90vh] overflow-scroll fixed z-[999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] bg-white rounded-lg shadow-lg p-6 md:w-[560px] md:p-8">
         <Dialog.Close
           onClick={() => {
-            onClose()
-            setRecipientUser(null)
+            onClose();
+            setRecipientUser(null);
           }}
           className="absolute top-4 right-4 hover:bg-gray-900 hover:text-gray-100 transition-all duration-300 text-gray-500 p-[0.1rem] rounded-full border border-gray-900"
         >
@@ -196,7 +196,7 @@ export function TransferModalForm({
                 <SelectUser
                   label="Recipient"
                   onSelect={async (value: string) => {
-                    await handleSelectRecipient(value)
+                    await handleSelectRecipient(value);
                   }}
                   data={formattedUsers}
                   placeholder="Select a Recipient"
@@ -226,7 +226,7 @@ export function TransferModalForm({
                 id="description"
                 className="text-sm w-full h-12 rounded-md border border-beige-500 px-3"
                 placeholder="e.g: Dinner Payment"
-                {...register('description')}
+                {...register("description")}
               />
               {errors.description && (
                 <ErrorMessage
@@ -243,7 +243,7 @@ export function TransferModalForm({
               <SelectInput
                 label="Category"
                 placeholder="Select Category..."
-                defaultValue={'General'}
+                defaultValue={"General"}
                 onSelect={(value: string) => setSelectedCategory(value)}
                 data={categories}
               />
@@ -266,7 +266,7 @@ export function TransferModalForm({
                   id="amount"
                   className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
                   placeholder="Amount"
-                  {...register('amount', { valueAsNumber: true })}
+                  {...register("amount", { valueAsNumber: true })}
                 />
               </div>
               {errors.amount && (
@@ -302,7 +302,7 @@ export function TransferModalForm({
                   <SelectInput
                     label="Recurrence Frequency"
                     placeholder="Recurrence Frequency"
-                    defaultValue={'Monthly'}
+                    defaultValue={"Monthly"}
                     data={recurrenceFrequencyOptions}
                     onSelect={setRecurrenceFrequency}
                   />
@@ -314,7 +314,7 @@ export function TransferModalForm({
                   </label>
                   <SelectInput
                     label="Recurrence Day"
-                    defaultValue={'1'}
+                    defaultValue={"1"}
                     placeholder="Recurrence Day"
                     data={daysInMonth}
                     onSelect={(value: string) =>
@@ -334,5 +334,5 @@ export function TransferModalForm({
         </Dialog.Description>
       </Dialog.Content>
     </Dialog.Portal>
-  )
+  );
 }

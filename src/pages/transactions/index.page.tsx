@@ -1,77 +1,77 @@
-import { useEffect, useState, useCallback } from 'react'
-import { useRouter } from 'next/router'
-import { NextSeo } from 'next-seo'
-import { TransactionProps } from '@/types/transaction'
-import { CategoryProps } from '@/types/category'
-import { useAppContext } from '@/contexts/AppContext'
-import { EmptyContent } from '@/components/shared/EmptyContent'
-import { SkeletonTransactionCard } from '@/components/shared/SkeletonTransactionCard'
-import Layout from '@/components/layouts/layout.page'
-import { LoadingPage } from '@/components/shared/LoadingPage'
-import { PaginationSection } from '@/components/shared/PaginationSection/PaginationSection'
-import { SearchSection } from './partials/SearchSection'
-import { TransactionTable } from './partials/TransactionsTable'
-import { TransferModalForm } from './partials/TransferModal'
-import { TransactionCard } from './partials/TransactionCard'
-import useRequest from '@/utils/useRequest'
-import { formatToSnakeCase } from '@/utils/formatToSnakeCase'
-import { formatToDollar } from '@/utils/formatToDollar'
-import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
-import { calculateTotalPages } from '@/utils/calculateTotalPages'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import * as Dialog from '@radix-ui/react-dialog'
-import { format } from 'date-fns'
-import { useDebounce } from '@/utils/useDebounce'
+import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
+import { TransactionProps } from "@/types/transaction";
+import { CategoryProps } from "@/types/category";
+import { useAppContext } from "@/contexts/AppContext";
+import { EmptyContent } from "@/components/shared/EmptyContent";
+import { SkeletonTransactionCard } from "@/components/shared/SkeletonTransactionCard";
+import Layout from "@/components/layouts/layout.page";
+import { LoadingPage } from "@/components/shared/LoadingPage";
+import { PaginationSection } from "@/components/shared/PaginationSection/PaginationSection";
+import { SearchSection } from "./partials/SearchSection";
+import { TransactionTable } from "./partials/TransactionsTable";
+import { TransferModalForm } from "./partials/TransferModal";
+import { TransactionCard } from "./partials/TransactionCard";
+import useRequest from "@/utils/useRequest";
+import { formatToSnakeCase } from "@/utils/formatToSnakeCase";
+import { formatToDollar } from "@/utils/formatToDollar";
+import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
+import { calculateTotalPages } from "@/utils/calculateTotalPages";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import * as Dialog from "@radix-ui/react-dialog";
+import { format } from "date-fns";
+import { useDebounce } from "@/utils/useDebounce";
 
 export default function Transactions() {
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const { category } = router.query
+  const { category } = router.query;
 
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("");
 
-  const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   const [selectedCategory, setSelectedCategory] = useState(
-    (category as string) || 'all',
-  )
+    (category as string) || "all"
+  );
 
-  const [selectedSortBy, setSelectedSortBy] = useState('latest')
+  const [selectedSortBy, setSelectedSortBy] = useState("latest");
 
-  const [maxVisibleButtons, setMaxVisibleButtons] = useState(3)
+  const [maxVisibleButtons, setMaxVisibleButtons] = useState(3);
 
-  const { isSidebarOpen } = useAppContext()
+  const { isSidebarOpen } = useAppContext();
 
-  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false)
+  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
 
-  const isRouteLoading = useLoadingOnRouteChange()
+  const isRouteLoading = useLoadingOnRouteChange();
 
   useDebounce(
     () => {
-      setDebouncedSearch(search)
-      setCurrentPage(1)
+      setDebouncedSearch(search);
+      setCurrentPage(1);
     },
     500,
-    [search],
-  )
+    [search]
+  );
 
   const { data, isValidating, mutate } = useRequest<{
-    transactions: TransactionProps[]
+    transactions: TransactionProps[];
     pagination: {
-      page: number
-      limit: number
-      total: number
-      totalPages: number
-    }
+      page: number;
+      limit: number;
+      total: number;
+      totalPages: number;
+    };
   }>(
     {
       url: `/transactions?page=${currentPage}&limit=10&filterByName=${selectedCategory.toLowerCase()}&sortBy=${formatToSnakeCase(
-        selectedSortBy,
+        selectedSortBy
       )}&search=${debouncedSearch}`,
-      method: 'GET',
+      method: "GET",
     },
     {
       revalidateOnFocus: false,
@@ -79,13 +79,13 @@ export default function Transactions() {
       dedupingInterval: 20000,
       focusThrottleInterval: 30000,
       keepPreviousData: true,
-    },
-  )
+    }
+  );
 
   const { data: categories } = useRequest<CategoryProps[]>(
     {
-      url: '/categories',
-      method: 'GET',
+      url: "/categories",
+      method: "GET",
     },
     {
       revalidateOnFocus: false,
@@ -93,45 +93,45 @@ export default function Transactions() {
       dedupingInterval: 20000,
       focusThrottleInterval: 30000,
       keepPreviousData: true,
-    },
-  )
+    }
+  );
 
-  const transactions = data?.transactions || []
+  const transactions = data?.transactions || [];
 
   const pagination = data?.pagination || {
     page: 1,
     limit: 10,
     total: 0,
     totalPages: 1,
-  }
+  };
 
-  const totalPages = calculateTotalPages(pagination.total, pagination.limit)
+  const totalPages = calculateTotalPages(pagination.total, pagination.limit);
 
   useEffect(() => {
     const updateMaxVisibleButtons = () => {
       if (window.innerWidth >= 1024) {
-        setMaxVisibleButtons(6)
+        setMaxVisibleButtons(6);
       } else if (window.innerWidth >= 768) {
-        setMaxVisibleButtons(4)
+        setMaxVisibleButtons(4);
       } else {
-        setMaxVisibleButtons(3)
+        setMaxVisibleButtons(3);
       }
-    }
+    };
 
-    updateMaxVisibleButtons()
-    window.addEventListener('resize', updateMaxVisibleButtons)
-    return () => window.removeEventListener('resize', updateMaxVisibleButtons)
-  }, [])
+    updateMaxVisibleButtons();
+    window.addEventListener("resize", updateMaxVisibleButtons);
+    return () => window.removeEventListener("resize", updateMaxVisibleButtons);
+  }, []);
 
   const handleSetCategory = useCallback((value: string) => {
-    setSelectedCategory(value)
-    setCurrentPage(1)
-  }, [])
+    setSelectedCategory(value);
+    setCurrentPage(1);
+  }, []);
 
   const handleSetSortBy = useCallback((value: string) => {
-    setSelectedSortBy(value)
-    setCurrentPage(1)
-  }, [])
+    setSelectedSortBy(value);
+    setCurrentPage(1);
+  }, []);
 
   return isRouteLoading ? (
     <LoadingPage />
@@ -141,15 +141,15 @@ export default function Transactions() {
         title="Transactions | Finance App"
         additionalMetaTags={[
           {
-            name: 'viewport',
-            content: 'width=device-width, initial-scale=1.0',
+            name: "viewport",
+            content: "width=device-width, initial-scale=1.0",
           },
         ]}
       />
       <Layout>
         <div
           className={`w-full px-4 py-5 flex-grow md:p-10 lg:pl-0 pb-20 md:pb-32 lg:pb-8 ${
-            isSidebarOpen ? 'lg:pr-10' : 'lg:pr-20'
+            isSidebarOpen ? "lg:pr-10" : "lg:pr-20"
           }`}
         >
           <div className="flex items-center justify-between w-full">
@@ -167,7 +167,7 @@ export default function Transactions() {
               {categories && (
                 <TransferModalForm
                   onSubmitForm={async (): Promise<void> => {
-                    await mutate()
+                    await mutate();
                   }}
                   categories={categories}
                   onClose={() => setIsTransferModalOpen(false)}
@@ -201,17 +201,17 @@ export default function Transactions() {
                   <TransactionCard
                     key={index}
                     name={
-                      transaction.balance === 'income'
+                      transaction.balance === "income"
                         ? transaction.sender.name
                         : transaction.recipient.name
                     }
                     balance={transaction.balance}
                     avatarUrl={
-                      transaction.balance === 'income'
+                      transaction.balance === "income"
                         ? transaction.sender.avatarUrl
                         : transaction.recipient.avatarUrl
                     }
-                    date={format(transaction.date, 'MMM dd, yyyy')}
+                    date={format(transaction.date, "MMM dd, yyyy")}
                     value={formatToDollar(transaction.amount || 0)}
                     category={transaction.category?.name}
                   />
@@ -232,5 +232,5 @@ export default function Transactions() {
         </div>
       </Layout>
     </>
-  )
+  );
 }

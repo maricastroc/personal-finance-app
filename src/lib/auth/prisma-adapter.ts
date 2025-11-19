@@ -1,40 +1,40 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { NextApiRequest, NextApiResponse, NextPageContext } from 'next'
-import { Adapter, AdapterUser } from 'next-auth/adapters'
-import { prisma } from '@/lib/prisma'
+import { NextApiRequest, NextApiResponse, NextPageContext } from "next";
+import { Adapter, AdapterUser } from "next-auth/adapters";
+import { prisma } from "@/lib/prisma";
 
 interface CustomUser extends AdapterUser {
-  avatarUrl?: string | null
+  avatarUrl?: string | null;
 }
 
 interface Account {
-  userId: string
-  type: string
-  provider: string
-  providerAccountId: string
-  refresh_token?: string
-  access_token?: string
-  expires_at?: number
-  token_type?: string
-  scope?: string
-  id_token?: string
-  session_state?: string
+  userId: string;
+  type: string;
+  provider: string;
+  providerAccountId: string;
+  refresh_token?: string;
+  access_token?: string;
+  expires_at?: number;
+  token_type?: string;
+  scope?: string;
+  id_token?: string;
+  session_state?: string;
 }
 
 export function PrismaAdapter(
-  req: NextApiRequest | NextPageContext['req'],
-  res: NextApiResponse | NextPageContext['res'],
+  req: NextApiRequest | NextPageContext["req"],
+  res: NextApiResponse | NextPageContext["res"]
 ): Adapter {
   return {
-    async createUser(user: Omit<CustomUser, 'id'>) {
+    async createUser(user: Omit<CustomUser, "id">) {
       const createdUser = await prisma.user.create({
         data: {
           name: user.name!,
           email: user.email,
           avatarUrl: user.avatarUrl,
         },
-      })
+      });
 
       return {
         id: createdUser.id,
@@ -42,7 +42,7 @@ export function PrismaAdapter(
         email: createdUser.email!,
         avatarUrl: createdUser.avatarUrl,
         emailVerified: null,
-      }
+      };
     },
 
     async getUser(id) {
@@ -50,10 +50,10 @@ export function PrismaAdapter(
         where: {
           id,
         },
-      })
+      });
 
       if (!user) {
-        return null
+        return null;
       }
 
       return {
@@ -62,7 +62,7 @@ export function PrismaAdapter(
         email: user.email!,
         emailVerified: null,
         avatarUrl: user.avatarUrl!,
-      }
+      };
     },
 
     async getUserByEmail(email) {
@@ -70,10 +70,10 @@ export function PrismaAdapter(
         where: {
           email,
         },
-      })
+      });
 
       if (!user) {
-        return null
+        return null;
       }
 
       return {
@@ -82,7 +82,7 @@ export function PrismaAdapter(
         email: user.email!,
         emailVerified: null,
         avatarUrl: user.avatarUrl!,
-      }
+      };
     },
 
     async getUserByAccount({ providerAccountId, provider }) {
@@ -96,13 +96,13 @@ export function PrismaAdapter(
         include: {
           user: true,
         },
-      })
+      });
 
       if (!account) {
-        return null
+        return null;
       }
 
-      const { user } = account
+      const { user } = account;
 
       return {
         id: user.id,
@@ -110,7 +110,7 @@ export function PrismaAdapter(
         email: user.email!,
         emailVerified: null,
         avatarUrl: user.avatarUrl!,
-      }
+      };
     },
 
     async updateUser(user) {
@@ -123,7 +123,7 @@ export function PrismaAdapter(
           email: user.email,
           avatarUrl: user.image,
         },
-      })
+      });
 
       return {
         id: updatedUser.id,
@@ -131,7 +131,7 @@ export function PrismaAdapter(
         email: updatedUser.email!,
         emailVerified: null,
         avatarUrl: updatedUser.avatarUrl!,
-      }
+      };
     },
 
     async linkAccount(account: Account) {
@@ -149,7 +149,7 @@ export function PrismaAdapter(
           id_token: account.id_token,
           session_state: account.session_state,
         },
-      })
+      });
     },
 
     async createSession({ sessionToken, userId, expires }) {
@@ -159,13 +159,13 @@ export function PrismaAdapter(
           userId,
           expires,
         },
-      })
+      });
 
       return {
         sessionToken,
         userId,
         expires,
-      }
+      };
     },
 
     async getSessionAndUser(sessionToken) {
@@ -176,12 +176,12 @@ export function PrismaAdapter(
         include: {
           user: true,
         },
-      })
+      });
       if (!prismaSession) {
-        return null
+        return null;
       }
 
-      const { user, ...session } = prismaSession
+      const { user, ...session } = prismaSession;
 
       return {
         session: {
@@ -196,7 +196,7 @@ export function PrismaAdapter(
           emailVerified: null,
           avatarUrl: user.avatarUrl,
         },
-      }
+      };
     },
 
     async updateSession({ sessionToken, userId, expires }) {
@@ -208,13 +208,13 @@ export function PrismaAdapter(
           expires,
           userId,
         },
-      })
+      });
 
       return {
         sessionToken: updatedSession.sessionToken,
         userId: updatedSession.userId,
         expires: updatedSession.expires,
-      }
+      };
     },
 
     async deleteSession(sessionToken) {
@@ -222,7 +222,7 @@ export function PrismaAdapter(
         where: {
           sessionToken,
         },
-      })
+      });
     },
-  }
+  };
 }

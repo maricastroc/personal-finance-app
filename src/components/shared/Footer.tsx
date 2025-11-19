@@ -1,26 +1,26 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { usePathname } from 'next/navigation'
-import { Item, navList } from '@/utils/getNavList'
-import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { Item, navList } from "@/utils/getNavList";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 export function Footer() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
-  const session = useSession()
+  const session = useSession();
 
-  const [filteredNavList, setFilteredNavList] = useState(navList)
+  const [filteredNavList, setFilteredNavList] = useState(navList);
 
   useEffect(() => {
     if (session?.data?.user.email === process.env.NEXT_PUBLIC_DEMO_LOGIN) {
       const filteredNavList = navList.filter((item) => {
-        return item.name !== 'Profile'
-      })
+        return item.name !== "Profile";
+      });
 
-      setFilteredNavList(filteredNavList)
+      setFilteredNavList(filteredNavList);
     }
-  }, [session?.data?.user?.email])
+  }, [session?.data?.user?.email]);
 
   return (
     <nav
@@ -35,20 +35,20 @@ export function Footer() {
         />
       ))}
     </nav>
-  )
+  );
 }
 
 function AsideItem({ item, active }: Item) {
   return (
     <Link
       href={item.href}
-      aria-current={active ? 'page' : undefined}
+      aria-current={active ? "page" : undefined}
       aria-label={item.name}
       className={`flex flex-col gap-2
         ${
           active
-            ? 'bg-beige-100 border-b-4 border-b-secondary-green'
-            : 'bg-transparent'
+            ? "bg-beige-100 border-b-4 border-b-secondary-green"
+            : "bg-transparent"
         }
         items-center justify-start rounded-t-xl min-w-[50px] min-h-[50px] p-2
       `}
@@ -64,12 +64,12 @@ function AsideItem({ item, active }: Item) {
 
       <p
         className={`font-semibold text-sm transition-all duration-500
-          ${active ? 'text-gray-900' : 'text-gray-100'}
+          ${active ? "text-gray-900" : "text-gray-100"}
           hidden sm:block
         `}
       >
         {item.name}
       </p>
     </Link>
-  )
+  );
 }

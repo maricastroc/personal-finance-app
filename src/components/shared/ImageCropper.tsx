@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useRef, useEffect } from 'react'
-import Cropper from 'react-cropper'
-import 'cropperjs/dist/cropper.css'
-import { PrimaryButton } from '../core/PrimaryButton'
+import React, { useRef, useEffect } from "react";
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
+import { PrimaryButton } from "../core/PrimaryButton";
 
 interface ImageCropperProps {
-  src: string
-  onCrop: (croppedImage: string) => void
-  aspectRatio?: number
-  onClose: () => void
+  src: string;
+  onCrop: (croppedImage: string) => void;
+  aspectRatio?: number;
+  onClose: () => void;
 }
 
 export const ImageCropper: React.FC<ImageCropperProps> = ({
@@ -17,23 +17,23 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
   onCrop,
   aspectRatio = 1,
 }) => {
-  const cropperRef = useRef<HTMLImageElement>(null)
-  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const cropperRef = useRef<HTMLImageElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    closeButtonRef.current?.focus()
+    closeButtonRef.current?.focus();
 
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
+      if (e.key === "Escape") onClose();
+    };
 
-    window.addEventListener('keydown', handleEsc)
-    return () => window.removeEventListener('keydown', handleEsc)
-  }, [onClose])
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
 
   const handleCrop = () => {
     if (cropperRef.current) {
-      const cropper = (cropperRef.current as any).cropper
+      const cropper = (cropperRef.current as any).cropper;
 
       const croppedCanvas = cropper.getCroppedCanvas({
         width: 500,
@@ -42,14 +42,14 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
         minHeight: 256,
         maxWidth: 2048,
         maxHeight: 2048,
-        fillColor: '#fff',
+        fillColor: "#fff",
         imageSmoothingEnabled: true,
-        imageSmoothingQuality: 'high',
-      })
+        imageSmoothingQuality: "high",
+      });
 
-      onCrop(croppedCanvas.toDataURL())
+      onCrop(croppedCanvas.toDataURL());
     }
-  }
+  };
 
   return (
     <div
@@ -65,7 +65,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
 
         <Cropper
           src={src}
-          style={{ height: 400, width: '100%' }}
+          style={{ height: 400, width: "100%" }}
           initialAspectRatio={aspectRatio}
           aspectRatio={aspectRatio}
           guides={true}
@@ -85,5 +85,5 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

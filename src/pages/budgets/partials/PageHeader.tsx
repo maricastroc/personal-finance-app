@@ -1,21 +1,21 @@
-import * as Dialog from '@radix-ui/react-dialog'
-import { BudgetModal } from './BudgetModal'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { getBudgetsCategories } from '@/utils/getBudgetsCategories'
-import { BudgetWithDetailsProps } from '@/components/shared/BudgetItem'
-import { AxiosResponse } from 'axios'
-import { KeyedMutator } from 'swr'
-import { PrimaryButton } from '@/components/core/PrimaryButton'
-import { PageTitle } from '@/components/shared/PageTitle'
+import * as Dialog from "@radix-ui/react-dialog";
+import { BudgetModal } from "./BudgetModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { getBudgetsCategories } from "@/utils/getBudgetsCategories";
+import { BudgetWithDetailsProps } from "@/components/shared/BudgetItem";
+import { AxiosResponse } from "axios";
+import { KeyedMutator } from "swr";
+import { PrimaryButton } from "@/components/core/PrimaryButton";
+import { PageTitle } from "@/components/shared/PageTitle";
 
 interface PageHeaderProps {
-  isBudgetModalOpen: boolean
-  setIsBudgetModalOpen: (value: boolean) => void
-  budgets: BudgetWithDetailsProps[] | undefined
+  isBudgetModalOpen: boolean;
+  setIsBudgetModalOpen: (value: boolean) => void;
+  budgets: BudgetWithDetailsProps[] | undefined;
   mutate: KeyedMutator<
     AxiosResponse<BudgetWithDetailsProps[], BudgetWithDetailsProps>
-  >
+  >;
 }
 
 export const PageHeader = ({
@@ -51,10 +51,10 @@ export const PageHeader = ({
           onClose={() => setIsBudgetModalOpen(false)}
           existedCategories={getBudgetsCategories(budgets)}
           onSubmitForm={async () => {
-            await mutate()
+            await mutate();
           }}
         />
       </Dialog.Root>
     </header>
-  )
-}
+  );
+};

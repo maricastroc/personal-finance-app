@@ -1,18 +1,18 @@
-import React from 'react'
-import * as Select from '@radix-ui/react-select'
-import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
+import React from "react";
+import * as Select from "@radix-ui/react-select";
+import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
 interface DataProps {
-  id?: string | number
-  name?: string | number
+  id?: string | number;
+  name?: string | number;
 }
 
 interface SelectUserProps {
-  label: string
-  data: DataProps[]
-  onSelect: (value: string) => Promise<void>
-  placeholder: string
-  contentWidth?: number | null
+  label: string;
+  data: DataProps[];
+  onSelect: (value: string) => Promise<void>;
+  placeholder: string;
+  contentWidth?: number | null;
 }
 
 export const SelectUser = ({
@@ -76,8 +76,8 @@ export const SelectUser = ({
         </Select.Content>
       </Select.Portal>
     </Select.Root>
-  )
-}
+  );
+};
 
 const SelectItem = React.forwardRef(
   (
@@ -87,11 +87,11 @@ const SelectItem = React.forwardRef(
       disabled,
       ...props
     }: {
-      children: React.ReactNode
-      value: string
-      disabled?: boolean
+      children: React.ReactNode;
+      value: string;
+      disabled?: boolean;
     },
-    ref: React.Ref<HTMLDivElement>,
+    ref: React.Ref<HTMLDivElement>
   ) => (
     <Select.Item
       ref={ref}
@@ -103,15 +103,15 @@ const SelectItem = React.forwardRef(
 
         ${
           disabled
-            ? 'text-gray-400 cursor-not-allowed'
-            : 'text-gray-900 cursor-pointer hover:bg-blue-100 focus:bg-blue-100'
+            ? "text-gray-400 cursor-not-allowed"
+            : "text-gray-900 cursor-pointer hover:bg-blue-100 focus:bg-blue-100"
         }
       `}
       {...props}
     >
       <Select.ItemText>{children}</Select.ItemText>
     </Select.Item>
-  ),
-)
+  )
+);
 
-SelectItem.displayName = 'SelectItem'
+SelectItem.displayName = "SelectItem";

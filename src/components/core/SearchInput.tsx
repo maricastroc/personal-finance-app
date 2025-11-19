@@ -1,43 +1,43 @@
-import { useDebounce } from '@/utils/useDebounce'
-import { MagnifyingGlass, X } from 'phosphor-react'
-import { useEffect, useState } from 'react'
+import { useDebounce } from "@/utils/useDebounce";
+import { MagnifyingGlass, X } from "phosphor-react";
+import { useEffect, useState } from "react";
 
 interface SearchInputProps {
-  id?: string
-  label?: string
-  value: string
-  placeholder?: string
-  onChange: (value: string) => void
-  className?: string
-  debounceMs?: number
+  id?: string;
+  label?: string;
+  value: string;
+  placeholder?: string;
+  onChange: (value: string) => void;
+  className?: string;
+  debounceMs?: number;
 }
 
 export function SearchInput({
-  id = 'search',
-  label = 'Search',
+  id = "search",
+  label = "Search",
   value,
-  placeholder = 'Search...',
+  placeholder = "Search...",
   onChange,
-  className = '',
+  className = "",
   debounceMs = 300,
 }: SearchInputProps) {
-  const [internalValue, setInternalValue] = useState(value)
+  const [internalValue, setInternalValue] = useState(value);
 
   useEffect(() => {
-    setInternalValue(value)
-  }, [value])
+    setInternalValue(value);
+  }, [value]);
 
   useDebounce(
     () => {
-      onChange(internalValue)
+      onChange(internalValue);
     },
     debounceMs,
-    [internalValue],
-  )
+    [internalValue]
+  );
 
   function handleClear() {
-    setInternalValue('')
-    onChange('')
+    setInternalValue("");
+    onChange("");
   }
 
   return (
@@ -80,5 +80,5 @@ export function SearchInput({
         />
       )}
     </div>
-  )
+  );
 }

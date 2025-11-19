@@ -1,6 +1,6 @@
 export function calculateTotalPages(
   totalRecords: number,
-  limit: number,
+  limit: number
 ): number {
-  return Math.ceil(totalRecords / limit)
+  return Math.ceil(totalRecords / limit);
 }

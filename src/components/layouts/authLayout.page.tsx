@@ -1,10 +1,10 @@
-import Image from 'next/image'
-import LogoMobile from '/public/assets/images/Logo.svg'
-import BackgroundImage from '/public/assets/images/illustration-authentication.svg'
-import { ReactNode } from 'react'
+import Image from "next/image";
+import LogoMobile from "@public/assets/images/Logo.svg";
+import BackgroundImage from "/public/assets/images/illustration-authentication.svg";
+import { ReactNode } from "react";
 
 interface AuthLayoutProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
@@ -67,5 +67,5 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         </main>
       </div>
     </div>
-  )
+  );
 }

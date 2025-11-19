@@ -1,8 +1,8 @@
 interface BudgetCardHeaderProps {
-  categoryName: string
-  theme: string
-  isLoading: boolean
-  children?: React.ReactNode
+  categoryName: string;
+  theme: string;
+  isLoading: boolean;
+  children?: React.ReactNode;
 }
 
 export function BudgetCardHeader({
@@ -31,5 +31,5 @@ export function BudgetCardHeader({
 
       {children}
     </header>
-  )
+  );
 }
