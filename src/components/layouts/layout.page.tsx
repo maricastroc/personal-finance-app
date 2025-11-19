@@ -16,12 +16,10 @@ export default function Layout({ children }: LayoutProps) {
         isSidebarOpen ? 'lg:pl-[17rem]' : 'lg:pl-[10rem]'
       }`}
     >
-      <nav aria-label="Main navigation">
-        <Sidebar
-          isSidebarOpen={isSidebarOpen}
-          handleIsSidebarOpen={() => handleIsSidebarOpen(!isSidebarOpen)}
-        />
-      </nav>
+      <Sidebar
+        isSidebarOpen={isSidebarOpen}
+        handleIsSidebarOpen={() => handleIsSidebarOpen(!isSidebarOpen)}
+      />
 
       <main id="main-content" className="flex-grow">
         {children}
