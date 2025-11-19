@@ -65,7 +65,7 @@ function AsideItem({ item, active }: Item) {
       <p
         className={`font-semibold text-sm transition-all duration-500
           ${active ? 'text-gray-900' : 'text-gray-100'}
-          sr-only sm:not-sr-only
+          hidden sm:block
         `}
       >
         {item.name}

@@ -8,7 +8,6 @@ export function AsideItem({ item, active, menuShown }: Item) {
     <Link
       href={item.href}
       aria-current={active ? 'page' : undefined}
-      aria-label={!menuShown ? item.name : undefined}
       className={`
         flex gap-4 hover:brightness-150 focus:outline-none
         focus:outline-2 focus:outline-white focus:outline-offset-2
@@ -28,12 +27,12 @@ export function AsideItem({ item, active, menuShown }: Item) {
           data-tooltip-id={item.name}
           data-tooltip-content={item.name}
           alt=""
-          role="presentation"
+          aria-hidden="true"
           fill
         />
       </div>
 
-      {menuShown && (
+      {menuShown ? (
         <p
           className={`font-semibold text-base ${
             active ? 'text-gray-900' : 'text-gray-300'
@@ -41,6 +40,8 @@ export function AsideItem({ item, active, menuShown }: Item) {
         >
           {item.name}
         </p>
+      ) : (
+        <span className="sr-only">{item.name}</span>
       )}
 
       <Tooltip id={item.name} place="right" className="custom-tooltip" />
