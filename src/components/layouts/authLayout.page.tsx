@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import LogoMobile from '../../../public/assets/images/Logo.svg'
-import BackgroundImage from '../../../public/assets/images/illustration-authentication.svg'
+import LogoMobile from '/public/assets/images/Logo.svg'
+import BackgroundImage from '/public/assets/images/illustration-authentication.svg'
 import { ReactNode } from 'react'
 
 interface AuthLayoutProps {

@@ -5,8 +5,8 @@ import { getOrdinalSuffix } from '@/utils/getOrdinalSuffix'
 import { EmptyContent } from '@/components/shared/EmptyContent'
 import { SkeletonTransactionCard } from '@/components/shared/SkeletonTransactionCard'
 import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
-import iconBillPaid from '../../../../public/assets/images/icon-bill-paid.svg'
-import iconBillDue from '../../../../public/assets/images/icon-bill-due.svg'
+import iconBillPaid from '/public/assets/images/icon-bill-paid.svg'
+import iconBillDue from '/public/assets/images/icon-bill-due.svg'
 import Image from 'next/image'
 
 export const RecurringBillsTable = ({

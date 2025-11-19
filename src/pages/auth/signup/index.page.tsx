@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
-import AuthLayout from '../../../components/layouts/authLayout.page'
+import AuthLayout from '@/components/layouts/authLayout.page'
 import { LoadingPage } from '@/components/shared/LoadingPage'
 import { PrimaryButton } from '@/components/core/PrimaryButton'
 import { z } from 'zod'

@@ -1,6 +1,6 @@
 import { formatToDollar } from '@/utils/formatToDollar'
 import Image from 'next/image'
-import iconRecurringBills from '../../../../../../../../../public/assets/images/icon-recurring-bills.svg'
+import iconRecurringBills from '/public/assets/images/icon-recurring-bills.svg'
 import { RecurringBillsResult } from '@/pages/home'
 
 interface TotalBillsCardProps {

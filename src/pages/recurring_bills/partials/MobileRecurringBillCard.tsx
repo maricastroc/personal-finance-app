@@ -1,8 +1,8 @@
 import { AVATAR_URL_DEFAULT } from '@/utils/constants'
 import { formatToDollar } from '@/utils/formatToDollar'
 import { getOrdinalSuffix } from '@/utils/getOrdinalSuffix'
-import iconBillPaid from '../../../../public/assets/images/icon-bill-paid.svg'
-import iconBillDue from '../../../../public/assets/images/icon-bill-due.svg'
+import iconBillPaid from '/public/assets/images/icon-bill-paid.svg'
+import iconBillDue from '/public/assets/images/icon-bill-due.svg'
 import Image from 'next/image'
 
 interface RecurringBillProps {

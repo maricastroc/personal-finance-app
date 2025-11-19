@@ -4,14 +4,13 @@ import { useAppContext } from '@/contexts/AppContext'
 import Layout from '@/components/layouts/layout.page'
 import { EmptyContent } from '@/components/shared/EmptyContent'
 import { LoadingPage } from '@/components/shared/LoadingPage'
-
 import { PotFormModal } from './partials/PotFormModal'
 import { SkeletonPotCard } from './partials/SkeletonPotCard'
+import { PageHeader } from './partials/PageHeader'
+import { PotCard } from './partials/PotCard'
 import { AllPotsProps } from '../home'
 import useRequest from '@/utils/useRequest'
 import { useLoadingOnRouteChange } from '@/utils/useLoadingOnRouteChange'
-import { PageHeader } from './partials/PageHeader'
-import { PotCard } from './partials/PotCard'
 
 export default function Pots() {
   const { isSidebarOpen } = useAppContext()
