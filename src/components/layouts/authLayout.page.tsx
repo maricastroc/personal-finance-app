@@ -55,7 +55,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           </div>
         </aside>
 
-        <main className="flex-1 xl:ml-[50%] xl:min-h-screen xl:overflow-y-auto">
+        <main className="flex-1 xl:ml-[50%] xl:min-h-screen">
           <section
             aria-label="Authentication form"
             className="w-full flex items-center justify-center min-h-full xl:justify-start xl:items-center"

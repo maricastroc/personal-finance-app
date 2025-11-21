@@ -72,7 +72,7 @@ export default function SignUp() {
       );
 
       toast?.success(response.data.message);
-      router.push("/home");
+      router.push("/");
     } catch (error) {
       handleApiError(error);
     }
@@ -98,7 +98,7 @@ export default function SignUp() {
         </h1>
 
         <form
-          className="flex flex-col py-8 gap-4"
+          className="flex flex-col py-5 gap-4"
           onSubmit={handleSubmit(handleSignUp)}
           aria-labelledby="form-title"
         >
@@ -149,7 +149,6 @@ export default function SignUp() {
             )}
           />
 
-          {/* Adicione o campo Initial Balance usando CurrencyInput */}
           <Controller
             name="initialBalance"
             control={control}
@@ -193,7 +192,11 @@ export default function SignUp() {
             </label>
           </fieldset>
 
-          <PrimaryButton type="submit" isSubmitting={isSubmitting}>
+          <PrimaryButton
+            className="mt-2"
+            type="submit"
+            isSubmitting={isSubmitting}
+          >
             Create account
           </PrimaryButton>
 

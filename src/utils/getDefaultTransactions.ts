@@ -52,7 +52,7 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
       isRecurring: true,
       categoryId: CATEGORIES.GENERAL,
       contactName: "Tech Company Inc.",
-      contactAvatar: "/images/avatars/technova-innovations.jpg",
+      contactAvatar: "./assets/images/avatars/technova-innovations.jpg",
       type: "income",
       userId: createdUser.id,
     },
@@ -63,7 +63,7 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
       isRecurring: false,
       categoryId: CATEGORIES.GENERAL,
       contactName: "Client Solutions Ltd.",
-      contactAvatar: "/images/avatars/bytewise.jpg",
+      contactAvatar: "./assets/images/avatars/bytewise.jpg",
       type: "income",
       userId: createdUser.id,
     },
@@ -74,7 +74,7 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
       isRecurring: true,
       categoryId: CATEGORIES.GENERAL,
       contactName: "Investment Fund",
-      contactAvatar: "/images/avatars/spark-electric-solutions.jpg",
+      contactAvatar: "./assets/images/avatars/spark-electric-solutions.jpg",
       type: "income",
       userId: createdUser.id,
     },
@@ -82,23 +82,23 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     // Expense Transactions - Bills
     {
       description: "Electricity Bill",
-      amount: -85.5,
+      amount: 85.5,
       date: "2024-08-03T14:00:37.000Z",
       isRecurring: true,
       categoryId: CATEGORIES.BILLS,
       contactName: "Power Utilities Co.",
-      contactAvatar: "/images/avatars/aqua-flow-utilities.jpg",
+      contactAvatar: "./assets/images/avatars/aqua-flow-utilities.jpg",
       type: "expense",
       userId: createdUser.id,
     },
     {
       description: "Internet Bill",
-      amount: -65.0,
+      amount: 65.0,
       date: "2024-08-02T09:25:11.000Z",
       isRecurring: true,
       categoryId: CATEGORIES.BILLS,
       contactName: "FastNet Internet",
-      contactAvatar: "/images/avatars/urban-services-hub.jpg",
+      contactAvatar: "./assets/images/avatars/urban-services-hub.jpg",
       type: "expense",
       userId: createdUser.id,
     },
@@ -106,7 +106,7 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     // Expense Transactions - Groceries
     {
       description: "Weekly Groceries",
-      amount: -95.5,
+      amount: 95.5,
       date: "2024-08-12T13:40:46.000Z",
       isRecurring: false,
       categoryId: CATEGORIES.GROCERIES,
@@ -116,7 +116,7 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     },
     {
       description: "Supermarket Shopping",
-      amount: -75.25,
+      amount: 75.25,
       date: "2024-08-19T16:20:00.000Z",
       isRecurring: false,
       categoryId: CATEGORIES.GROCERIES,
@@ -128,7 +128,7 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     // Expense Transactions - Dining Out
     {
       description: "Dinner with Friends",
-      amount: -33.75,
+      amount: 33.75,
       date: "2024-08-11T18:05:59.000Z",
       isRecurring: false,
       categoryId: CATEGORIES.DINING_OUT,
@@ -138,7 +138,7 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     },
     {
       description: "Lunch at Restaurant",
-      amount: -22.5,
+      amount: 22.5,
       date: "2024-08-15T12:30:00.000Z",
       isRecurring: false,
       categoryId: CATEGORIES.DINING_OUT,
@@ -160,12 +160,12 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     },
     {
       description: "Ride Sharing",
-      amount: -18.75,
+      amount: 18.75,
       date: "2024-08-14T17:45:00.000Z",
       isRecurring: false,
       categoryId: CATEGORIES.TRANSPORTATION,
       contactName: "Swift Ride Share",
-      contactAvatar: "/images/avatars/swift-ride-share.jpg",
+      contactAvatar: "./assets/images/avatars/swift-ride-share.jpg",
       type: "expense",
       userId: createdUser.id,
     },
@@ -173,7 +173,7 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     // Expense Transactions - Entertainment
     {
       description: "Movie Tickets",
-      amount: -32.0,
+      amount: 32.0,
       date: "2024-08-08T20:00:00.000Z",
       isRecurring: false,
       categoryId: CATEGORIES.ENTERTAINMENT,
@@ -183,12 +183,12 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     },
     {
       description: "Streaming Subscription",
-      amount: -15.99,
+      amount: 15.99,
       date: "2024-08-01T00:00:00.000Z",
       isRecurring: true,
       categoryId: CATEGORIES.ENTERTAINMENT,
       contactName: "StreamFlix",
-      contactAvatar: "/images/avatars/pixel-playground.jpg",
+      contactAvatar: "./assets/images/avatars/pixel-playground.jpg",
       type: "expense",
       userId: createdUser.id,
     },
@@ -196,7 +196,7 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     // Expense Transactions - Shopping
     {
       description: "Clothing Purchase",
-      amount: -89.99,
+      amount: 89.99,
       date: "2024-08-13T14:20:00.000Z",
       isRecurring: false,
       categoryId: CATEGORIES.SHOPPING,
@@ -206,7 +206,7 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     },
     {
       description: "Electronics Store",
-      amount: -299.99,
+      amount: 299.99,
       date: "2024-08-06T11:30:00.000Z",
       isRecurring: false,
       categoryId: CATEGORIES.SHOPPING,
@@ -218,12 +218,12 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     // Expense Transactions - Personal Care
     {
       description: "Haircut",
-      amount: -35.0,
+      amount: 35.0,
       date: "2024-08-09T10:00:00.000Z",
       isRecurring: false,
       categoryId: CATEGORIES.PERSONAL_CARE,
       contactName: "Style Salon",
-      contactAvatar: "/images/avatars/serenity-spa-and-wellness.jpg",
+      contactAvatar: "./assets/images/avatars/serenity-spa-and-wellness.jpg",
       type: "expense",
       userId: createdUser.id,
     },
@@ -231,12 +231,12 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     // Expense Transactions - Education
     {
       description: "Online Course",
-      amount: -49.99,
+      amount: 49.99,
       date: "2024-08-04T19:00:00.000Z",
       isRecurring: false,
       categoryId: CATEGORIES.EDUCATION,
       contactName: "Elevate Education",
-      contactAvatar: "/images/avatars/elevate-education.jpg",
+      contactAvatar: "./assets/images/avatars/elevate-education.jpg",
       type: "expense",
       userId: createdUser.id,
     },

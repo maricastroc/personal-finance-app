@@ -25,7 +25,7 @@ export const getDefaultBudgets = (createdUser: UserProps) => {
       amount: 750,
       categoryId: CATEGORIES.LIFESTYLE,
       userId: createdUser.id,
-      themeId: "7",
+      themeId: "2",
     },
   ];
 };

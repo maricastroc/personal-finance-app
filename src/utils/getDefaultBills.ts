@@ -11,7 +11,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
       categoryId: CATEGORIES.BILLS,
       userId: createdUser.id,
       contactName: "Power Utilities Co.",
-      contactAvatar: "/images/avatars/aqua-flow-utilities.jpg",
+      contactAvatar: "./assets/images/avatars/aqua-flow-utilities.jpg",
       type: "expense",
     },
     {
@@ -22,7 +22,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
       categoryId: CATEGORIES.ENTERTAINMENT,
       userId: createdUser.id,
       contactName: "StreamFlix",
-      contactAvatar: "/images/avatars/pixel-playground.jpg",
+      contactAvatar: "./assets/images/avatars/pixel-playground.jpg",
       type: "expense",
     },
     {
@@ -33,7 +33,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
       categoryId: CATEGORIES.BILLS,
       userId: createdUser.id,
       contactName: "FastNet Internet",
-      contactAvatar: "/images/avatars/urban-services-hub.jpg",
+      contactAvatar: "./assets/images/avatars/urban-services-hub.jpg",
       type: "expense",
     },
     {
@@ -44,7 +44,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
       categoryId: CATEGORIES.LIFESTYLE,
       userId: createdUser.id,
       contactName: "FitLife Gym",
-      contactAvatar: "/images/avatars/serenity-spa-and-wellness.jpg",
+      contactAvatar: "./assets/images/avatars/serenity-spa-and-wellness.jpg",
       type: "expense",
     },
     {
@@ -55,7 +55,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
       categoryId: CATEGORIES.ENTERTAINMENT,
       userId: createdUser.id,
       contactName: "MusicStream Pro",
-      contactAvatar: "/images/avatars/flavor-fiesta.jpg",
+      contactAvatar: "./assets/images/avatars/flavor-fiesta.jpg",
       type: "expense",
     },
     {
@@ -66,7 +66,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
       categoryId: CATEGORIES.BILLS,
       userId: createdUser.id,
       contactName: "Mobile Connect",
-      contactAvatar: "/images/avatars/technova-innovations.jpg",
+      contactAvatar: "./assets/images/avatars/technova-innovations.jpg",
       type: "expense",
     },
     {
@@ -77,7 +77,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
       categoryId: CATEGORIES.GENERAL,
       userId: createdUser.id,
       contactName: "CloudTech Solutions",
-      contactAvatar: "/images/avatars/bytewise.jpg",
+      contactAvatar: "./assets/images/avatars/bytewise.jpg",
       type: "expense",
     },
     {
@@ -88,7 +88,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
       categoryId: CATEGORIES.EDUCATION,
       userId: createdUser.id,
       contactName: "LearnHub Academy",
-      contactAvatar: "/images/avatars/elevate-education.jpg",
+      contactAvatar: "./assets/images/avatars/elevate-education.jpg",
       type: "expense",
     },
     // Adicionando algumas contas recorrentes de receita também
@@ -100,7 +100,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
       categoryId: CATEGORIES.GENERAL,
       userId: createdUser.id,
       contactName: "Tech Company Inc.",
-      contactAvatar: "/images/avatars/technova-innovations.jpg",
+      contactAvatar: "./assets/images/avatars/technova-innovations.jpg",
       type: "income",
     },
     {
@@ -111,7 +111,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
       categoryId: CATEGORIES.GENERAL,
       userId: createdUser.id,
       contactName: "Property Management",
-      contactAvatar: "/images/avatars/urban-services-hub.jpg",
+      contactAvatar: "./assets/images/avatars/urban-services-hub.jpg",
       type: "income",
     },
   ];

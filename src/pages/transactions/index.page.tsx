@@ -27,18 +27,28 @@ import { PageTitle } from "@/components/shared/PageTitle";
 import { PrimaryButton } from "@/components/core/PrimaryButton";
 
 export default function Transactions() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedSortBy, setSelectedSortBy] = useState("latest");
-  const [maxVisibleButtons, setMaxVisibleButtons] = useState(3);
-  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
-
   const router = useRouter();
+
   const { category } = router.query;
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  const [search, setSearch] = useState("");
+
+  const [selectedCategory, setSelectedCategory] = useState(
+    category ? String(category) : "all"
+  );
+
+  const [selectedSortBy, setSelectedSortBy] = useState("latest");
+
+  const [maxVisibleButtons, setMaxVisibleButtons] = useState(3);
+
+  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
+
   const { isSidebarOpen } = useAppContext();
+
   const isRouteLoading = useLoadingOnRouteChange();
 
   useDebounce(
