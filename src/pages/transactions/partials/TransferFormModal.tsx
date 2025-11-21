@@ -151,12 +151,12 @@ export function TransferFormModal({
 
         <Dialog.Description
           id="transfer-description"
-          className="text-sm text-gray-600 mb-4"
+          className="text-sm text-gray-600"
         >
           Please fill the fields below to make a new transfer.
         </Dialog.Description>
 
-        <form onSubmit={handleSubmit(handleTransfer)} className="mt-6">
+        <form onSubmit={handleSubmit(handleTransfer)} className="mt-2">
           <div className="flex items-start justify-center w-full">
             <div className="flex flex-col mt-4 mr-4">
               <InputLabel>Avatar</InputLabel>
@@ -309,7 +309,11 @@ export function TransferFormModal({
             </>
           )}
 
-          <PrimaryButton type="submit" isSubmitting={isSubmitting}>
+          <PrimaryButton
+            className="mt-8"
+            type="submit"
+            isSubmitting={isSubmitting}
+          >
             Transfer
           </PrimaryButton>
         </form>

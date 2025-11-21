@@ -218,7 +218,7 @@ export function PotFormModal({
             )}
           </div>
 
-          <PrimaryButton isSubmitting={isSubmitting}>
+          <PrimaryButton type="submit" isSubmitting={isSubmitting}>
             Save Changes
           </PrimaryButton>
         </form>
