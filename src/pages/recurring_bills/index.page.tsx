@@ -187,8 +187,8 @@ export default function RecurringBills() {
                         capitalizeFirstLetter(bill.recurrenceFrequency) || ""
                       }
                       amount={bill.amount}
-                      name={bill.recipient.name}
-                      avatarUrl={bill.recipient.avatarUrl}
+                      name={bill.contactName}
+                      avatarUrl={bill.contactAvatar}
                       status={bill?.status || ""}
                     />
                   ))

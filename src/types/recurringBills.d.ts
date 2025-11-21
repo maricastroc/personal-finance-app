@@ -6,11 +6,10 @@ export interface RecurringBillProps {
   amount: number;
   recurrenceDay?: string;
   recurrenceFrequency?: string;
-  senderId: string;
-  recipientId: string;
-  recipient: UserProps;
-  sender: UserProps;
   userId: string;
   user: UserProps;
   status?: string;
+  contactName: string;
+  contactAvatar: string;
+  balance?: "expense" | "income";
 }

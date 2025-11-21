@@ -45,8 +45,8 @@ export const RecurringBillsTable = ({
           <tr key={bill.id} className="border-t">
             <td className="px-4 py-2 text-left">
               <RecurringBillCard
-                name={bill.recipient.name}
-                avatarUrl={bill.recipient.avatarUrl}
+                name={bill.contactName}
+                avatarUrl={bill.contactAvatar}
               />
             </td>
 
