@@ -1,64 +1,43 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { PrimaryButton } from "@/components/core/PrimaryButton";
-import { ErrorMessage } from "@/components/shared/ErrorMessage";
 import { SelectInput } from "@/components/core/SelectInput";
-import { SelectUser } from "@/components/shared/SelectUser";
 import { api } from "@/lib/axios";
 import { CategoryProps } from "@/types/category";
-import { UserProps } from "@/types/user";
-import {
-  AVATAR_URL_DEFAULT,
-  recurrenceFrequencyOptions,
-} from "@/utils/constants";
+import { avatarUrls, recurrenceFrequencyOptions } from "@/utils/constants";
 import { handleApiError } from "@/utils/handleApiError";
-import useRequest from "@/utils/useRequest";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
-import { useSession } from "next-auth/react";
+import { Controller, useForm } from "react-hook-form";
 
 import { X } from "phosphor-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { InputBase } from "@/components/core/InputBase";
 import InputLabel from "@/components/core/InputLabel";
+import { AvatarSelectInput } from "@/components/core/AvatarSelectInput";
 
 const transferFormSchema = () =>
   z.object({
     amount: z.number().min(1, { message: "Amount must be greater than zero." }),
     description: z.string().optional(),
+    type: z.enum(["income", "expense"], {
+      required_error: "Transaction type is required.",
+    }),
     recurrenceDay: z.number().optional(),
     recurrenceFrequency: z.string().optional(),
-    recipientId: z.string().min(3, { message: "Recipient ID is required." }),
+    contactName: z.string().min(3, { message: "Recipient name is required." }),
+    contactAvatar: z
+      .string()
+      .min(3, { message: "Recipient avatar is required." }),
   });
 
+const transactionTypeOptions = [
+  { id: "expense", name: "Expense" },
+  { id: "income", name: "Income" },
+];
+
 export type TransferFormData = z.infer<ReturnType<typeof transferFormSchema>>;
-
-const RecipientUser = ({
-  avatarUrl,
-  name,
-}: {
-  avatarUrl: string;
-  name: string;
-}) => (
-  <div className="flex flex-col mt-3">
-    <label className="text-xs font-bold text-gray-500 mb-1">Recipient</label>
-
-    <div
-      className="flex items-center gap-2 text-sm w-full h-12 rounded-md border border-beige-500 pl-3"
-      role="group"
-      aria-label={`Selected recipient: ${name}`}
-    >
-      <img
-        src={avatarUrl}
-        alt={`Avatar of ${name}`}
-        className="w-7 h-7 rounded-full"
-      />
-      <p className="text-gray-900 font-bold text-xs">{name}</p>
-    </div>
-  </div>
-);
 
 interface TransferFormModalProps {
   id: string;
@@ -75,33 +54,13 @@ export function TransferFormModal({
 }: TransferFormModalProps) {
   const [isRecurring, setIsRecurring] = useState(false);
 
-  const [recipientId, setRecipientId] = useState("");
-
-  const [recipientUser, setRecipientUser] = useState<UserProps | null>(null);
-
   const [recurrenceDay, setRecurrenceDay] = useState(1);
 
   const [recurrenceFrequency, setRecurrenceFrequency] = useState("Monthly");
 
   const [selectedCategory, setSelectedCategory] = useState("General");
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  const session = useSession();
-
-  const { data: users } = useRequest<UserProps[]>(
-    {
-      url: "/users",
-      method: "GET",
-    },
-    {
-      revalidateOnFocus: false,
-      revalidateIfStale: true,
-      dedupingInterval: 20000,
-      focusThrottleInterval: 30000,
-      keepPreviousData: true,
-    }
-  );
+  const [selectedAvatar, setSelectedAvatar] = useState(avatarUrls[0]);
 
   const daysInMonth = Array.from({ length: 31 }, (_, index) => ({
     id: String(index + 1),
@@ -109,24 +68,36 @@ export function TransferFormModal({
   }));
 
   const {
-    register,
     handleSubmit,
-    reset,
     setValue,
+    control,
+    watch,
+    reset,
     formState: { isSubmitting, errors },
   } = useForm<TransferFormData>({
     resolver: zodResolver(transferFormSchema()),
-    defaultValues: { amount: 0, description: "", recipientId: "" },
+    defaultValues: {
+      amount: 0,
+      description: "",
+      contactName: "",
+      contactAvatar: selectedAvatar,
+      type: "expense",
+    },
   });
 
-  /* ---------------------- Handlers ---------------------- */
+  const handleAvatarSelect = (avatarUrl: string) => {
+    setSelectedAvatar(avatarUrl);
+    setValue("contactAvatar", avatarUrl);
+  };
 
   const handleTransfer = async (data: TransferFormData) => {
     const payload = {
       description: data.description || "",
-      recipientId,
       categoryName: selectedCategory,
       amount: Number(data.amount),
+      contactName: data.contactName,
+      contactAvatar: selectedAvatar,
+      type: data.type,
       isRecurring,
       recurrenceFrequency,
       recurrenceDay,
@@ -135,46 +106,16 @@ export function TransferFormModal({
     try {
       const response = await api.post(`/transactions`, payload);
 
-      setRecipientUser(response?.data?.profile || null);
-
       toast?.success(response?.data?.message);
       await onSubmitForm();
 
       reset();
-      setRecipientUser(null);
       onClose();
     } catch (error) {
       handleApiError(error);
     }
   };
-
-  const handleFetchRecipientUser = async (recipientId: string) => {
-    setIsLoading(true);
-
-    try {
-      const response = await api.get(`/profile/recipient/${recipientId}`);
-      setRecipientUser(response?.data?.profile || null);
-      toast?.success(response?.data?.message);
-    } catch (error) {
-      handleApiError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSelectRecipient = async (value: string) => {
-    setRecipientId(value);
-    setValue("recipientId", value);
-    await handleFetchRecipientUser(value);
-  };
-
-  const formattedUsers = users
-    ?.filter((user) => user.id !== session?.data?.user?.id)
-    .map((user) => ({
-      id: user.id,
-      name: user.name,
-    }));
-
+  console.log(watch(), errors);
   return (
     <Dialog.Portal>
       <Dialog.Overlay
@@ -193,7 +134,6 @@ export function TransferFormModal({
         <Dialog.Close
           aria-label="Close modal"
           onClick={() => {
-            setRecipientUser(null);
             reset();
             onClose();
           }}
@@ -217,42 +157,59 @@ export function TransferFormModal({
         </Dialog.Description>
 
         <form onSubmit={handleSubmit(handleTransfer)} className="mt-6">
-          <div className="flex flex-col mt-2">
-            <InputLabel htmlFor="recipientId">Recipient User</InputLabel>
+          <div className="flex items-start justify-center w-full">
+            <div className="flex flex-col mt-4 mr-4">
+              <InputLabel>Avatar</InputLabel>
 
-            {users && formattedUsers && (
-              <SelectUser
-                label="Recipient"
-                onSelect={handleSelectRecipient}
-                data={formattedUsers}
-                placeholder="Select a Recipient"
+              <AvatarSelectInput
+                label="Recipient Avatar"
+                placeholder="Select an avatar"
+                defaultValue={selectedAvatar}
+                onSelect={handleAvatarSelect}
+                data={avatarUrls}
               />
-            )}
 
-            {errors.recipientId && (
-              <ErrorMessage
-                id="recipient-error"
-                message={errors.recipientId.message}
+              {errors?.contactAvatar?.message && (
+                <span className="text-red-500 text-xs mt-1">
+                  {errors.contactAvatar.message}
+                </span>
+              )}
+            </div>
+
+            <div className="flex flex-col w-full mt-4">
+              <Controller
+                name="contactName"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <InputBase
+                    required
+                    label="Recipient name"
+                    id="recipient-name"
+                    type="text"
+                    placeholder="e.g: Jon Doe"
+                    error={fieldState.error?.message}
+                    {...field}
+                  />
+                )}
               />
-            )}
+            </div>
           </div>
 
-          {recipientUser && (
-            <RecipientUser
-              name={recipientUser.name}
-              avatarUrl={recipientUser?.avatarUrl || AVATAR_URL_DEFAULT}
-            />
-          )}
-
           <div className="flex flex-col mt-4">
-            <InputBase
-              required
-              label="Description"
-              id="description"
-              type="text"
-              placeholder="e.g: Dinner Payment"
-              error={errors?.description?.message}
-              {...register("description")}
+            <Controller
+              name="description"
+              control={control}
+              render={({ field, fieldState }) => (
+                <InputBase
+                  required
+                  label="Description"
+                  id="description"
+                  type="text"
+                  placeholder="e.g: Dinner Payment"
+                  error={fieldState.error?.message}
+                  {...field}
+                />
+              )}
             />
           </div>
 
@@ -268,16 +225,45 @@ export function TransferFormModal({
             />
           </div>
 
-          <InputBase
-            required
-            label="Amount ($)"
-            id="amount"
-            type="number"
-            step="0.01"
-            placeholder="Amount"
-            error={errors?.description?.message}
-            {...register("amount", { valueAsNumber: true })}
+          <Controller
+            name="amount"
+            control={control}
+            render={({ field, fieldState }) => (
+              <InputBase
+                required
+                label="Amount ($)"
+                id="amount"
+                type="number"
+                step="0.01"
+                placeholder="Amount"
+                error={fieldState.error?.message}
+                {...field}
+                onChange={(e) => {
+                  const value =
+                    e.target.value === "" ? 0 : parseFloat(e.target.value);
+                  field.onChange(value);
+                }}
+                value={field.value || ""}
+              />
+            )}
           />
+
+          <div className="flex flex-col my-4">
+            <InputLabel>Transaction Type</InputLabel>
+            <Controller
+              name="type"
+              control={control}
+              render={({ field }) => (
+                <SelectInput
+                  label="Transaction Type"
+                  placeholder="Select Type..."
+                  defaultValue={"expense"}
+                  onSelect={(value) => field.onChange(value.toLowerCase())}
+                  data={transactionTypeOptions}
+                />
+              )}
+            />
+          </div>
 
           <div className="flex items-center justify-start w-full mt-4 gap-2">
             <input
@@ -323,7 +309,7 @@ export function TransferFormModal({
             </>
           )}
 
-          <PrimaryButton type="submit" isSubmitting={isSubmitting || isLoading}>
+          <PrimaryButton type="submit" isSubmitting={isSubmitting}>
             Transfer
           </PrimaryButton>
         </form>

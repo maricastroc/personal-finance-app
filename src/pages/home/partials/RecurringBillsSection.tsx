@@ -3,7 +3,7 @@ import { EmptyContent } from "@/components/shared/EmptyContent";
 import { SkeletonRecurringBillsSection } from "@/components/skeletons/SkeletonRecurringBillsSection";
 import { BillCard } from "./BillCard";
 import { formatToDollar } from "@/utils/formatToDollar";
-import { RecurringBillsResult } from "..";
+import { RecurringBillsResult } from "../index.page";
 
 interface RecurringBillsSectionProps {
   isValidating: boolean;
@@ -22,7 +22,7 @@ export const RecurringBillsSection = ({
     >
       {isValidating ? (
         <SkeletonRecurringBillsSection />
-      ) : recurringBills ? (
+      ) : recurringBills && recurringBills?.allBills?.length ? (
         <div className="flex flex-grow flex-col sm:justify-end sm:items-end sm:w-full gap-4 pt-4">
           <BillCard
             title="Paid Bills"
@@ -41,7 +41,17 @@ export const RecurringBillsSection = ({
           />
         </div>
       ) : (
-        <EmptyContent content="No recurring bills available." />
+        <EmptyContent
+          content="No bills yet!"
+          description="Recurring bills are driven by your transactions. Marking transactions as recurring bills will help you manage your upcoming expenses."
+          icon={
+            <img
+              src="/assets/images/icon-nav-recurring-bills.svg"
+              alt="Recurring Bill icon"
+              className="w-12 h-12"
+            />
+          }
+        />
       )}
     </HomeCard>
   );

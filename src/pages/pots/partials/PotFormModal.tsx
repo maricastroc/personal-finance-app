@@ -3,7 +3,7 @@ import { PrimaryButton } from "@/components/core/PrimaryButton";
 import { ErrorMessage } from "@/components/shared/ErrorMessage";
 import { SelectTheme } from "@/components/shared/SelectTheme";
 import { api } from "@/lib/axios";
-import { AllPotsProps } from "@/pages/home";
+import { AllPotsProps } from "@/pages/home/index.page";
 import { getThemeOptions } from "@/utils/getThemeOptions";
 import { handleApiError } from "@/utils/handleApiError";
 import { zodResolver } from "@hookform/resolvers/zod";

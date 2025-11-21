@@ -7,8 +7,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "GET") return res.status(405).end();
-
   const session = await getServerSession(
     req,
     res,
@@ -16,7 +14,7 @@ export default async function handler(
   );
 
   if (!session) {
-    return res.status(400).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   const userId = session?.user?.id?.toString();
@@ -25,52 +23,103 @@ export default async function handler(
     return res.status(400).json({ message: "User ID is required" });
   }
 
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id: String(userId) },
-      select: { accountId: true },
-    });
+  if (req.method === "GET") {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: String(userId) },
+        select: { accountId: true },
+      });
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const budgets = await prisma.budget.findMany({
+        where: { userId: String(userId) },
+        include: {
+          category: true,
+          theme: true,
+        },
+      });
+
+      const transactions = await prisma.transaction.findMany({
+        where: {
+          userId,
+        },
+        include: {
+          category: true,
+        },
+      });
+
+      const budgetsWithDetails = budgets.map((budget) => {
+        const totalSpentInCategory = transactions
+          .filter((transaction) => transaction.categoryId === budget.categoryId)
+          .reduce((sum, transaction) => sum + transaction.amount, 0);
+
+        return {
+          id: budget.id,
+          categoryName: budget.category.name,
+          amountSpent: totalSpentInCategory,
+          budgetLimit: budget.amount,
+          theme: budget.theme?.color,
+        };
+      });
+
+      return res.json({ budgets: budgetsWithDetails });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "An error occurred" });
     }
+  } else if (req.method === "POST") {
+    try {
+      const { categoryName, themeColor, amount } = req.body;
 
-    const accountId = user.accountId;
+      if (!categoryName || !themeColor || !amount) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
 
-    const budgets = await prisma.budget.findMany({
-      where: { userId: String(userId) },
-      include: {
-        category: true,
-        theme: true,
-      },
-    });
+      let category = await prisma.category.findUnique({
+        where: { name: categoryName },
+      });
 
-    const transactions = await prisma.transaction.findMany({
-      where: {
-        senderId: accountId,
-      },
-      include: {
-        category: true,
-      },
-    });
+      if (!category) {
+        category = await prisma.category.create({
+          data: { name: categoryName },
+        });
+      }
 
-    const budgetsWithDetails = budgets.map((budget) => {
-      const totalSpentInCategory = transactions
-        .filter((transaction) => transaction.categoryId === budget.categoryId)
-        .reduce((sum, transaction) => sum + transaction.amount, 0);
+      let theme = await prisma.theme.findUnique({
+        where: { color: themeColor },
+      });
 
-      return {
-        id: budget.id,
-        categoryName: budget.category.name,
-        amountSpent: totalSpentInCategory,
-        budgetLimit: budget.amount,
-        theme: budget.theme?.color,
-      };
-    });
+      if (!theme) {
+        theme = await prisma.theme.create({
+          data: { color: themeColor },
+        });
+      }
 
-    return res.json({ budgets: budgetsWithDetails });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "An error occurred" });
+      const newBudget = await prisma.budget.create({
+        data: {
+          userId,
+          categoryId: category.id,
+          themeId: theme.id,
+          amount,
+        },
+        include: {
+          category: true,
+          theme: true,
+        },
+      });
+
+      return res.status(201).json({
+        budget: newBudget,
+        message: "Budget successfully created!",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "An error occurred" });
+    }
+  } else {
+    return res.status(405).json({ message: "Method Not Allowed" });
   }
 }

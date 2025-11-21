@@ -26,7 +26,6 @@ export default async function handler(
   }
 
   try {
-    // Buscar todos os pots do usuário e calcular a soma do currentAmount
     const pots = await prisma.pot.findMany({
       where: { userId: String(userId) },
       include: {

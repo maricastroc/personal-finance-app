@@ -4,7 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import useRequest from "@/utils/useRequest";
 
 import { AxiosResponse } from "axios";
-import { AllPotsProps } from "@/pages/home";
+import { AllPotsProps } from "@/pages/home/index.page";
 import { PotCardHeader } from "./partials/PotCardHeader";
 import { PotCardValue } from "./partials/PotCardValue";
 import { PotProgressBar } from "./partials/PotProgressBar";

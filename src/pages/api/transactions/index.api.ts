@@ -26,17 +26,6 @@ export default async function handler(
 
   if (req.method === "GET") {
     try {
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { accountId: true },
-      });
-
-      if (!user || !user.accountId) {
-        return res.status(404).json({ message: "User account not found" });
-      }
-
-      const userAccountId = user.accountId;
-
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
       const filterByName = req.query.filterByName as string;
@@ -47,28 +36,24 @@ export default async function handler(
         : undefined;
 
       const where: Prisma.TransactionWhereInput = {
-        OR: [{ senderId: userAccountId }, { recipientId: userAccountId }],
+        userId: userId,
         ...(searchQuery && {
-          AND: [
+          OR: [
             {
-              OR: [
-                {
-                  sender: {
-                    name: { contains: searchQuery, mode: "insensitive" },
-                  },
-                },
-                {
-                  recipient: {
-                    name: { contains: searchQuery, mode: "insensitive" },
-                  },
-                },
-              ],
+              description: { contains: searchQuery, mode: "insensitive" },
+            },
+            {
+              contactName: { contains: searchQuery, mode: "insensitive" },
+            },
+            {
+              category: {
+                name: { contains: searchQuery, mode: "insensitive" },
+              },
             },
           ],
         }),
       };
 
-      // Adicionar filtro por categoria se existir
       if (filterByName && filterByName !== "all") {
         where.category = {
           name: {
@@ -90,10 +75,10 @@ export default async function handler(
           orderBy = { date: "asc" };
           break;
         case "a_to_z":
-          orderBy = { recipient: { name: "asc" } };
+          orderBy = { contactName: "asc" };
           break;
         case "z_to_a":
-          orderBy = { recipient: { name: "desc" } };
+          orderBy = { contactName: "desc" };
           break;
         case "highest":
           orderBy = { amount: "desc" };
@@ -108,8 +93,6 @@ export default async function handler(
           where,
           include: {
             category: true,
-            sender: true,
-            recipient: true,
           },
           orderBy,
           skip,
@@ -120,7 +103,11 @@ export default async function handler(
 
       const transactionsWithBalance = transactions.map((transaction) => {
         const balance =
-          transaction.senderId === userAccountId ? "expense" : "income";
+          transaction.type === "income"
+            ? "income"
+            : transaction.type === "expense"
+            ? "expense"
+            : "transfer";
 
         return {
           ...transaction,
@@ -144,40 +131,35 @@ export default async function handler(
       return res.status(500).json({ message: "Internal Server Error" });
     }
   } else if (req.method === "POST") {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { accountId: true },
-    });
+    const {
+      description,
+      amount,
+      categoryName,
+      contactName,
+      contactAvatar,
+      type,
+      isRecurring,
+      recurrenceDay,
+      recurrenceFrequency,
+      date,
+    } = req.body;
 
-    if (!user || !user.accountId) {
-      return res.status(404).json({ message: "User account not found" });
-    }
-
-    const accountId = user.accountId;
-
-    const { description, amount, categoryName, recipientId, isRecurring } =
-      req.body;
-
-    if (!categoryName || !amount || !recipientId || isRecurring === null) {
+    if (!categoryName || !amount || !contactName || !type) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    const recipient = await prisma.user.findUnique({
-      where: { id: recipientId },
-    });
-
-    if (!recipient) {
-      return res.status(400).json({ message: "Recipient does not exist" });
+    if (!["income", "expense", "transfer"].includes(type)) {
+      return res.status(400).json({ message: "Invalid transaction type" });
     }
 
-    const category = await prisma.category.findUnique({
+    let category = await prisma.category.findUnique({
       where: { name: categoryName },
     });
 
     if (!category) {
-      return res
-        .status(400)
-        .json({ message: "Selected category does not exist" });
+      category = await prisma.category.create({
+        data: { name: categoryName },
+      });
     }
 
     const categoryId = category.id;
@@ -186,31 +168,34 @@ export default async function handler(
       const transaction = await prisma.transaction.create({
         data: {
           description,
-          amount,
+          amount: Math.abs(amount),
           categoryId,
-          recipientId: recipient.accountId,
-          senderId: accountId,
+          contactName,
+          contactAvatar: contactAvatar || "",
+          type,
           userId,
-          isRecurring,
+          isRecurring: isRecurring || false,
+          date: date ? new Date(date) : new Date(),
         },
       });
 
       if (isRecurring) {
-        const { recurrenceDay, recurrenceFrequency } = req.body;
-
         if (!recurrenceDay || !recurrenceFrequency) {
-          return res.status(400).json({ message: "Missing required fields" });
+          return res.status(400).json({
+            message: "Missing recurrence fields for recurring transaction",
+          });
         }
 
         await prisma.recurringBill.create({
           data: {
             description,
-            amount,
+            amount: Math.abs(amount),
             recurrenceDay,
             recurrenceFrequency,
             categoryId,
-            senderId: accountId,
-            recipientId,
+            contactName,
+            contactAvatar: contactAvatar || "",
+            type,
             userId,
           },
         });
@@ -224,5 +209,7 @@ export default async function handler(
       console.error("Error creating transaction:", error);
       return res.status(500).json({ message: "Internal Server Error" });
     }
+  } else {
+    return res.status(405).json({ message: "Method Not Allowed" });
   }
 }

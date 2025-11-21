@@ -188,15 +188,9 @@ export default function Transactions() {
                 transactions.map((t, index) => (
                   <TransactionCard
                     key={index}
-                    name={
-                      t.balance === "income" ? t.sender.name : t.recipient.name
-                    }
+                    name={t.contactName}
                     balance={t.balance}
-                    avatarUrl={
-                      t.balance === "income"
-                        ? t.sender.avatarUrl
-                        : t.recipient.avatarUrl
-                    }
+                    avatarUrl={t.contactAvatar}
                     date={format(t.date, "MMM dd, yyyy")}
                     value={formatToDollar(t.amount || 0)}
                     category={t.category?.name}

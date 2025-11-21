@@ -6,6 +6,7 @@ import HomeCard from "./HomeCard";
 import { SkeletonBudgetSection } from "@/components/skeletons/SkeletonBudgetSection";
 import { FinanceItem } from "@/components/shared/FinanceItem";
 import { EmptyContent } from "@/components/shared/EmptyContent";
+import { useRouter } from "next/router";
 
 interface BudgetsSectionProps {
   isValidating: boolean;
@@ -16,6 +17,8 @@ export const BudgetsSection = ({
   isValidating,
   budgets,
 }: BudgetsSectionProps) => {
+  const router = useRouter();
+
   return (
     <HomeCard
       flexGrow
@@ -40,7 +43,21 @@ export const BudgetsSection = ({
           </div>
         </div>
       ) : (
-        <EmptyContent content="No budgets available." />
+        <EmptyContent
+          content="No budgets yet!"
+          description="Create pots to set money aside for specific goals or expenses."
+          icon={
+            <img
+              src="/assets/images/icon-nav-budgets.svg"
+              alt="Budget icon"
+              className="w-12 h-12"
+            />
+          }
+          buttonLabel="Manage Budgets"
+          onButtonClick={() => {
+            router.push("/budgets");
+          }}
+        />
       )}
     </HomeCard>
   );

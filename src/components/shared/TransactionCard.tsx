@@ -20,6 +20,7 @@ export function TransactionCard({
   isBudgetsScreen = false,
 }: TransactionCardProps) {
   const isPlaceholder = !avatarUrl;
+
   const altText = isPlaceholder ? "" : `${name}'s avatar`;
 
   return (
@@ -61,11 +62,10 @@ export function TransactionCard({
         </div>
       </div>
 
-      {/* RIGHT BLOCK */}
       <div className="flex flex-col gap-1 items-end pl-2 text-end">
         <p
           className={`font-bold text-sm ${
-            balance === "income" ? "text-secondary-green" : "text-gray-900"
+            balance === "income" ? "text-secondary-green" : "text-secondary-red"
           } ${isBudgetsScreen ? "text-xs" : ""}`}
         >
           {balance === "income" ? "+" : "-"} {value}

@@ -50,16 +50,13 @@ export function BudgetCardTransactions({
       ) : (
         <ul className="flex flex-col mt-6">
           {transactions.map((t, i) => {
-            const isIncome = t.balance === "income";
-            const user = isIncome ? t.sender : t.recipient;
-
             return (
               <li key={t.id ?? i}>
                 <TransactionCard
                   isBudgetsScreen
-                  name={user.name}
+                  name={t.contactName}
                   balance={t.balance}
-                  avatarUrl={user.avatarUrl}
+                  avatarUrl={t.contactAvatar}
                   date={format(t.date, "MMM dd, yyyy")}
                   value={formatToDollar(t.amount)}
                 />

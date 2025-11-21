@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NextSeo } from "next-seo";
 import { useAppContext } from "@/contexts/AppContext";
-import { RecurringBillsResult } from "../home";
+import { RecurringBillsResult } from "../home/index.page";
 import { SummaryCard } from "./partials/SummaryCard";
 import { MobileRecurringBillCard } from "./partials/MobileRecurringBillCard";
 import { SearchSection } from "./partials/SearchSection";

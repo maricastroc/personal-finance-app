@@ -122,12 +122,19 @@ export default function Budgets() {
               </section>
             </div>
           ) : (
-            <section className="w-full bg-white px-5 py-6 rounded-md md:p-10">
-              <EmptyContent
-                variant="secondary"
-                content="No budgets available."
-              />
-            </section>
+            <EmptyContent
+              content="Your budgets are looking kind of empty!"
+              description="Create budgets to manage your spending and achieve your financial goals."
+              variant="secondary"
+              icon={
+                <img
+                  src="/assets/images/icon-nav-budgets.svg"
+                  alt="Budget icon"
+                  className="w-12 h-12"
+                />
+              }
+              buttonLabel="Manage Budget"
+            />
           )}
         </section>
       </Layout>

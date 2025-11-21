@@ -8,7 +8,7 @@ import { PotFormModal } from "./partials/PotFormModal";
 import { SkeletonPotCard } from "./partials/SkeletonPotCard";
 import { PageHeader } from "./partials/PageHeader";
 import { PotCard } from "./partials/PotCard";
-import { AllPotsProps } from "../home";
+import { AllPotsProps } from "../home/index.page";
 import useRequest from "@/utils/useRequest";
 import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
 
@@ -87,7 +87,19 @@ export default function Pots() {
               ))}
             </div>
           ) : (
-            <EmptyContent variant="secondary" content="No pots available." />
+            <EmptyContent
+              content="Your pots are looking kind of empty!"
+              description="Create pots to set money aside for specific goals or expenses."
+              variant="secondary"
+              icon={
+                <img
+                  src="/assets/images/icon-nav-pots.svg"
+                  alt="Pot icon"
+                  className="w-12 h-12"
+                />
+              }
+              buttonLabel="Manage Pots"
+            />
           )}
         </div>
       </Layout>

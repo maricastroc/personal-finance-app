@@ -34,39 +34,54 @@ export default async function handler(
       return res.status(404).json({ message: "User not found" });
     }
 
-    const accountId = user.accountId;
-
     const transactions = await prisma.transaction.findMany({
       where: {
-        OR: [{ senderId: accountId }, { recipientId: accountId }],
+        userId: userId,
       },
       select: {
+        id: true,
         amount: true,
-        senderId: true,
-        recipientId: true,
+        type: true,
+        description: true,
+        contactName: true,
+        contactAvatar: true,
+        date: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        createdAt: true,
+      },
+      orderBy: {
+        date: "desc",
       },
     });
 
     let expenses = 0;
     let incomes = 0;
-    let currentBalance = 0;
+    let transfers = 0;
 
     transactions.forEach((transaction) => {
-      if (transaction.senderId === accountId) {
+      if (transaction.type === "expense") {
         expenses += transaction.amount;
-      }
-      if (transaction.recipientId === accountId) {
+      } else if (transaction.type === "income") {
         incomes += transaction.amount;
+      } else if (transaction.type === "transfer") {
+        transfers += transaction.amount;
       }
     });
 
-    currentBalance = incomes - expenses + (user?.initialBalance || 0);
+    const currentBalance = (user?.initialBalance || 0) + incomes - expenses;
 
     return res.json({
       currentBalance,
       expenses,
       incomes,
+      transfers,
       transactions,
+      initialBalance: user?.initialBalance || 0,
     });
   } catch (error) {
     console.error(error);

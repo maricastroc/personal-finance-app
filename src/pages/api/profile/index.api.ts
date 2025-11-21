@@ -30,14 +30,14 @@ export const config = {
 
 const handleAvatarUpload = async (file: any) => {
   if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
-    throw new Error("Apenas imagens JPEG, PNG ou WebP são permitidas");
+    throw new Error("Only JPEG, PNG, or WebP images are allowed.");
   }
 
   const fileContent = await fs.promises.readFile(file.filepath);
 
   if (fileContent.length > MAX_AVATAR_SIZE) {
     await fs.promises.unlink(file.filepath);
-    throw new Error("A imagem deve ter no máximo 2MB");
+    throw new Error("The image must be a maximum of 2MB.");
   }
 
   const base64Image = fileContent.toString("base64");
@@ -207,7 +207,7 @@ export default async function handler(
   } else if (req.method === "POST") {
     const form = new IncomingForm();
 
-    form.parse(req, async (err, fields, files) => {
+    form.parse(req, async (err, fields) => {
       if (err) {
         return res.status(500).json({ message: "Error processing form" });
       }
@@ -252,22 +252,12 @@ export default async function handler(
 
         const hashedPassword = await bcrypt.hash(validatedFields.password, 10);
 
-        let avatarUrl: string | undefined;
-
-        if (files.avatarUrl) {
-          const avatarFile = Array.isArray(files.avatarUrl)
-            ? files.avatarUrl[0]
-            : files.avatarUrl;
-
-          avatarUrl = await handleAvatarUpload(avatarFile);
-        }
-
         const newUser = await prisma.user.create({
           data: {
             name: validatedFields.name,
             email: validatedFields.email,
             password: hashedPassword,
-            avatarUrl: avatarUrl ?? null,
+            initialBalance: validatedFields.initialBalance || 0,
           },
         });
 

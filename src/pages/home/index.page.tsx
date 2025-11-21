@@ -1,7 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from "react";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 import { NextSeo } from "next-seo";
 import { useAppContext } from "@/contexts/AppContext";
 import Layout from "@/components/layouts/layout.page";
@@ -52,10 +49,6 @@ export interface RecurringBillsResult {
 
 export default function Home() {
   const { isSidebarOpen } = useAppContext();
-
-  const session = useSession();
-
-  const router = useRouter();
 
   const isRouteLoading = useLoadingOnRouteChange();
 
@@ -127,12 +120,6 @@ export default function Home() {
     isValidatingBudgets ||
     isValidatingBills;
 
-  useEffect(() => {
-    if (session.status === "unauthenticated") {
-      router.push("/auth/login");
-    }
-  }, [session.status]);
-
   return isRouteLoading ? (
     <LoadingPage />
   ) : (
@@ -162,13 +149,13 @@ export default function Home() {
               isValidating={isValidating}
             />
             <FinanceCard
-              variant="secondary"
+              variant="income"
               title="Incomes"
               value={formatToDollar(balance?.incomes || 0)}
               isValidating={isValidating}
             />
             <FinanceCard
-              variant="secondary"
+              variant="outcome"
               title="Expenses"
               value={formatToDollar(balance?.expenses || 0)}
               isValidating={isValidating}

@@ -12,7 +12,7 @@ export interface TransactionProps {
   userId: string;
   user: UserProps;
   balance?: "expense" | "income";
-  sender: UserProps;
-  recipient: UserProps;
+  contactName: string;
+  contactAvatar: string;
   category?: CategoryProps;
 }

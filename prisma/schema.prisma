@@ -19,16 +19,12 @@ model User {
   accountId        String          @unique @default(uuid())
   initialBalance   Float?
   
-  transactions         Transaction[]   @relation("userTransactions")
-  sentTransactions     Transaction[]   @relation("senderTransactions")
-  receivedTransactions  Transaction[]   @relation("recipientTransactions")
-  budgets           Budget[]
-  pots              Pot[]
-  recurringBills    RecurringBill[]    @relation("userRecurringBills")
-  sentRecurringBills RecurringBill[]   @relation("recurringBillSender")
-  receivedRecurringBills RecurringBill[] @relation("recurringBillRecipient")
-  accounts          Account[]
-  sessions          Session[]
+  transactions     Transaction[]
+  budgets          Budget[]
+  pots             Pot[]
+  recurringBills   RecurringBill[]
+  accounts         Account[]
+  sessions         Session[]
 
   @@map("users")
 }
@@ -37,22 +33,21 @@ model Transaction {
   id                   String     @id @default(uuid())
   description          String?
   amount               Float
-  createdAt  DateTime   @default(now())
+  createdAt            DateTime   @default(now())
   date                 DateTime   @default(now())
   isRecurring          Boolean    @default(false)
+  
+  contactName          String
+  contactAvatar        String
+  type                 String
+  
   categoryId           String?
   category             Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  senderId             String?
-  sender               User?      @relation("senderTransactions", fields: [senderId], references: [accountId], onDelete: SetNull)
-  recipientId          String?
-  recipient            User?      @relation("recipientTransactions", fields: [recipientId], references: [accountId], onDelete: SetNull)
   userId               String
-  user                 User       @relation("userTransactions", fields: [userId], references: [id], onDelete: Cascade)
+  user                 User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([categoryId])
-  @@index([senderId])
-  @@index([recipientId])
   @@map("transactions")
 }
 
@@ -62,19 +57,17 @@ model RecurringBill {
   amount               Float
   recurrenceDay        Int?
   recurrenceFrequency  String?
+  contactName          String
+  contactAvatar        String
+  type                 String
+  
   categoryId           String?
   category             Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   userId               String
-  user                 User       @relation("userRecurringBills", fields: [userId], references: [id], onDelete: Cascade)
-  senderId             String?
-  sender               User?      @relation("recurringBillSender", fields: [senderId], references: [accountId], onDelete: SetNull)
-  recipientId          String?
-  recipient            User?      @relation("recurringBillRecipient", fields: [recipientId], references: [accountId], onDelete: SetNull)
+  user                 User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([categoryId])
-  @@index([senderId])
-  @@index([recipientId])
   @@map("recurring_bills")
 }
 

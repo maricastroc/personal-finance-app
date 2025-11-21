@@ -12,24 +12,29 @@ import { handleApiError } from "@/utils/handleApiError";
 import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
 import { InputBase } from "@/components/core/InputBase";
 import { PasswordInput } from "@/components/core/PasswordInput";
+
 import toast from "react-hot-toast";
 import { TextLink } from "@/components/core/TextLink";
+import { CurrencyInput } from "@/components/core/CurrencyInput";
 
+// Atualize o schema para incluir o initialBalance
 const signUpFormSchema = z.object({
   email: z.string().min(3, { message: "E-mail is required." }),
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long." }),
   name: z.string().min(3, { message: "Name is required." }),
+  initialBalance: z
+    .number()
+    .min(0, { message: "Initial balance must be positive." })
+    .optional(),
 });
 
 type SignUpFormData = z.infer<typeof signUpFormSchema>;
 
 export default function SignUp() {
   const isRouteLoading = useLoadingOnRouteChange();
-
   const router = useRouter();
-
   const [createWithDemo, setCreateWithDemo] = useState(false);
 
   const {
@@ -38,7 +43,12 @@ export default function SignUp() {
     formState: { isSubmitting },
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpFormSchema),
-    defaultValues: { email: "", password: "", name: "" },
+    defaultValues: {
+      email: "",
+      password: "",
+      name: "",
+      initialBalance: 0,
+    },
   });
 
   async function handleSignUp(data: SignUpFormData) {
@@ -47,6 +57,10 @@ export default function SignUp() {
     formData.append("email", data.email);
     formData.append("name", data.name);
     formData.append("password", data.password);
+
+    if (data.initialBalance) {
+      formData.append("initialBalance", data.initialBalance.toString());
+    }
 
     try {
       const response = await api.post(
@@ -58,8 +72,7 @@ export default function SignUp() {
       );
 
       toast?.success(response.data.message);
-
-      router.push("/auth/login");
+      router.push("/home");
     } catch (error) {
       handleApiError(error);
     }
@@ -136,6 +149,22 @@ export default function SignUp() {
             )}
           />
 
+          {/* Adicione o campo Initial Balance usando CurrencyInput */}
+          <Controller
+            name="initialBalance"
+            control={control}
+            render={({ field, fieldState }) => (
+              <CurrencyInput
+                label="Initial Balance"
+                value={field.value}
+                onValueChange={field.onChange}
+                id="initial-balance"
+                placeholder="$0.00"
+                error={fieldState.error?.message}
+              />
+            )}
+          />
+
           <fieldset
             className="flex items-start gap-2"
             aria-describedby="demo-desc"
@@ -164,13 +193,13 @@ export default function SignUp() {
             </label>
           </fieldset>
 
-          <PrimaryButton isSubmitting={isSubmitting}>
+          <PrimaryButton type="submit" isSubmitting={isSubmitting}>
             Create account
           </PrimaryButton>
 
           <p className="text-sm flex items-center justify-center w-full text-gray-500 gap-2">
             Already have an account?
-            <TextLink href="/auth/login">Login</TextLink>
+            <TextLink href="/">Login</TextLink>
           </p>
         </form>
       </AuthLayout>

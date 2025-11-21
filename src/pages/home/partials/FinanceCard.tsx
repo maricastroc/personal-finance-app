@@ -5,7 +5,7 @@ import clsx from "clsx";
 interface FinanceCardProps {
   title: string;
   value: string;
-  variant?: "primary" | "secondary" | "tertiary";
+  variant?: "primary" | "secondary" | "tertiary" | "income" | "outcome";
   isValidating?: boolean;
   icon?: ReactNode;
 }
@@ -15,6 +15,16 @@ const variants = {
     card: "bg-gray-900",
     title: "text-beige-100",
     value: "text-beige-100",
+  },
+  income: {
+    card: "bg-white",
+    title: "text-gray-500",
+    value: "text-secondary-green",
+  },
+  outcome: {
+    card: "bg-white",
+    title: "text-gray-500",
+    value: "text-secondary-red",
   },
   secondary: {
     card: "bg-white",

@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-import plugin from "tailwindcss/plugin";
 
 export default {
   content: [
@@ -50,15 +49,13 @@ export default {
         xxs: "0.75rem",
       },
       fontFamily: {
-        sans: ["Public Sans", "sans-serif"], 
+        sans: ["Public Sans", "sans-serif"],
       },
       screens: {
-        'max-sm': { 'max': '500px' },
-        'max-md': { 'max': '768px' },
+        "max-sm": { max: "500px" },
+        "max-md": { max: "768px" },
       },
     },
   },
-  plugins: [
-    require("tailwind-scrollbar"),
-  ],
+  plugins: [require("tailwind-scrollbar")],
 } satisfies Config;

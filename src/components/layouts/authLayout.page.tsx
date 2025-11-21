@@ -1,13 +1,26 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Image from "next/image";
 import LogoMobile from "@public/assets/images/Logo.svg";
 import BackgroundImage from "/public/assets/images/illustration-authentication.svg";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 interface AuthLayoutProps {
   children: ReactNode;
 }
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
+  const session = useSession();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session.status === "authenticated") {
+      router.push("/home");
+    }
+  }, [session.status]);
+
   return (
     <div className="flex flex-col h-screen w-full max-w-[100rem] mx-auto">
       <header className="xl:hidden bg-gray-900 text-gray-100 w-full rounded-b-lg flex py-6 items-center justify-center">

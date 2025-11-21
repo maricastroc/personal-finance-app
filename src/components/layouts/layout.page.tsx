@@ -1,7 +1,10 @@
-import { ReactNode } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { ReactNode, useEffect } from "react";
 import { Footer } from "../shared/Footer";
 import { useAppContext } from "@/contexts/AppContext";
 import { Sidebar } from "../shared/Sidebar";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,6 +13,16 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const { isSidebarOpen, handleIsSidebarOpen } = useAppContext();
 
+  const session = useSession();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.push("/");
+    }
+  }, [session.status]);
+  console.log(session);
   return (
     <div
       className={`flex flex-col w-screen min-h-screen h-full ${

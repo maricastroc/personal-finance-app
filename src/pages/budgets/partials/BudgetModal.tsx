@@ -186,7 +186,6 @@ export function BudgetModal({
               )}
             </div>
 
-            {/* LIMIT */}
             <div className="flex flex-col mt-4">
               <label
                 htmlFor="budgetLimit"
@@ -221,7 +220,6 @@ export function BudgetModal({
               )}
             </div>
 
-            {/* THEME */}
             <div className="flex flex-col mt-4">
               <label
                 htmlFor="theme"
@@ -241,7 +239,11 @@ export function BudgetModal({
               )}
             </div>
 
-            <PrimaryButton isSubmitting={isSubmitting}>
+            <PrimaryButton
+              className="mt-8"
+              type="submit"
+              isSubmitting={isSubmitting}
+            >
               Save Changes
             </PrimaryButton>
           </form>

@@ -26,26 +26,12 @@ export default async function handler(
   }
 
   try {
-    // Obtenha o `accountId` do usuário
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { accountId: true },
-    });
-
-    if (!user || !user.accountId) {
-      return res.status(404).json({ message: "User account not found" });
-    }
-
-    const userAccountId = user.accountId;
-
     const transactions = await prisma.transaction.findMany({
       where: {
         userId: String(userId),
       },
       include: {
         category: true,
-        sender: true,
-        recipient: true,
       },
       orderBy: {
         date: "desc",
@@ -54,8 +40,7 @@ export default async function handler(
     });
 
     const transactionsWithBalance = transactions.map((transaction) => {
-      const balance =
-        transaction.senderId === userAccountId ? "expense" : "income";
+      const balance = transaction.type;
 
       return {
         ...transaction,

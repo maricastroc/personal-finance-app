@@ -23,6 +23,7 @@ type SignInFormData = z.infer<typeof signInFormSchema>;
 
 export default function Login() {
   const router = useRouter();
+
   const isRouteLoading = useLoadingOnRouteChange();
 
   const {
@@ -46,7 +47,7 @@ export default function Login() {
         toast.error(response.error);
       } else {
         toast.success("Welcome to the Finance App!");
-        router.push("/");
+        router.push("/home");
       }
     } catch (error) {
       handleApiError(error);
@@ -114,7 +115,13 @@ export default function Login() {
               />
             )}
           />
-          <PrimaryButton isSubmitting={isSubmitting}>Login</PrimaryButton>
+          <PrimaryButton
+            className="mt-8"
+            type="submit"
+            isSubmitting={isSubmitting}
+          >
+            Login
+          </PrimaryButton>
 
           <section className="flex flex-col gap-1">
             <p className="text-sm flex items-center justify-center w-full text-gray-500 gap-2">

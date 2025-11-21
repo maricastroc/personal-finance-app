@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-
 import { getServerSession } from "next-auth";
 import {
   isBefore,
@@ -36,22 +35,18 @@ export default async function handler(
   }
 
   try {
-    const recurringBills = await prisma.user.findMany({
-      where: { id: String(userId) },
+    const recurringBills = await prisma.recurringBill.findMany({
+      where: {
+        userId: String(userId),
+      },
       include: {
-        recurringBills: {
-          include: {
-            recipient: true,
-          },
-        },
+        category: true,
       },
     });
 
-    if (recurringBills.length === 0 || !recurringBills[0]?.recurringBills) {
+    if (recurringBills.length === 0) {
       return res.status(404).json({ message: "No recurring bills found" });
     }
-
-    const bills = recurringBills[0].recurringBills;
 
     const today = startOfDay(new Date());
     const dueSoonDate = addDays(today, 3);
@@ -74,7 +69,7 @@ export default async function handler(
       monthlyTotal: 0,
     };
 
-    for (const bill of bills) {
+    for (const bill of recurringBills) {
       const recurrenceDate = new Date(
         today.getFullYear(),
         today.getMonth(),
@@ -82,6 +77,7 @@ export default async function handler(
       );
 
       if (
+        bill.type === "expense" &&
         isWithinInterval(recurrenceDate, {
           start: startOfMonthDate,
           end: endOfMonthDate,

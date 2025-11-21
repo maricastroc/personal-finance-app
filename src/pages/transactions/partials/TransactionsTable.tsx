@@ -27,7 +27,7 @@ export const TransactionTable = ({
             scope="col"
             className="px-4 py-2 text-xs text-gray-600 text-left w-2/5"
           >
-            Recipient / Sender
+            Recipient Name
           </th>
           <th
             scope="col"
@@ -63,15 +63,7 @@ export const TransactionTable = ({
           ))
         ) : transactions && transactions.length > 0 ? (
           transactions.map((transaction) => {
-            const name =
-              transaction.balance === "income"
-                ? transaction.sender.name
-                : transaction.recipient.name;
-
-            const avatarUrl =
-              transaction.balance === "income"
-                ? transaction.sender.avatarUrl
-                : transaction.recipient.avatarUrl;
+            const name = transaction?.contactName;
 
             return (
               <tr key={transaction.id} className="border-t">
@@ -79,7 +71,7 @@ export const TransactionTable = ({
                   <TransactionCard
                     name={name}
                     balance={transaction.balance}
-                    avatarUrl={avatarUrl}
+                    avatarUrl={transaction?.contactAvatar}
                     date={format(transaction.date, "MMM dd, yyyy")}
                     value={formatToDollar(transaction.amount || 0)}
                     category={transaction.category?.name}

@@ -1,4 +1,4 @@
-import { RecurringBillsResult } from "@/pages/home";
+import { RecurringBillsResult } from "@/pages/home/index.page";
 import { formatToDollar } from "@/utils/formatToDollar";
 import { Skeleton } from "@mui/material";
 
@@ -34,12 +34,11 @@ export const SummaryCard = ({
           </div>
         ) : (
           <>
-            {/* Paid Bills */}
             <div className="flex items-center justify-between w-full">
               <p className="text-xs text-gray-500">Paid Bills</p>
               <p className="font-bold text-gray-900 text-xs">
-                {`${recurringBills?.paid.bills.length} (${formatToDollar(
-                  recurringBills?.paid.total || 0
+                {`${recurringBills?.paid?.bills?.length || 0} (${formatToDollar(
+                  recurringBills?.paid?.total || 0
                 )})`}
               </p>
             </div>
@@ -50,13 +49,12 @@ export const SummaryCard = ({
               className="bg-gray-200 w-full h-[0.05rem] my-3"
             />
 
-            {/* Total Upcoming */}
             <div className="flex items-center justify-between w-full">
               <p className="text-xs text-gray-500">Total Upcoming</p>
               <p className="font-bold text-gray-900 text-xs">
-                {`${recurringBills?.upcoming.bills.length} (${formatToDollar(
-                  recurringBills?.upcoming.total || 0
-                )})`}
+                {`${
+                  recurringBills?.upcoming.bills.length || 0
+                } (${formatToDollar(recurringBills?.upcoming.total || 0)})`}
               </p>
             </div>
 
@@ -66,13 +64,12 @@ export const SummaryCard = ({
               className="bg-gray-200 w-full h-[0.05rem] my-3"
             />
 
-            {/* Due Soon */}
             <div className="flex items-center justify-between w-full">
               <p className="text-xs text-secondary-red">Due Soon</p>
               <p className="font-bold text-secondary-red text-xs">
-                {`${recurringBills?.dueSoon.bills.length} (${formatToDollar(
-                  recurringBills?.dueSoon.total || 0
-                )})`}
+                {`${
+                  recurringBills?.dueSoon.bills.length || 0
+                } (${formatToDollar(recurringBills?.dueSoon.total || 0)})`}
               </p>
             </div>
           </>

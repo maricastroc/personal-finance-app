@@ -16,7 +16,6 @@ interface SelectInputProps {
   includeAll?: boolean;
   placeholder: string;
   defaultValue?: string | null;
-  contentWidth?: number | null;
 }
 
 export const SelectInput = ({
@@ -27,7 +26,6 @@ export const SelectInput = ({
   existedCategories,
   placeholder,
   defaultValue = null,
-  contentWidth = null,
 }: SelectInputProps) => {
   return (
     <Select.Root
@@ -49,8 +47,12 @@ export const SelectInput = ({
       <Select.Portal>
         <Select.Content
           position="popper"
-          className="z-[10000] mt-1 bg-white text-gray-600 rounded-md shadow-lg border border-gray-200 max-h-40 overflow-y-auto"
-          style={contentWidth ? { width: `${contentWidth}px` } : {}}
+          className="z-[10000] min-w-full mt-1 bg-white text-gray-600 rounded-md shadow-lg border border-gray-200 max-h-60 overflow-y-auto"
+          style={{
+            width: "var(--radix-select-trigger-width)",
+            maxHeight: "200px",
+          }}
+          sideOffset={5}
         >
           <Select.ScrollUpButton
             className="flex items-center justify-center text-gray-500 hover:text-gray-900"
@@ -106,7 +108,7 @@ const SelectItem = React.forwardRef(
       value={value}
       disabled={disabled}
       className={`
-        flex items-center px-4 py-2 text-sm rounded-md
+        flex items-center px-4 w-full py-2 text-sm rounded-md
         focus:outline-none focus:ring-2 focus:ring-blue-500
         ${
           disabled

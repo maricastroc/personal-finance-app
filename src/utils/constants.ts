@@ -69,6 +69,36 @@ export const colors = [
   { name: "White", hex: "#ffffff" },
 ];
 
+export const avatarUrls = [
+  "./assets/images/avatars/aqua-flow-utilities.jpg",
+  "./assets/images/avatars/buzz-marketing-group.jpg",
+  "./assets/images/avatars/bytewise.jpg",
+  "./assets/images/avatars/ecofuel-energy.jpg",
+  "./assets/images/avatars/elevate-education.jpg",
+  "./assets/images/avatars/flavor-fiesta.jpg",
+  "./assets/images/avatars/green-plate-eatery.jpg",
+  "./assets/images/avatars/pixel-playground.jpg",
+  "./assets/images/avatars/savory-bites-bistro.jpg",
+  "./assets/images/avatars/serenity-spa-and-wellness.jpg",
+  "./assets/images/avatars/spark-electric-solutions.jpg",
+  "./assets/images/avatars/swift-ride-share.jpg",
+  "./assets/images/avatars/technova-innovations.jpg",
+  "./assets/images/avatars/urban-services-hub.jpg",
+];
+
+export const CATEGORIES = {
+  ENTERTAINMENT: "1", // Entertainment
+  GENERAL: "2", // General
+  BILLS: "3", // Bills
+  GROCERIES: "4", // Groceries
+  DINING_OUT: "5", // Dining Out
+  TRANSPORTATION: "6", // Transportation
+  PERSONAL_CARE: "7", // Personal Care
+  EDUCATION: "8", // Education
+  LIFESTYLE: "9", // Lifestyle
+  SHOPPING: "10", // Shopping
+};
+
 export const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-export const MAX_AVATAR_SIZE = 2 * 1024 * 1024;
+export const MAX_AVATAR_SIZE = 1024 * 1024;

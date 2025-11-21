@@ -93,7 +93,7 @@ export default function Profile() {
   });
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: "/auth/login" });
+    await signOut({ callbackUrl: "/" });
     toast?.success("See you soon!");
   };
 

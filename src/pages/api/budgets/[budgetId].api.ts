@@ -40,8 +40,6 @@ export default async function handler(
         return res.status(404).json({ message: "User not found" });
       }
 
-      const accountId = user.accountId;
-
       const budget = await prisma.budget.findUnique({
         where: { id: String(budgetId) },
         include: {
@@ -56,13 +54,12 @@ export default async function handler(
 
       const transactions = await prisma.transaction.findMany({
         where: {
-          senderId: accountId,
+          userId,
           categoryId: budget.categoryId,
+          type: "expense",
         },
         include: {
           category: true,
-          sender: true,
-          recipient: true,
         },
         orderBy: {
           date: "desc",

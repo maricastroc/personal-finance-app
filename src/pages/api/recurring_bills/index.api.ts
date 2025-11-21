@@ -53,10 +53,10 @@ export default async function handler(
       orderBy = { recurrenceDay: "asc" };
       break;
     case "a_to_z":
-      orderBy = { recipient: { name: "asc" } };
+      orderBy = { contactName: "asc" };
       break;
     case "z_to_a":
-      orderBy = { recipient: { name: "desc" } };
+      orderBy = { contactName: "desc" };
       break;
     case "highest":
       orderBy = { amount: "desc" };
@@ -74,19 +74,14 @@ export default async function handler(
       include: {
         recurringBills: {
           where: {
-            recipient: {
-              name: {
-                contains: searchQuery,
-                mode: "insensitive",
-              },
+            contactName: {
+              contains: searchQuery,
+              mode: "insensitive",
             },
           },
           orderBy,
           skip,
           take: limit,
-          include: {
-            recipient: true,
-          },
         },
       },
     });
@@ -94,11 +89,9 @@ export default async function handler(
     const totalTransactions = await prisma.recurringBill.count({
       where: {
         userId: String(userId),
-        recipient: {
-          name: {
-            contains: searchQuery,
-            mode: "insensitive",
-          },
+        contactName: {
+          contains: searchQuery,
+          mode: "insensitive",
         },
       },
     });
