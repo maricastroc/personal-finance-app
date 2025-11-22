@@ -177,6 +177,13 @@ export function TransferFormModal({
     }
   }, [transaction, isEdit, setValue]);
 
+  useEffect(() => {
+    if (!isRecurring) {
+      setValue("recurrenceFrequency", undefined);
+      setValue("recurrenceDay", undefined);
+    }
+  }, [isRecurring]);
+
   return (
     <Modal
       id={id}
@@ -210,7 +217,6 @@ export function TransferFormModal({
               control={control}
               render={({ field, fieldState }) => (
                 <InputBase
-                  required
                   label="Recipient name"
                   id="recipient-name"
                   type="text"
@@ -229,7 +235,6 @@ export function TransferFormModal({
             control={control}
             render={({ field, fieldState }) => (
               <InputBase
-                required
                 label="Description"
                 id="description"
                 type="text"

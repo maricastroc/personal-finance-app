@@ -163,7 +163,6 @@ export function CurrencyInput({
           aria-required={required}
           required={required}
           className={`pl-10 ${className}`}
-          error={error}
         />
       </div>
 
