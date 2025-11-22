@@ -1,3 +1,4 @@
+import * as Dialog from "@radix-ui/react-dialog";
 import useRequest from "@/utils/useRequest";
 import { useState } from "react";
 import { BudgetCardHeader } from "./BudgetCardHeader";
@@ -101,21 +102,21 @@ export default function BudgetCard({
       />
 
       {budget && (
-        <BudgetModal
-          isEdit
-          id="budget-modal"
-          isOpen={isEditOpen}
-          onOpenChange={setIsEditOpen}
-          onClose={() => setIsEditOpen(false)}
-          budgetId={budgetId}
-          categoryName={budget.budgetDetails.categoryName}
-          budgetLimit={budget.budgetDetails.budgetLimit}
-          theme={budget.budgetDetails.theme}
-          onSubmitForm={async () => {
-            await mutate();
-            await onSubmitForm();
-          }}
-        />
+        <Dialog.Root open={isEditOpen} onOpenChange={setIsEditOpen}>
+          <BudgetModal
+            isEdit
+            id="budget-modal"
+            onClose={() => setIsEditOpen(false)}
+            budgetId={budgetId}
+            categoryName={budget.budgetDetails.categoryName}
+            budgetLimit={budget.budgetDetails.budgetLimit}
+            theme={budget.budgetDetails.theme}
+            onSubmitForm={async () => {
+              await mutate();
+              await onSubmitForm();
+            }}
+          />
+        </Dialog.Root>
       )}
 
       {budget && (

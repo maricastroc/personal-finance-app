@@ -46,8 +46,6 @@ export const PageHeader = ({
 
         <BudgetModal
           id="budget-modal"
-          isOpen={isBudgetModalOpen}
-          onOpenChange={() => setIsBudgetModalOpen(!isBudgetModalOpen)}
           onClose={() => setIsBudgetModalOpen(false)}
           existedCategories={getBudgetsCategories(budgets)}
           onSubmitForm={async () => {

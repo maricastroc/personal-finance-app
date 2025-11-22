@@ -8,16 +8,15 @@ import { getThemeOptions } from "@/utils/getThemeOptions";
 import { handleApiError } from "@/utils/handleApiError";
 import useRequest from "@/utils/useRequest";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as Dialog from "@radix-ui/react-dialog";
-import { X } from "phosphor-react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
+import { Modal } from "@/components/shared/Modal";
+import { CurrencyInput } from "@/components/core/CurrencyInput";
+import InputLabel from "@/components/core/InputLabel";
 
 interface EditBudgetModalProps {
   id: string;
-  isOpen: boolean;
-  onOpenChange: (value: boolean) => void;
   onClose: () => void;
   categoryName?: string;
   budgetLimit?: number;
@@ -41,8 +40,6 @@ export type BudgetFormData = z.infer<ReturnType<typeof budgetFormSchema>>;
 
 export function BudgetModal({
   id,
-  isOpen,
-  onOpenChange,
   onClose,
   categoryName,
   budgetLimit,
@@ -53,7 +50,7 @@ export function BudgetModal({
   isEdit = false,
 }: EditBudgetModalProps) {
   const {
-    register,
+    control,
     handleSubmit,
     reset,
     setValue,
@@ -66,6 +63,12 @@ export function BudgetModal({
       theme: isEdit ? theme : "",
     },
   });
+
+  const modalTitle = isEdit ? "Edit Budget" : "Add New Budget";
+
+  const modalDescription = isEdit
+    ? "As your budgets change, feel free to update your spending limits."
+    : "Choose a category to set a spending budget. These categories can help you monitor spending.";
 
   const { data: categories } = useRequest<CategoryProps[]>({
     url: "/categories",
@@ -111,144 +114,92 @@ export function BudgetModal({
   };
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-[990] bg-black bg-opacity-70" />
+    <Modal
+      id={id}
+      onClose={onClose}
+      title={modalTitle}
+      description={modalDescription}
+    >
+      <form
+        className="mt-6"
+        onSubmit={
+          isEdit
+            ? handleSubmit(handleEditBudget)
+            : handleSubmit(handleCreateBudget)
+        }
+      >
+        <div className="flex flex-col">
+          <InputLabel htmlFor="budgetCategory">Budget Category</InputLabel>
 
-        <Dialog.Content
-          id={id}
-          aria-labelledby={`${id}-title`}
-          aria-describedby={`${id}-desc`}
-          className="fixed z-[999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                    w-[90vw] md:w-[560px] bg-white rounded-lg shadow-lg p-6 md:p-8"
-        >
-          <Dialog.Close
-            aria-label="Close modal"
-            onClick={onClose}
-            className="absolute top-4 right-4 hover:bg-grey-900 hover:text-white
-              transition-all duration-300 text-grey-500 p-[0.1rem]
-              rounded-full border border-grey-900 focus:outline-offset-2"
-          >
-            <X size={16} />
-          </Dialog.Close>
-
-          <Dialog.Title
-            id={`${id}-title`}
-            className="text-xl md:text-2xl font-semibold text-grey-900 mb-2"
-          >
-            {isEdit ? "Edit Budget" : "Add New Budget"}
-          </Dialog.Title>
-
-          <Dialog.Description
-            id={`${id}-desc`}
-            className="text-sm text-grey-500 mb-4"
-          >
-            {isEdit
-              ? "As your budgets change, feel free to update your spending limits."
-              : "Choose a category to set a spending budget. These categories can help you monitor spending."}
-          </Dialog.Description>
-
-          <form
-            className="mt-6"
-            onSubmit={
-              isEdit
-                ? handleSubmit(handleEditBudget)
-                : handleSubmit(handleCreateBudget)
-            }
-          >
-            <div className="flex flex-col">
-              <label
-                htmlFor="category"
-                className="text-xs font-bold text-grey-500 mb-1"
-              >
-                Budget Category
-              </label>
-
-              {categories && (
+          {categories && (
+            <Controller
+              name="category"
+              control={control}
+              render={({ field }) => (
                 <SelectInput
                   label="Category"
-                  defaultValue={categoryName}
-                  existedCategories={existedCategories}
-                  data={categories}
-                  onSelect={(value: string) => setValue("category", value)}
                   placeholder="Select a Category..."
-                  aria-describedby={
-                    errors.category ? "category-error" : undefined
-                  }
+                  existedCategories={existedCategories}
+                  defaultValue={categoryName}
+                  onSelect={(value) => field.onChange(value.toLowerCase())}
+                  data={categories}
                 />
               )}
+            />
+          )}
 
-              {errors.category && (
-                <ErrorMessage
-                  id="category-error"
-                  message={errors.category.message}
-                />
-              )}
-            </div>
+          {errors.category && (
+            <ErrorMessage
+              id="category-error"
+              message={errors.category.message}
+            />
+          )}
+        </div>
 
-            <div className="flex flex-col mt-4">
-              <label
-                htmlFor="budgetLimit"
-                className="text-xs font-bold text-grey-500 mb-1"
-              >
-                Maximum Spend ($)
-              </label>
-
-              <div className="relative w-full">
-                <span className="absolute inset-y-0 left-3 flex items-center text-grey-500">
-                  $
-                </span>
-
-                <input
-                  type="number"
-                  id="budgetLimit"
-                  step="0.01"
-                  className="text-sm w-full h-12 rounded-md border border-beige-500 pl-[1.8rem] pr-3"
-                  placeholder="Maximum Spend"
-                  {...register("budgetLimit", { valueAsNumber: true })}
-                  aria-describedby={
-                    errors.budgetLimit ? "budget-limit-error" : undefined
-                  }
-                />
-              </div>
-
-              {errors.budgetLimit && (
-                <ErrorMessage
-                  id="budget-limit-error"
-                  message={errors.budgetLimit.message}
-                />
-              )}
-            </div>
-
-            <div className="flex flex-col mt-4">
-              <label
-                htmlFor="theme"
-                className="text-xs font-bold text-grey-500 mb-1"
-              >
-                Theme Color
-              </label>
-
-              <SelectTheme
-                defaultValue={theme}
-                data={getThemeOptions}
-                onSelect={(value: string) => setValue("theme", value)}
+        <div className="flex flex-col mt-4">
+          <Controller
+            name="budgetLimit"
+            control={control}
+            render={({ field, fieldState }) => (
+              <CurrencyInput
+                label="Maximum Spend ($)"
+                value={field.value}
+                onValueChange={field.onChange}
+                id="budgetLimit"
+                placeholder="$0.00"
+                error={fieldState.error?.message}
               />
+            )}
+          />
+        </div>
 
-              {errors.theme && (
-                <ErrorMessage id="theme-error" message={errors.theme.message} />
-              )}
-            </div>
+        <div className="flex flex-col mt-4">
+          <label
+            htmlFor="theme"
+            className="text-xs font-bold text-grey-500 mb-1"
+          >
+            Theme Color
+          </label>
 
-            <PrimaryButton
-              className="mt-8"
-              type="submit"
-              isSubmitting={isSubmitting}
-            >
-              Save Changes
-            </PrimaryButton>
-          </form>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+          <SelectTheme
+            defaultValue={theme}
+            data={getThemeOptions}
+            onSelect={(value: string) => setValue("theme", value)}
+          />
+
+          {errors.theme && (
+            <ErrorMessage id="theme-error" message={errors.theme.message} />
+          )}
+        </div>
+
+        <PrimaryButton
+          className="mt-8"
+          type="submit"
+          isSubmitting={isSubmitting}
+        >
+          Save Changes
+        </PrimaryButton>
+      </form>
+    </Modal>
   );
 }

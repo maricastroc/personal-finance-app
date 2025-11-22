@@ -47,8 +47,6 @@ export default function Transactions() {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
   const { isSidebarOpen } = useAppContext();
 
   const isRouteLoading = useLoadingOnRouteChange();
@@ -128,16 +126,6 @@ export default function Transactions() {
     setCurrentPage(1);
   }, []);
 
-  const handleEditTransaction = (transaction: TransactionProps) => {
-    console.log("Edit transaction:", transaction);
-    // Abrir modal de edição, navegar para página de edição, etc.
-  };
-
-  const handleDeleteTransaction = (transaction: TransactionProps) => {
-    console.log("Delete transaction:", transaction);
-    // Abrir modal de confirmação, fazer chamada API para deletar, etc.
-  };
-
   if (isRouteLoading) return <LoadingPage />;
 
   return (
@@ -195,8 +183,6 @@ export default function Transactions() {
               isValidating={isValidating}
               categories={categories}
               mutate={mutate}
-              isEditModalOpen={isEditModalOpen}
-              setIsEditModalOpen={setIsEditModalOpen}
             />
 
             <div
@@ -217,8 +203,6 @@ export default function Transactions() {
                     date={format(transaction.date, "MMM dd, yyyy")}
                     value={formatToDollar(transaction.amount || 0)}
                     category={transaction.category?.name}
-                    onEdit={() => handleEditTransaction(transaction)}
-                    onDelete={() => handleDeleteTransaction(transaction)}
                   />
                 ))
               ) : (
