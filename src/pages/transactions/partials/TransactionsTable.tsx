@@ -12,6 +12,10 @@ import { AxiosResponse } from "axios";
 import { ActionsSection } from "./ActionsSection";
 import { useState } from "react";
 import { TransferFormModal } from "./TransferFormModal";
+import { api } from "@/lib/axios";
+import toast from "react-hot-toast";
+import { handleApiError } from "@/utils/handleApiError";
+import { DeleteModal } from "@/components/shared/DeleteModal";
 
 interface TransactionTableProps {
   transactions: TransactionProps[];
@@ -29,16 +33,47 @@ export const TransactionTable = ({
   const [editingTransaction, setEditingTransaction] =
     useState<TransactionProps | null>(null);
 
+  const [deletingTransaction, setDeletingTransaction] =
+    useState<TransactionProps | null>(null);
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleEdit = (transaction: TransactionProps) => {
     setEditingTransaction(transaction);
     setIsEditModalOpen(true);
   };
 
+  const handleDelete = (transaction: TransactionProps) => {
+    setDeletingTransaction(transaction);
+    setIsDeleteModalOpen(true);
+  };
+
   const handleCloseModal = () => {
     setIsEditModalOpen(false);
     setEditingTransaction(null);
+  };
+
+  const handleDeleteTransaction = async () => {
+    try {
+      setIsSubmitting(true);
+      const response = await api.delete(
+        `/transactions/${deletingTransaction?.id}`
+      );
+
+      toast.success(response.data.message);
+
+      await mutate();
+      setIsDeleteModalOpen(false);
+      setDeletingTransaction(null);
+    } catch (error) {
+      handleApiError(error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -146,7 +181,7 @@ export const TransactionTable = ({
 
                   <ActionsSection
                     transaction={transaction}
-                    onDelete={() => console.log("deleted")}
+                    onDelete={handleDelete}
                     onEdit={handleEdit}
                   />
                 </tr>
@@ -163,20 +198,30 @@ export const TransactionTable = ({
       </table>
 
       <Dialog.Root open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-        <Dialog.Trigger asChild>
-          {categories && editingTransaction && (
-            <TransferFormModal
-              isEdit
-              transaction={editingTransaction}
-              id="transfer-form-modal"
-              categories={categories}
-              onSubmitForm={async (): Promise<void> => {
-                await mutate();
-              }}
-              onClose={handleCloseModal}
-            />
-          )}
-        </Dialog.Trigger>
+        {categories && editingTransaction && (
+          <TransferFormModal
+            isEdit
+            transaction={editingTransaction}
+            id="transfer-form-modal"
+            categories={categories}
+            onSubmitForm={async (): Promise<void> => {
+              await mutate();
+            }}
+            onClose={handleCloseModal}
+          />
+        )}
+      </Dialog.Root>
+
+      <Dialog.Root open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <DeleteModal
+          id="delete-transaction"
+          title={deletingTransaction?.contactName || ""}
+          description="This action cannot be undone. All associated recurring bills and data
+            for this transaction will be permanently removed."
+          onClose={() => setIsDeleteModalOpen(false)}
+          onDelete={handleDeleteTransaction}
+          isSubmitting={isSubmitting}
+        />
       </Dialog.Root>
     </section>
   );

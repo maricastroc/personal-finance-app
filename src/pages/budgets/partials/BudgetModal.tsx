@@ -59,7 +59,7 @@ export function BudgetModal({
     resolver: zodResolver(budgetFormSchema()),
     defaultValues: {
       category: isEdit ? categoryName : "",
-      budgetLimit: isEdit ? budgetLimit : undefined,
+      budgetLimit: isEdit ? budgetLimit : 0,
       theme: isEdit ? theme : "",
     },
   });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
@@ -214,11 +215,14 @@ export default async function handler(
 
     try {
       await prisma.$transaction(async (tx) => {
+        await tx.transaction.delete({
+          where: { id: String(transactionId) },
+        });
+
         if (existingTransaction.recurringBillId) {
           const otherTransactions = await tx.transaction.count({
             where: {
               recurringBillId: existingTransaction.recurringBillId,
-              NOT: { id: String(transactionId) },
             },
           });
 
@@ -228,10 +232,6 @@ export default async function handler(
             });
           }
         }
-
-        await tx.transaction.delete({
-          where: { id: String(transactionId) },
-        });
       });
 
       return res.status(200).json({
@@ -239,6 +239,17 @@ export default async function handler(
       });
     } catch (error) {
       console.error("Error deleting transaction:", error);
+
+      if (
+        error instanceof Error &&
+        "code" in error &&
+        (error as any).code === "P2025"
+      ) {
+        return res.status(200).json({
+          message: "Transaction already deleted or not found",
+        });
+      }
+
       return res.status(500).json({ message: "Internal Server Error" });
     }
   }

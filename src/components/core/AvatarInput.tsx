@@ -12,7 +12,6 @@ export const AvatarInput = ({
   onChange,
   inputFileRef,
 }: AvatarInputProps) => {
-  console.log(avatarPreview);
   return (
     <div className="flex flex-col w-full sm:mb-4 overflow-hidden sm:grid sm:grid-cols-[1fr,3.6fr] items-center gap-4">
       <div className="flex items-center justify-center border-2 border-grey-300 rounded-full w-30 h-30">

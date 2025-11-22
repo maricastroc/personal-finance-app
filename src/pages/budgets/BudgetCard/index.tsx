@@ -9,8 +9,11 @@ import { BudgetCardLimitInfo } from "./BudgetCardLimitInfo";
 import { BudgetCardSpentInfo } from "./BudgetCardSpentInfo";
 import { BudgetCardTransactions } from "./BudgetCardTransactions";
 import { BudgetModal } from "../partials/BudgetModal";
-import { DeleteBudgetModal } from "../partials/DeleteBudgetModal";
 import { useRouter } from "next/router";
+import { DeleteModal } from "@/components/shared/DeleteModal";
+import { api } from "@/lib/axios";
+import toast from "react-hot-toast";
+import { handleApiError } from "@/utils/handleApiError";
 
 interface DetailsProps {
   categoryName: string;
@@ -58,6 +61,26 @@ export default function BudgetCard({
       keepPreviousData: true,
     }
   );
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleDeleteBudget = async () => {
+    try {
+      setIsSubmitting(true);
+      const response = await api.delete(`/budgets/${budget?.budget.id}`);
+
+      toast.success(response.data.message);
+
+      await mutate();
+      await onSubmitForm();
+
+      setIsDeleteOpen(false);
+    } catch (error) {
+      handleApiError(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const pct = Math.min(100, budget?.budgetDetails.percentageSpent || 0);
 
@@ -120,17 +143,17 @@ export default function BudgetCard({
       )}
 
       {budget && (
-        <DeleteBudgetModal
-          id="delete-budget-modal"
-          isOpen={isDeleteOpen}
-          onOpenChange={setIsDeleteOpen}
-          onClose={() => setIsDeleteOpen(false)}
-          budget={budget.budget}
-          onSubmitForm={async () => {
-            await mutate();
-            await onSubmitForm();
-          }}
-        />
+        <Dialog.Root open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+          <DeleteModal
+            id="delete-budget-modal"
+            title={budget?.budget?.category?.name}
+            description="This action cannot be undone. All associated transactions and data
+            for this budget will be permanently removed."
+            isSubmitting={isSubmitting}
+            onDelete={handleDeleteBudget}
+            onClose={() => setIsDeleteOpen(false)}
+          />
+        </Dialog.Root>
       )}
     </section>
   );

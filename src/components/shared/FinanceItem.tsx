@@ -36,12 +36,14 @@ export function FinanceItem({
 
         <div className="flex items-center">
           <h2 className="text-sm font-bold text-grey-900">
-            {formatToDollar(value || 0)}
+            {isBudgetsPage
+              ? formatToDollar(amountSpent || 0)
+              : formatToDollar(value || 0)}
           </h2>
 
           {isBudgetsPage && amountSpent !== undefined && (
             <p className="ml-1 text-xs text-grey-500">
-              of {formatToDollar(amountSpent)}
+              of {formatToDollar(value || 0)}
             </p>
           )}
         </div>
