@@ -16,7 +16,7 @@ export const SummaryCard = ({
       aria-labelledby="summary-title"
       className="rounded-xl flex bg-white p-6 text-start flex-col"
     >
-      <h2 id="summary-title" className="text-base font-bold text-gray-900 mb-4">
+      <h2 id="summary-title" className="text-base font-bold text-grey-900 mb-4">
         Summary
       </h2>
 
@@ -35,8 +35,8 @@ export const SummaryCard = ({
         ) : (
           <>
             <div className="flex items-center justify-between w-full">
-              <p className="text-xs text-gray-500">Paid Bills</p>
-              <p className="font-bold text-gray-900 text-xs">
+              <p className="text-xs text-grey-500">Paid Bills</p>
+              <p className="font-bold text-grey-900 text-xs">
                 {`${recurringBills?.paid?.bills?.length || 0} (${formatToDollar(
                   recurringBills?.paid?.total || 0
                 )})`}
@@ -46,12 +46,12 @@ export const SummaryCard = ({
             <span
               role="separator"
               aria-hidden="true"
-              className="bg-gray-200 w-full h-[0.05rem] my-3"
+              className="bg-grey-300 w-full h-[0.05rem] my-3"
             />
 
             <div className="flex items-center justify-between w-full">
-              <p className="text-xs text-gray-500">Total Upcoming</p>
-              <p className="font-bold text-gray-900 text-xs">
+              <p className="text-xs text-grey-500">Total Upcoming</p>
+              <p className="font-bold text-grey-900 text-xs">
                 {`${
                   recurringBills?.upcoming.bills.length || 0
                 } (${formatToDollar(recurringBills?.upcoming.total || 0)})`}
@@ -61,7 +61,7 @@ export const SummaryCard = ({
             <span
               role="separator"
               aria-hidden="true"
-              className="bg-gray-200 w-full h-[0.05rem] my-3"
+              className="bg-grey-300 w-full h-[0.05rem] my-3"
             />
 
             <div className="flex items-center justify-between w-full">

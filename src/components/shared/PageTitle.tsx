@@ -3,5 +3,5 @@ interface PageTitleProps {
 }
 
 export const PageTitle = ({ title }: PageTitleProps) => {
-  return <h1 className="text-gray-900 font-bold text-3xl">{title}</h1>;
+  return <h1 className="text-grey-900 font-bold text-3xl">{title}</h1>;
 };

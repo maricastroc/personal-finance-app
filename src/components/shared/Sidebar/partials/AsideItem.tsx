@@ -35,7 +35,7 @@ export function AsideItem({ item, active, menuShown }: Item) {
       {menuShown ? (
         <p
           className={`font-semibold text-base ${
-            active ? "text-gray-900" : "text-gray-300"
+            active ? "text-grey-900" : "text-grey-300"
           }`}
         >
           {item.name}

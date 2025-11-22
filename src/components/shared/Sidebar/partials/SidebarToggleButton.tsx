@@ -29,7 +29,7 @@ export function SidebarToggleButton({
     >
       <FontAwesomeIcon
         icon={isOpen ? faCaretLeft : faCaretRight}
-        className="text-gray-300"
+        className="text-grey-300"
         style={{
           fontSize: "1.5rem",
           marginLeft: isOpen ? 0 : 20,
@@ -38,7 +38,7 @@ export function SidebarToggleButton({
 
       <span
         className={`
-          text-gray-300 font-semibold text-sm
+          text-grey-300 font-semibold text-sm
           transition-opacity duration-300
           ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}
         `}

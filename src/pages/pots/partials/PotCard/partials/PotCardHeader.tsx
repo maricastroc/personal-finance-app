@@ -31,7 +31,7 @@ export function PotCardHeader({
 
       <div className="relative">
         <FontAwesomeIcon
-          className="text-gray-500 cursor-pointer"
+          className="text-grey-500 cursor-pointer"
           icon={faEllipsis}
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         />

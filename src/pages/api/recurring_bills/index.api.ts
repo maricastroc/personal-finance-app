@@ -147,6 +147,7 @@ export default async function handler(
       }
 
       let status = "upcoming";
+
       if (isBefore(recurrenceDate, today)) {
         status = "paid";
         result.paid.bills.push(bill);

@@ -14,7 +14,7 @@ export function RecurringBillCard({ avatarUrl, name }: RecurringBillProps) {
         className="w-9 h-9 rounded-full"
       />
 
-      <span className="text-sm font-bold text-gray-900 truncate max-w-[10rem]">
+      <span className="text-sm font-bold text-grey-900 truncate max-w-[10rem]">
         {name}
       </span>
     </div>

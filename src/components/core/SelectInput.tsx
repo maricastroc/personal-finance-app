@@ -1,6 +1,10 @@
 import React from "react";
 import * as Select from "@radix-ui/react-select";
-import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@radix-ui/react-icons";
 
 interface DataProps {
   id?: string | number;
@@ -35,11 +39,11 @@ export const SelectInput = ({
       <label className="sr-only">{label}</label>
 
       <Select.Trigger
-        className="h-12 flex items-center justify-between w-full px-4 py-2 text-sm text-gray-900 bg-white border border-beige-500 focus:border-beige-500 focus:outline-none focus:ring-gray-900 focus:ring-2 focus:ring-offset-2 rounded-md shadow-sm"
+        className="h-12 flex items-center justify-between w-full px-4 py-2 text-sm text-grey-900 bg-white border border-beige-500 focus:border-beige-500 focus:outline-none focus:ring-grey-900 focus:ring-2 focus:ring-offset-2 rounded-md shadow-sm"
         aria-label={label}
       >
-        <Select.Value className="text-gray-900" placeholder={placeholder} />
-        <Select.Icon className="ml-2 text-gray-900">
+        <Select.Value className="text-grey-900" placeholder={placeholder} />
+        <Select.Icon className="ml-2 text-grey-900">
           <ChevronDownIcon />
         </Select.Icon>
       </Select.Trigger>
@@ -47,7 +51,7 @@ export const SelectInput = ({
       <Select.Portal>
         <Select.Content
           position="popper"
-          className="z-[10000] min-w-full mt-1 bg-white text-gray-600 rounded-md shadow-lg border border-gray-200 max-h-60 overflow-y-auto"
+          className="z-[10000] min-w-full mt-1 bg-white text-grey-500 rounded-md shadow-lg border border-grey-300 max-h-60 overflow-y-auto"
           style={{
             width: "var(--radix-select-trigger-width)",
             maxHeight: "200px",
@@ -55,7 +59,7 @@ export const SelectInput = ({
           sideOffset={5}
         >
           <Select.ScrollUpButton
-            className="flex items-center justify-center text-gray-500 hover:text-gray-900"
+            className="flex items-center justify-center text-grey-500 hover:text-grey-900"
             aria-label="Scroll up"
           >
             <ChevronUpIcon />
@@ -78,7 +82,7 @@ export const SelectInput = ({
           </Select.Viewport>
 
           <Select.ScrollDownButton
-            className="flex items-center justify-center text-gray-500 hover:text-gray-900"
+            className="flex items-center justify-center text-grey-500 hover:text-grey-900"
             aria-label="Scroll down"
           >
             <ChevronDownIcon />
@@ -108,19 +112,24 @@ const SelectItem = React.forwardRef(
       value={value}
       disabled={disabled}
       className={`
-        flex items-center px-4 w-full py-2 text-sm rounded-md
-        focus:outline-none focus:ring-2 focus:ring-blue-500
+        flex items-center px-4 w-full py-2 text-sm rounded-md relative
+        focus:outline-none
         ${
           disabled
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-gray-900 cursor-pointer hover:bg-blue-100 focus:bg-blue-100"
+            ? "text-grey-500 cursor-not-allowed"
+            : "text-grey-900 cursor-pointer hover:bg-beige-100"
         }
       `}
       {...props}
     >
       <Select.ItemText>{children}</Select.ItemText>
+
+      <Select.ItemIndicator className="absolute right-3 flex items-center rounded-full bg-secondary-green">
+        <CheckIcon className="w-4 h-4 text-white" />
+      </Select.ItemIndicator>
+
       {disabled && (
-        <span className="ml-auto text-xs text-gray-500">Already used</span>
+        <span className="ml-auto text-xs text-grey-500">Already used</span>
       )}
     </Select.Item>
   )

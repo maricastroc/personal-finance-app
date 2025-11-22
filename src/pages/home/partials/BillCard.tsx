@@ -21,7 +21,7 @@ export function BillCard({ title, value, borderColor }: BillCardProps) {
         borderColors[borderColor]
       )}
     >
-      <p className="capitalize text-gray-500 text-sm">{title}</p>
+      <p className="capitalize text-grey-500 text-sm">{title}</p>
 
       <p className="font-semibold text-sm" aria-live="polite">
         {value}

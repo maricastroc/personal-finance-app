@@ -15,7 +15,7 @@ export function BudgetCardSpentInfo({ spent, free }: BudgetCardSpentInfoProps) {
         />
 
         <div>
-          <dt className="text-xs text-gray-500">Spent</dt>
+          <dt className="text-xs text-grey-500">Spent</dt>
           <dd className="font-bold text-sm">{formatToDollar(spent)}</dd>
         </div>
       </div>
@@ -27,7 +27,7 @@ export function BudgetCardSpentInfo({ spent, free }: BudgetCardSpentInfoProps) {
         />
 
         <div>
-          <dt className="text-xs text-gray-500">Free</dt>
+          <dt className="text-xs text-grey-500">Free</dt>
           <dd className="font-bold text-sm">{formatToDollar(free)}</dd>
         </div>
       </div>

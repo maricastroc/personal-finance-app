@@ -134,16 +134,16 @@ export function PotFormModal({
         <Dialog.Close
           onClick={onClose}
           aria-label="Close modal"
-          className="absolute top-4 right-4 text-gray-500 hover:bg-gray-900 hover:text-white transition-colors duration-300 p-1 rounded-full border border-gray-900"
+          className="absolute top-4 right-4 text-grey-500 hover:bg-grey-900 hover:text-white transition-colors duration-300 p-1 rounded-full border border-grey-900"
         >
           <X size={16} />
         </Dialog.Close>
 
-        <Dialog.Title className="text-xl font-semibold text-gray-900 mb-2 md:text-2xl">
+        <Dialog.Title className="text-xl font-semibold text-grey-900 mb-2 md:text-2xl">
           {isEdit ? "Edit Pot" : "Add New Pot"}
         </Dialog.Title>
 
-        <Dialog.Description className="flex flex-col w-full text-sm text-gray-600 mb-4">
+        <Dialog.Description className="flex flex-col w-full text-sm text-grey-500 mb-4">
           {isEdit
             ? "If your saving targets change, feel free to update your pots."
             : "Create a pot to set savings targets. These can help keep you on track as you save for special purchases."}
@@ -156,7 +156,7 @@ export function PotFormModal({
           }
         >
           <div>
-            <label className="text-xs font-bold text-gray-500 mb-1 block">
+            <label className="text-xs font-bold text-grey-500 mb-1 block">
               Pot Name
             </label>
             <input
@@ -172,12 +172,12 @@ export function PotFormModal({
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-500 mb-1 block">
+            <label className="text-xs font-bold text-grey-500 mb-1 block">
               Target Amount ($)
             </label>
 
             <div className="relative w-full">
-              <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+              <span className="absolute inset-y-0 left-3 flex items-center text-grey-500">
                 $
               </span>
 
@@ -200,7 +200,7 @@ export function PotFormModal({
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-500 mb-1 block">
+            <label className="text-xs font-bold text-grey-500 mb-1 block">
               Theme Color
             </label>
 

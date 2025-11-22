@@ -14,7 +14,7 @@ export default {
           100: "#f8f4f0",
           200: "#f2f3f7",
         },
-        gray: {
+        grey: {
           900: "#201f24",
           500: "#696868",
           300: "#b3b3b3",
@@ -22,10 +22,12 @@ export default {
         },
         secondary: {
           green: "#277c78",
+          greenHover: "#339e96",
           yellow: "#f2cdac",
           cyan: "#82c9d7",
           navy: "#626070",
           red: "#c94736",
+          redHover: "#ed564a",
           purple: "#826cb0",
           lightPurple: "#af81ba",
           turquoise: "#597c7c",

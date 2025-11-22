@@ -10,7 +10,7 @@ export const SkeletonSection = () => {
         <Skeleton variant="rounded" width={"100%"} height={20} />
       </span>
 
-      {index !== 3 && <span className="my-4 w-full h-[1px] bg-gray-200" />}
+      {index !== 3 && <span className="my-4 w-full h-[1px] bg-grey-300" />}
     </div>
   ));
 };

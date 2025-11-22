@@ -137,14 +137,14 @@ export function CurrencyInput({
   return (
     <div className={`flex flex-col ${containerClassName}`}>
       {label && (
-        <label htmlFor={id} className="text-xs font-bold text-gray-500 mb-1">
+        <label htmlFor={id} className="text-xs font-bold text-grey-500 mb-1">
           {label}
         </label>
       )}
 
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <CurrencyDollar className="h-5 w-5 text-gray-400" />
+          <CurrencyDollar className="h-5 w-5 text-grey-500" />
         </div>
 
         <InputBase

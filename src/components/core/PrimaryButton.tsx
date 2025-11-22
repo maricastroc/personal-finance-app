@@ -21,15 +21,15 @@ export const PrimaryButton = forwardRef<HTMLButtonElement, PrimaryButtonProps>(
     ref
   ) => {
     const baseClasses =
-      "w-full font-semibold rounded-md p-3 py-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] justify-center disabled:cursor-not-allowed focus:outline-offset-4 focus:outline-2 focus:outline-gray-900";
+      "w-full font-semibold rounded-md p-3 py-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] justify-center disabled:cursor-not-allowed focus:outline-offset-4 focus:outline-2 focus:outline-grey-900";
 
     const variantClasses = {
       default:
-        "bg-gray-900 text-beige-100 hover:bg-gray-500 disabled:bg-gray-400 disabled:text-gray-100",
+        "bg-grey-900 text-beige-100 hover:bg-grey-500 disabled:bg-grey-500 disabled:text-white",
       secondary:
-        "bg-beige-100 text-gray-900 hover:brightness-90 disabled:bg-gray-400 disabled:text-gray-100",
+        "bg-beige-100 text-grey-900 hover:brightness-90 disabled:bg-grey-500 disabled:text-white",
       outline:
-        "border border-black text-black bg-transparent hover:bg-gray-500 hover:text-white hover:border-transparent disabled:border-gray-400 disabled:text-gray-400",
+        "border border-black text-black bg-transparent hover:bg-grey-500 hover:text-white hover:border-transparent disabled:border-grey-500 disabled:text-grey-500",
     };
 
     return (

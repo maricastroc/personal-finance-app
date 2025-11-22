@@ -30,7 +30,7 @@ export function BudgetCardMenu({
         aria-controls={`budget-menu-${budgetId}`}
         type="button"
         onClick={() => setOpen(!open)}
-        className="text-gray-500 hover:text-gray-700"
+        className="text-grey-500 hover:text-grey-900"
       >
         <FontAwesomeIcon icon={faEllipsis} />
       </button>
@@ -50,7 +50,7 @@ export function BudgetCardMenu({
             Edit Budget
           </button>
 
-          <span className="my-1 h-px bg-gray-200" />
+          <span className="my-1 h-px bg-grey-300" />
 
           <button
             role="menuitem"

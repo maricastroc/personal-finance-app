@@ -31,12 +31,12 @@ export function PotActionsDropdown({
           setIsEditOpen(true);
           setIsOpen(false);
         }}
-        className="text-sm text-left text-gray-800 hover:text-gray-500"
+        className="text-sm text-left text-grey-900 hover:text-grey-500"
       >
         Edit Pot
       </button>
 
-      <span className="h-[1px] w-full bg-gray-200" />
+      <span className="h-[1px] w-full bg-grey-300" />
 
       <button
         onClick={() => {

@@ -30,13 +30,13 @@ export const SelectUser = ({
       <Select.Trigger
         className="
           h-12 flex items-center justify-between w-full px-4 py-2 text-sm
-          text-gray-900 bg-white border border-beige-500 rounded-md shadow-sm
-          focus:border-beige-500 focus:outline-none focus:ring-gray-900 focus:ring-2 focus:ring-offset-2
+          text-grey-900 bg-white border border-beige-500 rounded-md shadow-sm
+          focus:border-beige-500 focus:outline-none focus:ring-grey-900 focus:ring-2 focus:ring-offset-2
         "
         aria-label={label}
       >
         <Select.Value placeholder={placeholder} />
-        <Select.Icon className="ml-2 text-gray-900">
+        <Select.Icon className="ml-2 text-grey-900">
           <ChevronDownIcon />
         </Select.Icon>
       </Select.Trigger>
@@ -45,13 +45,13 @@ export const SelectUser = ({
         <Select.Content
           position="popper"
           className="
-            z-[10000] mt-1 bg-white text-gray-600 rounded-md shadow-lg
-            border border-gray-200 max-h-40 overflow-y-auto
+            z-[10000] mt-1 bg-white text-grey-500 rounded-md shadow-lg
+            border border-grey-300 max-h-40 overflow-y-auto
           "
           style={contentWidth ? { width: `${contentWidth}px` } : undefined}
         >
           <Select.ScrollUpButton
-            className="flex items-center justify-center text-gray-500 hover:text-gray-900"
+            className="flex items-center justify-center text-grey-500 hover:text-grey-900"
             aria-label="Scroll up"
           >
             <ChevronUpIcon />
@@ -68,7 +68,7 @@ export const SelectUser = ({
           </Select.Viewport>
 
           <Select.ScrollDownButton
-            className="flex items-center justify-center text-gray-500 hover:text-gray-900"
+            className="flex items-center justify-center text-grey-500 hover:text-grey-900"
             aria-label="Scroll down"
           >
             <ChevronDownIcon />
@@ -103,8 +103,8 @@ const SelectItem = React.forwardRef(
 
         ${
           disabled
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-gray-900 cursor-pointer hover:bg-blue-100 focus:bg-blue-100"
+            ? "text-grey-500 cursor-not-allowed"
+            : "text-grey-900 cursor-pointer hover:bg-blue-100 focus:bg-blue-100"
         }
       `}
       {...props}

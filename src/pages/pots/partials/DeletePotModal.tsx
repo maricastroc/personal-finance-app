@@ -50,7 +50,7 @@ export function DeletePotModal({
       >
         <Dialog.Close
           onClick={onClose}
-          className="absolute top-4 right-4 hover:bg-gray-900 hover:text-gray-100 transition-all duration-300 text-gray-500 p-[0.1rem] rounded-full border border-gray-900"
+          className="absolute top-4 right-4 hover:bg-grey-900 hover:text-white transition-all duration-300 text-grey-500 p-[0.1rem] rounded-full border border-grey-900"
         >
           <X size={16} aria-hidden="true" />
           <span className="sr-only">Close modal</span>
@@ -58,14 +58,14 @@ export function DeletePotModal({
 
         <Dialog.Title
           id="delete-pot-title"
-          className="text-xl font-semibold text-gray-900 mb-2 md:text-2xl"
+          className="text-xl font-semibold text-grey-900 mb-2 md:text-2xl"
         >
           {`Delete "${pot.name}"`}
         </Dialog.Title>
 
         <Dialog.Description
           id="delete-pot-description"
-          className="flex flex-col w-full text-sm text-gray-600"
+          className="flex flex-col w-full text-sm text-grey-500"
         >
           Are you sure you want to delete this pot? This action cannot be
           reversed, and all the data inside it will be removed forever.

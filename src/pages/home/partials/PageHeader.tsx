@@ -19,12 +19,12 @@ export const PageHeader = () => {
 
   return (
     <header className="flex items-center justify-between w-full mb-8">
-      <h1 className="text-gray-900 font-bold text-3xl">Overview</h1>
+      <h1 className="text-grey-900 font-bold text-3xl">Overview</h1>
 
       <button
         onClick={isDemoUser ? () => router.push("/") : handleLogout}
         type="button"
-        className="font-semibold rounded-md p-3 px-4 flex gap-2 items-center transition-all duration-300 max-h-[60px] text-sm bg-gray-900 text-beige-100 hover:bg-gray-500"
+        className="font-semibold rounded-md p-3 px-4 flex gap-2 items-center transition-all duration-300 max-h-[60px] text-sm bg-grey-900 text-beige-100 hover:bg-grey-500"
       >
         <FontAwesomeIcon icon={faRightToBracket} />
         {isDemoUser ? "Login" : "Logout"}

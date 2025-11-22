@@ -110,7 +110,7 @@ export function EditPotAmountModal({
       >
         <Dialog.Close
           onClick={onClose}
-          className="absolute top-4 right-4 hover:bg-gray-900 hover:text-gray-100 transition-all duration-300 text-gray-500 p-[0.1rem] rounded-full border border-gray-900"
+          className="absolute top-4 right-4 hover:bg-grey-900 hover:text-white transition-all duration-300 text-grey-500 p-[0.1rem] rounded-full border border-grey-900"
         >
           <X size={16} aria-hidden="true" />
           <span className="sr-only">Close modal</span>
@@ -118,12 +118,12 @@ export function EditPotAmountModal({
 
         <Dialog.Title
           id="edit-pot-title"
-          className="text-xl max-w-[90%] font-semibold text-gray-900 mb-2 md:text-2xl"
+          className="text-xl max-w-[90%] font-semibold text-grey-900 mb-2 md:text-2xl"
         >
           {isWithdraw ? `Withdraw from '${name}'` : `Add to '${name}'`}
         </Dialog.Title>
 
-        <Dialog.Description className="flex flex-col w-full text-sm text-gray-600">
+        <Dialog.Description className="flex flex-col w-full text-sm text-grey-500">
           {isWithdraw
             ? "Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot."
             : "Add money to your pot to increase your savings. This will add to the amount you have in this pot."}
@@ -131,7 +131,7 @@ export function EditPotAmountModal({
 
         <div className="flex flex-col w-full mt-6">
           <div className="flex items-center justify-between w-full">
-            <p className="text-gray-500 text-sm">New Amount</p>
+            <p className="text-grey-500 text-sm">New Amount</p>
             <h2 className="text-3xl font-bold">{formatToDollar(newAmount)}</h2>
           </div>
         </div>
@@ -171,10 +171,10 @@ export function EditPotAmountModal({
 
         <div className="flex flex-col w-full mt-3">
           <div className="flex items-center justify-between w-full">
-            <p className="text-gray-500 font-bold text-xs">
+            <p className="text-grey-500 font-bold text-xs">
               {newPercentage.toFixed(2)}%
             </p>
-            <p className="text-gray-500 text-xs">{`Target of ${formatToDollar(
+            <p className="text-grey-500 text-xs">{`Target of ${formatToDollar(
               targetAmount
             )}`}</p>
           </div>
@@ -183,13 +183,13 @@ export function EditPotAmountModal({
         <div className="flex flex-col mt-8">
           <label
             htmlFor="pot-amount-input"
-            className="text-xs font-bold text-gray-500 mb-1"
+            className="text-xs font-bold text-grey-500 mb-1"
           >
             {isWithdraw ? "Amount to Withdraw ($)" : "Amount to Add ($)"}
           </label>
 
           <div className="relative w-full">
-            <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+            <span className="absolute inset-y-0 left-3 flex items-center text-grey-500">
               $
             </span>
 

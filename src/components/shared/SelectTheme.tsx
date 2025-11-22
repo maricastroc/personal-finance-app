@@ -26,20 +26,20 @@ export const SelectTheme = ({
       <Select.Trigger
         className="
           h-12 flex items-center justify-between w-full px-4 py-2 
-          text-sm text-gray-900 bg-white border border-gray-500 
+          text-sm text-grey-900 bg-white border border-grey-500 
           rounded-md shadow-sm 
           focus-visible:outline-none 
-          focus-visible:ring-2 focus-visible:ring-gray-900 
+          focus-visible:ring-2 focus-visible:ring-grey-900 
           focus-visible:ring-offset-2 
           transition-all
         "
         aria-label="Theme"
       >
         <Select.Value
-          className="text-gray-900"
+          className="text-grey-900"
           placeholder="Select a Color..."
         />
-        <Select.Icon className="ml-2 text-gray-900">
+        <Select.Icon className="ml-2 text-grey-900">
           <ChevronDownIcon />
         </Select.Icon>
       </Select.Trigger>
@@ -49,11 +49,11 @@ export const SelectTheme = ({
           position="popper"
           className="
             z-[10000] w-[190px] h-40 overflow-y-scroll mt-1 
-            bg-white text-gray-600 rounded-md shadow-lg 
-            border border-gray-200
+            bg-white text-grey-500 rounded-md shadow-lg 
+            border border-grey-300
           "
         >
-          <Select.ScrollUpButton className="flex items-center justify-center text-gray-500 hover:text-gray-900">
+          <Select.ScrollUpButton className="flex items-center justify-center text-grey-500 hover:text-grey-900">
             <ChevronUpIcon />
           </Select.ScrollUpButton>
 
@@ -67,7 +67,7 @@ export const SelectTheme = ({
             </Select.Group>
           </Select.Viewport>
 
-          <Select.ScrollDownButton className="flex items-center justify-center text-gray-500 hover:text-gray-900">
+          <Select.ScrollDownButton className="flex items-center justify-center text-grey-500 hover:text-grey-900">
             <ChevronDownIcon />
           </Select.ScrollDownButton>
         </Select.Content>
@@ -93,7 +93,7 @@ const SelectItem = React.forwardRef(
       value={value}
       className="
         flex items-center px-4 py-2 text-sm rounded-md cursor-pointer
-        text-gray-900
+        text-grey-900
         hover:bg-blue-100 
         focus:bg-blue-100 
         focus:text-blue-900 gap-10

@@ -32,7 +32,7 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
 
   if (!budgets?.length) {
     return (
-      <p className="text-gray-500 text-center" role="status">
+      <p className="text-grey-500 text-center" role="status">
         No budgets available
       </p>
     );
@@ -57,7 +57,7 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
         : "0.00";
 
       return (
-        <div className="custom-tooltip bg-white text-gray-700 shadow-lg text-sm font-semibold p-2 rounded-md">
+        <div className="custom-tooltip bg-white text-grey-500 shadow-lg text-sm font-semibold p-2 rounded-md">
           <p>{`${name}: ${percentage}%`}</p>
         </div>
       );

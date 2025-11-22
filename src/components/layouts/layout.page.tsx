@@ -22,7 +22,7 @@ export default function Layout({ children }: LayoutProps) {
       router.push("/");
     }
   }, [session.status]);
-  console.log(session);
+
   return (
     <div
       className={`flex flex-col w-screen min-h-screen h-full ${
@@ -34,7 +34,7 @@ export default function Layout({ children }: LayoutProps) {
         handleIsSidebarOpen={() => handleIsSidebarOpen(!isSidebarOpen)}
       />
 
-      <main id="main-content" className="flex-grow">
+      <main id="main-content" className="flex-grow min-h-[100vh]">
         {children}
       </main>
 

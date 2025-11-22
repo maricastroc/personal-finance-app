@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
+import * as Dialog from "@radix-ui/react-dialog";
+import { format } from "date-fns";
 import { TransactionProps } from "@/types/transaction";
 import { CategoryProps } from "@/types/category";
 import { useAppContext } from "@/contexts/AppContext";
@@ -9,6 +11,8 @@ import { SkeletonTransactionCard } from "@/components/shared/SkeletonTransaction
 import Layout from "@/components/layouts/layout.page";
 import { LoadingPage } from "@/components/shared/LoadingPage";
 import { PaginationSection } from "@/components/shared/PaginationSection/PaginationSection";
+import { PageTitle } from "@/components/shared/PageTitle";
+import { PrimaryButton } from "@/components/core/PrimaryButton";
 import { SearchSection } from "./partials/SearchSection";
 import { TransactionTable } from "./partials/TransactionsTable";
 import { TransferFormModal } from "./partials/TransferFormModal";
@@ -20,11 +24,7 @@ import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
 import { calculateTotalPages } from "@/utils/calculateTotalPages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import * as Dialog from "@radix-ui/react-dialog";
-import { format } from "date-fns";
 import { useDebounce } from "@/utils/useDebounce";
-import { PageTitle } from "@/components/shared/PageTitle";
-import { PrimaryButton } from "@/components/core/PrimaryButton";
 
 export default function Transactions() {
   const router = useRouter();
@@ -45,7 +45,9 @@ export default function Transactions() {
 
   const [maxVisibleButtons, setMaxVisibleButtons] = useState(3);
 
-  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const { isSidebarOpen } = useAppContext();
 
@@ -126,6 +128,16 @@ export default function Transactions() {
     setCurrentPage(1);
   }, []);
 
+  const handleEditTransaction = (transaction: TransactionProps) => {
+    console.log("Edit transaction:", transaction);
+    // Abrir modal de edição, navegar para página de edição, etc.
+  };
+
+  const handleDeleteTransaction = (transaction: TransactionProps) => {
+    console.log("Delete transaction:", transaction);
+    // Abrir modal de confirmação, fazer chamada API para deletar, etc.
+  };
+
   if (isRouteLoading) return <LoadingPage />;
 
   return (
@@ -142,14 +154,11 @@ export default function Transactions() {
           <div className="flex items-center justify-between w-full">
             <PageTitle title="Transactions" />
 
-            <Dialog.Root
-              open={isTransferModalOpen}
-              onOpenChange={setIsTransferModalOpen}
-            >
+            <Dialog.Root open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
               <Dialog.Trigger asChild>
                 <PrimaryButton
                   aria-haspopup="dialog"
-                  aria-expanded={isTransferModalOpen}
+                  aria-expanded={isAddModalOpen}
                   aria-controls="transfer-form-modal"
                   className="mt-0 max-w-[5rem] sm:max-w-[8rem] text-sm"
                 >
@@ -165,7 +174,7 @@ export default function Transactions() {
                   onSubmitForm={async (): Promise<void> => {
                     await mutate();
                   }}
-                  onClose={() => setIsTransferModalOpen(false)}
+                  onClose={() => setIsAddModalOpen(false)}
                 />
               )}
             </Dialog.Root>
@@ -184,6 +193,10 @@ export default function Transactions() {
             <TransactionTable
               transactions={transactions}
               isValidating={isValidating}
+              categories={categories}
+              mutate={mutate}
+              isEditModalOpen={isEditModalOpen}
+              setIsEditModalOpen={setIsEditModalOpen}
             />
 
             <div
@@ -195,15 +208,17 @@ export default function Transactions() {
                   <SkeletonTransactionCard key={i} />
                 ))
               ) : transactions.length ? (
-                transactions.map((t, index) => (
+                transactions.map((transaction, index) => (
                   <TransactionCard
                     key={index}
-                    name={t.contactName}
-                    balance={t.balance}
-                    avatarUrl={t.contactAvatar}
-                    date={format(t.date, "MMM dd, yyyy")}
-                    value={formatToDollar(t.amount || 0)}
-                    category={t.category?.name}
+                    name={transaction.contactName}
+                    balance={transaction.balance}
+                    avatarUrl={transaction.contactAvatar}
+                    date={format(transaction.date, "MMM dd, yyyy")}
+                    value={formatToDollar(transaction.amount || 0)}
+                    category={transaction.category?.name}
+                    onEdit={() => handleEditTransaction(transaction)}
+                    onDelete={() => handleDeleteTransaction(transaction)}
                   />
                 ))
               ) : (

@@ -5,7 +5,7 @@ export const getThemeOptions = colors.map((color) => ({
     <div className="flex items-center space-x-2">
       <span
         className={`w-4 mr-2 h-4 rounded-full ${
-          color.name.toLowerCase() === "white" ? "border border-gray-800" : ""
+          color.name.toLowerCase() === "white" ? "border border-grey-900" : ""
         }`}
         style={{ backgroundColor: color.hex, marginRight: 4 }}
       ></span>

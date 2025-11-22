@@ -49,7 +49,7 @@ export function TransactionCard({
 
         <div className="flex flex-col gap-1 items-start text-start overflow-hidden max-sm:pl-2 sm:pl-0">
           <p
-            className={`text-gray-900 font-bold text-sm ${
+            className={`text-grey-900 font-bold text-sm ${
               isBudgetsScreen
                 ? "overflow-hidden text-xs max-sm:truncate max-sm:whitespace-nowrap max-sm:max-w-[5rem] md:text-sm md:max-w-[12rem]"
                 : ""
@@ -58,7 +58,7 @@ export function TransactionCard({
             {name}
           </p>
 
-          {category && <p className="text-gray-500 text-xs">{category}</p>}
+          {category && <p className="text-grey-500 text-xs">{category}</p>}
         </div>
       </div>
 
@@ -71,7 +71,7 @@ export function TransactionCard({
           {balance === "income" ? "+" : "-"} {value}
         </p>
 
-        <p className="text-gray-500 text-xs">{date}</p>
+        <p className="text-grey-500 text-xs">{date}</p>
       </div>
     </div>
   );

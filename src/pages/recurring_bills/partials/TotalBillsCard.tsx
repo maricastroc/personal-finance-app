@@ -11,7 +11,7 @@ export const TotalBillsCard = ({ recurringBills }: TotalBillsCardProps) => {
   return (
     <section
       aria-labelledby="total-bills-title"
-      className="rounded-xl flex bg-gray-900 p-6 gap-6 md:flex-grow lg:flex-grow-0 md:flex-col md:pt-10 md:justify-between"
+      className="rounded-xl flex bg-grey-900 p-6 gap-6 md:flex-grow lg:flex-grow-0 md:flex-col md:pt-10 md:justify-between"
     >
       <Image src={iconRecurringBills} alt="" aria-hidden="true" width={32} />
 

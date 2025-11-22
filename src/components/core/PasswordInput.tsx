@@ -21,7 +21,7 @@ export function PasswordInput({
   return (
     <div className={`flex flex-col ${className}`}>
       {label && (
-        <label htmlFor={id} className="text-xs font-bold text-gray-500 mb-1">
+        <label htmlFor={id} className="text-xs font-bold text-grey-500 mb-1">
           {label}
         </label>
       )}
@@ -34,7 +34,7 @@ export function PasswordInput({
           aria-describedby={errorId}
           aria-required={required}
           required={required}
-          className="text-sm w-full h-12  rounded-md border border-beige-500 px-3 pr-10 focus:outline-none focus:ring-gray-900 focus:ring-2 focus:ring-offset-1"
+          className="text-sm w-full h-12  rounded-md border border-beige-500 px-3 pr-10 focus:outline-none focus:ring-grey-900 focus:ring-2 focus:ring-offset-1"
           {...props}
         />
 
@@ -42,7 +42,7 @@ export function PasswordInput({
           type="button"
           aria-label={showPassword ? "Hide password" : "Show password"}
           aria-controls={id}
-          className="absolute inset-y-0 my-3 right-3 flex items-center text-gray-500 focus:border-transparent focus:outline-gray-900 focus:outline-2 focus:outline-offset-1 rounded-sm"
+          className="absolute inset-y-0 my-3 right-3 flex items-center text-grey-500 focus:border-transparent focus:outline-grey-900 focus:outline-2 focus:outline-offset-1 rounded-sm"
           onClick={() => setShowPassword(!showPassword)}
         >
           {showPassword ? (

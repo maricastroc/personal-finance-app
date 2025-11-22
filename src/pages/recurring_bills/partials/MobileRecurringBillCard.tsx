@@ -38,7 +38,7 @@ export function MobileRecurringBillCard({
             />
           </span>
 
-          <p className="text-gray-900 font-bold overflow-hidden text-sm max-sm:truncate max-sm:whitespace-nowrap max-sm:max-w-[40vw] md:text-sm md:max-w-[12rem]">
+          <p className="text-grey-900 font-bold overflow-hidden text-sm max-sm:truncate max-sm:whitespace-nowrap max-sm:max-w-[40vw] md:text-sm md:max-w-[12rem]">
             {name}
           </p>
         </div>
@@ -46,7 +46,7 @@ export function MobileRecurringBillCard({
         <div className="flex items-center gap-2">
           <time
             dateTime={`${recurrenceFrequency} ${recurrenceDay}`}
-            className="text-xs text-gray-600 py-2 text-left"
+            className="text-xs text-grey-500 py-2 text-left"
           >
             {`${recurrenceFrequency} - ${getOrdinalSuffix(
               recurrenceDay || ""
@@ -63,10 +63,10 @@ export function MobileRecurringBillCard({
         </div>
       </div>
 
-      <div className="text-sm text-gray-600 px-4 py-2 text-right">
+      <div className="text-sm text-grey-500 px-4 py-2 text-right">
         <span
           className={`font-bold ${
-            status === "due soon" ? "text-secondary-red" : "text-gray-900"
+            status === "due soon" ? "text-secondary-red" : "text-grey-900"
           }`}
         >
           {formatToDollar(amount)}

@@ -31,7 +31,7 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
     <aside
       aria-label="Main navigation sidebar"
       className={`
-        fixed hidden left-0 top-0 bottom-0 bg-gray-900 rounded-r-xl lg:flex 
+        fixed hidden left-0 top-0 bottom-0 bg-grey-900 rounded-r-xl lg:flex 
         flex-col justify-between py-12
         ${isSidebarOpen ? "lg:w-[240px]" : "lg:w-[88px]"}
         transition-all duration-500 z-50

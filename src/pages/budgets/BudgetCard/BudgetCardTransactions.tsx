@@ -31,7 +31,7 @@ export function BudgetCardTransactions({
           type="button"
           className="flex items-center gap-2 hover:opacity-80"
         >
-          <span className="text-sm text-gray-500">See All</span>
+          <span className="text-sm text-grey-500">See All</span>
           <img
             src="/assets/images/icon-caret-right.svg"
             alt=""
@@ -64,7 +64,7 @@ export function BudgetCardTransactions({
                 {i < transactions.length - 1 && (
                   <span
                     aria-hidden="true"
-                    className="w-full h-px bg-gray-200 my-1"
+                    className="w-full h-px bg-grey-300 my-1"
                   />
                 )}
               </li>

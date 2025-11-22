@@ -93,6 +93,7 @@ export default async function handler(
           where,
           include: {
             category: true,
+            recurringBill: true,
           },
           orderBy,
           skip,
@@ -186,7 +187,7 @@ export default async function handler(
           });
         }
 
-        await prisma.recurringBill.create({
+        const recurringBill = await prisma.recurringBill.create({
           data: {
             description,
             amount: Math.abs(amount),
@@ -197,6 +198,14 @@ export default async function handler(
             contactAvatar: contactAvatar || "",
             type,
             userId,
+          },
+        });
+
+        await prisma.transaction.update({
+          where: { id: transaction.id },
+          data: {
+            recurringBillId: recurringBill.id,
+            isRecurring: true,
           },
         });
       }

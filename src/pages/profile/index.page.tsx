@@ -191,12 +191,12 @@ export default function Profile() {
           className={`w-full flex flex-col items-center justify-center p-4 pb-20 md:p-8 lg:p-12 overflow-y-scroll
         }`}
         >
-          <div className="bg-white relative w-full px-5 py-6 rounded-md max-w-[35rem] xl:w-full overflow-y-scroll flex flex-col justify-start scrollbar scrollbar-thumb-gray-500 scrollbar-track-transparent">
+          <div className="bg-white relative w-full px-5 py-6 rounded-md max-w-[35rem] xl:w-full overflow-y-scroll flex flex-col justify-start scrollbar scrollbar-thumb-grey-500 scrollbar-track-transparent">
             <div className="flex items-center justify-between w-full">
               <h2 className="font-bold text-2xl">Update Details</h2>
               <button
                 onClick={handleLogout}
-                className={`font-semibold rounded-md p-3 px-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-gray-900 text-beige-100 hover:bg-gray-500 capitalize justify-center disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-not-allowed`}
+                className={`font-semibold rounded-md p-3 px-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-grey-900 text-beige-100 hover:bg-grey-500 capitalize justify-center disabled:bg-grey-300 disabled:text-white disabled:cursor-not-allowed`}
               >
                 <FontAwesomeIcon icon={faRightToBracket} />
                 <p className="hidden sm:block">Logout</p>
@@ -264,7 +264,7 @@ export default function Profile() {
                   onCheckedChange={(checked) =>
                     setChangePassword(checked === true)
                   }
-                  className="flex items-center justify-center relative w-4 h-4 rounded-sm border-2 border-gray-600 text-white 
+                  className="flex items-center justify-center relative w-4 h-4 rounded-sm border-2 border-grey-500 text-white 
                         bg-transparent data-[state=checked]:bg-black data-[state=checked]:border-black"
                 >
                   <Checkbox.Indicator>
@@ -273,7 +273,7 @@ export default function Profile() {
                 </Checkbox.Root>
                 <label
                   htmlFor="changePassword"
-                  className="text-xs font-bold text-gray-500"
+                  className="text-xs font-bold text-grey-500"
                 >
                   Change Password?
                 </label>

@@ -19,7 +19,7 @@ export function PasswordSection({
       <div>
         <label
           htmlFor="oldPassword"
-          className="text-xs font-bold text-gray-500 mb-1"
+          className="text-xs font-bold text-grey-500 mb-1"
         >
           Current Password
         </label>
@@ -49,7 +49,7 @@ export function PasswordSection({
       <div>
         <label
           htmlFor="password"
-          className="text-xs font-bold text-gray-500 mb-1"
+          className="text-xs font-bold text-grey-500 mb-1"
         >
           New Password
         </label>
@@ -77,7 +77,7 @@ export function PasswordSection({
       <div>
         <label
           htmlFor="passwordConfirm"
-          className="text-xs font-bold text-gray-500 mb-1"
+          className="text-xs font-bold text-grey-500 mb-1"
         >
           Confirm New Password
         </label>

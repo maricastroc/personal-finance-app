@@ -193,22 +193,24 @@ export default function RecurringBills() {
                     />
                   ))
                 ) : (
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-grey-500">
                     No recurring bills available.
                   </p>
                 )}
               </div>
 
-              <div className="flex md:px-4 items-center justify-between gap-2 mt-6">
-                <PaginationSection
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  maxVisibleButtons={maxVisibleButtons}
-                  handleSetCurrentPage={(value: number) =>
-                    setCurrentPage(value)
-                  }
-                />
-              </div>
+              {!!recurringBills?.allBills?.length && (
+                <div className="flex md:px-4 items-center justify-between gap-2 mt-6">
+                  <PaginationSection
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    maxVisibleButtons={maxVisibleButtons}
+                    handleSetCurrentPage={(value: number) =>
+                      setCurrentPage(value)
+                    }
+                  />
+                </div>
+              )}
             </section>
           </div>
         </div>

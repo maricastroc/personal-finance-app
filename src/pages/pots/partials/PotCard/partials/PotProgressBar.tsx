@@ -18,8 +18,8 @@ export function PotProgressBar({ percentage, color, target }: Props) {
       </div>
 
       <div className="flex justify-between mt-3">
-        <p className="text-gray-500 font-bold text-xs">{percentage}%</p>
-        <p className="text-gray-500 text-xs">Target of ${target}</p>
+        <p className="text-grey-500 font-bold text-xs">{percentage}%</p>
+        <p className="text-grey-500 text-xs">Target of ${target}</p>
       </div>
     </>
   );

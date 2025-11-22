@@ -22,7 +22,7 @@ export function TextLink({
     <Component
       className={clsx(
         "font-semibold underline underline-offset-4",
-        "focus:outline-offset-2 focus:outline-2 focus:outline-gray-900",
+        "focus:outline-offset-2 focus:outline-2 focus:outline-grey-900",
         className
       )}
       {...props}

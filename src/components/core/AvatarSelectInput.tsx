@@ -25,10 +25,10 @@ export const AvatarSelectInput = ({
       <label className="sr-only">{label}</label>
 
       <Select.Trigger
-        className="h-12 flex items-center justify-between w-[4rem] p-2 text-sm text-gray-900 bg-white border border-beige-500 focus:border-beige-500 focus:outline-none focus:ring-gray-900 focus:ring-2 focus:ring-offset-2 rounded-md shadow-sm"
+        className="h-12 flex items-center justify-between w-[4rem] p-2 text-sm text-grey-900 bg-white border border-beige-500 focus:border-beige-500 focus:outline-none focus:ring-grey-900 focus:ring-2 focus:ring-offset-2 rounded-md shadow-sm"
         aria-label={label}
       >
-        <Select.Value className="text-gray-900" placeholder={placeholder}>
+        <Select.Value className="text-grey-900" placeholder={placeholder}>
           {defaultValue && (
             <img
               src={defaultValue}
@@ -37,7 +37,7 @@ export const AvatarSelectInput = ({
             />
           )}
         </Select.Value>
-        <Select.Icon className="ml-1 text-gray-900">
+        <Select.Icon className="ml-1 text-grey-900">
           <ChevronDownIcon />
         </Select.Icon>
       </Select.Trigger>
@@ -45,7 +45,7 @@ export const AvatarSelectInput = ({
       <Select.Portal>
         <Select.Content
           position="popper"
-          className="z-[10000] min-w-full mt-1 bg-white rounded-md shadow-lg border border-gray-200 max-h-60 overflow-y-auto"
+          className="z-[10000] min-w-full mt-1 bg-white rounded-md shadow-lg border border-grey-300 max-h-60 overflow-y-auto"
           style={{
             width: "var(--radix-select-trigger-width)",
             maxHeight: "200px",
@@ -53,7 +53,7 @@ export const AvatarSelectInput = ({
           sideOffset={5}
         >
           <Select.ScrollUpButton
-            className="flex items-center justify-center text-gray-500 hover:text-gray-900"
+            className="flex items-center justify-center text-grey-500 hover:text-grey-900"
             aria-label="Scroll up"
           >
             <ChevronUpIcon />
@@ -74,7 +74,7 @@ export const AvatarSelectInput = ({
           </Select.Viewport>
 
           <Select.ScrollDownButton
-            className="flex items-center justify-center text-gray-500 hover:text-gray-900"
+            className="flex items-center justify-center text-grey-500 hover:text-grey-900"
             aria-label="Scroll down"
           >
             <ChevronDownIcon />

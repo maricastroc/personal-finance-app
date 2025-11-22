@@ -12,29 +12,29 @@ interface FinanceCardProps {
 
 const variants = {
   primary: {
-    card: "bg-gray-900",
+    card: "bg-grey-900",
     title: "text-beige-100",
     value: "text-beige-100",
   },
   income: {
     card: "bg-white",
-    title: "text-gray-500",
+    title: "text-grey-500",
     value: "text-secondary-green",
   },
   outcome: {
     card: "bg-white",
-    title: "text-gray-500",
+    title: "text-grey-500",
     value: "text-secondary-red",
   },
   secondary: {
     card: "bg-white",
-    title: "text-gray-500",
-    value: "text-gray-900",
+    title: "text-grey-500",
+    value: "text-grey-900",
   },
   tertiary: {
     card: "bg-beige-100",
-    title: "text-gray-500",
-    value: "text-gray-900",
+    title: "text-grey-500",
+    value: "text-grey-900",
   },
 };
 

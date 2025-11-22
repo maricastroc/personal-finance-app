@@ -23,7 +23,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
 
   return (
     <div className="flex flex-col h-screen w-full max-w-[100rem] mx-auto">
-      <header className="xl:hidden bg-gray-900 text-gray-100 w-full rounded-b-lg flex py-6 items-center justify-center">
+      <header className="xl:hidden bg-grey-900 text-white w-full rounded-b-lg flex py-6 items-center justify-center">
         <Image src={LogoMobile} alt="Finance App logo" />
       </header>
 

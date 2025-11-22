@@ -125,23 +125,23 @@ export function BudgetModal({
           <Dialog.Close
             aria-label="Close modal"
             onClick={onClose}
-            className="absolute top-4 right-4 hover:bg-gray-900 hover:text-gray-100
-              transition-all duration-300 text-gray-500 p-[0.1rem]
-              rounded-full border border-gray-900 focus:outline-offset-2"
+            className="absolute top-4 right-4 hover:bg-grey-900 hover:text-white
+              transition-all duration-300 text-grey-500 p-[0.1rem]
+              rounded-full border border-grey-900 focus:outline-offset-2"
           >
             <X size={16} />
           </Dialog.Close>
 
           <Dialog.Title
             id={`${id}-title`}
-            className="text-xl md:text-2xl font-semibold text-gray-900 mb-2"
+            className="text-xl md:text-2xl font-semibold text-grey-900 mb-2"
           >
             {isEdit ? "Edit Budget" : "Add New Budget"}
           </Dialog.Title>
 
           <Dialog.Description
             id={`${id}-desc`}
-            className="text-sm text-gray-600 mb-4"
+            className="text-sm text-grey-500 mb-4"
           >
             {isEdit
               ? "As your budgets change, feel free to update your spending limits."
@@ -159,7 +159,7 @@ export function BudgetModal({
             <div className="flex flex-col">
               <label
                 htmlFor="category"
-                className="text-xs font-bold text-gray-500 mb-1"
+                className="text-xs font-bold text-grey-500 mb-1"
               >
                 Budget Category
               </label>
@@ -189,13 +189,13 @@ export function BudgetModal({
             <div className="flex flex-col mt-4">
               <label
                 htmlFor="budgetLimit"
-                className="text-xs font-bold text-gray-500 mb-1"
+                className="text-xs font-bold text-grey-500 mb-1"
               >
                 Maximum Spend ($)
               </label>
 
               <div className="relative w-full">
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                <span className="absolute inset-y-0 left-3 flex items-center text-grey-500">
                   $
                 </span>
 
@@ -223,7 +223,7 @@ export function BudgetModal({
             <div className="flex flex-col mt-4">
               <label
                 htmlFor="theme"
-                className="text-xs font-bold text-gray-500 mb-1"
+                className="text-xs font-bold text-grey-500 mb-1"
               >
                 Theme Color
               </label>

@@ -13,7 +13,7 @@ export function BudgetCardLimitInfo({
 }: BudgetCardLimitInfoProps) {
   return (
     <>
-      <p className="text-sm text-gray-500 pt-6">
+      <p className="text-sm text-grey-500 pt-6">
         Maximum of {formatToDollar(limit)}
       </p>
 

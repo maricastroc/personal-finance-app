@@ -32,15 +32,15 @@ export function FinanceItem({
           !isBudgetsPage ? "flex-col" : "w-full justify-between"
         }`}
       >
-        <p className="text-gray-500 text-xs">{title}</p>
+        <p className="text-grey-500 text-xs">{title}</p>
 
         <div className="flex items-center">
-          <h2 className="text-sm font-bold text-gray-900">
+          <h2 className="text-sm font-bold text-grey-900">
             {formatToDollar(value || 0)}
           </h2>
 
           {isBudgetsPage && amountSpent !== undefined && (
-            <p className="ml-1 text-xs text-gray-500">
+            <p className="ml-1 text-xs text-grey-500">
               of {formatToDollar(amountSpent)}
             </p>
           )}

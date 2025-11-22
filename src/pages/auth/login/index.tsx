@@ -124,12 +124,12 @@ export default function Login() {
           </PrimaryButton>
 
           <section className="flex flex-col gap-1">
-            <p className="text-sm flex items-center justify-center w-full text-gray-500 gap-2">
+            <p className="text-sm flex items-center justify-center w-full text-grey-500 gap-2">
               Need to create an account?
               <TextLink href="/auth/signup">Sign up</TextLink>
             </p>
 
-            <p className="text-sm flex items-center justify-center w-full text-gray-500 gap-2">
+            <p className="text-sm flex items-center justify-center w-full text-grey-500 gap-2">
               You’re just browsing?
               <TextLink
                 as="button"

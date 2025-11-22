@@ -43,8 +43,8 @@ export function SearchInput({
   return (
     <div
       className={`
-        h-12 text-sm w-full flex items-center rounded-md border border-gray-500 px-1
-        focus-within:ring-2 focus-within:ring-gray-900 
+        h-12 text-sm w-full flex items-center rounded-md border border-grey-500 px-1
+        focus-within:ring-2 focus-within:ring-grey-900 
         focus-within:ring-offset-2 focus-within:ring-offset-white
         focus-within:border-transparent
         transition-all duration-150

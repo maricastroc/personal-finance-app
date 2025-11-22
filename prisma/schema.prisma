@@ -45,9 +45,13 @@ model Transaction {
   category             Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   userId               String
   user                 User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  recurringBillId      String?
+  recurringBill        RecurringBill? @relation(fields: [recurringBillId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([categoryId])
+  @@index([recurringBillId])
   @@map("transactions")
 }
 
@@ -65,6 +69,8 @@ model RecurringBill {
   category             Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   userId               String
   user                 User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  transactions         Transaction[]
 
   @@index([userId])
   @@index([categoryId])

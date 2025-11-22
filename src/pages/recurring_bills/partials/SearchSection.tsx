@@ -21,7 +21,7 @@ export const SearchSection = ({
   return (
     <div className="flex flex-col mb-6">
       <div className="flex items-center md:grid md:grid-cols-[1.5fr,1fr] md:justify-between md:justify-items-end">
-        <div className="h-12 text-sm truncate w-full flex items-center rounded-md border border-gray-500">
+        <div className="h-12 text-sm truncate w-full flex items-center rounded-md border border-grey-500">
           <label htmlFor="search" className="sr-only">
             Search transactions
           </label>
@@ -52,7 +52,7 @@ export const SearchSection = ({
         <button
           aria-label="Open sort options"
           onClick={() => setIsSortBySelectOpen(!isSortBySelectOpen)}
-          className="ml-3 md:hidden rounded-md bg-gray-900 p-1 flex items-center justify-center h-[2.5rem]"
+          className="ml-3 md:hidden rounded-md bg-grey-900 p-1 flex items-center justify-center h-[2.5rem]"
         >
           <FontAwesomeIcon
             icon={faArrowDownWideShort}

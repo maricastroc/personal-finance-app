@@ -59,9 +59,9 @@ export function DeleteBudgetModal({
           <Dialog.Close
             aria-label="Close modal"
             onClick={onClose}
-            className="absolute top-4 right-4 hover:bg-gray-900 hover:text-gray-100 
-              transition-all duration-300 text-gray-500 
-              p-[0.1rem] rounded-full border border-gray-900 
+            className="absolute top-4 right-4 hover:bg-grey-900 hover:text-white 
+              transition-all duration-300 text-grey-500 
+              p-[0.1rem] rounded-full border border-graey-900 
               focus:outline-offset-2"
           >
             <X size={16} />
@@ -69,14 +69,14 @@ export function DeleteBudgetModal({
 
           <Dialog.Title
             id={`${id}-title`}
-            className="text-xl font-semibold text-gray-900 mb-2 md:text-2xl"
+            className="text-xl font-semibold text-grey-900 mb-2 md:text-2xl"
           >
             Delete “{budget.category.name}”
           </Dialog.Title>
 
           <Dialog.Description
             id={`${id}-desc`}
-            className="flex flex-col w-full text-sm text-gray-600"
+            className="flex flex-col w-full text-sm text-grey-500"
           >
             This action cannot be undone. All associated transactions and data
             for this budget will be permanently removed.

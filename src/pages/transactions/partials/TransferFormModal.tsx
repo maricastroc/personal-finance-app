@@ -1,23 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import * as Dialog from "@radix-ui/react-dialog";
 import { PrimaryButton } from "@/components/core/PrimaryButton";
 import { SelectInput } from "@/components/core/SelectInput";
 import { api } from "@/lib/axios";
 import { CategoryProps } from "@/types/category";
+import { TransactionProps } from "@/types/transaction";
 import { avatarUrls, recurrenceFrequencyOptions } from "@/utils/constants";
 import { handleApiError } from "@/utils/handleApiError";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as Dialog from "@radix-ui/react-dialog";
 import { Controller, useForm } from "react-hook-form";
 
 import { X } from "phosphor-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { InputBase } from "@/components/core/InputBase";
 import InputLabel from "@/components/core/InputLabel";
 import { AvatarSelectInput } from "@/components/core/AvatarSelectInput";
+import { CurrencyInput } from "@/components/core/CurrencyInput";
 
-const transferFormSchema = () =>
+const transactionFormSchema = () =>
   z.object({
     amount: z.number().min(1, { message: "Amount must be greater than zero." }),
     description: z.string().optional(),
@@ -29,7 +31,7 @@ const transferFormSchema = () =>
     contactName: z.string().min(3, { message: "Recipient name is required." }),
     contactAvatar: z
       .string()
-      .min(3, { message: "Recipient avatar is required." }),
+      .min(1, { message: "Recipient avatar is required." }),
   });
 
 const transactionTypeOptions = [
@@ -37,13 +39,17 @@ const transactionTypeOptions = [
   { id: "income", name: "Income" },
 ];
 
-export type TransferFormData = z.infer<ReturnType<typeof transferFormSchema>>;
+export type TransactionFormData = z.infer<
+  ReturnType<typeof transactionFormSchema>
+>;
 
 interface TransferFormModalProps {
   id: string;
   onClose: () => void;
   onSubmitForm: () => Promise<void>;
   categories: CategoryProps[];
+  transaction?: TransactionProps | null; // Para edição
+  isEdit?: boolean; // Para distinguir entre criar e editar
 }
 
 export function TransferFormModal({
@@ -51,6 +57,8 @@ export function TransferFormModal({
   onClose,
   onSubmitForm,
   categories,
+  transaction = null,
+  isEdit = false,
 }: TransferFormModalProps) {
   const [isRecurring, setIsRecurring] = useState(false);
 
@@ -71,11 +79,10 @@ export function TransferFormModal({
     handleSubmit,
     setValue,
     control,
-    watch,
     reset,
     formState: { isSubmitting, errors },
-  } = useForm<TransferFormData>({
-    resolver: zodResolver(transferFormSchema()),
+  } = useForm<TransactionFormData>({
+    resolver: zodResolver(transactionFormSchema()),
     defaultValues: {
       amount: 0,
       description: "",
@@ -85,50 +92,89 @@ export function TransferFormModal({
     },
   });
 
+  useEffect(() => {
+    if (transaction && isEdit) {
+      setValue("amount", Math.abs(transaction.amount));
+      setValue("description", transaction.description || "");
+      setValue("contactName", transaction.contactName);
+      setValue("contactAvatar", transaction.contactAvatar);
+      setValue("type", transaction.balance as "income" | "expense");
+
+      setSelectedAvatar(transaction.contactAvatar);
+      setSelectedCategory(transaction.category?.name || "General");
+      setIsRecurring(transaction.isRecurring);
+
+      if (transaction.isRecurring) {
+
+      }
+    }
+  }, [transaction, isEdit, setValue]);
+
   const handleAvatarSelect = (avatarUrl: string) => {
     setSelectedAvatar(avatarUrl);
-    setValue("contactAvatar", avatarUrl);
+    setValue("contactAvatar", avatarUrl, { shouldValidate: true });
   };
 
-  const handleTransfer = async (data: TransferFormData) => {
+  const handleSubmitForm = async (data: TransactionFormData) => {
     const payload = {
       description: data.description || "",
       categoryName: selectedCategory,
-      amount: Number(data.amount),
+      amount:
+        data.type === "expense"
+          ? -Math.abs(data.amount)
+          : Math.abs(data.amount),
       contactName: data.contactName,
-      contactAvatar: selectedAvatar,
+      contactAvatar: data.contactAvatar,
       type: data.type,
       isRecurring,
-      recurrenceFrequency,
-      recurrenceDay,
+      recurrenceFrequency: isRecurring ? recurrenceFrequency : undefined,
+      recurrenceDay: isRecurring ? recurrenceDay : undefined,
     };
 
     try {
-      const response = await api.post(`/transactions`, payload);
+      let response;
 
-      toast?.success(response?.data?.message);
+      if (isEdit && transaction) {
+        // Editar transação existente
+        response = await api.put(`/transactions/${transaction.id}`, payload);
+        toast?.success(
+          response?.data?.message || "Transaction updated successfully!"
+        );
+      } else {
+        // Criar nova transação
+        response = await api.post(`/transactions`, payload);
+        toast?.success(
+          response?.data?.message || "Transaction created successfully!"
+        );
+      }
+
       await onSubmitForm();
-
       reset();
       onClose();
     } catch (error) {
       handleApiError(error);
     }
   };
-  console.log(watch(), errors);
+
+  const modalTitle = isEdit ? "Edit Transaction" : "New Transaction";
+  const modalDescription = isEdit
+    ? "Update the transaction details below."
+    : "Please fill the fields below to create a new transaction.";
+  const submitButtonText = isEdit ? "Update Transaction" : "Create Transaction";
+
   return (
     <Dialog.Portal>
       <Dialog.Overlay
-        aria-label="Close transfer modal"
-        className="fixed inset-0 z-[990] bg-black bg-opacity-70"
+        aria-label="Close transaction modal"
+        className="fixed inset-0 z-[990] bg-black bg-opacity-10"
       />
 
       <Dialog.Content
         id={id}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="transfer-title"
-        aria-describedby="transfer-description"
+        aria-labelledby="transaction-title"
+        aria-describedby="transaction-description"
         className="max-h-[90vh] overflow-y-scroll fixed z-[999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] bg-white rounded-lg shadow-lg p-6 md:w-[560px] md:p-8"
       >
         <Dialog.Close
@@ -137,26 +183,26 @@ export function TransferFormModal({
             reset();
             onClose();
           }}
-          className="absolute top-4 right-4 hover:bg-gray-900 hover:text-gray-100 transition-all duration-300 text-gray-500 p-[0.1rem] rounded-full border border-gray-900"
+          className="absolute top-4 right-4 hover:bg-grey-900 hover:text-white transition-all duration-300 text-grey-500 p-[0.1rem] rounded-full border border-grey-900"
         >
           <X size={16} />
         </Dialog.Close>
 
         <Dialog.Title
-          id="transfer-title"
-          className="text-xl font-semibold text-gray-900 mb-2 md:text-2xl"
+          id="transaction-title"
+          className="text-xl font-semibold text-grey-900 mb-2 md:text-2xl"
         >
-          New Transfer
+          {modalTitle}
         </Dialog.Title>
 
         <Dialog.Description
-          id="transfer-description"
-          className="text-sm text-gray-600"
+          id="transaction-description"
+          className="text-sm text-grey-500"
         >
-          Please fill the fields below to make a new transfer.
+          {modalDescription}
         </Dialog.Description>
 
-        <form onSubmit={handleSubmit(handleTransfer)} className="mt-2">
+        <form onSubmit={handleSubmit(handleSubmitForm)} className="mt-2">
           <div className="flex items-start justify-center w-full">
             <div className="flex flex-col mt-4 mr-4">
               <InputLabel>Avatar</InputLabel>
@@ -219,7 +265,7 @@ export function TransferFormModal({
             <SelectInput
               label="Category"
               placeholder="Select Category..."
-              defaultValue={"General"}
+              defaultValue={selectedCategory}
               onSelect={setSelectedCategory}
               data={categories}
             />
@@ -229,21 +275,13 @@ export function TransferFormModal({
             name="amount"
             control={control}
             render={({ field, fieldState }) => (
-              <InputBase
-                required
+              <CurrencyInput
                 label="Amount ($)"
+                value={field.value}
+                onValueChange={field.onChange}
                 id="amount"
-                type="number"
-                step="0.01"
-                placeholder="Amount"
+                placeholder="$0.00"
                 error={fieldState.error?.message}
-                {...field}
-                onChange={(e) => {
-                  const value =
-                    e.target.value === "" ? 0 : parseFloat(e.target.value);
-                  field.onChange(value);
-                }}
-                value={field.value || ""}
               />
             )}
           />
@@ -257,7 +295,7 @@ export function TransferFormModal({
                 <SelectInput
                   label="Transaction Type"
                   placeholder="Select Type..."
-                  defaultValue={"expense"}
+                  defaultValue={field.value === "income" ? "Income" : "Expense"}
                   onSelect={(value) => field.onChange(value.toLowerCase())}
                   data={transactionTypeOptions}
                 />
@@ -271,10 +309,10 @@ export function TransferFormModal({
               onChange={() => setIsRecurring(!isRecurring)}
               id="isRecurring"
               type="checkbox"
-              className="w-4 h-4 accent-gray-900"
+              className="w-4 h-4 accent-grey-900"
             />
 
-            <InputLabel className="mb-0" htmlFor="isRecurring">
+            <InputLabel className="mt-1" htmlFor="isRecurring">
               Is Recurring?
             </InputLabel>
           </div>
@@ -314,7 +352,7 @@ export function TransferFormModal({
             type="submit"
             isSubmitting={isSubmitting}
           >
-            Transfer
+            {submitButtonText}
           </PrimaryButton>
         </form>
       </Dialog.Content>

@@ -25,7 +25,7 @@ export function Footer() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="fixed bottom-0 left-0 right-0 h-18 lg:hidden flex justify-between items-center bg-gray-900 px-4 pt-3 z-50"
+      className="fixed bottom-0 left-0 right-0 h-18 lg:hidden flex justify-between items-center bg-grey-900 px-4 pt-3 z-50"
     >
       {filteredNavList.map((item) => (
         <AsideItem
@@ -64,7 +64,7 @@ function AsideItem({ item, active }: Item) {
 
       <p
         className={`font-semibold text-sm transition-all duration-500
-          ${active ? "text-gray-900" : "text-gray-100"}
+          ${active ? "text-grey-900" : "text-white"}
           hidden sm:block
         `}
       >
