@@ -5,11 +5,14 @@ interface DatePickerProps {
 }
 
 export function DatePicker({ value, onChange, error }: DatePickerProps) {
+  const today = new Date().toISOString().split("T")[0];
+
   return (
     <div className="relative">
       <input
         type="date"
         value={value}
+        min={today}
         onChange={(e) => onChange(e.target.value)}
         className={`
           w-full p-3 text-sm border rounded-md

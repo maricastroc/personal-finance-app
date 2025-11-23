@@ -68,7 +68,9 @@ export function TransferFormModal({
 
   const [recurrenceFrequency, setRecurrenceFrequency] = useState("Monthly");
 
-  const [selectedCategory, setSelectedCategory] = useState("General");
+  const [selectedCategory, setSelectedCategory] = useState(
+    transaction?.category?.name || "General"
+  );
 
   const [selectedAvatar, setSelectedAvatar] = useState(avatarUrls[0]);
 
@@ -100,7 +102,7 @@ export function TransferFormModal({
     setSelectedAvatar(avatarUrl);
     setValue("contactAvatar", avatarUrl, { shouldValidate: true });
   };
-
+  console.log(selectedCategory);
   const handleSubmitForm = async (data: TransactionFormData) => {
     const payload = {
       description: data.description || "",

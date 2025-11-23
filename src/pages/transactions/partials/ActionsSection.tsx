@@ -21,7 +21,7 @@ export const ActionsSection = ({
           onClick={() => onEdit?.(transaction)}
           aria-label={`Edit transaction with ${transaction.contactName}`}
           disabled={isDisabled}
-          className="p-[0.3rem] text-white disabled:bg-grey-300 disabled:cursor-not-allowed hover:bg-secondary-greenHover rounded-full flex items-center bg-secondary-green transition-colors"
+          className="focus:ring-2 focus:outline-none focus:border-transparent focus:ring-offset-2 p-[0.3rem] focus:ring-secondary-green text-white disabled:bg-grey-300 disabled:cursor-not-allowed hover:bg-secondary-greenHover rounded-full flex items-center bg-secondary-green transition-colors"
           title="Edit transaction"
         >
           <Pencil size={16} />
@@ -31,7 +31,7 @@ export const ActionsSection = ({
           onClick={() => onDelete?.(transaction)}
           disabled={isDisabled}
           aria-label={`Delete transaction with ${transaction.contactName}`}
-          className="p-[0.3rem] text-white disabled:bg-grey-300 disabled:cursor-not-allowed hover:bg-secondary-redHover rounded-full flex items-center bg-secondary-red transition-colors"
+          className="focus:ring-2 focus:outline-none focus:border-transparent focus:ring-offset-2 focus:ring-secondary-green p-[0.3rem] text-white disabled:bg-grey-300 disabled:cursor-not-allowed hover:bg-secondary-redHover rounded-full flex items-center bg-secondary-red transition-colors"
           title="Delete transaction"
         >
           <Trash size={16} />

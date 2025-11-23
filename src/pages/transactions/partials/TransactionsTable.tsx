@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as Dialog from "@radix-ui/react-dialog";
-import { EmptyContent } from "@/components/shared/EmptyContent";
 import { formatToDollar } from "@/utils/formatToDollar";
 import { format } from "date-fns";
 import { TransactionCard } from "./TransactionCard";
@@ -191,17 +190,22 @@ export const TransactionTable = ({
             })
           ) : (
             <tr>
-              <td colSpan={5} className="px-4 py-2">
-                <EmptyContent content="No transactions available." />
+              <td
+                colSpan={5}
+                className="text-sm text-grey-500 rounded-md bg-beige-100 px-4 py-2"
+              >
+                No transactions found.
               </td>
             </tr>
           )}
 
-          <tr>
-            <td colSpan={5}>
-              <WarningSection title="Editing and deletion are restricted for recurrent transactions. These are always expense type and should be managed in the Recurrent Bills area." />
-            </td>
-          </tr>
+          {transactions && transactions?.length > 0 && (
+            <tr>
+              <td colSpan={5}>
+                <WarningSection title="Editing and deletion are restricted for recurrent transactions. These are always expense type and should be managed in the Recurrent Bills area." />
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
 

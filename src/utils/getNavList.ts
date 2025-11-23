@@ -29,7 +29,7 @@ export const navList = [
     name: "Overview",
     icon: navHome,
     iconActive: navHomeActive,
-    href: "/",
+    href: "/home",
   },
   {
     name: "Transactions",

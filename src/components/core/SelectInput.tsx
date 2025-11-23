@@ -41,7 +41,6 @@ export const SelectInput = ({
       <Select.Trigger
         className="h-12 flex items-center justify-between w-full px-4 py-2 text-sm text-grey-900 bg-white border border-beige-500 focus:border-beige-500 focus:outline-none focus:ring-secondary-green focus:ring-2 focus:ring-offset-2 rounded-md shadow-sm"
         aria-label={label}
-        disabled
       >
         <Select.Value className="text-grey-900" placeholder={placeholder} />
         <Select.Icon className="ml-2 text-grey-900">

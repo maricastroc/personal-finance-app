@@ -29,7 +29,7 @@ export function PaginationBtn({
 
   return (
     <button
-      className="rounded-md flex items-center gap-3 border border-grey-900 h-10 min-w-10 justify-center bg-grey-900 text-beige-100 px-3 hover:bg-grey-900 hover:text-beige-100 disabled:bg-grey-300 disabled:border-grey-300 disabled:text-white disabled:cursor-not-allowed transition-all duration-500"
+      className="rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-secondary-green flex items-center gap-3 border border-grey-900 h-10 min-w-10 justify-center bg-grey-900 text-beige-100 px-3 hover:bg-grey-900 hover:text-beige-100 disabled:bg-grey-300 disabled:border-grey-300 disabled:text-white disabled:cursor-not-allowed transition-all duration-500"
       {...rest}
     >
       {content}

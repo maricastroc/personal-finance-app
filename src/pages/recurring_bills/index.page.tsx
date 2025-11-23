@@ -142,7 +142,7 @@ export default function RecurringBills() {
               <TotalBillsCard recurringBills={recurringBillsResume} />
 
               <SummaryCard
-                isValidating={isValidatingResume}
+                isValidating={isValidating || isValidatingResume}
                 recurringBills={recurringBillsResume}
               />
             </section>
@@ -164,7 +164,7 @@ export default function RecurringBills() {
               <div className="overflow-x-auto md:mt-5 w-full">
                 <RecurringBillsTable
                   recurringBills={data?.bills}
-                  isValidating={isValidating}
+                  isValidating={isValidating || isValidatingResume}
                   onSave={async () => {
                     await mutate();
                     await mutateResume();

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { buildNextAuthOptions } from "../auth/[...nextauth].api";
 import { getServerSession } from "next-auth";
+import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
 
 export default async function handler(
   req: NextApiRequest,
@@ -79,7 +80,7 @@ export default async function handler(
       }
 
       let category = await prisma.category.findUnique({
-        where: { name: categoryName },
+        where: { name: capitalizeFirstLetter(categoryName) },
       });
 
       if (!category) {

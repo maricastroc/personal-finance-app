@@ -21,7 +21,7 @@ export const PrimaryButton = forwardRef<HTMLButtonElement, PrimaryButtonProps>(
     ref
   ) => {
     const baseClasses =
-      "w-full font-semibold rounded-md p-3 py-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] justify-center disabled:cursor-not-allowed focus:outline-offset-4 focus:outline-2 focus:outline-grey-900";
+      "w-full font-semibold rounded-md p-3 py-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] justify-center disabled:cursor-not-allowed focus:outline-offset-4 focus:outline-2 focus:outline-secondary-green";
 
     const variantClasses = {
       default:

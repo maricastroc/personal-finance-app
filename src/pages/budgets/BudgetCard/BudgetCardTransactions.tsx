@@ -47,29 +47,31 @@ export function BudgetCardTransactions({
             <SkeletonTransactionCard key={i} aria-hidden="true" />
           ))}
         </div>
+      ) : !transactions.length ? (
+        <p className="mt-6 text-sm text-grey-500 text-center">
+          No transactions found
+        </p>
       ) : (
         <ul className="flex flex-col mt-6">
-          {transactions.map((t, i) => {
-            return (
-              <li key={t.id ?? i}>
-                <TransactionCard
-                  isBudgetsScreen
-                  name={t.contactName}
-                  balance={t.balance}
-                  avatarUrl={t.contactAvatar}
-                  date={format(t.date, "MMM dd, yyyy")}
-                  value={formatToDollar(t.amount)}
-                />
+          {transactions.map((transaction, index) => (
+            <li key={transaction.id ?? index}>
+              <TransactionCard
+                isBudgetsScreen
+                name={transaction.contactName}
+                balance={transaction.balance}
+                avatarUrl={transaction.contactAvatar}
+                date={format(transaction.date, "MMM dd, yyyy")}
+                value={formatToDollar(transaction.amount)}
+              />
 
-                {i < transactions.length - 1 && (
-                  <span
-                    aria-hidden="true"
-                    className="w-full h-px bg-grey-300 my-1"
-                  />
-                )}
-              </li>
-            );
-          })}
+              {index < transactions.length - 1 && (
+                <span
+                  aria-hidden="true"
+                  className="w-full h-px bg-grey-300 my-1"
+                />
+              )}
+            </li>
+          ))}
         </ul>
       )}
     </section>
