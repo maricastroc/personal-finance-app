@@ -22,22 +22,22 @@ export const RecurringBillsSection = ({
     >
       {isValidating ? (
         <SkeletonRecurringBillsSection />
-      ) : recurringBills && recurringBills?.allBills?.length ? (
+      ) : recurringBills && recurringBills?.bills?.length ? (
         <div className="flex flex-grow flex-col sm:justify-end sm:items-end sm:w-full gap-4 pt-4">
-          <BillCard
-            title="Paid Bills"
-            value={formatToDollar(recurringBills.paid.total || 0)}
-            borderColor="green"
-          />
           <BillCard
             title="Total Upcoming"
             value={formatToDollar(recurringBills.upcoming.total || 0)}
+            borderColor="green"
+          />
+          <BillCard
+            title="Total Due Soon"
+            value={formatToDollar(recurringBills.dueSoon.total || 0)}
             borderColor="yellow"
           />
           <BillCard
-            title="Due Soon"
-            value={formatToDollar(recurringBills.dueSoon.total || 0)}
-            borderColor="cyan"
+            title="Total Overdue"
+            value={formatToDollar(recurringBills.overdue.total || 0)}
+            borderColor="red"
           />
         </div>
       ) : (

@@ -1,16 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import {
-  isBefore,
-  startOfDay,
-  addDays,
-  isWithinInterval,
-  endOfMonth,
-  startOfMonth,
-} from "date-fns";
+import { isBefore, startOfDay, addDays, isWithinInterval } from "date-fns";
 import { RecurringBill } from "@prisma/client";
 import { buildNextAuthOptions } from "../../auth/[...nextauth].api";
+import { calculateNextDueDate } from "../index.api";
 
 export default async function handler(
   req: NextApiRequest,
@@ -50,53 +44,53 @@ export default async function handler(
 
     const today = startOfDay(new Date());
     const dueSoonDate = addDays(today, 3);
-    const startOfMonthDate = startOfMonth(today);
-    const endOfMonthDate = endOfMonth(today);
 
     const result = {
-      paid: {
-        bills: [] as RecurringBill[],
+      overdue: {
+        bills: [] as (RecurringBill & { nextDueDate: Date; baseDate: Date })[],
         total: 0,
       },
       dueSoon: {
-        bills: [] as RecurringBill[],
+        bills: [] as (RecurringBill & { nextDueDate: Date; baseDate: Date })[],
         total: 0,
       },
       upcoming: {
-        bills: [] as RecurringBill[],
+        bills: [] as (RecurringBill & { nextDueDate: Date; baseDate: Date })[],
         total: 0,
       },
       monthlyTotal: 0,
     };
 
     for (const bill of recurringBills) {
-      const recurrenceDate = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        bill.recurrenceDay || 1
-      );
+      result.monthlyTotal += Math.abs(bill.amount);
+    }
 
-      if (
-        bill.type === "expense" &&
-        isWithinInterval(recurrenceDate, {
-          start: startOfMonthDate,
-          end: endOfMonthDate,
-        })
-      ) {
-        result.monthlyTotal += bill.amount;
-      }
+    for (const bill of recurringBills) {
+      const nextDueDate = calculateNextDueDate(bill);
 
-      if (isBefore(recurrenceDate, today)) {
-        result.paid.bills.push(bill);
-        result.paid.total += bill.amount;
+      if (isBefore(nextDueDate, today)) {
+        result.overdue.bills.push({
+          ...bill,
+          nextDueDate,
+          baseDate: bill.baseDate,
+        });
+        result.overdue.total += Math.abs(bill.amount);
       } else if (
-        isWithinInterval(recurrenceDate, { start: today, end: dueSoonDate })
+        isWithinInterval(nextDueDate, { start: today, end: dueSoonDate })
       ) {
-        result.dueSoon.bills.push(bill);
-        result.dueSoon.total += bill.amount;
+        result.dueSoon.bills.push({
+          ...bill,
+          nextDueDate,
+          baseDate: bill.baseDate,
+        });
+        result.dueSoon.total += Math.abs(bill.amount);
       } else {
-        result.upcoming.bills.push(bill);
-        result.upcoming.total += bill.amount;
+        result.upcoming.bills.push({
+          ...bill,
+          nextDueDate,
+          baseDate: bill.baseDate,
+        });
+        result.upcoming.total += Math.abs(bill.amount);
       }
     }
 

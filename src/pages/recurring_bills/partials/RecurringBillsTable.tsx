@@ -1,86 +1,167 @@
 import { RecurringBillProps } from "@/types/recurringBills";
 import { formatToDollar } from "@/utils/formatToDollar";
 import { RecurringBillCard } from "./RecurringBillCard";
-import { getOrdinalSuffix } from "@/utils/getOrdinalSuffix";
-import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
 import iconBillPaid from "/public/assets/images/icon-bill-paid.svg";
-import iconBillDue from "/public/assets/images/icon-bill-due.svg";
+import iconBillDueSoon from "/public/assets/images/icon-bill-due.svg";
+import iconBillOverdue from "/public/assets/images/icon-bill-overdue.svg";
 import Image from "next/image";
 import { SkeletonSection } from "./SkeletonSection";
+import { format } from "date-fns";
+import { useState } from "react";
+import { api } from "@/lib/axios";
+import toast from "react-hot-toast";
+import { handleApiError } from "@/utils/handleApiError";
+import { WarningSection } from "@/components/shared/WarningSection";
 
 export const RecurringBillsTable = ({
   recurringBills,
   isValidating,
+  onSave,
 }: {
   recurringBills: RecurringBillProps[] | undefined;
   isValidating: boolean;
-}) => (
-  <table className="min-w-full table-fixed">
-    <thead>
-      <tr>
-        <th className="px-4 py-2 text-xs text-grey-500 text-left w-2/5">
-          Bill Title
-        </th>
-        <th className="px-4 py-2 text-xs text-grey-500 text-left w-1/5">
-          Due Date
-        </th>
-        <th className="px-4 py-2 text-xs text-grey-500 text-right w-1/5">
-          Amount
-        </th>
-      </tr>
-    </thead>
+  onSave: () => Promise<void>;
+}) => {
+  const [payingBillId, setPayingBillId] = useState<string | null>(null);
 
-    <tbody>
-      {isValidating ? (
-        <SkeletonSection />
-      ) : recurringBills && recurringBills.length > 0 ? (
-        recurringBills.map((bill) => (
-          <tr key={bill.id} className="border-t">
-            <td className="px-4 py-2 text-left">
-              <RecurringBillCard
-                name={bill.contactName}
-                avatarUrl={bill.contactAvatar}
-              />
-            </td>
+  const handlePayNow = async (bill: RecurringBillProps) => {
+    if (payingBillId) return;
 
-            <td className="text-xs text-grey-500 px-4 py-2 text-left">
-              <div className="flex items-center gap-2">
-                {`${capitalizeFirstLetter(
-                  bill.recurrenceFrequency
-                )} - ${getOrdinalSuffix(bill.recurrenceDay || "")}`}
+    setPayingBillId(bill.id);
 
-                {bill.status === "paid" && (
-                  <Image src={iconBillPaid} alt="" width={12} />
-                )}
+    try {
+      const response = await api.post(`/recurring_bills/${bill.id}/pay`, {
+        paymentDate: new Date().toISOString().split("T")[0],
+      });
 
-                {bill.status === "due soon" && (
-                  <Image src={iconBillDue} alt="" width={12} />
-                )}
-              </div>
-            </td>
+      toast.success(response.data.message || "Bill paid successfully!");
+      await onSave();
+    } catch (error) {
+      handleApiError(error);
+    } finally {
+      setPayingBillId(null);
+    }
+  };
 
-            <td className="text-sm text-grey-500 px-4 py-2 text-right">
-              <span
-                className={`font-bold ${
-                  bill.status === "due soon"
-                    ? "text-secondary-red"
-                    : "text-grey-900"
-                }`}
-              >
-                {formatToDollar(bill.amount)}
-              </span>
-            </td>
+  const shouldShowEnabledButton = (bill: RecurringBillProps) => {
+    return bill.status === "due soon" || bill.status === "overdue";
+  };
+
+  const hasUpcomingBills = recurringBills?.some(
+    (bill) => bill.status === "upcoming"
+  );
+
+  return (
+    <div>
+      <table
+        className={`table-fixed overflow-x-auto ${
+          recurringBills && recurringBills?.length > 0
+            ? "min-w-[40rem]"
+            : "min-w-[35rem]"
+        }`}
+      >
+        <thead>
+          <tr>
+            <th className="px-4 py-2 text-xs text-grey-500 text-left w-2/5">
+              Bill Title
+            </th>
+            <th className="px-4 py-2 text-xs text-grey-500 text-left w-1/5">
+              Due Date
+            </th>
+            <th className="px-4 py-2 text-xs text-grey-500 text-left w-1/7">
+              Status
+            </th>
+            <th className="px-4 py-2 text-xs text-grey-500 text-right w-1/5">
+              Amount
+            </th>
+            <th className="px-4 py-2 text-xs text-grey-500 text-center w-3/5">
+              Actions
+            </th>
           </tr>
-        ))
-      ) : (
-        <tr>
-          <td colSpan={3} className="px-4 py-2">
-            <span className="text-secondary-red text-sm font-bold">
-              No transactions found.
-            </span>
-          </td>
-        </tr>
+        </thead>
+
+        <tbody>
+          {isValidating ? (
+            <SkeletonSection />
+          ) : recurringBills && recurringBills.length > 0 ? (
+            recurringBills.map((bill) => (
+              <tr key={bill.id} className="border-t">
+                <td className="px-4 py-2 text-left">
+                  <RecurringBillCard
+                    name={bill.contactName}
+                    avatarUrl={bill.contactAvatar}
+                  />
+                </td>
+
+                <td className="text-xs text-grey-500 px-4 py-2 text-left">
+                  {format(bill.nextDueDate as Date, "MMM dd, yyyy")}
+                </td>
+
+                <td className="text-xs text-grey-500 px-4 py-2 text-left">
+                  <div className="flex items-center gap-1 capitalize">
+                    {bill.status === "upcoming" && (
+                      <Image src={iconBillPaid} alt="Upcoming" width={12} />
+                    )}
+
+                    {bill.status === "due soon" && (
+                      <Image src={iconBillDueSoon} alt="Due soon" width={12} />
+                    )}
+
+                    {bill.status === "overdue" && (
+                      <Image src={iconBillOverdue} alt="Overdue" width={12} />
+                    )}
+
+                    {bill.status}
+                  </div>
+                </td>
+
+                <td className="text-sm text-grey-500 px-4 py-2 text-right">
+                  <span
+                    className={`font-bold ${
+                      bill.status === "due soon" || bill.status === "overdue"
+                        ? "text-secondary-red"
+                        : "text-grey-900"
+                    }`}
+                  >
+                    {formatToDollar(bill.amount)}
+                  </span>
+                </td>
+
+                <td className="px-4 py-2 text-center">
+                  <button
+                    type="button"
+                    onClick={() => handlePayNow(bill)}
+                    disabled={!shouldShowEnabledButton(bill)}
+                    className={`
+                      p-2 py-1 text-xs font-medium rounded-md transition-colors
+                      disabled:cursor-not-allowed disabled:border-grey-300 border text-white bg-secondary-green hover:text-white hover:bg-secondary-greenHover disabled:bg-grey-300 disabled:text-white
+                    `}
+                  >
+                    {payingBillId === bill.id ? "Paying..." : "Pay Now"}
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={5} className="px-4 py-2">
+                <span className="text-secondary-red w-full text-sm font-bold">
+                  No recurring bills found.
+                </span>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+
+      {hasUpcomingBills && (
+        <WarningSection
+          title="Note about upcoming bills:"
+          description='The "Pay Now" button will become available when bills are due
+                within 3 days (marked as "due soon") or when they are overdue.
+                Upcoming bills cannot be paid in advance through this system.'
+        />
       )}
-    </tbody>
-  </table>
-);
+    </div>
+  );
+};

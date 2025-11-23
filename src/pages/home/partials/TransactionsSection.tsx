@@ -33,6 +33,7 @@ export const TransactionsSection = ({
               <TransactionCard
                 key={index}
                 name={transaction.contactName}
+                category={transaction.category?.name}
                 balance={transaction.balance}
                 avatarUrl={transaction.contactAvatar}
                 date={format(transaction.date, "MMM dd, yyyy")}

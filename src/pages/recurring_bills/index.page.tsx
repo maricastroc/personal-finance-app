@@ -3,17 +3,14 @@ import { NextSeo } from "next-seo";
 import { useAppContext } from "@/contexts/AppContext";
 import { RecurringBillsResult } from "../home/index.page";
 import { SummaryCard } from "./partials/SummaryCard";
-import { MobileRecurringBillCard } from "./partials/MobileRecurringBillCard";
 import { SearchSection } from "./partials/SearchSection";
 import { TotalBillsCard } from "./partials/TotalBillsCard";
 import { RecurringBillsTable } from "./partials/RecurringBillsTable";
 import { formatToSnakeCase } from "@/utils/formatToSnakeCase";
 import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
 import useRequest from "@/utils/useRequest";
-import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
 import { calculateTotalPages } from "@/utils/calculateTotalPages";
 import { useDebounce } from "@/utils/useDebounce";
-import { SkeletonTransactionCard } from "@/components/shared/SkeletonTransactionCard";
 import { LoadingPage } from "@/components/shared/LoadingPage";
 import Layout from "@/components/layouts/layout.page";
 import { PaginationSection } from "@/components/shared/PaginationSection/PaginationSection";
@@ -51,39 +48,41 @@ export default function RecurringBills() {
     setSelectedSortBy(value);
   };
 
-  const { data: recurringBills, isValidating } =
-    useRequest<RecurringBillsResult>(
-      {
-        url: `/recurring_bills?page=${currentPage}&limit=10&sortBy=${formatToSnakeCase(
-          selectedSortBy
-        )}&search=${debouncedSearch}`,
-        method: "GET",
-      },
-      {
-        revalidateOnFocus: false,
-        revalidateIfStale: true,
-        dedupingInterval: 20000,
-        focusThrottleInterval: 30000,
-        keepPreviousData: true,
-      }
-    );
+  const { data, isValidating, mutate } = useRequest<RecurringBillsResult>(
+    {
+      url: `/recurring_bills?page=${currentPage}&limit=10&sortBy=${formatToSnakeCase(
+        selectedSortBy
+      )}&search=${debouncedSearch}`,
+      method: "GET",
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      dedupingInterval: 20000,
+      focusThrottleInterval: 30000,
+      keepPreviousData: true,
+    }
+  );
 
-  const { data: recurringBillsResume, isValidating: isValidatingResume } =
-    useRequest<RecurringBillsResult>(
-      {
-        url: `/recurring_bills/resume`,
-        method: "GET",
-      },
-      {
-        revalidateOnFocus: false,
-        revalidateIfStale: true,
-        dedupingInterval: 20000,
-        focusThrottleInterval: 30000,
-        keepPreviousData: true,
-      }
-    );
+  const {
+    data: recurringBillsResume,
+    isValidating: isValidatingResume,
+    mutate: mutateResume,
+  } = useRequest<RecurringBillsResult>(
+    {
+      url: `/recurring_bills/resume`,
+      method: "GET",
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      dedupingInterval: 20000,
+      focusThrottleInterval: 30000,
+      keepPreviousData: true,
+    }
+  );
 
-  const pagination = recurringBills?.pagination || {
+  const pagination = data?.pagination || {
     page: 1,
     limit: 10,
     total: 0,
@@ -162,44 +161,18 @@ export default function RecurringBills() {
                 search={search}
               />
 
-              <div className="hidden md:flex overflow-x-auto mt-5">
+              <div className="overflow-x-auto md:mt-5 w-full">
                 <RecurringBillsTable
-                  recurringBills={recurringBills?.allBills}
+                  recurringBills={data?.bills}
                   isValidating={isValidating}
+                  onSave={async () => {
+                    await mutate();
+                    await mutateResume();
+                  }}
                 />
               </div>
 
-              <div className="flex flex-col md:hidden mt-4">
-                {isValidating && !recurringBills?.allBills?.length ? (
-                  Array.from({ length: 5 }).map((_, index) => (
-                    <div key={index} className="border-t">
-                      <div className="px-4 py-2">
-                        <SkeletonTransactionCard />
-                      </div>
-                    </div>
-                  ))
-                ) : recurringBills?.allBills?.length ? (
-                  recurringBills.allBills.map((bill) => (
-                    <MobileRecurringBillCard
-                      key={bill.id}
-                      recurrenceDay={bill.recurrenceDay || ""}
-                      recurrenceFrequency={
-                        capitalizeFirstLetter(bill.recurrenceFrequency) || ""
-                      }
-                      amount={bill.amount}
-                      name={bill.contactName}
-                      avatarUrl={bill.contactAvatar}
-                      status={bill?.status || ""}
-                    />
-                  ))
-                ) : (
-                  <p className="text-sm text-grey-500">
-                    No recurring bills available.
-                  </p>
-                )}
-              </div>
-
-              {!!recurringBills?.allBills?.length && (
+              {!!data?.bills?.length && (
                 <div className="flex md:px-4 items-center justify-between gap-2 mt-6">
                   <PaginationSection
                     currentPage={currentPage}

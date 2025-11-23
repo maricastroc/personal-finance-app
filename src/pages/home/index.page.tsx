@@ -34,10 +34,10 @@ interface RecurringBillsWithDetails {
 }
 
 export interface RecurringBillsResult {
-  paid: RecurringBillsWithDetails;
+  overdue: RecurringBillsWithDetails;
   upcoming: RecurringBillsWithDetails;
   dueSoon: RecurringBillsWithDetails;
-  allBills: RecurringBillProps[];
+  bills: RecurringBillProps[];
   monthlyTotal: number;
   pagination: {
     page: number;

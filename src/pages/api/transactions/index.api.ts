@@ -3,6 +3,39 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { buildNextAuthOptions } from "../auth/[...nextauth].api";
 import { Prisma } from "@prisma/client";
+import { addMonths, addYears, isBefore, setDate } from "date-fns";
+
+export function calculateNextDueDate(
+  baseDate: Date,
+  recurrenceDay: number,
+  recurrenceFrequency: string
+): Date {
+  const today = new Date();
+  let nextDueDate = new Date(baseDate);
+
+  nextDueDate = setDate(nextDueDate, recurrenceDay);
+
+  if (isBefore(nextDueDate, today)) {
+    switch (recurrenceFrequency) {
+      case "Monthly":
+        nextDueDate = addMonths(nextDueDate, 1);
+        break;
+      case "Bimonthly":
+        nextDueDate = addMonths(nextDueDate, 2);
+        break;
+      case "Half-yearly":
+        nextDueDate = addMonths(nextDueDate, 6);
+        break;
+      case "Annual":
+        nextDueDate = addYears(nextDueDate, 1);
+        break;
+      default:
+        nextDueDate = addMonths(nextDueDate, 1);
+    }
+  }
+
+  return nextDueDate;
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -131,7 +164,8 @@ export default async function handler(
       console.error("Error fetching transactions:", error);
       return res.status(500).json({ message: "Internal Server Error" });
     }
-  } else if (req.method === "POST") {
+  }
+  if (req.method === "POST") {
     const {
       description,
       amount,
@@ -164,58 +198,77 @@ export default async function handler(
     }
 
     const categoryId = category.id;
+    const transactionDate = date ? new Date(date) : new Date();
 
     try {
-      const transaction = await prisma.transaction.create({
-        data: {
-          description,
-          amount: Math.abs(amount),
-          categoryId,
-          contactName,
-          contactAvatar: contactAvatar || "",
-          type,
-          userId,
-          isRecurring: isRecurring || false,
-          date: date ? new Date(date) : new Date(),
-        },
-      });
-
-      if (isRecurring) {
-        if (!recurrenceDay || !recurrenceFrequency) {
-          return res.status(400).json({
-            message: "Missing recurrence fields for recurring transaction",
-          });
-        }
-
-        const recurringBill = await prisma.recurringBill.create({
+      const result = await prisma.$transaction(async (tx) => {
+        const transaction = await tx.transaction.create({
           data: {
             description,
             amount: Math.abs(amount),
-            recurrenceDay,
-            recurrenceFrequency,
             categoryId,
             contactName,
             contactAvatar: contactAvatar || "",
             type,
             userId,
+            isRecurring: isRecurring || false,
+            date: transactionDate,
+            recurringBillId: null,
           },
         });
 
-        await prisma.transaction.update({
-          where: { id: transaction.id },
-          data: {
-            recurringBillId: recurringBill.id,
-            isRecurring: true,
-          },
-        });
-      }
+        if (isRecurring) {
+          if (!recurrenceDay || !recurrenceFrequency) {
+            throw new Error(
+              "Missing recurrence fields for recurring transaction"
+            );
+          }
+
+          const nextDueDate = calculateNextDueDate(
+            transactionDate,
+            recurrenceDay,
+            recurrenceFrequency
+          );
+
+          const recurringBill = await tx.recurringBill.create({
+            data: {
+              description,
+              amount: Math.abs(amount),
+              recurrenceDay,
+              recurrenceFrequency,
+              categoryId,
+              contactName,
+              contactAvatar: contactAvatar || "",
+              type,
+              userId,
+              baseDate: transactionDate,
+              nextDueDate,
+              lastPaidDate: null,
+            },
+          });
+
+          return { transaction, recurringBill };
+        }
+
+        return { transaction };
+      });
 
       return res.status(201).json({
         message: "Transaction created successfully",
-        transaction,
+        ...result,
       });
     } catch (error) {
       console.error("Error creating transaction:", error);
+
+      if (
+        error instanceof Error &&
+        error.message.includes("Missing recurrence fields")
+      ) {
+        return res.status(400).json({
+          message: "Missing recurrence fields for recurring transaction",
+        });
+      }
+
       return res.status(500).json({ message: "Internal Server Error" });
     }
   } else {

@@ -68,7 +68,7 @@ export function TransactionCard({
             balance === "income" ? "text-secondary-green" : "text-secondary-red"
           } ${isBudgetsScreen ? "text-xs" : ""}`}
         >
-          {balance === "income" ? "+" : "-"} {value}
+          {balance === "income" ? "+" : ""} {value}
         </p>
 
         <p className="text-grey-500 text-xs">{date}</p>

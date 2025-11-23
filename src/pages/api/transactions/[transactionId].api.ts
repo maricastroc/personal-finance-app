@@ -34,9 +34,6 @@ export default async function handler(
       contactName,
       contactAvatar,
       type,
-      isRecurring,
-      recurrenceDay,
-      recurrenceFrequency,
       date,
     } = req.body;
 
@@ -66,6 +63,20 @@ export default async function handler(
       return res.status(404).json({ message: "Transaction not found" });
     }
 
+    if (existingTransaction.recurringBillId) {
+      return res.status(400).json({
+        message:
+          "Cannot edit transactions created via 'Pay Now'. Please edit the recurring bill template instead.",
+      });
+    }
+
+    if (existingTransaction.isRecurring) {
+      return res.status(400).json({
+        message:
+          "Cannot edit recurring transactions. Please edit the recurring bill template instead.",
+      });
+    }
+
     let category = await prisma.category.findUnique({
       where: { name: categoryName },
     });
@@ -79,117 +90,26 @@ export default async function handler(
     const categoryId = category.id;
 
     try {
-      const result = await prisma.$transaction(async (tx) => {
-        const updatedTransaction = await tx.transaction.update({
-          where: { id: String(transactionId) },
-          data: {
-            description,
-            amount: type === "expense" ? -Math.abs(amount) : Math.abs(amount),
-            categoryId,
-            contactName,
-            contactAvatar: contactAvatar || "",
-            type,
-            date: date ? new Date(date) : new Date(),
-          },
-        });
-
-        if (isRecurring) {
-          if (!recurrenceDay || !recurrenceFrequency) {
-            throw new Error(
-              "Missing recurrence fields for recurring transaction"
-            );
-          }
-
-          if (existingTransaction.recurringBillId) {
-            await tx.recurringBill.update({
-              where: { id: existingTransaction.recurringBillId },
-              data: {
-                description,
-                amount:
-                  type === "expense" ? -Math.abs(amount) : Math.abs(amount),
-                recurrenceDay,
-                recurrenceFrequency,
-                categoryId,
-                contactName,
-                contactAvatar: contactAvatar || "",
-                type,
-              },
-            });
-
-            if (!existingTransaction.isRecurring) {
-              await tx.transaction.update({
-                where: { id: String(transactionId) },
-                data: { isRecurring: true },
-              });
-            }
-          } else {
-            const recurringBill = await tx.recurringBill.create({
-              data: {
-                description,
-                amount:
-                  type === "expense" ? -Math.abs(amount) : Math.abs(amount),
-                recurrenceDay,
-                recurrenceFrequency,
-                categoryId,
-                contactName,
-                contactAvatar: contactAvatar || "",
-                type,
-                userId,
-              },
-            });
-
-            await tx.transaction.update({
-              where: { id: String(transactionId) },
-              data: {
-                recurringBillId: recurringBill.id,
-                isRecurring: true,
-              },
-            });
-          }
-        } else {
-          if (existingTransaction.recurringBillId) {
-            await tx.transaction.update({
-              where: { id: String(transactionId) },
-              data: {
-                recurringBillId: null,
-                isRecurring: false,
-              },
-            });
-
-            const otherTransactions = await tx.transaction.count({
-              where: {
-                recurringBillId: existingTransaction.recurringBillId,
-                NOT: { id: String(transactionId) },
-              },
-            });
-
-            if (otherTransactions === 0) {
-              await tx.recurringBill.delete({
-                where: { id: existingTransaction.recurringBillId },
-              });
-            }
-          }
-        }
-
-        return updatedTransaction;
+      const updatedTransaction = await prisma.transaction.update({
+        where: { id: String(transactionId) },
+        data: {
+          description,
+          amount: Math.abs(amount),
+          categoryId,
+          contactName,
+          contactAvatar: contactAvatar || "",
+          type,
+          date: date ? new Date(date) : new Date(),
+          isRecurring: false,
+        },
       });
 
       return res.status(200).json({
         message: "Transaction updated successfully",
-        transaction: result,
+        transaction: updatedTransaction,
       });
     } catch (error) {
       console.error("Error updating transaction:", error);
-
-      if (
-        error instanceof Error &&
-        error.message.includes("Missing recurrence fields")
-      ) {
-        return res.status(400).json({
-          message: "Missing recurrence fields for recurring transaction",
-        });
-      }
-
       return res.status(500).json({ message: "Internal Server Error" });
     }
   } else if (req.method === "DELETE") {
@@ -213,25 +133,23 @@ export default async function handler(
       return res.status(404).json({ message: "Transaction not found" });
     }
 
+    if (existingTransaction.recurringBillId) {
+      return res.status(400).json({
+        message:
+          "Cannot delete transactions created via 'Pay Now'. These payments are linked to recurring bills.",
+      });
+    }
+
+    if (existingTransaction.isRecurring) {
+      return res.status(400).json({
+        message:
+          "Cannot delete recurring transactions. Please delete the recurring bill template instead.",
+      });
+    }
+
     try {
-      await prisma.$transaction(async (tx) => {
-        await tx.transaction.delete({
-          where: { id: String(transactionId) },
-        });
-
-        if (existingTransaction.recurringBillId) {
-          const otherTransactions = await tx.transaction.count({
-            where: {
-              recurringBillId: existingTransaction.recurringBillId,
-            },
-          });
-
-          if (otherTransactions === 0) {
-            await tx.recurringBill.delete({
-              where: { id: existingTransaction.recurringBillId },
-            });
-          }
-        }
+      await prisma.transaction.delete({
+        where: { id: String(transactionId) },
       });
 
       return res.status(200).json({
@@ -252,5 +170,7 @@ export default async function handler(
 
       return res.status(500).json({ message: "Internal Server Error" });
     }
+  } else {
+    return res.status(405).json({ message: "Method Not Allowed" });
   }
 }

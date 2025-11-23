@@ -25,11 +25,13 @@ export const PrimaryButton = forwardRef<HTMLButtonElement, PrimaryButtonProps>(
 
     const variantClasses = {
       default:
-        "bg-grey-900 text-beige-100 hover:bg-grey-500 disabled:bg-grey-500 disabled:text-white",
+        "bg-grey-900 text-beige-100 hover:bg-grey-500 disabled:bg-grey-300 disabled:text-white disabled:hover:bg-grey-300",
+
       secondary:
-        "bg-beige-100 text-grey-900 hover:brightness-90 disabled:bg-grey-500 disabled:text-white",
+        "bg-beige-100 text-grey-900 hover:brightness-90 disabled:bg-grey-300 disabled:text-white disabled:hover:brightness-100",
+
       outline:
-        "border border-black text-black bg-transparent hover:bg-grey-500 hover:text-white hover:border-transparent disabled:border-grey-500 disabled:text-grey-500",
+        "border border-black text-black bg-transparent hover:bg-grey-500 hover:text-white hover:border-transparent disabled:border-grey-300 disabled:text-grey-300 disabled:hover:bg-transparent disabled:hover:text-grey-300 disabled:hover:border-grey-300",
     };
 
     return (

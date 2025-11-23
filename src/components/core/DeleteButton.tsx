@@ -13,7 +13,12 @@ export const DeleteButton = forwardRef<HTMLButtonElement, DeleteButtonProps>(
         type={props.type ?? "button"}
         aria-busy={isSubmitting}
         aria-live="polite"
-        className="font-semibold rounded-md p-3 px-4 flex gap-2 transition-all duration-300 text-sm bg-secondary-red text-beige-100 hover:brightness-125 justify-center disabled:bg-grey-500 disabled:text-white disabled:cursor-not-allowed"
+        className="
+          font-semibold rounded-md p-3 px-4 flex gap-2 transition-all duration-300
+          text-sm bg-secondary-red text-beige-100 hover:brightness-125 justify-center
+          disabled:bg-grey-300 disabled:text-white disabled:cursor-not-allowed
+          disabled:hover:brightness-100
+        "
         disabled={isSubmitting || disabled}
         {...props}
       >

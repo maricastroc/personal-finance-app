@@ -4,7 +4,7 @@ import { SelectInput } from "@/components/core/SelectInput";
 import { api } from "@/lib/axios";
 import { CategoryProps } from "@/types/category";
 import { TransactionProps } from "@/types/transaction";
-import { avatarUrls, recurrenceFrequencyOptions } from "@/utils/constants";
+import { avatarUrls } from "@/utils/constants";
 import { handleApiError } from "@/utils/handleApiError";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -17,6 +17,8 @@ import InputLabel from "@/components/core/InputLabel";
 import { AvatarSelectInput } from "@/components/core/AvatarSelectInput";
 import { CurrencyInput } from "@/components/core/CurrencyInput";
 import { Modal } from "@/components/shared/Modal";
+import { format } from "date-fns";
+import { DatePicker } from "@/components/core/DatePicker";
 
 const transactionFormSchema = () =>
   z.object({
@@ -31,6 +33,7 @@ const transactionFormSchema = () =>
     contactAvatar: z
       .string()
       .min(1, { message: "Recipient avatar is required." }),
+    date: z.string().min(1, { message: "Date is required." }),
   });
 
 const transactionTypeOptions = [
@@ -79,6 +82,7 @@ export function TransferFormModal({
     setValue,
     control,
     reset,
+    watch,
     formState: { isSubmitting, errors },
   } = useForm<TransactionFormData>({
     resolver: zodResolver(transactionFormSchema()),
@@ -88,6 +92,7 @@ export function TransferFormModal({
       contactName: "",
       contactAvatar: selectedAvatar,
       type: "expense",
+      date: format(new Date(), "yyyy-MM-dd"),
     },
   });
 
@@ -107,6 +112,7 @@ export function TransferFormModal({
       contactName: data.contactName,
       contactAvatar: data.contactAvatar,
       type: data.type,
+      date: data.date,
       isRecurring,
       recurrenceFrequency: isRecurring ? recurrenceFrequency : undefined,
       recurrenceDay: isRecurring ? recurrenceDay : undefined,
@@ -144,7 +150,6 @@ export function TransferFormModal({
   const modalDescription = isEdit
     ? "Update the transaction details below."
     : "Please fill the fields below to create a new transaction.";
-
   const submitButtonText = isEdit ? "Update Transaction" : "Create Transaction";
 
   useEffect(() => {
@@ -154,6 +159,8 @@ export function TransferFormModal({
       setValue("contactName", transaction.contactName);
       setValue("contactAvatar", transaction.contactAvatar);
       setValue("type", transaction.balance as "income" | "expense");
+
+      setValue("date", format(new Date(transaction.date), "yyyy-MM-dd"));
 
       setSelectedAvatar(transaction.contactAvatar);
       setSelectedCategory(transaction.category?.name || "General");
@@ -183,6 +190,14 @@ export function TransferFormModal({
       setValue("recurrenceDay", undefined);
     }
   }, [isRecurring]);
+
+  useEffect(() => {
+    if (watch().type === "expense") {
+      setIsRecurring(false);
+      setValue("recurrenceFrequency", undefined);
+      setValue("recurrenceDay", undefined);
+    }
+  }, [watch().type]);
 
   return (
     <Modal
@@ -273,6 +288,21 @@ export function TransferFormModal({
           )}
         />
 
+        <div className="flex flex-col mt-4">
+          <InputLabel>Transaction Date</InputLabel>
+          <Controller
+            name="date"
+            control={control}
+            render={({ field, fieldState }) => (
+              <DatePicker
+                value={field.value}
+                onChange={field.onChange}
+                error={fieldState.error?.message}
+              />
+            )}
+          />
+        </div>
+
         <div className="flex flex-col my-4">
           <InputLabel>Transaction Type</InputLabel>
           <Controller
@@ -290,66 +320,43 @@ export function TransferFormModal({
           />
         </div>
 
-        <div className="flex items-center justify-start w-full mt-4 gap-2">
-          <input
-            checked={isRecurring}
-            onChange={() => setIsRecurring(!isRecurring)}
-            id="isRecurring"
-            type="checkbox"
-            className="w-4 h-4 accent-grey-900"
-          />
+        {watch().type === "expense" && !isEdit && (
+          <div className="flex items-center justify-start w-full mt-4 gap-2">
+            <input
+              checked={isRecurring}
+              onChange={() => setIsRecurring(!isRecurring)}
+              id="isRecurring"
+              type="checkbox"
+              className="w-4 h-4 accent-grey-900"
+            />
 
-          <InputLabel className="mt-1" htmlFor="isRecurring">
-            Is Recurring?
-          </InputLabel>
-        </div>
+            <InputLabel className="mt-1" htmlFor="isRecurring">
+              Is Recurring?
+            </InputLabel>
+          </div>
+        )}
 
         {isRecurring && (
-          <>
-            <div className="flex flex-col mt-4">
-              <InputLabel htmlFor="recurrenceFrequency">
-                Recurrence Frequency
-              </InputLabel>
+          <div className="flex flex-col mt-4">
+            <InputLabel htmlFor="recurrenceDay">Recurrence Day</InputLabel>
 
-              <Controller
-                name="recurrenceFrequency"
-                control={control}
-                render={({ field }) => (
-                  <SelectInput
-                    label="Recurrence Frequency"
-                    placeholder="Recurrence Day"
-                    defaultValue={recurrenceFrequency}
-                    data={recurrenceFrequencyOptions}
-                    onSelect={(value) => {
-                      field.onChange(value);
-                      setRecurrenceFrequency(value);
-                    }}
-                  />
-                )}
-              />
-            </div>
-
-            <div className="flex flex-col mt-4">
-              <InputLabel htmlFor="recurrenceDay">Recurrence Day</InputLabel>
-
-              <Controller
-                name="recurrenceDay"
-                control={control}
-                render={({ field }) => (
-                  <SelectInput
-                    label="Recurrence Day"
-                    defaultValue={String(recurrenceDay)}
-                    placeholder="Recurrence Day"
-                    data={daysInMonth}
-                    onSelect={(value) => {
-                      field.onChange(Number(value));
-                      setRecurrenceDay(Number(value));
-                    }}
-                  />
-                )}
-              />
-            </div>
-          </>
+            <Controller
+              name="recurrenceDay"
+              control={control}
+              render={({ field }) => (
+                <SelectInput
+                  label="Recurrence Day"
+                  defaultValue={String(recurrenceDay)}
+                  placeholder="Recurrence Day"
+                  data={daysInMonth}
+                  onSelect={(value) => {
+                    field.onChange(Number(value));
+                    setRecurrenceDay(Number(value));
+                  }}
+                />
+              )}
+            />
+          </div>
         )}
 
         <PrimaryButton

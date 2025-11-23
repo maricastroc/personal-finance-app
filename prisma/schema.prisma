@@ -47,7 +47,7 @@ model Transaction {
   user                 User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   recurringBillId      String?
-  recurringBill        RecurringBill? @relation(fields: [recurringBillId], references: [id], onDelete: Cascade)
+  recurringBill        RecurringBill? @relation(fields: [recurringBillId], references: [id], onDelete: SetNull)
 
   @@index([userId])
   @@index([categoryId])
@@ -64,13 +64,17 @@ model RecurringBill {
   contactName          String
   contactAvatar        String
   type                 String
+  nextDueDate          DateTime?
+  lastPaidDate         DateTime?
+  baseDate             DateTime   @default(now())
   
   categoryId           String?
   category             Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   userId               String
   user                 User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  transactions         Transaction[]
+  // Mantemos a relação mas SEM back-reference nas queries
+  transactions         Transaction[]  // ← RELAÇÃO OBRIGATÓRIA
 
   @@index([userId])
   @@index([categoryId])

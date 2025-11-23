@@ -3,13 +3,13 @@ import clsx from "clsx";
 interface BillCardProps {
   title: string;
   value: string;
-  borderColor: "green" | "yellow" | "cyan";
+  borderColor: "green" | "yellow" | "red";
 }
 
 const borderColors = {
   green: "border-l-secondary-green",
   yellow: "border-l-secondary-yellow",
-  cyan: "border-l-secondary-cyan",
+  red: "border-l-secondary-red",
 };
 
 export function BillCard({ title, value, borderColor }: BillCardProps) {

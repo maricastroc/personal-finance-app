@@ -1,3 +1,4 @@
+import { TransactionProps } from "./transaction";
 import { UserProps } from "./user";
 
 export interface RecurringBillProps {
@@ -6,6 +7,9 @@ export interface RecurringBillProps {
   amount: number;
   recurrenceDay?: string;
   recurrenceFrequency?: string;
+  transaction?: TransactionProps;
+  nextDueDate?: Date;
+  baseDate?: Date;
   userId: string;
   user: UserProps;
   status?: string;

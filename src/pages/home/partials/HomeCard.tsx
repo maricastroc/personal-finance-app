@@ -32,7 +32,7 @@ export default function HomeCard({
           aria-label={`Go to ${title} details`}
           className="
             flex items-center gap-2
-            focus:outline-none focus:ring-2 focus:ring-grey-900 focus:ring-offset-2
+            focus:outline-none focus:ring-2 focus:ring-secondary-green focus:ring-offset-2
           "
         >
           <p className="text-sm text-grey-500">{buttonLabel}</p>

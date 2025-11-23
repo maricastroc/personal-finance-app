@@ -25,7 +25,7 @@ export const AvatarSelectInput = ({
       <label className="sr-only">{label}</label>
 
       <Select.Trigger
-        className="h-12 flex items-center justify-between w-[4rem] p-2 text-sm text-grey-900 bg-white border border-beige-500 focus:border-beige-500 focus:outline-none focus:ring-grey-900 focus:ring-2 focus:ring-offset-2 rounded-md shadow-sm"
+        className="h-12 flex items-center justify-between w-[4rem] p-2 text-sm text-grey-900 bg-white border border-beige-500 focus:border-beige-500 focus:outline-none focus:ring-secondary-green focus:ring-2 focus:ring-offset-2 rounded-md shadow-sm"
         aria-label={label}
       >
         <Select.Value className="text-grey-900" placeholder={placeholder}>

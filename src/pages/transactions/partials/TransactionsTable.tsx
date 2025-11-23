@@ -16,6 +16,7 @@ import { api } from "@/lib/axios";
 import toast from "react-hot-toast";
 import { handleApiError } from "@/utils/handleApiError";
 import { DeleteModal } from "@/components/shared/DeleteModal";
+import { WarningSection } from "@/components/shared/WarningSection";
 
 interface TransactionTableProps {
   transactions: TransactionProps[];
@@ -79,7 +80,7 @@ export const TransactionTable = ({
   return (
     <section
       aria-labelledby="transaction-table-title"
-      className="hidden md:flex overflow-x-auto mt-6"
+      className="flex overflow-x-auto mt-6"
     >
       <table className="min-w-full table-fixed">
         <caption id="transaction-table-title" className="sr-only">
@@ -183,6 +184,7 @@ export const TransactionTable = ({
                     transaction={transaction}
                     onDelete={handleDelete}
                     onEdit={handleEdit}
+                    isDisabled={!!transaction?.isRecurring}
                   />
                 </tr>
               );
@@ -194,6 +196,12 @@ export const TransactionTable = ({
               </td>
             </tr>
           )}
+
+          <tr>
+            <td colSpan={5}>
+              <WarningSection title="Editing and deletion are restricted for recurrent transactions. These are always expense type and should be managed in the Recurrent Bills area." />
+            </td>
+          </tr>
         </tbody>
       </table>
 

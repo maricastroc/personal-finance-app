@@ -35,21 +35,6 @@ export const SummaryCard = ({
         ) : (
           <>
             <div className="flex items-center justify-between w-full">
-              <p className="text-xs text-grey-500">Paid Bills</p>
-              <p className="font-bold text-grey-900 text-xs">
-                {`${recurringBills?.paid?.bills?.length || 0} (${formatToDollar(
-                  recurringBills?.paid?.total || 0
-                )})`}
-              </p>
-            </div>
-
-            <span
-              role="separator"
-              aria-hidden="true"
-              className="bg-grey-300 w-full h-[0.05rem] my-3"
-            />
-
-            <div className="flex items-center justify-between w-full">
               <p className="text-xs text-grey-500">Total Upcoming</p>
               <p className="font-bold text-grey-900 text-xs">
                 {`${
@@ -65,11 +50,26 @@ export const SummaryCard = ({
             />
 
             <div className="flex items-center justify-between w-full">
-              <p className="text-xs text-secondary-red">Due Soon</p>
-              <p className="font-bold text-secondary-red text-xs">
+              <p className="text-xs text-grey-500">Total Due Soon</p>
+              <p className="font-bold text-grey-900 text-xs">
                 {`${
                   recurringBills?.dueSoon.bills.length || 0
                 } (${formatToDollar(recurringBills?.dueSoon.total || 0)})`}
+              </p>
+            </div>
+
+            <span
+              role="separator"
+              aria-hidden="true"
+              className="bg-grey-300 w-full h-[0.05rem] my-3"
+            />
+
+            <div className="flex items-center justify-between w-full">
+              <p className="text-xs text-secondary-red">Total Overdue</p>
+              <p className="font-bold text-secondary-red text-xs">
+                {`${
+                  recurringBills?.overdue.bills.length || 0
+                } (${formatToDollar(recurringBills?.overdue.total || 0)})`}
               </p>
             </div>
           </>
