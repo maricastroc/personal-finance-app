@@ -16,6 +16,8 @@ import { RecurringBillsSection } from "./partials/RecurringBillsSection";
 import { TransactionsSection } from "./partials/TransactionsSection";
 import { PotsSection } from "./partials/PotsSection";
 import { PageHeader } from "./partials/PageHeader";
+import { useEffect, useState } from "react";
+import { swrConfig } from "@/utils/constants";
 
 interface BalanceProps {
   incomes: number | undefined;
@@ -52,77 +54,49 @@ export default function Home() {
 
   const isRouteLoading = useLoadingOnRouteChange();
 
+  const [initialLoad, setInitialLoad] = useState(true);
+
   const { data: balance, isValidating: isValidatingBalance } =
-    useRequest<BalanceProps>(
-      { url: "/balance", method: "GET" },
-      {
-        revalidateOnFocus: false,
-        revalidateIfStale: true,
-        dedupingInterval: 20000,
-        focusThrottleInterval: 30000,
-        keepPreviousData: true,
-      }
-    );
+    useRequest<BalanceProps>({ url: "/balance", method: "GET" }, swrConfig);
 
   const { data: allPots, isValidating: isValidatingPots } =
-    useRequest<AllPotsProps>(
-      { url: "/pots", method: "GET" },
-      {
-        revalidateOnFocus: false,
-        revalidateIfStale: true,
-        dedupingInterval: 20000,
-        focusThrottleInterval: 30000,
-        keepPreviousData: true,
-      }
-    );
+    useRequest<AllPotsProps>({ url: "/pots", method: "GET" }, swrConfig);
 
   const { data: budgets, isValidating: isValidatingBudgets } = useRequest<
     BudgetWithDetailsProps[]
-  >(
-    { url: "/budgets", method: "GET" },
-    {
-      revalidateOnFocus: false,
-      revalidateIfStale: true,
-      dedupingInterval: 20000,
-      focusThrottleInterval: 30000,
-      keepPreviousData: true,
-    }
-  );
+  >({ url: "/budgets", method: "GET" }, swrConfig);
 
   const { data: recurringBills, isValidating: isValidatingBills } =
     useRequest<RecurringBillsResult>(
       { url: "/recurring_bills", method: "GET" },
-      {
-        revalidateOnFocus: false,
-        revalidateIfStale: true,
-        dedupingInterval: 20000,
-        focusThrottleInterval: 30000,
-        keepPreviousData: true,
-      }
+      swrConfig
     );
 
   const { data: transactions, isValidating: isValidatingTransactions } =
     useRequest<TransactionProps[]>(
       { url: "/transactions/latest", method: "GET" },
-      {
-        revalidateOnFocus: false,
-        revalidateIfStale: true,
-        dedupingInterval: 20000,
-        focusThrottleInterval: 30000,
-        keepPreviousData: true,
-      }
+      swrConfig
     );
 
-  const isValidating =
+  const isAnyDataValidating =
     isValidatingBalance ||
     isValidatingTransactions ||
     isValidatingPots ||
     isValidatingBudgets ||
     isValidatingBills;
 
-  return isRouteLoading ? (
-    <LoadingPage />
-  ) : (
+  useEffect(() => {
+    if (!isAnyDataValidating && initialLoad) {
+      setInitialLoad(false);
+    }
+  }, [isAnyDataValidating, initialLoad]);
+
+  // Mostra loading apenas na primeira carga ou mudança de rota
+  if (isRouteLoading || initialLoad) {
+    return <LoadingPage />;
+  }
+
+  return (
     <>
       <NextSeo
         title="Home | Finance App"
@@ -146,36 +120,42 @@ export default function Home() {
             <FinanceCard
               title="Current Balance"
               value={formatToDollar(balance?.currentBalance || 0)}
-              isValidating={isValidating}
+              isValidating={isValidatingBalance && initialLoad}
             />
             <FinanceCard
               variant="income"
               title="Incomes"
               value={formatToDollar(balance?.incomes || 0)}
-              isValidating={isValidating}
+              isValidating={isValidatingBalance && initialLoad}
             />
             <FinanceCard
               variant="outcome"
               title="Expenses"
               value={formatToDollar(balance?.expenses || 0)}
-              isValidating={isValidating}
+              isValidating={isValidatingBalance && initialLoad}
             />
           </section>
 
           <section className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-6">
             <div className="flex flex-col">
-              <PotsSection allPots={allPots} isValidating={isValidating} />
+              <PotsSection
+                allPots={allPots}
+                isValidating={isValidatingPots && initialLoad}
+              />
               <TransactionsSection
                 transactions={transactions}
-                isValidating={isValidating}
+                isValidating={isValidatingTransactions && initialLoad}
               />
             </div>
 
             <div className="flex flex-col flex-grow">
-              <BudgetsSection budgets={budgets} isValidating={isValidating} />
+              <BudgetsSection
+                budgets={budgets}
+                isValidating={isValidatingBudgets && initialLoad}
+              />
               <RecurringBillsSection
                 recurringBills={recurringBills}
-                isValidating={isValidating}
+                isValidating={isValidatingBills && initialLoad}
               />
             </div>
           </section>

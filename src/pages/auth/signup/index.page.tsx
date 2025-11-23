@@ -17,14 +17,13 @@ import toast from "react-hot-toast";
 import { TextLink } from "@/components/core/TextLink";
 import { CurrencyInput } from "@/components/core/CurrencyInput";
 
-// Atualize o schema para incluir o initialBalance
 const signUpFormSchema = z.object({
   email: z.string().min(3, { message: "E-mail is required." }),
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long." }),
   name: z.string().min(3, { message: "Name is required." }),
-  initialBalance: z
+  currentBalance: z
     .number()
     .min(0, { message: "Initial balance must be positive." })
     .optional(),
@@ -47,7 +46,7 @@ export default function SignUp() {
       email: "",
       password: "",
       name: "",
-      initialBalance: 0,
+      currentBalance: 0,
     },
   });
 
@@ -58,8 +57,8 @@ export default function SignUp() {
     formData.append("name", data.name);
     formData.append("password", data.password);
 
-    if (data.initialBalance) {
-      formData.append("initialBalance", data.initialBalance.toString());
+    if (data.currentBalance) {
+      formData.append("currentBalance", data.currentBalance.toString());
     }
 
     try {
@@ -150,7 +149,7 @@ export default function SignUp() {
           />
 
           <Controller
-            name="initialBalance"
+            name="currentBalance"
             control={control}
             render={({ field, fieldState }) => (
               <CurrencyInput

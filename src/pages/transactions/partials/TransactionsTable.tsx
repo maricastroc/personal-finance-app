@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import { handleApiError } from "@/utils/handleApiError";
 import { DeleteModal } from "@/components/shared/DeleteModal";
 import { WarningSection } from "@/components/shared/WarningSection";
+import { useBalance } from "@/contexts/BalanceContext";
 
 interface TransactionTableProps {
   transactions: TransactionProps[];
@@ -42,6 +43,8 @@ export const TransactionTable = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const { refetchBalance } = useBalance();
+
   const handleEdit = (transaction: TransactionProps) => {
     setEditingTransaction(transaction);
     setIsEditModalOpen(true);
@@ -67,6 +70,7 @@ export const TransactionTable = ({
       toast.success(response.data.message);
 
       await mutate();
+      await refetchBalance();
       setIsDeleteModalOpen(false);
       setDeletingTransaction(null);
     } catch (error) {
@@ -199,13 +203,11 @@ export const TransactionTable = ({
             </tr>
           )}
 
-          {transactions && transactions?.length > 0 && (
-            <tr>
-              <td colSpan={5}>
-                <WarningSection title="Editing and deletion are restricted for recurrent transactions. These are always expense type and should be managed in the Recurrent Bills area." />
-              </td>
-            </tr>
-          )}
+          <tr>
+            <td colSpan={5}>
+              <WarningSection title="All recurring transactions are managed in the Recurring Bills area. Go there to view or pay your scheduled bills." />
+            </td>
+          </tr>
         </tbody>
       </table>
 

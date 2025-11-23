@@ -87,7 +87,7 @@ export default async function handler(
             )
             .regex(/[0-9]/, "Password must contain at least one number")
             .min(1, "Password is required"),
-          initialBalance: z
+          currentBalance: z
             .string()
             .transform((value) => (value ? parseFloat(value) : 0))
             .optional(),
@@ -99,8 +99,8 @@ export default async function handler(
           password: fields.password
             ? getSingleString(fields.password)
             : undefined,
-          initialBalance: fields.initialBalance
-            ? getSingleString(fields.initialBalance)
+          currentBalance: fields.currentBalance
+            ? getSingleString(fields.currentBalance)
             : undefined,
           avatarUrl: files.avatarUrl?.[0],
         });

@@ -39,6 +39,14 @@ export default async function handler(
   }
 
   try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     const result = await prisma.$transaction(async (tx) => {
       const bill = await tx.recurringBill.findFirst({
         where: {
@@ -55,7 +63,24 @@ export default async function handler(
         throw new Error("Recurring bill missing recurrence information");
       }
 
+      if (bill.type === "expense") {
+        if (bill.amount > (user.currentBalance || 0)) {
+          throw new Error("Insufficient funds to pay this bill");
+        }
+      }
+
       const paymentDateObj = paymentDate ? new Date(paymentDate) : new Date();
+
+      if (bill.type === "expense") {
+        await tx.user.update({
+          where: { id: user.id },
+          data: {
+            currentBalance: {
+              decrement: bill.amount,
+            },
+          },
+        });
+      }
 
       const transaction = await tx.transaction.create({
         data: {
@@ -103,6 +128,12 @@ export default async function handler(
       }
       if (error.message.includes("missing recurrence information")) {
         return res.status(400).json({ message: error.message });
+      }
+      if (error.message.includes("Insufficient funds")) {
+        return res.status(400).json({
+          message:
+            "Insufficient funds. You don't have enough balance to pay this bill.",
+        });
       }
     }
 

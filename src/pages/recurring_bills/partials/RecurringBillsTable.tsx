@@ -12,6 +12,7 @@ import { api } from "@/lib/axios";
 import toast from "react-hot-toast";
 import { handleApiError } from "@/utils/handleApiError";
 import { WarningSection } from "@/components/shared/WarningSection";
+import { useBalance } from "@/contexts/BalanceContext";
 
 export const RecurringBillsTable = ({
   recurringBills,
@@ -24,6 +25,8 @@ export const RecurringBillsTable = ({
 }) => {
   const [payingBillId, setPayingBillId] = useState<string | null>(null);
 
+  const { refetchBalance } = useBalance();
+
   const handlePayNow = async (bill: RecurringBillProps) => {
     if (payingBillId) return;
 
@@ -35,7 +38,9 @@ export const RecurringBillsTable = ({
       });
 
       toast.success(response.data.message || "Bill paid successfully!");
+
       await onSave();
+      await refetchBalance();
     } catch (error) {
       handleApiError(error);
     } finally {

@@ -17,7 +17,7 @@ model User {
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
   accountId        String          @unique @default(uuid())
-  initialBalance   Float?
+  currentBalance   Float?
   
   transactions     Transaction[]
   budgets          Budget[]

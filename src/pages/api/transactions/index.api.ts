@@ -58,6 +58,7 @@ export default async function handler(
   }
 
   if (req.method === "GET") {
+    // ... (mantém igual o código GET existente)
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
@@ -165,6 +166,7 @@ export default async function handler(
       return res.status(500).json({ message: "Internal Server Error" });
     }
   }
+
   if (req.method === "POST") {
     const {
       description,
@@ -187,6 +189,25 @@ export default async function handler(
       return res.status(400).json({ message: "Invalid transaction type" });
     }
 
+    const user = await prisma.user.findUnique({
+      where: { id: String(userId) },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (type === "expense") {
+      const expenseAmount = Math.abs(amount);
+
+      if (expenseAmount > (user?.currentBalance || 0)) {
+        return res.status(400).json({
+          message:
+            "Insufficient funds. You don't have enough balance to cover this expense.",
+        });
+      }
+    }
+
     let category = await prisma.category.findUnique({
       where: { name: categoryName },
     });
@@ -202,22 +223,9 @@ export default async function handler(
 
     try {
       const result = await prisma.$transaction(async (tx) => {
-        const transaction = await tx.transaction.create({
-          data: {
-            description,
-            amount: Math.abs(amount),
-            categoryId,
-            contactName,
-            contactAvatar: contactAvatar || "",
-            type,
-            userId,
-            isRecurring: isRecurring || false,
-            date: transactionDate,
-            recurringBillId: null,
-          },
-        });
-
+        // ✅ LÓGICA CORRIGIDA:
         if (isRecurring) {
+          // ✅ TRANSAÇÃO RECORRENTE: Só cria a bill, NÃO cria transação nem debita saldo
           if (!recurrenceDay || !recurrenceFrequency) {
             throw new Error(
               "Missing recurrence fields for recurring transaction"
@@ -247,26 +255,73 @@ export default async function handler(
             },
           });
 
-          return { transaction, recurringBill };
-        }
+          return { recurringBill };
+        } else {
+          if (type === "expense") {
+            const expenseAmount = Math.abs(amount);
+            if (expenseAmount > (user.currentBalance || 0)) {
+              throw new Error("Insufficient funds for this expense");
+            }
 
-        return { transaction };
+            await tx.user.update({
+              where: { id: user.id },
+              data: {
+                currentBalance: {
+                  decrement: expenseAmount,
+                },
+              },
+            });
+          } else if (type === "income") {
+            await tx.user.update({
+              where: { id: user.id },
+              data: {
+                currentBalance: {
+                  increment: Math.abs(amount),
+                },
+              },
+            });
+          }
+
+          const transaction = await tx.transaction.create({
+            data: {
+              description,
+              amount: Math.abs(amount),
+              categoryId,
+              contactName,
+              contactAvatar: contactAvatar || "",
+              type,
+              userId,
+              isRecurring: false,
+              date: transactionDate,
+              recurringBillId: null,
+            },
+          });
+
+          return { transaction };
+        }
       });
 
       return res.status(201).json({
-        message: "Transaction created successfully",
+        message: isRecurring
+          ? "Recurring bill created successfully"
+          : "Transaction created successfully",
         ...result,
       });
     } catch (error) {
       console.error("Error creating transaction:", error);
 
-      if (
-        error instanceof Error &&
-        error.message.includes("Missing recurrence fields")
-      ) {
-        return res.status(400).json({
-          message: "Missing recurrence fields for recurring transaction",
-        });
+      if (error instanceof Error) {
+        if (error.message.includes("Missing recurrence fields")) {
+          return res.status(400).json({
+            message: "Missing recurrence fields for recurring transaction",
+          });
+        }
+        if (error.message.includes("Insufficient funds")) {
+          return res.status(400).json({
+            message:
+              "Insufficient funds. You don't have enough balance to cover this expense.",
+          });
+        }
       }
 
       return res.status(500).json({ message: "Internal Server Error" });

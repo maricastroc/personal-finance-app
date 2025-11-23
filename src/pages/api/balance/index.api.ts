@@ -61,27 +61,20 @@ export default async function handler(
 
     let expenses = 0;
     let incomes = 0;
-    let transfers = 0;
 
     transactions.forEach((transaction) => {
       if (transaction.type === "expense") {
         expenses += transaction.amount;
       } else if (transaction.type === "income") {
         incomes += transaction.amount;
-      } else if (transaction.type === "transfer") {
-        transfers += transaction.amount;
       }
     });
 
-    const currentBalance = (user?.initialBalance || 0) + incomes - expenses;
-
     return res.json({
-      currentBalance,
+      currentBalance: user?.currentBalance,
       expenses,
       incomes,
-      transfers,
       transactions,
-      initialBalance: user?.initialBalance || 0,
     });
   } catch (error) {
     console.error(error);

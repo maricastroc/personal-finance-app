@@ -19,6 +19,7 @@ import { CurrencyInput } from "@/components/core/CurrencyInput";
 import { Modal } from "@/components/shared/Modal";
 import { format } from "date-fns";
 import { DatePicker } from "@/components/core/DatePicker";
+import { useBalance } from "@/contexts/BalanceContext";
 
 const transactionFormSchema = () =>
   z.object({
@@ -79,6 +80,8 @@ export function TransferFormModal({
     name: String(index + 1),
   }));
 
+  const { refetchBalance } = useBalance();
+
   const {
     handleSubmit,
     setValue,
@@ -136,6 +139,7 @@ export function TransferFormModal({
       }
 
       await onSubmitForm();
+      await refetchBalance();
 
       setRecurrenceDay(1);
       setRecurrenceFrequency("Monthly");

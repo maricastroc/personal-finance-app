@@ -45,8 +45,16 @@ export default async function handler(
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    if (!["income", "expense", "transfer"].includes(type)) {
+    if (!["income", "expense"].includes(type)) {
       return res.status(400).json({ message: "Invalid transaction type" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: String(userId) },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
     const existingTransaction = await prisma.transaction.findFirst({
@@ -77,6 +85,19 @@ export default async function handler(
       });
     }
 
+    if (type === "expense") {
+      const amountDifference = Math.abs(amount) - existingTransaction.amount;
+
+      if (amountDifference > 0) {
+        if (amountDifference > (user?.currentBalance || 0)) {
+          return res.status(400).json({
+            message:
+              "Insufficient funds. You don't have enough balance to cover this expense.",
+          });
+        }
+      }
+    }
+
     let category = await prisma.category.findUnique({
       where: { name: categoryName },
     });
@@ -90,6 +111,34 @@ export default async function handler(
     const categoryId = category.id;
 
     try {
+      if (type === "expense") {
+        const amountDifference = Math.abs(amount) - existingTransaction.amount;
+
+        if (amountDifference !== 0) {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: {
+              currentBalance: {
+                decrement: amountDifference,
+              },
+            },
+          });
+        }
+      } else if (type === "income") {
+        const amountDifference = Math.abs(amount) - existingTransaction.amount;
+
+        if (amountDifference !== 0) {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: {
+              currentBalance: {
+                increment: amountDifference,
+              },
+            },
+          });
+        }
+      }
+
       const updatedTransaction = await prisma.transaction.update({
         where: { id: String(transactionId) },
         data: {
@@ -117,6 +166,14 @@ export default async function handler(
 
     if (!transactionId) {
       return res.status(400).json({ message: "Transaction ID is required" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: String(userId) },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
     const existingTransaction = await prisma.transaction.findFirst({
@@ -148,6 +205,26 @@ export default async function handler(
     }
 
     try {
+      if (existingTransaction.type === "expense") {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            currentBalance: {
+              increment: existingTransaction.amount,
+            },
+          },
+        });
+      } else if (existingTransaction.type === "income") {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            currentBalance: {
+              decrement: existingTransaction.amount,
+            },
+          },
+        });
+      }
+
       await prisma.transaction.delete({
         where: { id: String(transactionId) },
       });

@@ -5,6 +5,7 @@ import { AppProvider } from "@/contexts/AppContext";
 import "react-toastify/dist/ReactToastify.css";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
+import { BalanceProvider } from "@/contexts/BalanceContext";
 
 const font = Public_Sans({
   subsets: ["latin"],
@@ -35,11 +36,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <AppProvider>
-        <div
-          className={`${font.className} bg-beige-100 overflow-x-hidden h-full`}
-        >
-          <Component {...pageProps} />
-        </div>
+        <BalanceProvider>
+          <div
+            className={`${font.className} bg-beige-100 overflow-x-hidden h-full`}
+          >
+            <Component {...pageProps} />
+          </div>
+        </BalanceProvider>
       </AppProvider>
     </SessionProvider>
   );

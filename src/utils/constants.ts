@@ -102,3 +102,12 @@ export const CATEGORIES = {
 export const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export const MAX_AVATAR_SIZE = 1024 * 1024;
+
+export const swrConfig = {
+  revalidateOnFocus: false,
+  revalidateIfStale: true,
+  revalidateOnReconnect: false,
+  dedupingInterval: 60000,
+  focusThrottleInterval: 120000,
+  keepPreviousData: true,
+};

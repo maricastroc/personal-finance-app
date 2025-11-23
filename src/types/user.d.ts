@@ -12,7 +12,7 @@ export interface UserProps {
   password?: string | null;
   email?: string;
   accountId?: string;
-  initialBalance?: number;
+  currentBalance?: number;
 
   accounts?: AccountProps[] | null | undefined;
   sessions?: SessionProps[] | null | undefined;
