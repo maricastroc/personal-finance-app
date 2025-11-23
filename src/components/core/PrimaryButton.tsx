@@ -38,8 +38,6 @@ export const PrimaryButton = forwardRef<HTMLButtonElement, PrimaryButtonProps>(
       <button
         ref={ref}
         type={props.type ?? "button"}
-        aria-busy={isSubmitting}
-        aria-live="polite"
         disabled={isSubmitting || disabled}
         className={clsx(baseClasses, variantClasses[variant], className)}
         {...props}
