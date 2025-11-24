@@ -1,3 +1,4 @@
+import { BudgetProps } from "@/types/budget";
 import { formatToDollar } from "@/utils/formatToDollar";
 import useRequest from "@/utils/useRequest";
 import React, { useState } from "react";
@@ -25,7 +26,7 @@ export interface BudgetWithDetailsProps {
 export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const { data: budgets } = useRequest<BudgetWithDetailsProps[]>({
+  const { data: budgets } = useRequest<BudgetProps[]>({
     url: "/budgets",
     method: "GET",
   });
@@ -38,12 +39,15 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
     );
   }
 
-  const budgetLimitSum = budgets.reduce((sum, b) => sum + b.budgetLimit, 0);
-  const amountSpentSum = budgets.reduce((sum, b) => sum + b.amountSpent, 0);
+  const budgetLimitSum = budgets.reduce((sum, b) => sum + b.amount, 0);
+  const amountSpentSum = budgets.reduce(
+    (sum, b) => sum + (b?.amountSpent || 0),
+    0
+  );
 
   const data = budgets.map((b) => ({
-    name: b.categoryName,
-    value: b.budgetLimit,
+    name: b.category?.name,
+    value: b.amount,
     theme: b.theme,
   }));
 
@@ -95,7 +99,9 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
             {budgets.map((b, index) => (
               <Cell
                 key={`cell-outer-${index}`}
-                fill={activeIndex === index ? `${b.theme}80` : b.theme}
+                fill={
+                  activeIndex === index ? `${b.theme?.color}80` : b.theme?.color
+                }
                 onMouseEnter={() => setActiveIndex(index)}
                 onMouseLeave={() => setActiveIndex(null)}
                 onClick={() => setActiveIndex(index)}
@@ -117,7 +123,9 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
             {budgets.map((b, index) => (
               <Cell
                 key={`cell-inner-${index}`}
-                fill={activeIndex === index ? `${b.theme}98` : b.theme}
+                fill={
+                  activeIndex === index ? `${b.theme?.color}98` : b.theme?.color
+                }
                 onMouseEnter={() => setActiveIndex(index)}
                 onMouseLeave={() => setActiveIndex(null)}
                 onClick={() => setActiveIndex(index)}

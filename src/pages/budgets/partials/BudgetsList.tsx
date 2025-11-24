@@ -1,8 +1,8 @@
-import { BudgetWithDetailsProps } from "@/components/shared/BudgetItem";
 import { FinanceItem } from "@/components/shared/FinanceItem";
+import { BudgetProps } from "@/types/budget";
 
 interface BudgetsListProps {
-  budgets: BudgetWithDetailsProps[];
+  budgets: BudgetProps[];
 }
 
 export const BudgetsList = ({ budgets }: BudgetsListProps) => {
@@ -19,10 +19,10 @@ export const BudgetsList = ({ budgets }: BudgetsListProps) => {
         <div key={budget.id} className="w-full flex flex-col">
           <FinanceItem
             isBudgetsPage
-            title={budget.categoryName}
-            color={budget.theme}
-            value={budget.budgetLimit}
-            amountSpent={budget.amountSpent}
+            title={budget.category.name}
+            color={budget.theme.color}
+            value={budget.amount}
+            amountSpent={budget.amountSpent || 0}
           />
           {index !== budgets.length - 1 && (
             <span className="my-3 w-full h-[1px] bg-grey-300" />

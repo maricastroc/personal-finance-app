@@ -1,21 +1,21 @@
-import { ThemeProps } from "@/types/theme";
 import { PotProps } from "@/types/pot";
 import { ThemeDataProps, useThemeData } from "@/hooks/useThemesData";
 import { SelectTheme } from "@/components/shared/SelectTheme";
+import { useAppContext } from "@/contexts/AppContext";
 
 interface PotThemeSelectorProps {
-  themes: ThemeProps[] | undefined;
   pots: PotProps[] | undefined;
   pot: PotProps | undefined;
   onSelect: (themeId: string) => void;
 }
 
 export function PotThemeSelector({
-  themes,
   pots,
   pot,
   onSelect,
 }: PotThemeSelectorProps) {
+  const { themes } = useAppContext();
+
   const data: ThemeDataProps[] = useThemeData(themes, pots);
 
   return (

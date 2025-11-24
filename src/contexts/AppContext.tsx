@@ -1,8 +1,12 @@
+import { ThemeProps } from "@/types/theme";
+import useRequest from "@/utils/useRequest";
 import React, { createContext, useContext, useState, useMemo } from "react";
 
 interface AppContextType {
   isSidebarOpen: boolean;
   handleIsSidebarOpen: (value: boolean) => void;
+  themes: ThemeProps[] | undefined;
+  isValidatingThemes: boolean;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -16,12 +20,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsSidebarOpen(value);
   };
 
+  const { data: themes, isValidating: isValidatingThemes } = useRequest<
+    ThemeProps[]
+  >(
+    {
+      url: "/themes",
+      method: "GET",
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
+      keepPreviousData: true,
+    }
+  );
+
   const contextValue = useMemo(
     () => ({
       isSidebarOpen,
       handleIsSidebarOpen,
+      themes,
+      isValidatingThemes,
     }),
-    [isSidebarOpen]
+    [isSidebarOpen, themes, isValidatingThemes]
   );
 
   return (

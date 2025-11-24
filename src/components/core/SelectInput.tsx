@@ -15,7 +15,7 @@ interface DataProps {
 interface SelectInputProps {
   label: string;
   data: DataProps[];
-  existedCategories?: string[];
+  selectedBudgetsCategories?: string[];
   onSelect: (value: string) => void;
   includeAll?: boolean;
   placeholder: string;
@@ -27,7 +27,7 @@ export const SelectInput = ({
   data,
   onSelect,
   includeAll = false,
-  existedCategories,
+  selectedBudgetsCategories,
   placeholder,
   defaultValue = null,
 }: SelectInputProps) => {
@@ -73,7 +73,9 @@ export const SelectInput = ({
                 <SelectItem
                   key={index}
                   value={String(item.name)}
-                  disabled={existedCategories?.includes(String(item.name))}
+                  disabled={selectedBudgetsCategories?.includes(
+                    String(item.name)
+                  )}
                 >
                   {item.name}
                 </SelectItem>

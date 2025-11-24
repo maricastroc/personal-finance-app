@@ -1,10 +1,8 @@
 import { PrimaryButton } from "@/components/core/PrimaryButton";
 import { ErrorMessage } from "@/components/shared/ErrorMessage";
 import { SelectInput } from "@/components/core/SelectInput";
-import { SelectTheme } from "@/components/shared/SelectTheme";
 import { api } from "@/lib/axios";
 import { CategoryProps } from "@/types/category";
-import { getThemeOptions } from "@/utils/getThemeOptions";
 import { handleApiError } from "@/utils/handleApiError";
 import useRequest from "@/utils/useRequest";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,15 +12,15 @@ import { z } from "zod";
 import { Modal } from "@/components/shared/Modal";
 import { CurrencyInput } from "@/components/core/CurrencyInput";
 import InputLabel from "@/components/core/InputLabel";
+import { BudgetProps } from "@/types/budget";
+import { BudgetThemeSelector } from "./BudgetThemeSelector";
 
 interface EditBudgetModalProps {
   id: string;
   onClose: () => void;
-  categoryName?: string;
-  budgetLimit?: number;
-  existedCategories?: string[];
-  theme?: string;
-  budgetId?: string;
+  budget?: BudgetProps;
+  selectedBudgetsCategories?: string[];
+  budgets: BudgetProps[] | undefined;
   isEdit?: boolean;
   onSubmitForm: () => Promise<void>;
 }
@@ -41,11 +39,9 @@ export type BudgetFormData = z.infer<ReturnType<typeof budgetFormSchema>>;
 export function BudgetModal({
   id,
   onClose,
-  categoryName,
-  budgetLimit,
-  theme,
-  budgetId,
-  existedCategories,
+  budget,
+  budgets,
+  selectedBudgetsCategories,
   onSubmitForm,
   isEdit = false,
 }: EditBudgetModalProps) {
@@ -53,14 +49,13 @@ export function BudgetModal({
     control,
     handleSubmit,
     reset,
-    setValue,
     formState: { isSubmitting, errors },
   } = useForm<BudgetFormData>({
     resolver: zodResolver(budgetFormSchema()),
     defaultValues: {
-      category: isEdit ? categoryName : "",
-      budgetLimit: isEdit ? budgetLimit : 0,
-      theme: isEdit ? theme : "",
+      category: isEdit ? budget?.category?.name : "",
+      budgetLimit: isEdit ? budget?.amount : 0,
+      theme: isEdit ? budget?.theme.color : "",
     },
   });
 
@@ -83,7 +78,7 @@ export function BudgetModal({
         amount: data.budgetLimit,
       };
 
-      const response = await api.put(`/budgets/${budgetId}`, payload);
+      const response = await api.put(`/budgets/${budget?.id}`, payload);
 
       toast.success(response.data.message);
       await onSubmitForm();
@@ -139,8 +134,8 @@ export function BudgetModal({
                 <SelectInput
                   label="Category"
                   placeholder="Select a Category..."
-                  existedCategories={existedCategories}
-                  defaultValue={categoryName}
+                  selectedBudgetsCategories={selectedBudgetsCategories}
+                  defaultValue={budget?.category?.name}
                   onSelect={(value) => field.onChange(value.toLowerCase())}
                   data={categories}
                 />
@@ -181,10 +176,16 @@ export function BudgetModal({
             Theme Color
           </label>
 
-          <SelectTheme
-            defaultValue={theme}
-            data={getThemeOptions}
-            onSelect={(value: string) => setValue("theme", value)}
+          <Controller
+            name="theme"
+            control={control}
+            render={({ field }) => (
+              <BudgetThemeSelector
+                budgets={budgets}
+                budget={budget}
+                onSelect={(themeId: string) => field.onChange(themeId)}
+              />
+            )}
           />
 
           {errors.theme && (

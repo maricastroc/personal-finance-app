@@ -12,11 +12,9 @@ import { PotFormModal } from "../PotFormModal";
 import { PotsResult } from "@/types/pots-result";
 import { PotProps } from "@/types/pot";
 import { KeyedMutator } from "swr";
-import { ThemeProps } from "@/types/theme";
 
 interface PotCardProps {
   pot: PotProps;
-  themes: ThemeProps[] | undefined;
   pots: PotProps[] | undefined;
   mutate: KeyedMutator<AxiosResponse<PotsResult, any>>;
   onSubmitForm: () => Promise<
@@ -24,13 +22,7 @@ interface PotCardProps {
   >;
 }
 
-export const PotCard = ({
-  pot,
-  themes,
-  pots,
-  onSubmitForm,
-  mutate,
-}: PotCardProps) => {
+export const PotCard = ({ pot, pots, onSubmitForm, mutate }: PotCardProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -102,7 +94,6 @@ export const PotCard = ({
           isEdit
           id="pot-modal"
           pot={pot}
-          themes={themes}
           pots={pots}
           onClose={() => setIsAddOpen(false)}
           onSubmitForm={async () => {

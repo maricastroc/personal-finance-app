@@ -77,14 +77,8 @@ export default async function handler(
 
       const budgetWithDetails = {
         budget,
-        budgetDetails: {
-          budget,
-          categoryName: budget.category.name,
-          amountSpent: totalSpentInCategory,
-          budgetLimit: budget.amount,
-          theme: budget.theme?.color,
-          percentageSpent: percentageSpent.toFixed(2),
-        },
+        amountSpent: totalSpentInCategory,
+        percentageSpent: percentageSpent.toFixed(2),
         transactions,
       };
 

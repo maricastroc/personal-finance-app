@@ -11,7 +11,6 @@ import { PotCard } from "./partials/PotCard";
 import useRequest from "@/utils/useRequest";
 import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
 import { PotsResult } from "@/types/pots-result";
-import { ThemeProps } from "@/types/theme";
 
 export default function Pots() {
   const { isSidebarOpen } = useAppContext();
@@ -30,20 +29,6 @@ export default function Pots() {
       revalidateIfStale: true,
       dedupingInterval: 20000,
       focusThrottleInterval: 30000,
-      keepPreviousData: true,
-    }
-  );
-
-  const { data: themesData, isValidating: isValidatingThemes } = useRequest<
-    ThemeProps[]
-  >(
-    {
-      url: "/themes",
-      method: "GET",
-    },
-    {
-      revalidateOnFocus: false,
-      revalidateIfStale: false,
       keepPreviousData: true,
     }
   );
@@ -76,14 +61,13 @@ export default function Pots() {
           >
             <PotFormModal
               id="pot-modal"
-              themes={themesData}
               pots={data?.pots}
               onClose={() => setIsPotModalOpen(false)}
               onSubmitForm={async () => await mutate()}
             />
           </PageHeader>
 
-          {isValidating || isValidatingThemes ? (
+          {isValidating ? (
             <div className="flex flex-col w-full lg:grid lg:grid-cols-2 gap-6">
               {Array.from({ length: 4 }).map((_, index) => (
                 <SkeletonPotCard key={index} />
@@ -95,7 +79,6 @@ export default function Pots() {
                 <PotCard
                   key={pot.id}
                   pot={pot}
-                  themes={themesData}
                   pots={data?.pots}
                   mutate={mutate}
                   onSubmitForm={async () => await mutate()}

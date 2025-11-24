@@ -11,5 +11,6 @@ export interface BudgetProps {
   themeId: string;
   theme: ThemeProps;
   userId: string;
+  amountSpent?: number;
   user: UserProps;
 }

@@ -70,7 +70,6 @@ export const SelectTheme = ({
                   key={index}
                   value={String(item.value)}
                   disabled={item.disabled}
-                  rightLabel={item.disabled ? "already used" : undefined}
                 >
                   {item.label}
                 </SelectItem>
@@ -93,7 +92,6 @@ const SelectItem = React.forwardRef(
       children,
       value,
       disabled = false,
-      rightLabel,
       ...props
     }: {
       children: React.ReactNode;
@@ -112,7 +110,7 @@ const SelectItem = React.forwardRef(
         outline-none
         ${
           disabled
-            ? "text-grey-400 cursor-not-allowed opacity-60"
+            ? "text-grey-500 cursor-not-allowed"
             : "text-grey-900 cursor-pointer hover:bg-blue-100 focus:bg-blue-100"
         }
       `}
@@ -122,10 +120,8 @@ const SelectItem = React.forwardRef(
         {children}
       </Select.ItemText>
 
-      {rightLabel && (
-        <span className="text-xs text-grey-500 whitespace-nowrap ml-4">
-          {rightLabel}
-        </span>
+      {disabled && (
+        <span className="ml-auto text-xs text-grey-500">Already used</span>
       )}
     </Select.Item>
   )

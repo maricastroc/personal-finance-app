@@ -59,10 +59,10 @@ export default async function handler(
 
         return {
           id: budget.id,
-          categoryName: budget.category.name,
+          category: budget.category,
           amountSpent: totalSpentInCategory,
-          budgetLimit: budget.amount,
-          theme: budget.theme?.color,
+          amount: budget.amount,
+          theme: budget.theme,
         };
       });
 

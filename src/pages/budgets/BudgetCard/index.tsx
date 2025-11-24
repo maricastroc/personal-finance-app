@@ -15,27 +15,22 @@ import { api } from "@/lib/axios";
 import toast from "react-hot-toast";
 import { handleApiError } from "@/utils/handleApiError";
 
-interface DetailsProps {
-  categoryName: string;
-  amountSpent: number;
-  theme: string;
-  budgetLimit: number;
-  percentageSpent: number;
-}
-
 interface BudgetCardProps {
   budgetId: string;
+  budgets: BudgetProps[] | undefined;
   onSubmitForm: () => Promise<void>;
 }
 
-interface BudgetWithDetailsProps {
+interface BudgetResult {
   budget: BudgetProps;
-  budgetDetails: DetailsProps;
+  percentageSpent: number;
+  amountSpent: number;
   transactions: TransactionProps[];
 }
 
 export default function BudgetCard({
   budgetId,
+  budgets,
   onSubmitForm,
 }: BudgetCardProps) {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -44,11 +39,7 @@ export default function BudgetCard({
 
   const router = useRouter();
 
-  const {
-    data: budget,
-    mutate,
-    isValidating,
-  } = useRequest<BudgetWithDetailsProps>(
+  const { data, mutate, isValidating } = useRequest<BudgetResult>(
     {
       url: `/budgets/${budgetId}`,
       method: "GET",
@@ -67,7 +58,7 @@ export default function BudgetCard({
   const handleDeleteBudget = async () => {
     try {
       setIsSubmitting(true);
-      const response = await api.delete(`/budgets/${budget?.budget.id}`);
+      const response = await api.delete(`/budgets/${data?.budget.id}`);
 
       toast.success(response.data.message);
 
@@ -82,17 +73,15 @@ export default function BudgetCard({
     }
   };
 
-  const pct = Math.min(100, budget?.budgetDetails.percentageSpent || 0);
+  const pct = Math.min(100, data?.percentageSpent || 0);
 
-  const free =
-    (budget?.budgetDetails.budgetLimit || 0) -
-    (budget?.budgetDetails.amountSpent || 0);
+  const free = (data?.budget?.amount || 0) - (data?.amountSpent || 0);
 
   return (
     <section className="flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
       <BudgetCardHeader
-        categoryName={budget?.budgetDetails.categoryName || ""}
-        theme={budget?.budgetDetails.theme || ""}
+        categoryName={data?.budget?.category?.name || ""}
+        theme={data?.budget?.theme?.color || ""}
         isLoading={isValidating}
       >
         <BudgetCardMenu
@@ -103,37 +92,32 @@ export default function BudgetCard({
       </BudgetCardHeader>
 
       <BudgetCardLimitInfo
-        limit={budget?.budgetDetails.budgetLimit || 0}
+        limit={data?.budget?.amount || 0}
         pct={pct}
-        theme={budget?.budgetDetails.theme || ""}
+        theme={data?.budget?.theme?.color || ""}
       />
 
-      <BudgetCardSpentInfo
-        spent={budget?.budgetDetails.amountSpent || 0}
-        free={free}
-      />
+      <BudgetCardSpentInfo spent={data?.budget?.amount || 0} free={free} />
 
       <BudgetCardTransactions
-        transactions={budget?.transactions || []}
+        transactions={data?.transactions || []}
         isLoading={isValidating}
         onSeeAll={() =>
           router.push({
             pathname: "/transactions",
-            query: { category: budget?.budgetDetails.categoryName },
+            query: { category: data?.budget?.category?.name },
           })
         }
       />
 
-      {budget && (
+      {data?.budget && (
         <Dialog.Root open={isEditOpen} onOpenChange={setIsEditOpen}>
           <BudgetModal
             isEdit
             id="budget-modal"
             onClose={() => setIsEditOpen(false)}
-            budgetId={budgetId}
-            categoryName={budget.budgetDetails.categoryName}
-            budgetLimit={budget.budgetDetails.budgetLimit}
-            theme={budget.budgetDetails.theme}
+            budgets={budgets}
+            budget={data?.budget}
             onSubmitForm={async () => {
               await mutate();
               await onSubmitForm();
@@ -142,11 +126,11 @@ export default function BudgetCard({
         </Dialog.Root>
       )}
 
-      {budget && (
+      {data?.budget && (
         <Dialog.Root open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
           <DeleteModal
             id="delete-budget-modal"
-            title={budget?.budget?.category?.name}
+            title={data?.budget?.category?.name}
             description="This action cannot be undone. All associated transactions and data
             for this budget will be permanently removed."
             isSubmitting={isSubmitting}

@@ -1,3 +1,4 @@
+import { BudgetProps } from "@/types/budget";
 import { PotProps } from "@/types/pot";
 import { ThemeProps } from "@/types/theme";
 import { useMemo } from "react";
@@ -10,12 +11,12 @@ export interface ThemeDataProps {
 
 export function useThemeData(
   themes: ThemeProps[] | undefined,
-  pots: PotProps[] | undefined
+  data: PotProps[] | BudgetProps[] | undefined
 ): ThemeDataProps[] {
   return useMemo(() => {
-    const usedThemeIds = new Set(pots?.map((p) => p.themeId));
+    const usedThemeIds = new Set(data?.map((p) => p.theme.id));
 
-    if (!themes || !pots) {
+    if (!themes || !data) {
       return [];
     }
 
@@ -50,5 +51,5 @@ export function useThemeData(
         ),
       })),
     ];
-  }, [themes, pots]);
+  }, [themes, data]);
 }

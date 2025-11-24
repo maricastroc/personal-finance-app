@@ -4,10 +4,7 @@ import { NextSeo } from "next-seo";
 import { useAppContext } from "@/contexts/AppContext";
 import { EmptyContent } from "@/components/shared/EmptyContent";
 import { LoadingPage } from "@/components/shared/LoadingPage";
-import {
-  BudgetItem,
-  BudgetWithDetailsProps,
-} from "@/components/shared/BudgetItem";
+import { BudgetItem } from "@/components/shared/BudgetItem";
 import Layout from "@/components/layouts/layout.page";
 import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
 import useRequest from "@/utils/useRequest";
@@ -16,6 +13,7 @@ import BudgetCard from "./BudgetCard";
 import { PageHeader } from "./partials/PageHeader";
 import { SkeletonSection } from "./partials/SkeletonSection";
 import { BudgetsList } from "./partials/BudgetsList";
+import { BudgetProps } from "@/types/budget";
 
 export default function Budgets() {
   const { isSidebarOpen } = useAppContext();
@@ -28,7 +26,7 @@ export default function Budgets() {
     data: budgets,
     mutate,
     isValidating,
-  } = useRequest<BudgetWithDetailsProps[]>(
+  } = useRequest<BudgetProps[]>(
     {
       url: "/budgets",
       method: "GET",
@@ -113,6 +111,7 @@ export default function Budgets() {
                   : budgets?.map((budget) => (
                       <BudgetCard
                         key={budget.id}
+                        budgets={budgets}
                         budgetId={budget.id}
                         onSubmitForm={async () => {
                           await mutate();

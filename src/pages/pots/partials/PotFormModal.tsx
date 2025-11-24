@@ -7,7 +7,6 @@ import { Modal } from "@/components/shared/Modal";
 import { api } from "@/lib/axios";
 import { PotProps } from "@/types/pot";
 import { PotsResult } from "@/types/pots-result";
-import { ThemeProps } from "@/types/theme";
 import { handleApiError } from "@/utils/handleApiError";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosResponse } from "axios";
@@ -20,7 +19,6 @@ import { PotThemeSelector } from "./PotThemeSelector";
 interface PotFormModalProps {
   id: string;
   onClose: () => void;
-  themes: ThemeProps[] | undefined;
   pots: PotProps[] | undefined;
   pot?: PotProps;
   isEdit?: boolean;
@@ -48,7 +46,6 @@ export function PotFormModal({
   onClose,
   pot,
   pots,
-  themes,
   onSubmitForm,
   isEdit = false,
 }: PotFormModalProps) {
@@ -180,7 +177,6 @@ export function PotFormModal({
             control={control}
             render={({ field }) => (
               <PotThemeSelector
-                themes={themes}
                 pots={pots}
                 pot={pot}
                 onSelect={(themeId: string) => field.onChange(themeId)}
