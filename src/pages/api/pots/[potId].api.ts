@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { buildNextAuthOptions } from "../auth/[...nextauth].api";
 import { getServerSession } from "next-auth";
+import { formatToDollar } from "@/utils/formatToDollar";
 
 export default async function handler(
   req: NextApiRequest,
@@ -91,6 +92,16 @@ export default async function handler(
       const amountChange = currentAmount - existingPot.currentAmount;
 
       if (amountChange > 0) {
+        if (currentAmount > targetAmount) {
+          const exceededBy = currentAmount - targetAmount;
+
+          return res.status(400).json({
+            message: `Cannot add money. This would exceed the target amount by ${formatToDollar(
+              exceededBy
+            )}.`,
+          });
+        }
+
         if (amountChange > (user?.currentBalance || 0)) {
           return res.status(400).json({
             message:

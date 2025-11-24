@@ -1,25 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import useRequest from "@/utils/useRequest";
 
 import { AxiosResponse } from "axios";
-import { AllPotsProps } from "@/pages/home/index.page";
 import { PotCardHeader } from "./partials/PotCardHeader";
 import { PotCardValue } from "./partials/PotCardValue";
 import { PotProgressBar } from "./partials/PotProgressBar";
 import { PotAmountButtons } from "./partials/PotAmountButtons";
 import { DeletePotModal } from "../DeletePotModal";
 import { PotFormModal } from "../PotFormModal";
+import { PotsResult } from "@/types/pots-result";
+import { PotProps } from "@/types/pot";
+import { KeyedMutator } from "swr";
+import { ThemeProps } from "@/types/theme";
 
 interface PotCardProps {
-  potId: string;
+  pot: PotProps;
+  themes: ThemeProps[] | undefined;
+  pots: PotProps[] | undefined;
+  mutate: KeyedMutator<AxiosResponse<PotsResult, any>>;
   onSubmitForm: () => Promise<
-    void | AxiosResponse<AllPotsProps, any> | undefined
+    void | AxiosResponse<PotsResult, any> | undefined
   >;
 }
 
-export const PotCard = ({ potId, onSubmitForm }: PotCardProps) => {
+export const PotCard = ({
+  pot,
+  themes,
+  pots,
+  onSubmitForm,
+  mutate,
+}: PotCardProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -30,31 +41,13 @@ export const PotCard = ({ potId, onSubmitForm }: PotCardProps) => {
 
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
 
-  const { data, mutate } = useRequest<PotWithDetails>(
-    {
-      url: `/pots/${potId}`,
-      method: "GET",
-    },
-    {
-      revalidateOnFocus: false,
-      revalidateIfStale: true,
-      dedupingInterval: 20000,
-      focusThrottleInterval: 30000,
-      keepPreviousData: true,
-    }
-  );
-
   async function refreshAll() {
     await mutate();
     await onSubmitForm();
     setIsDropdownOpen(false);
   }
 
-  if (!data?.pot) return null;
-
-  const percentage = data?.percentageSpent;
-
-  const pot = data?.pot;
+  const percentage = (pot.currentAmount / pot.targetAmount) * 100;
 
   const originalPercentage = Math.max(
     0,
@@ -108,12 +101,10 @@ export const PotCard = ({ potId, onSubmitForm }: PotCardProps) => {
         <PotFormModal
           isEdit
           id="pot-modal"
-          name={pot?.name}
-          targetAmount={pot?.targetAmount}
-          currentAmount={pot?.currentAmount}
-          themeColor={pot?.theme?.color}
+          pot={pot}
+          themes={themes}
+          pots={pots}
           onClose={() => setIsAddOpen(false)}
-          potId={potId}
           onSubmitForm={async () => {
             await mutate();
             await onSubmitForm();

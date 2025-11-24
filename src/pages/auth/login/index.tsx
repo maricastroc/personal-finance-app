@@ -131,12 +131,7 @@ export default function Login() {
 
             <p className="text-sm flex items-center justify-center w-full text-grey-500 gap-2">
               You’re just browsing?
-              <TextLink
-                aria-description="Log in using a pre-filled demo account"
-                as="button"
-                type="button"
-                onClick={onSubmitDemo}
-              >
+              <TextLink as="button" type="button" onClick={onSubmitDemo}>
                 Demo Login
               </TextLink>
             </p>

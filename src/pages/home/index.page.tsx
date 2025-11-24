@@ -5,7 +5,6 @@ import Layout from "@/components/layouts/layout.page";
 import { BudgetWithDetailsProps } from "@/components/shared/BudgetItem";
 import { LoadingPage } from "@/components/shared/LoadingPage";
 import { FinanceCard } from "./partials/FinanceCard";
-import { PotProps } from "@/types/pot";
 import { TransactionProps } from "@/types/transaction";
 import { RecurringBillProps } from "@/types/recurringBills";
 import useRequest from "@/utils/useRequest";
@@ -18,16 +17,12 @@ import { PotsSection } from "./partials/PotsSection";
 import { PageHeader } from "./partials/PageHeader";
 import { useEffect, useState } from "react";
 import { swrConfig } from "@/utils/constants";
+import { PotsResult } from "@/types/pots-result";
 
 interface BalanceProps {
   incomes: number | undefined;
   expenses: number | undefined;
   currentBalance: number | undefined;
-}
-
-export interface AllPotsProps {
-  pots: PotProps[];
-  totalCurrentAmount: number | undefined;
 }
 
 interface RecurringBillsWithDetails {
@@ -59,8 +54,8 @@ export default function Home() {
   const { data: balance, isValidating: isValidatingBalance } =
     useRequest<BalanceProps>({ url: "/balance", method: "GET" }, swrConfig);
 
-  const { data: allPots, isValidating: isValidatingPots } =
-    useRequest<AllPotsProps>({ url: "/pots", method: "GET" }, swrConfig);
+  const { data: potsData, isValidating: isValidatingPots } =
+    useRequest<PotsResult>({ url: "/pots", method: "GET" }, swrConfig);
 
   const { data: budgets, isValidating: isValidatingBudgets } = useRequest<
     BudgetWithDetailsProps[]
@@ -139,7 +134,8 @@ export default function Home() {
           <section className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-6">
             <div className="flex flex-col">
               <PotsSection
-                allPots={allPots}
+                pots={potsData?.pots}
+                totalCurrentAmount={potsData?.totalCurrentAmount}
                 isValidating={isValidatingPots && initialLoad}
               />
               <TransactionsSection

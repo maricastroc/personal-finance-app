@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 import { PotProps } from "@/types/pot";
-import { PotActionsDropdown } from "./PotActionsDropdown";
+import { DropdownActions } from "@/components/shared/DropdownActions";
 
 interface HeaderProps {
   pot: PotProps;
@@ -30,17 +30,24 @@ export function PotCardHeader({
       </div>
 
       <div className="relative">
-        <FontAwesomeIcon
-          className="text-grey-500 cursor-pointer"
-          icon={faEllipsis}
+        <button
+          type="button"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        />
+          className="focus:outline-secondary-green focus:outline-2 focus:outline-offset-2"
+        >
+          <FontAwesomeIcon
+            className="text-grey-500 cursor-pointer"
+            icon={faEllipsis}
+          />
+        </button>
 
-        <PotActionsDropdown
+        <DropdownActions
           isOpen={isDropdownOpen}
           setIsOpen={setIsDropdownOpen}
           setIsEditOpen={setIsEditOpen}
           setIsDeleteOpen={setIsDeleteOpen}
+          editText="Edit Pot"
+          deleteText="Delete Pot"
         />
       </div>
     </div>

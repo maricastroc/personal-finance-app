@@ -2,17 +2,21 @@ import { useOutsideAndEscape } from "@/hooks/useClickOutside";
 
 interface Props {
   isOpen: boolean;
-  setIsOpen: (v: boolean) => void;
-  setIsEditOpen: (v: boolean) => void;
-  setIsDeleteOpen: (v: boolean) => void;
+  setIsOpen: (value: boolean) => void;
+  setIsDeleteOpen: (value: boolean) => void;
+  setIsEditOpen: (value: boolean) => void;
+  editText: string;
+  deleteText: string;
 }
 
-export function PotActionsDropdown({
-  isOpen,
-  setIsOpen,
-  setIsEditOpen,
+export const DropdownActions = ({
   setIsDeleteOpen,
-}: Props) {
+  setIsEditOpen,
+  setIsOpen,
+  isOpen,
+  editText,
+  deleteText,
+}: Props) => {
   const dropdownRef = useOutsideAndEscape<HTMLDivElement>({
     enabled: isOpen,
     onClickOutside: () => setIsOpen(false),
@@ -27,26 +31,28 @@ export function PotActionsDropdown({
       className="absolute top-[1.5rem] w-[8.5rem] bg-white shadow-xl p-3 rounded-lg flex flex-col gap-2 z-10"
     >
       <button
+        type="button"
         onClick={() => {
           setIsEditOpen(true);
           setIsOpen(false);
         }}
-        className="text-sm text-left text-grey-900 hover:text-grey-500"
+        className="text-sm text-left text-grey-900 hover:text-grey-500 focus:outline-secondary-green focus:outline-offset-2 focus:outline-2"
       >
-        Edit Pot
+        {editText}
       </button>
 
       <span className="h-[1px] w-full bg-grey-300" />
 
       <button
+        type="button"
         onClick={() => {
           setIsDeleteOpen(true);
           setIsOpen(false);
         }}
-        className="text-sm text-left text-secondary-red hover:brightness-125"
+        className="text-sm text-left text-secondary-red focus:outline-secondary-green focus:outline-offset-2 focus:outline-2 hover:brightness-125"
       >
-        Delete Pot
+        {deleteText}
       </button>
     </div>
   );
-}
+};

@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { CurrencyInput } from "@/components/core/CurrencyInput";
 import { PrimaryButton } from "@/components/core/PrimaryButton";
-import { ErrorMessage } from "@/components/shared/ErrorMessage";
 import { Modal } from "@/components/shared/Modal";
 import { useBalance } from "@/contexts/BalanceContext";
 import { api } from "@/lib/axios";
@@ -78,6 +77,15 @@ export function EditPotAmountModal({
 
   const handleEditPot = async () => {
     try {
+      if (inputValue === 0) {
+        toast.error(
+          isWithdraw
+            ? "Please enter an amount to withdraw from your pot."
+            : "Please enter an amount to add to your pot."
+        );
+        return;
+      }
+
       setIsSubmitting(true);
 
       const payload = {
@@ -178,17 +186,9 @@ export function EditPotAmountModal({
           placeholder="0.00"
           id="pot-amount-input"
         />
-
-        {newAmount < 0 && (
-          <ErrorMessage
-            id="amount-error"
-            message="Withdrawal amount exceeds available balance. Please enter a lower amount."
-          />
-        )}
       </div>
 
       <PrimaryButton
-        disabled={newAmount < 0}
         className="mt-8"
         onClick={handleEditPot}
         isSubmitting={isSubmitting}

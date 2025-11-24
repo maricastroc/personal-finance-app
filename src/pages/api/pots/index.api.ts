@@ -38,11 +38,12 @@ export default async function handler(
       0
     );
 
-    const potsWithTotalCurrentAmount = {
-      pots,
-      totalCurrentAmount,
-    };
-    return res.json({ pots: potsWithTotalCurrentAmount });
+    return res.json({
+      data: {
+        pots,
+        totalCurrentAmount,
+      },
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "An error occurred" });

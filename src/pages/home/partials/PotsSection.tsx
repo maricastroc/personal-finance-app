@@ -1,5 +1,4 @@
 import { SkeletonPot } from "@/components/skeletons/SkeletonPot";
-import { AllPotsProps } from "../index.page";
 import HomeCard from "./HomeCard";
 import { FinanceCard } from "./FinanceCard";
 import { formatToDollar } from "@/utils/formatToDollar";
@@ -10,26 +9,31 @@ import { useRouter } from "next/router";
 
 interface PotsSectionProps {
   isValidating: boolean;
-  allPots: AllPotsProps | undefined;
+  pots: PotProps[] | undefined;
+  totalCurrentAmount: number | undefined;
 }
 
-export const PotsSection = ({ isValidating, allPots }: PotsSectionProps) => {
+export const PotsSection = ({
+  isValidating,
+  pots,
+  totalCurrentAmount,
+}: PotsSectionProps) => {
   const router = useRouter();
 
   return (
     <HomeCard routePath="/pots" title="Pots" buttonLabel="See Details">
       {isValidating ? (
         <SkeletonPot />
-      ) : allPots && allPots?.pots?.length ? (
+      ) : pots && pots?.length ? (
         <div className="flex flex-col gap-5 md:grid md:grid-cols-2 lg:flex lg:flex-col">
           <FinanceCard
             icon={<img src="/assets/images/icon-pot.svg" alt="" />}
             variant="tertiary"
             title="Total saved"
-            value={formatToDollar(allPots.totalCurrentAmount || 0)}
+            value={formatToDollar(totalCurrentAmount || 0)}
           />
           <div className="grid grid-cols-2 gap-4">
-            {allPots.pots.map((pot: PotProps) => (
+            {pots.map((pot: PotProps) => (
               <FinanceItem
                 key={pot.id}
                 title={pot.name}

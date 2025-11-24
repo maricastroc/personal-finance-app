@@ -4,10 +4,10 @@ import { InputBase } from "@/components/core/InputBase";
 import { PrimaryButton } from "@/components/core/PrimaryButton";
 import { ErrorMessage } from "@/components/shared/ErrorMessage";
 import { Modal } from "@/components/shared/Modal";
-import { SelectTheme } from "@/components/shared/SelectTheme";
 import { api } from "@/lib/axios";
-import { AllPotsProps } from "@/pages/home/index.page";
-import { getThemeOptions } from "@/utils/getThemeOptions";
+import { PotProps } from "@/types/pot";
+import { PotsResult } from "@/types/pots-result";
+import { ThemeProps } from "@/types/theme";
 import { handleApiError } from "@/utils/handleApiError";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosResponse } from "axios";
@@ -15,18 +15,17 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
+import { PotThemeSelector } from "./PotThemeSelector";
 
 interface PotFormModalProps {
   id: string;
   onClose: () => void;
-  targetAmount?: number;
-  currentAmount?: number;
-  themeColor?: string;
-  potId?: string;
-  name?: string;
+  themes: ThemeProps[] | undefined;
+  pots: PotProps[] | undefined;
+  pot?: PotProps;
   isEdit?: boolean;
   onSubmitForm: () => Promise<
-    void | AxiosResponse<AllPotsProps, any> | undefined
+    void | AxiosResponse<PotsResult, any> | undefined
   >;
 }
 
@@ -47,11 +46,9 @@ export type PotFormData = z.infer<ReturnType<typeof potFormSchema>>;
 export function PotFormModal({
   id,
   onClose,
-  name,
-  targetAmount,
-  currentAmount,
-  themeColor,
-  potId,
+  pot,
+  pots,
+  themes,
   onSubmitForm,
   isEdit = false,
 }: PotFormModalProps) {
@@ -64,16 +61,15 @@ export function PotFormModal({
   const {
     handleSubmit,
     control,
-    setValue,
     reset,
     formState: { isSubmitting, errors },
   } = useForm<PotFormData>({
     resolver: zodResolver(potFormSchema()),
     defaultValues: {
-      name: isEdit ? name : "",
-      targetAmount: isEdit ? targetAmount : 0,
-      themeColor: isEdit ? themeColor : "",
-      currentAmount: isEdit ? currentAmount : 0,
+      name: isEdit ? pot?.name : "",
+      targetAmount: isEdit ? pot?.targetAmount : 0,
+      themeColor: isEdit ? pot?.themeColor : "",
+      currentAmount: isEdit ? pot?.currentAmount : 0,
     },
   });
 
@@ -86,7 +82,7 @@ export function PotFormModal({
         currentAmount: data.currentAmount,
       };
 
-      const response = await api.put(`/pots/${potId}`, payload);
+      const response = await api.put(`/pots/${pot?.id}`, payload);
 
       toast?.success(response.data.message);
       await onSubmitForm();
@@ -105,7 +101,7 @@ export function PotFormModal({
         targetAmount: data.targetAmount,
       };
 
-      const response = await api.post(`/pots/${potId}`, payload);
+      const response = await api.post(`/pots/${pot?.id}`, payload);
 
       toast?.success(response.data.message);
       await onSubmitForm();
@@ -117,15 +113,15 @@ export function PotFormModal({
   };
 
   useEffect(() => {
-    if (isEdit) {
+    if (isEdit && pot) {
       reset({
-        name,
-        targetAmount,
-        currentAmount,
-        themeColor,
+        name: pot.name,
+        targetAmount: pot.targetAmount,
+        currentAmount: pot.currentAmount ?? 0,
+        themeColor: pot.themeColor,
       });
     }
-  }, [isEdit, name, themeColor, targetAmount, currentAmount, reset]);
+  }, [isEdit, pot, reset]);
 
   return (
     <Modal
@@ -179,10 +175,17 @@ export function PotFormModal({
             Theme Color
           </label>
 
-          <SelectTheme
-            defaultValue={themeColor}
-            data={getThemeOptions}
-            onSelect={(value) => setValue("themeColor", value)}
+          <Controller
+            name="themeColor"
+            control={control}
+            render={({ field }) => (
+              <PotThemeSelector
+                themes={themes}
+                pots={pots}
+                pot={pot}
+                onSelect={(themeId: string) => field.onChange(themeId)}
+              />
+            )}
           />
 
           {errors.themeColor && (

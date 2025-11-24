@@ -30,7 +30,7 @@ export function PotAmountButtons({
         <Dialog.Trigger asChild>
           <button
             onClick={() => setIsAddOpen(true)}
-            className="bg-beige-100 w-full rounded-md py-4 px-3 hover:brightness-90"
+            className="bg-beige-100 w-full rounded-md py-4 px-3 hover:brightness-90 focus:outline-secondary-green focus:outline-offset-2 focus:outline-2"
           >
             <FontAwesomeIcon icon={faPlus} className="text-sm mr-1" />
             Add Money
@@ -54,7 +54,7 @@ export function PotAmountButtons({
           <button
             type="button"
             onClick={() => setIsWithdrawOpen(true)}
-            className="bg-beige-100 w-full rounded-md py-4 px-3 hover:brightness-90"
+            className="bg-beige-100 w-full rounded-md py-4 px-3 hover:brightness-90 focus:outline-secondary-green focus:outline-offset-2 focus:outline-2"
           >
             <FontAwesomeIcon icon={faMinus} className="text-sm mr-1" />
             Withdraw

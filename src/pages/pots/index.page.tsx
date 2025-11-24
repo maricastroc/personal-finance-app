@@ -8,9 +8,10 @@ import { PotFormModal } from "./partials/PotFormModal";
 import { SkeletonPotCard } from "./partials/SkeletonPotCard";
 import { PageHeader } from "./partials/PageHeader";
 import { PotCard } from "./partials/PotCard";
-import { AllPotsProps } from "../home/index.page";
 import useRequest from "@/utils/useRequest";
 import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
+import { PotsResult } from "@/types/pots-result";
+import { ThemeProps } from "@/types/theme";
 
 export default function Pots() {
   const { isSidebarOpen } = useAppContext();
@@ -19,11 +20,7 @@ export default function Pots() {
 
   const [isPotModalOpen, setIsPotModalOpen] = useState(false);
 
-  const {
-    data: pots,
-    mutate,
-    isValidating,
-  } = useRequest<AllPotsProps>(
+  const { data, mutate, isValidating } = useRequest<PotsResult>(
     {
       url: "/pots",
       method: "GET",
@@ -33,6 +30,20 @@ export default function Pots() {
       revalidateIfStale: true,
       dedupingInterval: 20000,
       focusThrottleInterval: 30000,
+      keepPreviousData: true,
+    }
+  );
+
+  const { data: themesData, isValidating: isValidatingThemes } = useRequest<
+    ThemeProps[]
+  >(
+    {
+      url: "/themes",
+      method: "GET",
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
       keepPreviousData: true,
     }
   );
@@ -65,23 +76,28 @@ export default function Pots() {
           >
             <PotFormModal
               id="pot-modal"
+              themes={themesData}
+              pots={data?.pots}
               onClose={() => setIsPotModalOpen(false)}
               onSubmitForm={async () => await mutate()}
             />
           </PageHeader>
 
-          {isValidating ? (
+          {isValidating || isValidatingThemes ? (
             <div className="flex flex-col w-full lg:grid lg:grid-cols-2 gap-6">
               {Array.from({ length: 4 }).map((_, index) => (
                 <SkeletonPotCard key={index} />
               ))}
             </div>
-          ) : pots?.pots.length ? (
+          ) : data?.pots?.length ? (
             <div className="flex flex-col w-full lg:grid lg:grid-cols-2 gap-6">
-              {pots.pots.map((pot) => (
+              {data.pots.map((pot) => (
                 <PotCard
                   key={pot.id}
-                  potId={pot.id}
+                  pot={pot}
+                  themes={themesData}
+                  pots={data?.pots}
+                  mutate={mutate}
                   onSubmitForm={async () => await mutate()}
                 />
               ))}
