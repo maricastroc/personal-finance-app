@@ -43,7 +43,6 @@ export function PasswordInput({
         <button
           type="button"
           aria-label={showPassword ? "Hide password" : "Show password"}
-          aria-pressed={showPassword}
           className="absolute inset-y-0 my-3 right-3 flex items-center text-grey-500
           focus:outline-secondary-green focus:outline-2 focus:outline-offset-1 rounded-sm"
           onClick={() => setShowPassword((prev) => !prev)}
