@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { api } from "@/lib/axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -9,7 +9,6 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { UserProps } from "@/types/user";
 import Layout from "@/components/layouts/layout.page";
-import { AvatarInput } from "@/components/core/AvatarInput";
 import { LoadingPage } from "@/components/shared/LoadingPage";
 import { PrimaryButton } from "@/components/core/PrimaryButton";
 import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
@@ -19,7 +18,6 @@ import { NextSeo } from "next-seo";
 import toast from "react-hot-toast";
 import { InputBase } from "@/components/core/InputBase";
 import { PasswordInput } from "@/components/core/PasswordInput";
-import { ImageCropper } from "@/components/shared/ImageCropper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
@@ -27,7 +25,6 @@ const editProfileFormSchema = (changePassword: boolean) =>
   z
     .object({
       email: z.string().min(3, { message: "E-mail is required." }),
-      accountId: z.string().optional(),
       oldPassword: changePassword
         ? z.string().min(8, { message: "Old password is required." })
         : z.string().optional(),
@@ -42,9 +39,6 @@ const editProfileFormSchema = (changePassword: boolean) =>
             .min(8, { message: "Password must be at least 8 characters long." })
         : z.string().optional(),
       name: z.string().min(3, { message: "Name is required." }),
-      avatarUrl: z
-        .custom<File>((file) => file instanceof File && file.size > 0)
-        .optional(),
     })
     .refine(
       (data) =>
@@ -60,17 +54,9 @@ export type EditProfileFormData = z.infer<
 >;
 
 export default function Profile() {
-  const inputFileRef = useRef<HTMLInputElement>(null);
-
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-
   const isRouteLoading = useLoadingOnRouteChange();
 
   const [changePassword, setChangePassword] = useState(false);
-
-  const [showCropper, setShowCropper] = useState(false);
-
-  const [originalImage, setOriginalImage] = useState<string | null>(null);
 
   const { data: user } = useRequest<UserProps>({
     url: "/profile",
@@ -97,34 +83,6 @@ export default function Profile() {
     toast?.success("See you soon!");
   };
 
-  const handleCroppedImage = (croppedImage: string) => {
-    fetch(croppedImage)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const file = new File([blob], "avatar.jpg", {
-          type: "image/jpeg",
-        });
-        setValue("avatarUrl", file);
-        setAvatarPreview(croppedImage);
-        setShowCropper(false);
-      });
-  };
-
-  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setValue("avatarUrl", file);
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        setOriginalImage(reader.result as string);
-        setShowCropper(true);
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
-
   async function handleEditProfile(data: EditProfileFormData) {
     if (user) {
       const formData = new FormData();
@@ -132,14 +90,11 @@ export default function Profile() {
       formData.append("name", data.name);
       formData.append("user_id", user.id.toString());
 
-      if (data.avatarUrl) formData.append("avatarUrl", data.avatarUrl);
       if (data.oldPassword) formData.append("oldPassword", data.oldPassword);
       if (data.password) formData.append("password", data.password);
 
       try {
-        const response = await api.put(`/profile`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        const response = await api.put(`/profile`, formData);
 
         toast?.success(response.data.message);
       } catch (error) {
@@ -150,7 +105,6 @@ export default function Profile() {
 
   useEffect(() => {
     if (user) {
-      setAvatarPreview(`${user.avatarUrl}`);
       setValue("name", user.name);
       setValue("email", user.email ?? "");
     }
@@ -178,56 +132,25 @@ export default function Profile() {
         ]}
       />
       <Layout>
-        {showCropper && originalImage && (
-          <ImageCropper
-            src={originalImage}
-            onCrop={handleCroppedImage}
-            aspectRatio={1}
-            onClose={() => setShowCropper(false)}
-          />
-        )}
-
         <div
-          className={`w-full flex flex-col items-center justify-center p-4 pb-20 md:p-8 lg:p-12 overflow-y-scroll
+          className={`w-full h-[100vh] flex flex-col items-center justify-center p-4 pb-20 md:p-8 lg:p-12
         }`}
         >
-          <div className="bg-white relative w-full px-5 py-6 rounded-md max-w-[35rem] xl:w-full overflow-y-scroll flex flex-col justify-start scrollbar scrollbar-thumb-grey-500 scrollbar-track-transparent">
+          <div className="bg-white shadow-lg relative w-full px-5 py-6 rounded-md max-w-[35rem] xl:w-full flex flex-col justify-start scrollbar scrollbar-thumb-grey-500 scrollbar-track-transparent">
             <div className="flex items-center justify-between w-full">
-              <h2 className="font-bold text-2xl">Update Details</h2>
+              <h2 className="font-bold text-2xl">Update Profile</h2>
               <button
                 onClick={handleLogout}
-                className={`font-semibold rounded-md p-3 px-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-grey-900 text-beige-100 hover:bg-grey-500 capitalize justify-center disabled:bg-grey-300 disabled:text-white disabled:cursor-not-allowed`}
+                className={`font-semibold rounded-md focus:outline-secondary-green focus:outline-offset-2 focus:outline-2 p-3 px-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-secondary-red text-beige-100 hover:bg-secondary-redHover capitalize justify-center disabled:bg-grey-300 disabled:text-white disabled:cursor-not-allowed`}
               >
                 <FontAwesomeIcon icon={faRightToBracket} />
                 <p className="hidden sm:block">Logout</p>
               </button>
             </div>
             <form
-              className="flex flex-col py-8 gap-4"
+              className="flex flex-col pt-8 gap-4"
               onSubmit={handleSubmit(handleEditProfile)}
             >
-              <AvatarInput
-                avatarPreview={avatarPreview}
-                onChange={handleAvatarChange}
-                inputFileRef={inputFileRef}
-              />
-
-              <Controller
-                name="accountId"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <InputBase
-                    disabled
-                    label="Account ID"
-                    id="name"
-                    type="text"
-                    placeholder="Your Account ID"
-                    error={fieldState.error?.message}
-                    {...field}
-                  />
-                )}
-              />
-
               <Controller
                 name="name"
                 control={control}
@@ -260,11 +183,18 @@ export default function Profile() {
 
               <div className="flex items-center justify-start w-full gap-2">
                 <Checkbox.Root
+                  id="changePassword"
                   checked={changePassword}
                   onCheckedChange={(checked) =>
                     setChangePassword(checked === true)
                   }
-                  className="flex items-center justify-center relative w-4 h-4 rounded-sm border-2 border-grey-500 text-white 
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      setChangePassword((prev) => !prev);
+                    }
+                  }}
+                  className="flex items-center focus:outline-2 focus:outline-offset-2 focus:outline-secondary-green justify-center relative w-4 h-4 rounded-sm border-2 border-grey-500 text-white 
                         bg-transparent data-[state=checked]:bg-black data-[state=checked]:border-black"
                 >
                   <Checkbox.Indicator>

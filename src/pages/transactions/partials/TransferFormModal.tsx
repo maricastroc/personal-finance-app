@@ -4,7 +4,7 @@ import { SelectInput } from "@/components/core/SelectInput";
 import { api } from "@/lib/axios";
 import { CategoryProps } from "@/types/category";
 import { TransactionProps } from "@/types/transaction";
-import { avatarUrls } from "@/utils/constants";
+import { avatarUrls, TRANSFER_CONSTRAINTS } from "@/utils/constants";
 import { handleApiError } from "@/utils/handleApiError";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -20,10 +20,18 @@ import { Modal } from "@/components/shared/Modal";
 import { format } from "date-fns";
 import { DatePicker } from "@/components/core/DatePicker";
 import { useBalance } from "@/contexts/BalanceContext";
+import { formatToDollar } from "@/utils/formatToDollar";
 
 const transactionFormSchema = () =>
   z.object({
-    amount: z.number().min(1, { message: "Amount must be greater than zero." }),
+    amount: z
+      .number({ invalid_type_error: "Amount must be a number." })
+      .min(1, { message: "Amount must be greater than zero." })
+      .max(TRANSFER_CONSTRAINTS.MAX_LIMIT, {
+        message: `Target amount cannot exceed ${formatToDollar(
+          TRANSFER_CONSTRAINTS.MAX_LIMIT
+        )}`,
+      }),
     description: z
       .string()
       .max(20, { message: "Description cannot exceed 20 characters." })
