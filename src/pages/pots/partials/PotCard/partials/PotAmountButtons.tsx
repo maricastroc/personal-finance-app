@@ -42,7 +42,7 @@ export function PotAmountButtons({
           name={pot.name}
           currentAmount={pot.currentAmount}
           targetAmount={pot.targetAmount}
-          themeColor={pot.theme.color}
+          theme={pot.theme}
           originalPercentage={originalPercentage}
           onClose={() => setIsAddOpen(false)}
           onSubmitForm={refreshAll}
@@ -67,7 +67,7 @@ export function PotAmountButtons({
           name={pot.name}
           currentAmount={pot.currentAmount}
           targetAmount={pot.targetAmount}
-          themeColor={pot.theme.color}
+          theme={pot.theme}
           originalPercentage={originalPercentage}
           onClose={() => setIsWithdrawOpen(false)}
           onSubmitForm={refreshAll}

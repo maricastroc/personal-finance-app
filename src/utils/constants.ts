@@ -103,6 +103,21 @@ export const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export const MAX_AVATAR_SIZE = 1024 * 1024;
 
+export const BUDGET_CONSTRAINTS = {
+  MAX_LIMIT: 900000,
+  MIN_LIMIT: 1,
+} as const;
+
+export const POT_CONSTRAINTS = {
+  MAX_LIMIT: 900000,
+  MIN_LIMIT: 1,
+} as const;
+
+export const TRANSFER_CONSTRAINTS = {
+  MAX_LIMIT: 900000,
+  MIN_LIMIT: 1,
+} as const;
+
 export const swrConfig = {
   revalidateOnFocus: false,
   revalidateIfStale: true,

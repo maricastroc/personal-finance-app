@@ -1,3 +1,5 @@
+import { formatToDollar } from "@/utils/formatToDollar";
+
 interface Props {
   percentage: number;
   color: string;
@@ -19,7 +21,9 @@ export function PotProgressBar({ percentage, color, target }: Props) {
 
       <div className="flex justify-between mt-3">
         <p className="text-grey-500 font-bold text-xs">{percentage}%</p>
-        <p className="text-grey-500 text-xs">Target of ${target}</p>
+        <p className="text-grey-500 text-xs">{`Target of ${formatToDollar(
+          target
+        )}`}</p>
       </div>
     </>
   );

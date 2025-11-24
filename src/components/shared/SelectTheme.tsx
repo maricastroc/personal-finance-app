@@ -19,6 +19,7 @@ export const SelectTheme = ({
   onSelect,
   defaultValue = null,
 }: SelectThemeProps) => {
+  console.log(data);
   return (
     <Select.Root
       defaultValue={defaultValue ?? undefined}

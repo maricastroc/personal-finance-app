@@ -1,16 +1,14 @@
-import {
-  BudgetItem,
-  BudgetWithDetailsProps,
-} from "@/components/shared/BudgetItem";
+import { BudgetItem } from "@/components/shared/BudgetItem";
 import HomeCard from "./HomeCard";
 import { SkeletonBudgetSection } from "@/components/skeletons/SkeletonBudgetSection";
 import { FinanceItem } from "@/components/shared/FinanceItem";
 import { EmptyContent } from "@/components/shared/EmptyContent";
 import { useRouter } from "next/router";
+import { BudgetProps } from "@/types/budget";
 
 interface BudgetsSectionProps {
   isValidating: boolean;
-  budgets: BudgetWithDetailsProps[] | undefined;
+  budgets: BudgetProps[] | undefined;
 }
 
 export const BudgetsSection = ({
@@ -35,9 +33,9 @@ export const BudgetsSection = ({
             {budgets.map((budget, index) => (
               <FinanceItem
                 key={index}
-                title={budget.categoryName}
-                color={budget.theme}
-                value={budget.budgetLimit}
+                title={budget.category?.name}
+                color={budget.theme.color}
+                value={budget.amount}
               />
             ))}
           </div>

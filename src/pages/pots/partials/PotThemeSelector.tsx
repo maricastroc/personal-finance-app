@@ -16,9 +16,9 @@ export function PotThemeSelector({
 }: PotThemeSelectorProps) {
   const { themes } = useAppContext();
 
-  const data: ThemeDataProps[] = useThemeData(themes, pots);
+  const data: ThemeDataProps[] = useThemeData(themes, pots, pot?.theme?.id);
 
   return (
-    <SelectTheme data={data} defaultValue={pot?.themeId} onSelect={onSelect} />
+    <SelectTheme data={data} defaultValue={pot?.theme.id} onSelect={onSelect} />
   );
 }

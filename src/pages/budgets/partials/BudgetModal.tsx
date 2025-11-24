@@ -14,6 +14,8 @@ import { CurrencyInput } from "@/components/core/CurrencyInput";
 import InputLabel from "@/components/core/InputLabel";
 import { BudgetProps } from "@/types/budget";
 import { BudgetThemeSelector } from "./BudgetThemeSelector";
+import { formatToDollar } from "@/utils/formatToDollar";
+import { BUDGET_CONSTRAINTS } from "@/utils/constants";
 
 interface EditBudgetModalProps {
   id: string;
@@ -30,8 +32,13 @@ const budgetFormSchema = () =>
     category: z.string().min(3, { message: "Category is required." }),
     budgetLimit: z
       .number({ invalid_type_error: "Amount must be a number." })
-      .min(1, { message: "Amount must be greater than zero." }),
-    theme: z.string().min(3, { message: "Theme is required." }),
+      .min(1, { message: "Amount must be greater than zero." })
+      .max(BUDGET_CONSTRAINTS.MAX_LIMIT, {
+        message: `Budget limit cannot exceed ${formatToDollar(
+          BUDGET_CONSTRAINTS.MAX_LIMIT
+        )}`,
+      }),
+    themeId: z.string().min(1, { message: "Theme is required." }),
   });
 
 export type BudgetFormData = z.infer<ReturnType<typeof budgetFormSchema>>;
@@ -55,7 +62,7 @@ export function BudgetModal({
     defaultValues: {
       category: isEdit ? budget?.category?.name : "",
       budgetLimit: isEdit ? budget?.amount : 0,
-      theme: isEdit ? budget?.theme.color : "",
+      themeId: isEdit ? budget?.theme.id : "",
     },
   });
 
@@ -74,7 +81,7 @@ export function BudgetModal({
     try {
       const payload = {
         categoryName: data.category,
-        themeColor: data.theme,
+        themeId: data.themeId,
         amount: data.budgetLimit,
       };
 
@@ -93,7 +100,7 @@ export function BudgetModal({
     try {
       const payload = {
         categoryName: data.category,
-        themeColor: data.theme,
+        themeId: data.themeId,
         amount: data.budgetLimit,
       };
 
@@ -177,7 +184,7 @@ export function BudgetModal({
           </label>
 
           <Controller
-            name="theme"
+            name="themeId"
             control={control}
             render={({ field }) => (
               <BudgetThemeSelector
@@ -188,8 +195,8 @@ export function BudgetModal({
             )}
           />
 
-          {errors.theme && (
-            <ErrorMessage id="theme-error" message={errors.theme.message} />
+          {errors.themeId && (
+            <ErrorMessage id="theme-error" message={errors.themeId.message} />
           )}
         </div>
 

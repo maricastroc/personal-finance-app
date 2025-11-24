@@ -2,7 +2,6 @@
 import { NextSeo } from "next-seo";
 import { useAppContext } from "@/contexts/AppContext";
 import Layout from "@/components/layouts/layout.page";
-import { BudgetWithDetailsProps } from "@/components/shared/BudgetItem";
 import { LoadingPage } from "@/components/shared/LoadingPage";
 import { FinanceCard } from "./partials/FinanceCard";
 import { TransactionProps } from "@/types/transaction";
@@ -18,6 +17,7 @@ import { PageHeader } from "./partials/PageHeader";
 import { useEffect, useState } from "react";
 import { swrConfig } from "@/utils/constants";
 import { PotsResult } from "@/types/pots-result";
+import { BudgetProps } from "@/types/budget";
 
 interface BalanceProps {
   incomes: number | undefined;
@@ -58,7 +58,7 @@ export default function Home() {
     useRequest<PotsResult>({ url: "/pots", method: "GET" }, swrConfig);
 
   const { data: budgets, isValidating: isValidatingBudgets } = useRequest<
-    BudgetWithDetailsProps[]
+    BudgetProps[]
   >({ url: "/budgets", method: "GET" }, swrConfig);
 
   const { data: recurringBills, isValidating: isValidatingBills } =
@@ -86,7 +86,6 @@ export default function Home() {
     }
   }, [isAnyDataValidating, initialLoad]);
 
-  // Mostra loading apenas na primeira carga ou mudança de rota
   if (isRouteLoading || initialLoad) {
     return <LoadingPage />;
   }

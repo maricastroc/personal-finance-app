@@ -15,14 +15,6 @@ export interface BudgetItemProps {
   isBudgetsScreen?: boolean;
 }
 
-export interface BudgetWithDetailsProps {
-  id: string;
-  categoryName: string;
-  amountSpent: number;
-  theme: string;
-  budgetLimit: number;
-}
-
 export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 

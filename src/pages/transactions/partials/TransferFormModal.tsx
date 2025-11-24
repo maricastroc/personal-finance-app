@@ -24,13 +24,19 @@ import { useBalance } from "@/contexts/BalanceContext";
 const transactionFormSchema = () =>
   z.object({
     amount: z.number().min(1, { message: "Amount must be greater than zero." }),
-    description: z.string().optional(),
+    description: z
+      .string()
+      .max(20, { message: "Description cannot exceed 20 characters." })
+      .optional(),
     type: z.enum(["income", "expense"], {
       required_error: "Transaction type is required.",
     }),
     recurrenceDay: z.number().optional(),
     recurrenceFrequency: z.string().optional(),
-    contactName: z.string().min(3, { message: "Recipient name is required." }),
+    contactName: z
+      .string()
+      .min(3, { message: "Recipient name must have at least 3 characters." })
+      .max(20, { message: "Recipient name cannot exceed 20 characters." }),
     contactAvatar: z
       .string()
       .min(1, { message: "Recipient avatar is required." }),

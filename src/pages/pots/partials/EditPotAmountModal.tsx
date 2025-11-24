@@ -4,6 +4,7 @@ import { PrimaryButton } from "@/components/core/PrimaryButton";
 import { Modal } from "@/components/shared/Modal";
 import { useBalance } from "@/contexts/BalanceContext";
 import { api } from "@/lib/axios";
+import { ThemeProps } from "@/types/theme";
 import { formatToDollar } from "@/utils/formatToDollar";
 import { handleApiError } from "@/utils/handleApiError";
 import { useState, useEffect } from "react";
@@ -14,7 +15,7 @@ interface EditPotAmountModalProps {
   id: string;
   currentAmount: number;
   targetAmount: number;
-  themeColor: string;
+  theme: ThemeProps;
   originalPercentage: number;
   isWithdraw?: boolean;
   onClose: () => void;
@@ -28,7 +29,7 @@ export function EditPotAmountModal({
   name,
   currentAmount,
   targetAmount,
-  themeColor,
+  theme,
   originalPercentage,
   isWithdraw = false,
 }: EditPotAmountModalProps) {
@@ -90,7 +91,7 @@ export function EditPotAmountModal({
 
       const payload = {
         name,
-        themeColor,
+        themeId: theme.id,
         targetAmount,
         currentAmount: newAmount || 0,
       };
@@ -143,7 +144,7 @@ export function EditPotAmountModal({
                 ? originalPercentage - inputPercentage
                 : originalPercentage
             }%`,
-            backgroundColor: themeColor,
+            backgroundColor: theme.color,
             transition: "width 0.3s ease",
           }}
         />

@@ -91,9 +91,9 @@ export default async function handler(
     try {
       const { budgetId } = req.query;
 
-      const { categoryName, themeColor, amount } = req.body;
+      const { categoryName, themeId, amount } = req.body;
 
-      if (!budgetId || !categoryName || !themeColor || !amount) {
+      if (!budgetId || !categoryName || !themeId || !amount) {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
@@ -105,14 +105,12 @@ export default async function handler(
         return res.status(404).json({ message: "Category not found" });
       }
 
-      let theme = await prisma.theme.findUnique({
-        where: { color: themeColor },
+      const theme = await prisma.theme.findUnique({
+        where: { id: themeId },
       });
 
       if (!theme) {
-        theme = await prisma.theme.create({
-          data: { color: themeColor },
-        });
+        return res.status(400).json({ message: "Theme not found" });
       }
 
       const updatedBudget = await prisma.budget.update({
@@ -131,55 +129,6 @@ export default async function handler(
       return res.status(200).json({
         budget: updatedBudget,
         message: "Budget successfully updated!",
-      });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: "An error occurred" });
-    }
-  } else if (req.method === "POST") {
-    try {
-      const { categoryName, themeColor, amount } = req.body;
-
-      if (!categoryName || !themeColor || !amount) {
-        return res.status(400).json({ message: "Missing required fields" });
-      }
-
-      let category = await prisma.category.findUnique({
-        where: { name: categoryName },
-      });
-
-      if (!category) {
-        category = await prisma.category.create({
-          data: { name: categoryName },
-        });
-      }
-
-      let theme = await prisma.theme.findUnique({
-        where: { color: themeColor },
-      });
-
-      if (!theme) {
-        theme = await prisma.theme.create({
-          data: { color: themeColor },
-        });
-      }
-
-      const newBudget = await prisma.budget.create({
-        data: {
-          userId,
-          categoryId: category.id,
-          themeId: theme.id,
-          amount,
-        },
-        include: {
-          category: true,
-          theme: true,
-        },
-      });
-
-      return res.status(200).json({
-        budget: newBudget,
-        message: "Budget successfully created!",
       });
     } catch (error) {
       console.error(error);

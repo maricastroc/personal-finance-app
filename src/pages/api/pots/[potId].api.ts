@@ -67,9 +67,9 @@ export default async function handler(
   } else if (req.method === "PUT") {
     try {
       const { potId } = req.query;
-      const { name, themeColor, targetAmount, currentAmount } = req.body;
+      const { name, themeId, targetAmount, currentAmount } = req.body;
 
-      if (!potId || !name || !themeColor || !targetAmount) {
+      if (!potId || !name || !themeId || !targetAmount) {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
@@ -139,14 +139,12 @@ export default async function handler(
         });
       }
 
-      let theme = await prisma.theme.findUnique({
-        where: { color: themeColor },
+      const theme = await prisma.theme.findUnique({
+        where: { id: themeId },
       });
 
       if (!theme) {
-        theme = await prisma.theme.create({
-          data: { color: themeColor },
-        });
+        return res.status(404).json({ message: "Theme not found" });
       }
 
       const updatedPot = await prisma.pot.update({
@@ -170,71 +168,6 @@ export default async function handler(
         pot: updatedPot,
         user: { currentBalance: updatedUser?.currentBalance || 0 },
         message: "Pot successfully updated!",
-      });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: "An error occurred" });
-    }
-  } else if (req.method === "POST") {
-    try {
-      const { name, themeColor, targetAmount, initialAmount = 0 } = req.body;
-
-      if (!name || !themeColor || !targetAmount) {
-        return res.status(400).json({ message: "Missing required fields" });
-      }
-
-      const user = await prisma.user.findUnique({
-        where: { id: String(userId) },
-      });
-
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-
-      if (initialAmount > (user?.currentBalance || 0)) {
-        return res.status(400).json({
-          message:
-            "Insufficient funds. You cannot add more than your available balance.",
-        });
-      }
-
-      let theme = await prisma.theme.findUnique({
-        where: { color: themeColor },
-      });
-
-      if (!theme) {
-        theme = await prisma.theme.create({
-          data: { color: themeColor },
-        });
-      }
-
-      if (initialAmount > 0) {
-        await prisma.user.update({
-          where: { id: user.id },
-          data: {
-            currentBalance: {
-              decrement: initialAmount,
-            },
-          },
-        });
-      }
-
-      const newPot = await prisma.pot.create({
-        data: {
-          userId,
-          name,
-          themeId: theme.id,
-          targetAmount,
-          currentAmount: initialAmount,
-        },
-        include: {
-          theme: true,
-        },
-      });
-
-      return res.status(200).json({
-        pot: newPot,
-        message: "Pot successfully created!",
       });
     } catch (error) {
       console.error(error);

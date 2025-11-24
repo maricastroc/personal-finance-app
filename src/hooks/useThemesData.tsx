@@ -11,14 +11,17 @@ export interface ThemeDataProps {
 
 export function useThemeData(
   themes: ThemeProps[] | undefined,
-  data: PotProps[] | BudgetProps[] | undefined
+  data: (PotProps | BudgetProps)[] | undefined,
+  currentThemeIdToIgnore?: string
 ): ThemeDataProps[] {
   return useMemo(() => {
-    const usedThemeIds = new Set(data?.map((p) => p.theme.id));
+    if (!themes || !data) return [];
 
-    if (!themes || !data) {
-      return [];
-    }
+    const usedThemeIds = new Set(
+      data
+        .map((item) => item.theme.id)
+        .filter((id) => id !== currentThemeIdToIgnore)
+    );
 
     const available = themes.filter((t) => !usedThemeIds.has(t.id));
     const unavailable = themes.filter((t) => usedThemeIds.has(t.id));
@@ -26,6 +29,7 @@ export function useThemeData(
     return [
       ...available.map((t) => ({
         value: t.id,
+        disabled: false,
         label: (
           <div className="flex items-center gap-2">
             <span
@@ -51,5 +55,5 @@ export function useThemeData(
         ),
       })),
     ];
-  }, [themes, data]);
+  }, [themes, data, currentThemeIdToIgnore]);
 }

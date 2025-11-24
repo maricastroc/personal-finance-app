@@ -15,6 +15,8 @@ import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { PotThemeSelector } from "./PotThemeSelector";
+import { POT_CONSTRAINTS } from "@/utils/constants";
+import { formatToDollar } from "@/utils/formatToDollar";
 
 interface PotFormModalProps {
   id: string;
@@ -29,14 +31,22 @@ interface PotFormModalProps {
 
 const potFormSchema = () =>
   z.object({
-    name: z.string().min(3, { message: "Name is required." }),
+    name: z
+      .string()
+      .min(3, { message: "Name must have at least 3 characters." })
+      .max(20, { message: "Name cannot exceed 20 characters." }),
     targetAmount: z
       .number({ invalid_type_error: "Amount must be a number." })
-      .min(1, { message: "Amount must be greater than zero." }),
+      .min(1, { message: "Amount must be greater than zero." })
+      .max(POT_CONSTRAINTS.MAX_LIMIT, {
+        message: `Target amount cannot exceed ${formatToDollar(
+          POT_CONSTRAINTS.MAX_LIMIT
+        )}`,
+      }),
     currentAmount: z
       .number({ invalid_type_error: "Amount must be a number." })
       .optional(),
-    themeColor: z.string().min(3, { message: "Theme is required." }),
+    themeId: z.string().min(1, { message: "Theme is required." }),
   });
 
 export type PotFormData = z.infer<ReturnType<typeof potFormSchema>>;
@@ -65,7 +75,7 @@ export function PotFormModal({
     defaultValues: {
       name: isEdit ? pot?.name : "",
       targetAmount: isEdit ? pot?.targetAmount : 0,
-      themeColor: isEdit ? pot?.themeColor : "",
+      themeId: isEdit ? pot?.themeId : "",
       currentAmount: isEdit ? pot?.currentAmount : 0,
     },
   });
@@ -74,7 +84,7 @@ export function PotFormModal({
     try {
       const payload = {
         name: data.name,
-        themeColor: data.themeColor,
+        themeId: data.themeId,
         targetAmount: data.targetAmount,
         currentAmount: data.currentAmount,
       };
@@ -94,11 +104,11 @@ export function PotFormModal({
     try {
       const payload = {
         name: data.name,
-        themeColor: data.themeColor,
+        themeId: data.themeId,
         targetAmount: data.targetAmount,
       };
 
-      const response = await api.post(`/pots/${pot?.id}`, payload);
+      const response = await api.post(`/pots`, payload);
 
       toast?.success(response.data.message);
       await onSubmitForm();
@@ -115,7 +125,7 @@ export function PotFormModal({
         name: pot.name,
         targetAmount: pot.targetAmount,
         currentAmount: pot.currentAmount ?? 0,
-        themeColor: pot.themeColor,
+        themeId: pot.theme?.id,
       });
     }
   }, [isEdit, pot, reset]);
@@ -173,7 +183,7 @@ export function PotFormModal({
           </label>
 
           <Controller
-            name="themeColor"
+            name="themeId"
             control={control}
             render={({ field }) => (
               <PotThemeSelector
@@ -184,10 +194,10 @@ export function PotFormModal({
             )}
           />
 
-          {errors.themeColor && (
+          {errors.themeId && (
             <ErrorMessage
-              id="theme-color-error"
-              message={errors.themeColor.message}
+              id="theme-id-error"
+              message={errors.themeId.message}
             />
           )}
         </div>

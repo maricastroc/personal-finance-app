@@ -73,9 +73,9 @@ export default async function handler(
     }
   } else if (req.method === "POST") {
     try {
-      const { categoryName, themeColor, amount } = req.body;
+      const { categoryName, themeId, amount } = req.body;
 
-      if (!categoryName || !themeColor || !amount) {
+      if (!categoryName || !themeId || !amount) {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
@@ -89,14 +89,12 @@ export default async function handler(
         });
       }
 
-      let theme = await prisma.theme.findUnique({
-        where: { color: themeColor },
+      const theme = await prisma.theme.findUnique({
+        where: { id: themeId },
       });
 
       if (!theme) {
-        theme = await prisma.theme.create({
-          data: { color: themeColor },
-        });
+        return res.status(400).json({ message: "Theme not found" });
       }
 
       const newBudget = await prisma.budget.create({
