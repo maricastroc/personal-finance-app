@@ -27,12 +27,11 @@ body {
 }
 
 .custom-tooltip {
-  background-color: var(--color-tooltip) !important;
-  padding: 0.4rem 0.8rem !important;
-  font-size: 13px !important;
-  border-radius: 1rem !important;
-  font-weight: 500 !important;
-  color: var(--color-tooltip-text) !important;
-  z-index: 9999 !important;
-  line-height: 1.4 !important;
+  background-color: var(--color-tooltip);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-tooltip-text);
+  z-index: 9999;
+  line-height: 1.4;
 }

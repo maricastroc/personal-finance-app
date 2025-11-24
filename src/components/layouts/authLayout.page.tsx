@@ -28,7 +28,10 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       </header>
 
       <div className="py-10 xl:py-0 flex-1 flex xl:overflow-hidden">
-        <aside className="hidden xl:flex xl:w-1/2 xl:fixed xl:left-0 xl:top-0 xl:h-screen xl:p-3">
+        <aside
+          aria-label="Branding and promotional information"
+          className="hidden xl:flex xl:w-1/2 xl:fixed xl:left-0 xl:top-0 xl:h-screen xl:p-3"
+        >
           <div className="w-full h-full relative rounded-md overflow-hidden">
             <Image
               src={BackgroundImage}
@@ -57,9 +60,12 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
 
         <main className="flex-1 xl:ml-[50%] xl:min-h-screen">
           <section
-            aria-label="Authentication form"
+            aria-labelledby="auth-section-title"
             className="w-full flex items-center justify-center min-h-full xl:justify-start xl:items-center"
           >
+            <h2 id="auth-section-title" className="sr-only">
+              Authentication form
+            </h2>
             <div className="w-full xl:mx-20 flex justify-center items-center">
               <div
                 className="
