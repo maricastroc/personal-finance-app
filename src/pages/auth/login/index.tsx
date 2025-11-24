@@ -131,7 +131,12 @@ export default function Login() {
 
             <p className="text-sm flex items-center justify-center w-full text-grey-500 gap-2">
               You’re just browsing?
-              <TextLink as="button" type="button" onClick={onSubmitDemo}>
+              <TextLink
+                aria-label="Log in using a demo account to test the app."
+                as="button"
+                type="button"
+                onClick={onSubmitDemo}
+              >
                 Demo Login
               </TextLink>
             </p>
