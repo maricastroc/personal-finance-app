@@ -230,8 +230,7 @@ export const TransactionTable = ({
         <DeleteModal
           id="delete-transaction"
           title={deletingTransaction?.contactName || ""}
-          description="This action cannot be undone. All associated recurring bills and data
-            for this transaction will be permanently removed."
+          description="This transaction will be permanently removed from your records. Your balance will be adjusted accordingly. This action cannot be undone."
           onClose={() => setIsDeleteModalOpen(false)}
           onDelete={handleDeleteTransaction}
           isSubmitting={isSubmitting}

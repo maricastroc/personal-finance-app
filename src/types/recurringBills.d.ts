@@ -9,6 +9,7 @@ export interface RecurringBillProps {
   recurrenceFrequency?: string;
   transaction?: TransactionProps;
   nextDueDate?: Date;
+  lastPaidDate?: Date;
   baseDate?: Date;
   userId: string;
   user: UserProps;

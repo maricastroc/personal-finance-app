@@ -176,7 +176,13 @@ export default function SignUp() {
               onChange={() => setCreateWithDemo(!createWithDemo)}
               id="createWithDemo"
               type="checkbox"
-              className="w-6 h-6 accent-grey-900"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  setCreateWithDemo(!createWithDemo);
+                }
+              }}
+              className="w-6 h-6 accent-grey-900 focus:outline-2 focus:outline-secondary-green focus:outline-offset-2"
             />
 
             <label

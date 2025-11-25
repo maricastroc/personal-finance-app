@@ -1,3 +1,4 @@
+import * as Dialog from "@radix-ui/react-dialog";
 import { RecurringBillProps } from "@/types/recurringBills";
 import { formatToDollar } from "@/utils/formatToDollar";
 import { RecurringBillCard } from "./RecurringBillCard";
@@ -13,6 +14,9 @@ import toast from "react-hot-toast";
 import { handleApiError } from "@/utils/handleApiError";
 import { WarningSection } from "@/components/shared/WarningSection";
 import { useBalance } from "@/contexts/BalanceContext";
+import { ActionsSection } from "./ActionsSection";
+import { DeleteModal } from "@/components/shared/DeleteModal";
+import { EditBillModal } from "./EditBillModal";
 
 export const RecurringBillsTable = ({
   recurringBills,
@@ -24,6 +28,20 @@ export const RecurringBillsTable = ({
   onSave: () => Promise<void>;
 }) => {
   const [payingBillId, setPayingBillId] = useState<string | null>(null);
+
+  const [editingBill, setEditingBill] = useState<RecurringBillProps | null>(
+    null
+  );
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const [deletingBill, setDeletingBill] = useState<RecurringBillProps | null>(
+    null
+  );
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { refetchBalance } = useBalance();
 
@@ -56,6 +74,33 @@ export const RecurringBillsTable = ({
     (bill) => bill.status === "upcoming"
   );
 
+  const handleEdit = (bill: RecurringBillProps) => {
+    setEditingBill(bill);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDelete = (bill: RecurringBillProps) => {
+    setDeletingBill(bill);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteBill = async () => {
+    try {
+      setIsSubmitting(true);
+      const response = await api.delete(`/recurring_bills/${deletingBill?.id}`);
+
+      toast.success(response.data.message);
+
+      await onSave();
+      setIsDeleteModalOpen(false);
+      setDeletingBill(null);
+    } catch (error) {
+      handleApiError(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div>
       <table
@@ -68,7 +113,7 @@ export const RecurringBillsTable = ({
         <thead>
           <tr>
             <th className="px-4 py-2 text-xs text-grey-500 text-left w-2/5">
-              Bill Title
+              Recipient Name
             </th>
             <th className="px-4 py-2 text-xs text-grey-500 text-left w-1/5">
               Due Date
@@ -78,6 +123,9 @@ export const RecurringBillsTable = ({
             </th>
             <th className="px-4 py-2 text-xs text-grey-500 text-right w-1/5">
               Amount
+            </th>
+            <th className="px-4 py-2 text-xs text-grey-500 text-center w-3/5">
+              Payment
             </th>
             <th className="px-4 py-2 text-xs text-grey-500 text-center w-3/5">
               Actions
@@ -145,28 +193,61 @@ export const RecurringBillsTable = ({
                     {payingBillId === bill.id ? "Paying..." : "Pay Now"}
                   </button>
                 </td>
+
+                <td>
+                  <ActionsSection
+                    bill={bill}
+                    onDelete={handleDelete}
+                    onEdit={handleEdit}
+                  />
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={5} className="px-4 py-2">
+              <td colSpan={6} className="px-4 py-2">
                 <span className="text-secondary-red w-full text-sm font-bold">
                   No recurring bills found.
                 </span>
               </td>
             </tr>
           )}
+
+          {hasUpcomingBills && (
+            <td colSpan={6}>
+              <WarningSection
+                title="Note about upcoming bills:"
+                description='The "Pay Now" button will become available when bills are due
+                    within 3 days (marked as "due soon") or when they are overdue.
+                    Upcoming bills cannot be paid in advance through this system.'
+              />
+            </td>
+          )}
         </tbody>
       </table>
 
-      {hasUpcomingBills && (
-        <WarningSection
-          title="Note about upcoming bills:"
-          description='The "Pay Now" button will become available when bills are due
-                within 3 days (marked as "due soon") or when they are overdue.
-                Upcoming bills cannot be paid in advance through this system.'
+      <Dialog.Root open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <DeleteModal
+          id="delete-bill"
+          title={deletingBill?.contactName || ""}
+          description="This will permanently delete this recurring bill and all its future scheduled occurrences. This action cannot be undone."
+          onClose={() => setIsDeleteModalOpen(false)}
+          onDelete={handleDeleteBill}
+          isSubmitting={isSubmitting}
         />
-      )}
+      </Dialog.Root>
+
+      <Dialog.Root open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+        <EditBillModal
+          bill={editingBill}
+          onClose={() => setIsEditModalOpen(false)}
+          onSubmitForm={async () => {
+            setIsEditModalOpen(false);
+            setEditingBill(null);
+            await onSave();
+          }}
+        />
+      </Dialog.Root>
     </div>
   );
 };

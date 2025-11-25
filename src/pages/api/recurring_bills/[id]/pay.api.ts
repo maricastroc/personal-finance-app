@@ -4,13 +4,12 @@ import { getServerSession } from "next-auth";
 import { buildNextAuthOptions } from "../../auth/[...nextauth].api";
 import { addMonths, setDate } from "date-fns";
 
-function calculateNextDueDate(
-  referenceDate: Date,
-  recurrenceDay: number
-): Date {
-  let nextDueDate = new Date(referenceDate);
+function calculateNextDueDate(baseDate: Date, recurrenceDay: number): Date {
+  let nextDueDate = new Date(baseDate);
+
   nextDueDate = setDate(nextDueDate, recurrenceDay);
   nextDueDate = addMonths(nextDueDate, 1);
+
   return nextDueDate;
 }
 

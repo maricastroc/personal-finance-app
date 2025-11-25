@@ -73,8 +73,7 @@ model RecurringBill {
   userId               String
   user                 User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  // Mantemos a relação mas SEM back-reference nas queries
-  transactions         Transaction[]  // ← RELAÇÃO OBRIGATÓRIA
+  transactions         Transaction[]
 
   @@index([userId])
   @@index([categoryId])

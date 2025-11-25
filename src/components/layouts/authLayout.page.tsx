@@ -58,7 +58,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         <main className="flex-1 xl:ml-[50%] xl:min-h-screen">
           <section
             aria-labelledby="auth-section-title"
-            className="w-full flex items-center justify-center min-h-full xl:justify-start xl:items-center"
+            className=" w-full flex items-center justify-center min-h-full xl:justify-start xl:items-center"
           >
             <h2 id="auth-section-title" className="sr-only">
               Authentication form
@@ -67,6 +67,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               <div
                 className="
                   bg-white 
+                  shadow-lg
                   relative 
                   mx-4 px-5 py-6 lg:p-8 lg:pb-0
                   rounded-md

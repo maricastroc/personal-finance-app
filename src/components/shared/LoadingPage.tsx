@@ -14,7 +14,7 @@ export function LoadingPage() {
       >
         <CircularProgress
           size="3rem"
-          className="text-[#597c7c]"
+          className="text-[#277c78]"
           role="status"
           aria-label="Loading, please wait"
         />

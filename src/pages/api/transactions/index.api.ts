@@ -3,35 +3,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { buildNextAuthOptions } from "../auth/[...nextauth].api";
 import { Prisma } from "@prisma/client";
-import { addMonths, addYears, isBefore, setDate } from "date-fns";
+import { addMonths, isBefore, setDate } from "date-fns";
 
-export function calculateNextDueDate(
-  baseDate: Date,
-  recurrenceDay: number,
-  recurrenceFrequency: string
-): Date {
+function calculateNextDueDate(baseDate: Date, recurrenceDay: number): Date {
   const today = new Date();
   let nextDueDate = new Date(baseDate);
 
   nextDueDate = setDate(nextDueDate, recurrenceDay);
 
   if (isBefore(nextDueDate, today)) {
-    switch (recurrenceFrequency) {
-      case "Monthly":
-        nextDueDate = addMonths(nextDueDate, 1);
-        break;
-      case "Bimonthly":
-        nextDueDate = addMonths(nextDueDate, 2);
-        break;
-      case "Half-yearly":
-        nextDueDate = addMonths(nextDueDate, 6);
-        break;
-      case "Annual":
-        nextDueDate = addYears(nextDueDate, 1);
-        break;
-      default:
-        nextDueDate = addMonths(nextDueDate, 1);
-    }
+    nextDueDate = addMonths(nextDueDate, 1);
   }
 
   return nextDueDate;
@@ -223,9 +204,7 @@ export default async function handler(
 
     try {
       const result = await prisma.$transaction(async (tx) => {
-        // ✅ LÓGICA CORRIGIDA:
         if (isRecurring) {
-          // ✅ TRANSAÇÃO RECORRENTE: Só cria a bill, NÃO cria transação nem debita saldo
           if (!recurrenceDay || !recurrenceFrequency) {
             throw new Error(
               "Missing recurrence fields for recurring transaction"
@@ -234,8 +213,7 @@ export default async function handler(
 
           const nextDueDate = calculateNextDueDate(
             transactionDate,
-            recurrenceDay,
-            recurrenceFrequency
+            recurrenceDay
           );
 
           const recurringBill = await tx.recurringBill.create({
@@ -303,8 +281,8 @@ export default async function handler(
 
       return res.status(201).json({
         message: isRecurring
-          ? "Recurring bill created successfully"
-          : "Transaction created successfully",
+          ? "Recurring bill created successfully!"
+          : "Transaction created successfully!",
         ...result,
       });
     } catch (error) {

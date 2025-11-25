@@ -21,6 +21,7 @@ import { format } from "date-fns";
 import { DatePicker } from "@/components/core/DatePicker";
 import { useBalance } from "@/contexts/BalanceContext";
 import { formatToDollar } from "@/utils/formatToDollar";
+import { WarningSection } from "@/components/shared/WarningSection";
 
 const transactionFormSchema = () =>
   z.object({
@@ -147,6 +148,7 @@ export function TransferFormModal({
         );
       } else {
         response = await api.post(`/transactions`, payload);
+
         toast?.success(
           response?.data?.message || "Transaction created successfully!"
         );
@@ -356,7 +358,7 @@ export function TransferFormModal({
           </div>
         )}
 
-        {isRecurring && (
+        {isRecurring && watch().type === "expense" && (
           <div className="flex flex-col mt-4">
             <InputLabel htmlFor="recurrenceDay">Recurrence Day</InputLabel>
 
@@ -376,6 +378,8 @@ export function TransferFormModal({
                 />
               )}
             />
+
+            <WarningSection title="Transactions marked as recurring always repeat monthly and are managed in the Recurring Bills area. Go there to view or pay your scheduled bills." />
           </div>
         )}
 
