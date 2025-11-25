@@ -140,7 +140,10 @@ export default function Transactions() {
           aria-labelledby="transactions-title"
         >
           <div className="flex items-center justify-between w-full">
-            <PageTitle title="Transactions" />
+            <PageTitle
+              title="Transactions"
+              description="View and manage your transactions with ease."
+            />
 
             <Dialog.Root open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
               <Dialog.Trigger asChild>

@@ -130,10 +130,6 @@ export default async function handler(
       },
     });
 
-    if (recurringBills.length === 0) {
-      return res.status(404).json({ message: "No recurring bills found" });
-    }
-
     const today = startOfDay(new Date());
     const dueSoonDate = addDays(today, 3);
     const startOfMonthDate = startOfMonth(today);

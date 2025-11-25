@@ -22,7 +22,10 @@ export function PageHeader({
 }: PageHeaderProps) {
   return (
     <header className="flex items-center justify-between w-full mb-8">
-      <PageTitle title="Pots" />
+      <PageTitle
+        title="Pots"
+        description="Manage your pots to organize your savings and expenses effectively."
+      />
 
       <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
         <Dialog.Trigger asChild>

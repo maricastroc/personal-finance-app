@@ -1,3 +1,4 @@
+import { PageTitle } from "@/components/shared/PageTitle";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signOut, useSession } from "next-auth/react";
@@ -19,7 +20,10 @@ export const PageHeader = () => {
 
   return (
     <header className="flex items-center justify-between w-full mb-8">
-      <h1 className="text-grey-900 font-bold text-3xl">Overview</h1>
+      <PageTitle
+        title="Overview"
+        description="A quick look at your accounts, pots, budgets, bills, and recent transactions."
+      />
 
       <button
         onClick={isDemoUser ? () => router.push("/") : handleLogout}

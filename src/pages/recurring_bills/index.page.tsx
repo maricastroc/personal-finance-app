@@ -131,7 +131,10 @@ export default function RecurringBills() {
           }`}
         >
           <header className="mb-8">
-            <PageTitle title="Recurring Bills" />
+            <PageTitle
+              title="Recurring Bills"
+              description="An insight into your recurring bills and their payment statuses."
+            />
           </header>
 
           <div className="flex flex-col w-full md:grid lg:grid-cols-[1fr,2fr] md:gap-6">

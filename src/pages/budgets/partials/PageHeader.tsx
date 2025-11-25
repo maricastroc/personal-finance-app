@@ -28,7 +28,10 @@ export const PageHeader = ({
       className="flex items-center justify-between w-full mb-8"
       aria-label="Budgets Header"
     >
-      <PageTitle title="Budgets" />
+      <PageTitle
+        title="Budgets"
+        description="Manage your budgets and track your spending."
+      />
 
       <Dialog.Root open={isBudgetModalOpen} onOpenChange={setIsBudgetModalOpen}>
         <Dialog.Trigger asChild>
