@@ -19,13 +19,13 @@ export function TransactionCard({
   return (
     <article
       className="flex justify-between w-full items-center py-4"
-      aria-label={`Transação de ${name}`}
+      aria-label={`${name} transaction`}
     >
       <div className="flex items-center gap-2 md:w-[13rem] flex-1">
         <span className="relative w-11 h-11 rounded-full">
           <img
             src={avatarUrl || AVATAR_URL_DEFAULT}
-            alt={`Avatar de ${name}`}
+            alt={`${name} avatar`}
             className="rounded-full"
           />
         </span>

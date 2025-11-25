@@ -17,6 +17,7 @@ import { useBalance } from "@/contexts/BalanceContext";
 import { ActionsSection } from "./ActionsSection";
 import { DeleteModal } from "@/components/shared/DeleteModal";
 import { EditBillModal } from "./EditBillModal";
+import { toZonedTime } from "date-fns-tz";
 
 export const RecurringBillsTable = ({
   recurringBills,
@@ -150,7 +151,10 @@ export const RecurringBillsTable = ({
                 </td>
 
                 <td className="text-xs text-grey-500 px-4 py-2 text-left">
-                  {format(bill.nextDueDate as Date, "MMM dd, yyyy")}
+                  {format(
+                    toZonedTime(bill.nextDueDate as Date, "UTC"),
+                    "MMM dd, yyyy"
+                  )}
                 </td>
 
                 <td className="text-xs text-grey-500 px-4 py-2 text-left">

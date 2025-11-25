@@ -98,6 +98,18 @@ export default async function handler(
       }
     }
 
+    if (date) {
+      const newDate = new Date(date);
+      const originalDate = new Date(existingTransaction.date);
+
+      if (newDate < originalDate) {
+        return res.status(400).json({
+          message:
+            "Cannot change transaction date to a date earlier than the original transaction date.",
+        });
+      }
+    }
+
     let category = await prisma.category.findUnique({
       where: { name: categoryName },
     });

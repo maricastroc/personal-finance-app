@@ -22,6 +22,7 @@ import { DatePicker } from "@/components/core/DatePicker";
 import { useBalance } from "@/contexts/BalanceContext";
 import { formatToDollar } from "@/utils/formatToDollar";
 import { WarningSection } from "@/components/shared/WarningSection";
+import { toZonedTime } from "date-fns-tz";
 
 const transactionFormSchema = () =>
   z.object({
@@ -182,7 +183,10 @@ export function TransferFormModal({
       setValue("contactAvatar", transaction.contactAvatar);
       setValue("type", transaction.balance as "income" | "expense");
 
-      setValue("date", format(new Date(transaction.date), "yyyy-MM-dd"));
+      setValue(
+        "date",
+        format(toZonedTime(transaction.date, "UTC"), "yyyy-MM-dd")
+      );
 
       setSelectedAvatar(transaction.contactAvatar);
       setSelectedCategory(transaction.category?.name || "General");

@@ -6,6 +6,7 @@ import { formatToDollar } from "@/utils/formatToDollar";
 import { EmptyContent } from "@/components/shared/EmptyContent";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
+import { toZonedTime } from "date-fns-tz";
 
 interface TransactionsSectionProps {
   isValidating: boolean;
@@ -36,7 +37,10 @@ export const TransactionsSection = ({
                 category={transaction.category?.name}
                 balance={transaction.balance}
                 avatarUrl={transaction.contactAvatar}
-                date={format(transaction.date, "MMM dd, yyyy")}
+                date={format(
+                  toZonedTime(transaction.date, "UTC"),
+                  "MMM dd, yyyy"
+                )}
                 value={formatToDollar(transaction.amount || 0)}
               />
             ))

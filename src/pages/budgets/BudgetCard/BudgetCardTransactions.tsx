@@ -3,6 +3,7 @@ import { TransactionCard } from "@/components/shared/TransactionCard";
 import { TransactionProps } from "@/types/transaction";
 import { formatToDollar } from "@/utils/formatToDollar";
 import { format } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 
 interface BudgetCardTransactionsProps {
   transactions: TransactionProps[];
@@ -60,7 +61,10 @@ export function BudgetCardTransactions({
                 name={transaction.contactName}
                 balance={transaction.balance}
                 avatarUrl={transaction.contactAvatar}
-                date={format(transaction.date, "MMM dd, yyyy")}
+                date={format(
+                  toZonedTime(transaction.date, "UTC"),
+                  "MMM dd, yyyy"
+                )}
                 value={formatToDollar(transaction.amount)}
               />
 

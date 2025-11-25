@@ -17,6 +17,7 @@ import { handleApiError } from "@/utils/handleApiError";
 import { DeleteModal } from "@/components/shared/DeleteModal";
 import { WarningSection } from "@/components/shared/WarningSection";
 import { useBalance } from "@/contexts/BalanceContext";
+import { toZonedTime } from "date-fns-tz";
 
 interface TransactionTableProps {
   transactions: TransactionProps[];
@@ -79,7 +80,7 @@ export const TransactionTable = ({
       setIsSubmitting(false);
     }
   };
-
+  console.log(transactions);
   return (
     <section
       aria-labelledby="transaction-table-title"
@@ -162,7 +163,10 @@ export const TransactionTable = ({
 
                   <td className="text-xs text-grey-500 px-4 py-2 text-left align-middle">
                     <time dateTime={new Date(transaction.date).toISOString()}>
-                      {format(transaction.date, "MMM dd, yyyy")}
+                      {format(
+                        toZonedTime(transaction.date, "UTC"),
+                        "MMM dd, yyyy"
+                      )}
                     </time>
                   </td>
 

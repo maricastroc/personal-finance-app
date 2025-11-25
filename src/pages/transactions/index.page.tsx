@@ -25,6 +25,7 @@ import { calculateTotalPages } from "@/utils/calculateTotalPages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useDebounce } from "@/utils/useDebounce";
+import { toZonedTime } from "date-fns-tz";
 
 export default function Transactions() {
   const router = useRouter();
@@ -203,7 +204,10 @@ export default function Transactions() {
                     name={transaction.contactName}
                     balance={transaction.balance}
                     avatarUrl={transaction.contactAvatar}
-                    date={format(transaction.date, "MMM dd, yyyy")}
+                    date={format(
+                      toZonedTime(transaction.date, "UTC"),
+                      "MMM dd, yyyy"
+                    )}
                     value={formatToDollar(transaction.amount || 0)}
                     category={transaction.category?.name}
                   />

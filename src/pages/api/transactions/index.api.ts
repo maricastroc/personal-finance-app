@@ -202,6 +202,18 @@ export default async function handler(
     const categoryId = category.id;
     const transactionDate = date ? new Date(date) : new Date();
 
+    const transactionDateStr = date
+      ? date
+      : new Date().toISOString().split("T")[0];
+    const todayStr = new Date().toISOString().split("T")[0];
+
+    if (transactionDateStr < todayStr) {
+      return res.status(400).json({
+        message:
+          "Cannot create transactions with past dates. Please use today's date or a future date.",
+      });
+    }
+
     try {
       const result = await prisma.$transaction(async (tx) => {
         if (isRecurring) {

@@ -66,7 +66,7 @@ export function FinanceCard({
       <div className="flex flex-col">
         <h2 className={clsx("text-sm font-medium", v.title)}>{title}</h2>
         <p
-          className={clsx("text-2xl font-semibold mt-1", v.value)}
+          className={clsx("text-2xl font-bold mt-1", v.value)}
           aria-live="polite"
         >
           {value}

@@ -13,16 +13,17 @@ export function DatePicker({
   isEdit = false,
   originalDate,
 }: DatePickerProps) {
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date();
+  const todayLocal = today.toLocaleDateString("en-CA");
 
-  const minDate = isEdit && originalDate ? undefined : today;
+  const minDate = isEdit && originalDate ? undefined : todayLocal;
 
   return (
     <div className="relative">
       <input
         type="date"
         value={value}
-        min={minDate} // ← Agora é dinâmico
+        min={minDate}
         onChange={(e) => onChange(e.target.value)}
         className={`
           w-full p-3 text-sm border rounded-md
