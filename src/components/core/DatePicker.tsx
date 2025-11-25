@@ -2,17 +2,27 @@ interface DatePickerProps {
   value: string;
   onChange: (value: string) => void;
   error?: string;
+  isEdit?: boolean;
+  originalDate?: string;
 }
 
-export function DatePicker({ value, onChange, error }: DatePickerProps) {
+export function DatePicker({
+  value,
+  onChange,
+  error,
+  isEdit = false,
+  originalDate,
+}: DatePickerProps) {
   const today = new Date().toISOString().split("T")[0];
+
+  const minDate = isEdit && originalDate ? undefined : today;
 
   return (
     <div className="relative">
       <input
         type="date"
         value={value}
-        min={today}
+        min={minDate} // ← Agora é dinâmico
         onChange={(e) => onChange(e.target.value)}
         className={`
           w-full p-3 text-sm border rounded-md

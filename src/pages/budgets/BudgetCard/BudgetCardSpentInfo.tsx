@@ -28,7 +28,11 @@ export function BudgetCardSpentInfo({ spent, free }: BudgetCardSpentInfoProps) {
 
         <div>
           <dt className="text-xs text-grey-500">Free</dt>
-          <dd className="font-bold text-sm">{formatToDollar(free)}</dd>
+          <dd
+            className={`font-bold text-sm ${free < 0 && "text-secondary-red"}`}
+          >
+            {formatToDollar(free)}
+          </dd>
         </div>
       </div>
     </dl>

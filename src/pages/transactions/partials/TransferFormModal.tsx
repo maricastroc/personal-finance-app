@@ -120,7 +120,7 @@ export function TransferFormModal({
     setSelectedAvatar(avatarUrl);
     setValue("contactAvatar", avatarUrl, { shouldValidate: true });
   };
-  console.log(selectedCategory);
+
   const handleSubmitForm = async (data: TransactionFormData) => {
     const payload = {
       description: data.description || "",
@@ -320,6 +320,12 @@ export function TransferFormModal({
                 value={field.value}
                 onChange={field.onChange}
                 error={fieldState.error?.message}
+                isEdit={isEdit}
+                originalDate={
+                  transaction?.date
+                    ? format(new Date(transaction.date), "yyyy-MM-dd")
+                    : undefined
+                }
               />
             )}
           />

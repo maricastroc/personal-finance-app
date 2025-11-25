@@ -74,14 +74,14 @@ export default async function handler(
     if (existingTransaction.recurringBillId) {
       return res.status(400).json({
         message:
-          "Cannot edit transactions created via 'Pay Now'. Please edit the recurring bill template instead.",
+          "Cannot edit transactions created via 'Pay Now'. These payments are linked to recurring bills.",
       });
     }
 
     if (existingTransaction.isRecurring) {
       return res.status(400).json({
         message:
-          "Cannot edit recurring transactions. Please edit the recurring bill template instead.",
+          "Cannot edit transactions created via 'Pay Now'. These payments are linked to recurring bills.",
       });
     }
 
@@ -200,7 +200,7 @@ export default async function handler(
     if (existingTransaction.isRecurring) {
       return res.status(400).json({
         message:
-          "Cannot delete recurring transactions. Please delete the recurring bill template instead.",
+          "Cannot delete transactions created via 'Pay Now'. These payments are linked to recurring bills.",
       });
     }
 

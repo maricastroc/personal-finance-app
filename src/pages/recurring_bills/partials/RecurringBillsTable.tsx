@@ -51,6 +51,8 @@ export const RecurringBillsTable = ({
     setPayingBillId(bill.id);
 
     try {
+      setIsSubmitting(true);
+
       const response = await api.post(`/recurring_bills/${bill.id}/pay`, {
         paymentDate: new Date().toISOString().split("T")[0],
       });
@@ -63,6 +65,7 @@ export const RecurringBillsTable = ({
       handleApiError(error);
     } finally {
       setPayingBillId(null);
+      setIsSubmitting(false);
     }
   };
 
@@ -134,7 +137,7 @@ export const RecurringBillsTable = ({
         </thead>
 
         <tbody>
-          {isValidating ? (
+          {isValidating || isSubmitting ? (
             <SkeletonSection />
           ) : recurringBills && recurringBills.length > 0 ? (
             recurringBills.map((bill) => (
