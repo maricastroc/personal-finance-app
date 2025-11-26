@@ -20,7 +20,9 @@ export function PotProgressBar({ percentage, color, target }: Props) {
       </div>
 
       <div className="flex justify-between mt-3">
-        <p className="text-grey-500 font-bold text-xs">{percentage}%</p>
+        <p className="text-grey-500 font-bold text-xs">
+          {percentage.toFixed(2)}%
+        </p>
         <p className="text-grey-500 text-xs">{`Target of ${formatToDollar(
           target
         )}`}</p>
