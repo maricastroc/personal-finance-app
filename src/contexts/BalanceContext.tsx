@@ -23,17 +23,19 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
     expenses: 0,
   });
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [balanceLoaded, setBalanceLoaded] = useState(false);
+
+  const [transactionsLoaded, setTransactionsLoaded] = useState(false);
 
   const {
-    data,
+    data: balanceData,
     isValidating: isValidatingBalance,
-    mutate,
+    mutate: mutateBalance,
   } = useRequest<{
     currentBalance: number;
     incomes: number;
     expenses: number;
-  }>({ url: "/balance", method: "GET" });
+  }>({ url: "/balance", method: "GET" }, swrConfig);
 
   const {
     data: latestTransactions,
@@ -45,15 +47,38 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
   );
 
   useEffect(() => {
-    if (data) {
-      setLocalBalance(data);
-      setIsLoading(false);
+    if (balanceData) {
+      setLocalBalance(balanceData);
+      setBalanceLoaded(true);
     }
-  }, [data]);
+  }, [balanceData]);
 
+  // Marcar transactions como carregadas
   useEffect(() => {
-    setIsLoading(isValidatingBalance || isValidatingTransactions);
-  }, [isValidatingBalance, isValidatingTransactions]);
+    if (latestTransactions !== undefined) {
+      setTransactionsLoaded(true);
+    }
+  }, [latestTransactions]);
+
+  const isLoading = React.useMemo(() => {
+    if (!balanceLoaded && !transactionsLoaded) {
+      return true;
+    }
+
+    if (
+      (isValidatingBalance || isValidatingTransactions) &&
+      (balanceLoaded || transactionsLoaded)
+    ) {
+      return false;
+    }
+
+    return !balanceLoaded || !transactionsLoaded;
+  }, [
+    balanceLoaded,
+    transactionsLoaded,
+    isValidatingBalance,
+    isValidatingTransactions,
+  ]);
 
   const updateBalance = (newBalance: number) => {
     setLocalBalance((prev) => ({
@@ -63,9 +88,20 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
   };
 
   const refetchBalance = async () => {
-    await mutate();
-    await mutateTransactions();
+    if (!balanceData) setBalanceLoaded(false);
+    if (!latestTransactions) setTransactionsLoaded(false);
+
+    await Promise.all([mutateBalance(), mutateTransactions()]);
   };
+
+  useEffect(() => {
+    if (!balanceData) {
+      setBalanceLoaded(false);
+    }
+    if (!latestTransactions) {
+      setTransactionsLoaded(false);
+    }
+  }, [balanceData, latestTransactions]);
 
   return (
     <BalanceContext.Provider
