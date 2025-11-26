@@ -1,12 +1,15 @@
 // contexts/BalanceContext.tsx
 import React, { createContext, useContext, useState, useEffect } from "react";
 import useRequest from "@/utils/useRequest";
+import { TransactionProps } from "@/types/transaction";
+import { swrConfig } from "@/utils/constants";
 
 interface BalanceContextType {
   currentBalance: number;
   incomes: number;
   expenses: number;
   isLoading: boolean;
+  latestTransactions: TransactionProps[] | undefined;
   updateBalance: (newBalance: number) => void;
   refetchBalance: () => Promise<void>;
 }
@@ -32,6 +35,15 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
     expenses: number;
   }>({ url: "/balance", method: "GET" });
 
+  const {
+    data: latestTransactions,
+    mutate: mutateTransactions,
+    isValidating: isValidatingTransactions,
+  } = useRequest<TransactionProps[]>(
+    { url: "/transactions/latest", method: "GET" },
+    swrConfig
+  );
+
   useEffect(() => {
     if (data) {
       setLocalBalance(data);
@@ -39,12 +51,11 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
     }
   }, [data]);
 
-  // Atualizar loading state baseado na validação
   useEffect(() => {
-    if (isValidatingBalance) {
+    if (isValidatingBalance || isValidatingTransactions) {
       setIsLoading(true);
     }
-  }, [isValidatingBalance]);
+  }, [isValidatingBalance, isValidatingTransactions]);
 
   const updateBalance = (newBalance: number) => {
     setLocalBalance((prev) => ({
@@ -56,11 +67,13 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
   const refetchBalance = async () => {
     setIsLoading(true);
     await mutate();
+    await mutateTransactions();
   };
 
   return (
     <BalanceContext.Provider
       value={{
+        latestTransactions,
         currentBalance: localBalance.currentBalance,
         incomes: localBalance.incomes,
         expenses: localBalance.expenses,
