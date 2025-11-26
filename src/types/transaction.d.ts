@@ -1,5 +1,5 @@
 import { CategoryProps } from "./category";
-import { RecurringBillProps } from "./recurringBills";
+import { RecurringBillProps } from "./recurring-bills";
 import { UserProps } from "./user";
 
 export interface TransactionProps {

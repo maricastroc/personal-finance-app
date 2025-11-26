@@ -1,4 +1,4 @@
-import { RecurringBillsResult } from "@/pages/home/index.page";
+import { RecurringBillsResult } from "@/types/recurring-bills-result";
 import { formatToDollar } from "@/utils/formatToDollar";
 import { Skeleton } from "@mui/material";
 

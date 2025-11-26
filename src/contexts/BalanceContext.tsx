@@ -20,7 +20,13 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
     expenses: 0,
   });
 
-  const { data, isValidating, mutate } = useRequest<{
+  const [isLoading, setIsLoading] = useState(true);
+
+  const {
+    data,
+    isValidating: isValidatingBalance,
+    mutate,
+  } = useRequest<{
     currentBalance: number;
     incomes: number;
     expenses: number;
@@ -29,8 +35,16 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (data) {
       setLocalBalance(data);
+      setIsLoading(false);
     }
   }, [data]);
+
+  // Atualizar loading state baseado na validação
+  useEffect(() => {
+    if (isValidatingBalance) {
+      setIsLoading(true);
+    }
+  }, [isValidatingBalance]);
 
   const updateBalance = (newBalance: number) => {
     setLocalBalance((prev) => ({
@@ -40,6 +54,7 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
   };
 
   const refetchBalance = async () => {
+    setIsLoading(true);
     await mutate();
   };
 
@@ -49,7 +64,7 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
         currentBalance: localBalance.currentBalance,
         incomes: localBalance.incomes,
         expenses: localBalance.expenses,
-        isLoading: isValidating,
+        isLoading,
         updateBalance,
         refetchBalance,
       }}

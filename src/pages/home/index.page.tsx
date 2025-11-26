@@ -5,7 +5,6 @@ import Layout from "@/components/layouts/layout.page";
 import { LoadingPage } from "@/components/shared/LoadingPage";
 import { FinanceCard } from "./partials/FinanceCard";
 import { TransactionProps } from "@/types/transaction";
-import { RecurringBillProps } from "@/types/recurringBills";
 import useRequest from "@/utils/useRequest";
 import { formatToDollar } from "@/utils/formatToDollar";
 import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
@@ -14,45 +13,18 @@ import { RecurringBillsSection } from "./partials/RecurringBillsSection";
 import { TransactionsSection } from "./partials/TransactionsSection";
 import { PotsSection } from "./partials/PotsSection";
 import { PageHeader } from "./partials/PageHeader";
-import { useEffect, useState } from "react";
 import { swrConfig } from "@/utils/constants";
 import { PotsResult } from "@/types/pots-result";
 import { BudgetProps } from "@/types/budget";
-
-interface BalanceProps {
-  incomes: number | undefined;
-  expenses: number | undefined;
-  currentBalance: number | undefined;
-}
-
-interface RecurringBillsWithDetails {
-  bills: RecurringBillProps[];
-  total: number;
-}
-
-export interface RecurringBillsResult {
-  overdue: RecurringBillsWithDetails;
-  upcoming: RecurringBillsWithDetails;
-  dueSoon: RecurringBillsWithDetails;
-  bills: RecurringBillProps[];
-  monthlyTotal: number;
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-}
+import { useBalance } from "@/contexts/BalanceContext";
+import { RecurringBillsResult } from "@/types/recurring-bills-result";
 
 export default function Home() {
   const { isSidebarOpen } = useAppContext();
 
   const isRouteLoading = useLoadingOnRouteChange();
 
-  const [initialLoad, setInitialLoad] = useState(true);
-
-  const { data: balance, isValidating: isValidatingBalance } =
-    useRequest<BalanceProps>({ url: "/balance", method: "GET" }, swrConfig);
+  const { incomes, expenses, currentBalance, isLoading } = useBalance();
 
   const { data: potsData, isValidating: isValidatingPots } =
     useRequest<PotsResult>({ url: "/pots", method: "GET" }, swrConfig);
@@ -73,20 +45,7 @@ export default function Home() {
       swrConfig
     );
 
-  const isAnyDataValidating =
-    isValidatingBalance ||
-    isValidatingTransactions ||
-    isValidatingPots ||
-    isValidatingBudgets ||
-    isValidatingBills;
-
-  useEffect(() => {
-    if (!isAnyDataValidating && initialLoad) {
-      setInitialLoad(false);
-    }
-  }, [isAnyDataValidating, initialLoad]);
-
-  if (isRouteLoading || initialLoad) {
+  if (isRouteLoading) {
     return <LoadingPage />;
   }
 
@@ -112,21 +71,24 @@ export default function Home() {
 
           <section className="grid md:grid-cols-3 gap-4 mt-8 md:h-[7.5rem] lg:mt-6 lg:gap-6">
             <FinanceCard
+              key={`balance-${currentBalance}-${Date.now()}`}
               title="Current Balance"
-              value={formatToDollar(balance?.currentBalance || 0)}
-              isValidating={isValidatingBalance && initialLoad}
+              value={formatToDollar(currentBalance)}
+              isValidating={isLoading}
             />
             <FinanceCard
+              key={`income-${incomes}-${Date.now()}`}
               variant="income"
               title="Incomes"
-              value={formatToDollar(balance?.incomes || 0)}
-              isValidating={isValidatingBalance && initialLoad}
+              value={formatToDollar(incomes)}
+              isValidating={isLoading}
             />
             <FinanceCard
+              key={`expense-${expenses}-${Date.now()}`}
               variant="outcome"
               title="Expenses"
-              value={formatToDollar(balance?.expenses || 0)}
-              isValidating={isValidatingBalance && initialLoad}
+              value={formatToDollar(expenses)}
+              isValidating={isLoading}
             />
           </section>
 
@@ -135,22 +97,22 @@ export default function Home() {
               <PotsSection
                 pots={potsData?.pots}
                 totalCurrentAmount={potsData?.totalCurrentAmount}
-                isValidating={isValidatingPots && initialLoad}
+                isValidating={isValidatingPots}
               />
               <TransactionsSection
                 transactions={transactions}
-                isValidating={isValidatingTransactions && initialLoad}
+                isValidating={isValidatingTransactions}
               />
             </div>
 
             <div className="flex flex-col flex-grow">
               <BudgetsSection
                 budgets={budgets}
-                isValidating={isValidatingBudgets && initialLoad}
+                isValidating={isValidatingBudgets}
               />
               <RecurringBillsSection
                 recurringBills={recurringBills}
-                isValidating={isValidatingBills && initialLoad}
+                isValidating={isValidatingBills}
               />
             </div>
           </section>

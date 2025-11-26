@@ -3,7 +3,7 @@ import { EmptyContent } from "@/components/shared/EmptyContent";
 import { SkeletonRecurringBillsSection } from "@/components/skeletons/SkeletonRecurringBillsSection";
 import { BillCard } from "./BillCard";
 import { formatToDollar } from "@/utils/formatToDollar";
-import { RecurringBillsResult } from "../index.page";
+import { RecurringBillsResult } from "@/types/recurring-bills-result";
 
 interface RecurringBillsSectionProps {
   isValidating: boolean;

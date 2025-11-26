@@ -1,5 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { RecurringBillProps } from "@/types/recurringBills";
+import { RecurringBillProps } from "@/types/recurring-bills";
 import { formatToDollar } from "@/utils/formatToDollar";
 import { RecurringBillCard } from "./RecurringBillCard";
 import iconBillPaid from "/public/assets/images/icon-bill-paid.svg";

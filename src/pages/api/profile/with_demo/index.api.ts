@@ -1,27 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-require-imports */
 import { IncomingForm } from "formidable";
 import { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
 import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";
-import { ALLOWED_MIME_TYPES, MAX_AVATAR_SIZE } from "@/utils/constants";
 import { getDefaultTransactions } from "@/utils/getDefaultTransactions";
 import { getDefaultBudgets } from "@/utils/getDefaultBudgets";
 import { getDefaultPots } from "@/utils/getDefaultPots";
 import { getDefaultBills } from "@/utils/getDefaultBills";
-
-let fs: any, path: any;
-
-try {
-  if (typeof process !== "undefined" && process.versions?.node) {
-    fs = require("fs");
-    path = require("path");
-  }
-} catch (e) {
-  console.warn("File system operations not available in this environment:", e);
-}
 
 export const config = {
   api: {
@@ -42,24 +28,40 @@ const getSingleString = (
   return undefined;
 };
 
-const handleAvatarUpload = async (file: any) => {
-  if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
-    throw new Error("Apenas imagens JPEG, PNG ou WebP são permitidas");
-  }
+// Função para calcular o balance baseado nos dados padrão
+const calculateBalanceFromDefaults = () => {
+  // Obter os dados padrão
+  const dummyUser = { id: "temp" } as any;
+  const defaultTransactions = getDefaultTransactions(dummyUser);
+  const defaultPots = getDefaultPots(dummyUser);
 
-  const fileContent = await fs.promises.readFile(file.filepath);
+  // Calcular income e expense das transações padrão
+  let totalIncome = 0;
+  let totalExpense = 0;
 
-  if (fileContent.length > MAX_AVATAR_SIZE) {
-    await fs.promises.unlink(file.filepath);
-    throw new Error("A imagem deve ter no máximo 2MB");
-  }
+  defaultTransactions.forEach((transaction: any) => {
+    if (transaction.type === "income") {
+      totalIncome += transaction.amount;
+    } else if (transaction.type === "expense") {
+      totalExpense += transaction.amount;
+    }
+  });
 
-  const base64Image = fileContent.toString("base64");
-  const dataURI = `data:${file.mimetype};base64,${base64Image}`;
+  // Calcular total em pots
+  const totalInPots = defaultPots.reduce(
+    (sum: number, pot: any) => sum + (pot.currentAmount || 0),
+    0
+  );
 
-  await fs.promises.unlink(file.filepath);
+  // Calcular currentBalance: income - expense - pots
+  const calculatedBalance = totalIncome - totalExpense - totalInPots;
 
-  return dataURI;
+  return {
+    calculatedBalance,
+    totalIncome,
+    totalExpense,
+    totalInPots,
+  };
 };
 
 export default async function handler(
@@ -69,7 +71,7 @@ export default async function handler(
   if (req.method === "POST") {
     const form = new IncomingForm();
 
-    form.parse(req, async (err, fields, files) => {
+    form.parse(req, async (err, fields) => {
       if (err) {
         return res.status(500).json({ message: "Error processing form" });
       }
@@ -102,7 +104,6 @@ export default async function handler(
           currentBalance: fields.currentBalance
             ? getSingleString(fields.currentBalance)
             : undefined,
-          avatarUrl: files.avatarUrl?.[0],
         });
 
         const existingUser = await prisma.user.findUnique({
@@ -115,41 +116,41 @@ export default async function handler(
 
         const hashedPassword = await bcrypt.hash(validatedFields.password, 10);
 
-        let avatarUrl: string | undefined;
-
-        if (files.avatarUrl) {
-          const avatarFile = Array.isArray(files.avatarUrl)
-            ? files.avatarUrl[0]
-            : files.avatarUrl;
-
-          avatarUrl = await handleAvatarUpload(avatarFile);
-        }
+        // Calcular o balance ANTES de criar a transaction
+        const balanceData = calculateBalanceFromDefaults();
 
         const dbData: any = {
           ...validatedFields,
           password: hashedPassword,
-          ...(avatarUrl && { avatarUrl }),
+          currentBalance: balanceData.calculatedBalance, // Já definir o balance correto
         };
 
         const result = await prisma.$transaction(async (tx) => {
           const createdUser = await tx.user.create({ data: dbData });
 
+          // Criar as entradas padrão
           await tx.transaction.createMany({
             data: getDefaultTransactions(createdUser as any),
           });
           await tx.budget.createMany({
             data: getDefaultBudgets(createdUser as any),
           });
-          await tx.pot.createMany({ data: getDefaultPots(createdUser as any) });
+          await tx.pot.createMany({
+            data: getDefaultPots(createdUser as any),
+          });
           await tx.recurringBill.createMany({
             data: getDefaultBills(createdUser as any),
           });
 
-          return createdUser;
+          return {
+            user: createdUser,
+            balanceData,
+          };
         });
 
         return res.status(201).json({
-          user: result,
+          user: result.user,
+          balanceData: result.balanceData,
           message: "User successfully created!",
         });
       } catch (error) {

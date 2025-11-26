@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-require-imports */
 import { IncomingForm } from "formidable";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
@@ -8,18 +6,6 @@ import { z } from "zod";
 import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";
 import { buildNextAuthOptions } from "../auth/[...nextauth].api";
-import { ALLOWED_MIME_TYPES, MAX_AVATAR_SIZE } from "@/utils/constants";
-
-let fs: any, path: any;
-
-try {
-  if (typeof process !== "undefined" && process.versions?.node) {
-    fs = require("fs");
-    path = require("path");
-  }
-} catch (e) {
-  console.warn("File system operations not available in this environment:", e);
-}
 
 export const config = {
   api: {
@@ -28,32 +14,11 @@ export const config = {
   },
 };
 
-const handleAvatarUpload = async (file: any) => {
-  if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
-    throw new Error("Only JPEG, PNG, or WebP images are allowed.");
-  }
-
-  const fileContent = await fs.promises.readFile(file.filepath);
-
-  if (fileContent.length > MAX_AVATAR_SIZE) {
-    await fs.promises.unlink(file.filepath);
-    throw new Error("The image must be a maximum of 2MB.");
-  }
-
-  const base64Image = fileContent.toString("base64");
-  const dataURI = `data:${file.mimetype};base64,${base64Image}`;
-
-  await fs.promises.unlink(file.filepath);
-
-  return dataURI;
-};
-
 interface Updates {
   name?: string | undefined;
   email?: string | undefined;
   password?: string | undefined;
   oldPassword?: string | undefined;
-  avatarUrl?: string | undefined;
 }
 
 const getSingleString = (
@@ -105,7 +70,7 @@ export default async function handler(
 
     const form = new IncomingForm({ keepExtensions: true });
 
-    form.parse(req, async (err, fields, files) => {
+    form.parse(req, async (err, fields) => {
       if (err) {
         return res.status(500).json({ message: "Error processing form" });
       }
@@ -165,21 +130,7 @@ export default async function handler(
           }
         }
 
-        let avatarUrl: string | undefined;
-
-        if (files.avatarUrl) {
-          const avatarFile = Array.isArray(files.avatarUrl)
-            ? files.avatarUrl[0]
-            : files.avatarUrl;
-
-          avatarUrl = await handleAvatarUpload(avatarFile);
-        }
-
         const updates: Updates = { ...validatedFields };
-
-        if (avatarUrl) {
-          updates.avatarUrl = avatarUrl;
-        }
 
         if (validatedFields.password) {
           updates.password = await bcrypt.hash(validatedFields.password, 10);

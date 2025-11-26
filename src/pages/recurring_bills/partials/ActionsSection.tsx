@@ -1,5 +1,5 @@
 import { Pencil, Trash } from "phosphor-react";
-import { RecurringBillProps } from "@/types/recurringBills";
+import { RecurringBillProps } from "@/types/recurring-bills";
 
 interface Props {
   bill: RecurringBillProps;

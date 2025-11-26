@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import { Modal } from "@/components/shared/Modal";
 import { formatToDollar } from "@/utils/formatToDollar";
-import { RecurringBillProps } from "@/types/recurringBills";
+import { RecurringBillProps } from "@/types/recurring-bills";
 import { WarningSection } from "@/components/shared/WarningSection";
 import { TRANSFER_CONSTRAINTS } from "@/utils/constants";
 

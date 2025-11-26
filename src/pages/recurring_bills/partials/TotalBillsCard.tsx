@@ -1,7 +1,7 @@
 import { formatToDollar } from "@/utils/formatToDollar";
 import Image from "next/image";
 import iconRecurringBills from "/public/assets/images/icon-recurring-bills.svg";
-import { RecurringBillsResult } from "@/pages/home/index.page";
+import { RecurringBillsResult } from "@/types/recurring-bills-result";
 
 interface TotalBillsCardProps {
   recurringBills: RecurringBillsResult | undefined;

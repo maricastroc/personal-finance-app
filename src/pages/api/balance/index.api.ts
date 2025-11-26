@@ -71,7 +71,7 @@ export default async function handler(
     });
 
     return res.json({
-      currentBalance: user?.currentBalance,
+      currentBalance: user?.currentBalance || 0,
       expenses,
       incomes,
       transactions,

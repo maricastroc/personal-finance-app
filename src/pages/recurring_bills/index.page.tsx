@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { NextSeo } from "next-seo";
 import { useAppContext } from "@/contexts/AppContext";
-import { RecurringBillsResult } from "../home/index.page";
 import { SummaryCard } from "./partials/SummaryCard";
 import { SearchSection } from "./partials/SearchSection";
 import { TotalBillsCard } from "./partials/TotalBillsCard";
@@ -15,6 +14,7 @@ import { LoadingPage } from "@/components/shared/LoadingPage";
 import Layout from "@/components/layouts/layout.page";
 import { PaginationSection } from "@/components/shared/PaginationSection/PaginationSection";
 import { PageTitle } from "@/components/shared/PageTitle";
+import { RecurringBillsResult } from "@/types/recurring-bills-result";
 
 export default function RecurringBills() {
   const [currentPage, setCurrentPage] = useState(1);
