@@ -52,9 +52,7 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
   }, [data]);
 
   useEffect(() => {
-    if (isValidatingBalance || isValidatingTransactions) {
-      setIsLoading(true);
-    }
+    setIsLoading(isValidatingBalance || isValidatingTransactions);
   }, [isValidatingBalance, isValidatingTransactions]);
 
   const updateBalance = (newBalance: number) => {
@@ -65,7 +63,6 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
   };
 
   const refetchBalance = async () => {
-    setIsLoading(true);
     await mutate();
     await mutateTransactions();
   };

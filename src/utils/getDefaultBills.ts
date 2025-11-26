@@ -5,7 +5,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
   return [
     {
       description: "Electricity Bill",
-      amount: -100,
+      amount: 100,
       recurrenceDay: 2,
       recurrenceFrequency: "monthly",
       categoryId: CATEGORIES.BILLS,
@@ -16,7 +16,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
     },
     {
       description: "Streaming Subscription",
-      amount: -30,
+      amount: 30,
       recurrenceDay: 3,
       recurrenceFrequency: "monthly",
       categoryId: CATEGORIES.ENTERTAINMENT,
@@ -27,7 +27,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
     },
     {
       description: "Internet Bill",
-      amount: -100,
+      amount: 100,
       recurrenceDay: 30,
       recurrenceFrequency: "monthly",
       categoryId: CATEGORIES.BILLS,
@@ -38,7 +38,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
     },
     {
       description: "Gym Membership",
-      amount: -10,
+      amount: 10,
       recurrenceDay: 11,
       recurrenceFrequency: "monthly",
       categoryId: CATEGORIES.LIFESTYLE,
@@ -49,7 +49,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
     },
     {
       description: "Music Streaming",
-      amount: -49.99,
+      amount: 49.99,
       recurrenceDay: 23,
       recurrenceFrequency: "monthly",
       categoryId: CATEGORIES.ENTERTAINMENT,
@@ -60,7 +60,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
     },
     {
       description: "Phone Bill",
-      amount: -35,
+      amount: 35,
       recurrenceDay: 29,
       recurrenceFrequency: "monthly",
       categoryId: CATEGORIES.BILLS,
@@ -71,7 +71,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
     },
     {
       description: "Cloud Storage",
-      amount: -50,
+      amount: 50,
       recurrenceDay: 4,
       recurrenceFrequency: "monthly",
       categoryId: CATEGORIES.GENERAL,
@@ -82,7 +82,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
     },
     {
       description: "Online Learning Platform",
-      amount: -9.99,
+      amount: 9.99,
       recurrenceDay: 21,
       recurrenceFrequency: "monthly",
       categoryId: CATEGORIES.EDUCATION,
@@ -91,7 +91,6 @@ export const getDefaultBills = (createdUser: UserProps) => {
       contactAvatar: "./assets/images/avatars/elevate-education.jpg",
       type: "expense",
     },
-    // Adicionando algumas contas recorrentes de receita também
     {
       description: "Monthly Salary",
       amount: 3500,
