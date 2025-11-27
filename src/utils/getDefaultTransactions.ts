@@ -150,7 +150,7 @@ export const getDefaultTransactions = (createdUser: UserProps) => {
     // Expense Transactions - Transportation
     {
       description: "Gas Refill",
-      amount: -45.0,
+      amount: 45.0,
       date: "2024-08-07T08:15:00.000Z",
       isRecurring: false,
       categoryId: CATEGORIES.TRANSPORTATION,
