@@ -139,6 +139,7 @@ export default async function handler(
           total: totalTransactions,
           totalPages: Math.ceil(totalTransactions / limit),
         },
+        orderBy: [{ createdAt: "desc" }],
       };
 
       return res.status(200).json({ data });

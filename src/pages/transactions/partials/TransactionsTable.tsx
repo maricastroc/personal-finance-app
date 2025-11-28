@@ -191,7 +191,10 @@ export const TransactionTable = ({
                     transaction={transaction}
                     onDelete={handleDelete}
                     onEdit={handleEdit}
-                    isDisabled={!!transaction?.isRecurring}
+                    isDisabled={
+                      !!transaction?.isRecurring ||
+                      !!transaction.isRecurringGenerated
+                    }
                   />
                 </tr>
               );
@@ -209,7 +212,7 @@ export const TransactionTable = ({
 
           <tr>
             <td colSpan={5}>
-              <WarningSection title="All recurring transactions are managed in the Recurring Bills area. Go there to view or pay your scheduled bills." />
+              <WarningSection title="All recurring transactions are managed in the Recurring Bills area, which is why the edit and delete buttons are disabled here. Go there to view or pay your scheduled bills." />
             </td>
           </tr>
         </tbody>

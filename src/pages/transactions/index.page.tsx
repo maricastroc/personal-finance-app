@@ -2,12 +2,9 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import * as Dialog from "@radix-ui/react-dialog";
-import { format } from "date-fns";
 import { TransactionProps } from "@/types/transaction";
 import { CategoryProps } from "@/types/category";
 import { useAppContext } from "@/contexts/AppContext";
-import { EmptyContent } from "@/components/shared/EmptyContent";
-import { SkeletonTransactionCard } from "@/components/shared/SkeletonTransactionCard";
 import Layout from "@/components/layouts/layout.page";
 import { LoadingPage } from "@/components/shared/LoadingPage";
 import { PaginationSection } from "@/components/shared/PaginationSection/PaginationSection";
@@ -16,16 +13,13 @@ import { PrimaryButton } from "@/components/core/PrimaryButton";
 import { SearchSection } from "./partials/SearchSection";
 import { TransactionTable } from "./partials/TransactionsTable";
 import { TransferFormModal } from "./partials/TransferFormModal";
-import { TransactionCard } from "./partials/TransactionCard";
 import useRequest from "@/utils/useRequest";
 import { formatToSnakeCase } from "@/utils/formatToSnakeCase";
-import { formatToDollar } from "@/utils/formatToDollar";
 import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
 import { calculateTotalPages } from "@/utils/calculateTotalPages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useDebounce } from "@/utils/useDebounce";
-import { toZonedTime } from "date-fns-tz";
 
 export default function Transactions() {
   const router = useRouter();
@@ -77,7 +71,8 @@ export default function Transactions() {
       method: "GET",
     },
     {
-      revalidateOnFocus: false,
+      revalidateOnFocus: true,
+      revalidateIfStale: true,
       keepPreviousData: true,
       dedupingInterval: 20000,
       focusThrottleInterval: 30000,
@@ -188,34 +183,6 @@ export default function Transactions() {
               categories={categories}
               mutate={mutate}
             />
-
-            <div
-              className="flex flex-col md:hidden"
-              aria-label="Transaction list"
-            >
-              {isValidating ? (
-                Array.from({ length: 9 }).map((_, i) => (
-                  <SkeletonTransactionCard key={i} />
-                ))
-              ) : transactions.length ? (
-                transactions.map((transaction, index) => (
-                  <TransactionCard
-                    key={index}
-                    name={transaction.contactName}
-                    balance={transaction.balance}
-                    avatarUrl={transaction.contactAvatar}
-                    date={format(
-                      toZonedTime(transaction.date, "UTC"),
-                      "MMM dd, yyyy"
-                    )}
-                    value={formatToDollar(transaction.amount || 0)}
-                    category={transaction.category?.name}
-                  />
-                ))
-              ) : (
-                <EmptyContent content="No transactions available" />
-              )}
-            </div>
 
             <div className="flex items-center justify-between gap-2 mt-6">
               <PaginationSection

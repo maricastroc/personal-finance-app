@@ -93,6 +93,7 @@ export default async function handler(
           isRecurring: false,
           date: paymentDateObj,
           recurringBillId: bill.id,
+          isRecurringGenerated: true,
         },
       });
 

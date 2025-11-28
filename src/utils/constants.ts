@@ -118,6 +118,8 @@ export const TRANSFER_CONSTRAINTS = {
   MIN_LIMIT: 1,
 } as const;
 
+export const MAX_CONTENT_WIDTH = "150rem";
+
 export const swrConfig = {
   revalidateOnFocus: false,
   revalidateIfStale: true,

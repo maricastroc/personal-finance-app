@@ -53,7 +53,6 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
     }
   }, [balanceData]);
 
-  // Marcar transactions como carregadas
   useEffect(() => {
     if (latestTransactions !== undefined) {
       setTransactionsLoaded(true);

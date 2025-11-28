@@ -34,7 +34,10 @@ export default function Layout({ children }: LayoutProps) {
         handleIsSidebarOpen={() => handleIsSidebarOpen(!isSidebarOpen)}
       />
 
-      <main id="main-content" className="flex-grow min-h-[100vh]">
+      <main
+        id="main-content"
+        className="flex xl:justify-center flex-grow min-h-[100vh]"
+      >
         {children}
       </main>
 

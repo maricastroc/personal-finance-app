@@ -71,7 +71,10 @@ export default async function handler(
       return res.status(404).json({ message: "Transaction not found" });
     }
 
-    if (existingTransaction.recurringBillId) {
+    if (
+      existingTransaction.recurringBillId ||
+      existingTransaction.isRecurringGenerated
+    ) {
       return res.status(400).json({
         message:
           "Cannot edit transactions created via 'Pay Now'. These payments are linked to recurring bills.",

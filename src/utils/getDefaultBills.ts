@@ -100,7 +100,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
       userId: createdUser.id,
       contactName: "Tech Company Inc.",
       contactAvatar: "./assets/images/avatars/technova-innovations.jpg",
-      type: "income",
+      type: "expense",
     },
     {
       description: "Rental Income",
@@ -111,7 +111,7 @@ export const getDefaultBills = (createdUser: UserProps) => {
       userId: createdUser.id,
       contactName: "Property Management",
       contactAvatar: "./assets/images/avatars/urban-services-hub.jpg",
-      type: "income",
+      type: "expense",
     },
   ];
 };

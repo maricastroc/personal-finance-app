@@ -46,6 +46,7 @@ model Transaction {
   userId               String
   user                 User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   
+  isRecurringGenerated Boolean    @default(false)
   recurringBillId      String?
   recurringBill        RecurringBill? @relation(fields: [recurringBillId], references: [id], onDelete: SetNull)
 
@@ -112,6 +113,7 @@ model Pot {
   name         String
   targetAmount Float
   currentAmount Float   @default(0)
+  createdAt  DateTime   @default(now())
   userId       String
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   themeId      String?

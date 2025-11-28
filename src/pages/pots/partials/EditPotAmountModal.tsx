@@ -128,74 +128,81 @@ export function EditPotAmountModal({
       description={modalDescription}
       onClose={onClose}
     >
-      <div className="flex flex-col w-full mt-6">
-        <div className="flex items-center justify-between w-full">
-          <p className="text-grey-500 text-sm">New Amount</p>
-          <h2 className="text-3xl font-bold">{formatToDollar(newAmount)}</h2>
-        </div>
-      </div>
-
-      <div className="mt-4 w-full h-[0.9rem] bg-beige-100 rounded-full relative overflow-hidden">
-        <div
-          className="absolute h-full"
-          style={{
-            width: `${
-              isWithdraw
-                ? originalPercentage - inputPercentage
-                : originalPercentage
-            }%`,
-            backgroundColor: theme.color,
-            transition: "width 0.3s ease",
-          }}
-        />
-
-        <div
-          className={`absolute h-full ${
-            isWithdraw ? "bg-secondary-red" : "bg-secondary-green"
-          }`}
-          style={{
-            width: `${inputPercentage}%`,
-            left: isWithdraw
-              ? `calc(${originalPercentage}% - ${inputPercentage}%)`
-              : `${originalPercentage}%`,
-            transition: "width 0.3s ease, left 0.3s ease",
-            borderLeft: "3px solid white",
-            borderTopLeftRadius:
-              currentAmount === 0 || newAmount === 0 ? "0.45rem" : "",
-            borderBottomLeftRadius:
-              currentAmount === 0 || newAmount === 0 ? "0.45rem" : "",
-          }}
-        />
-      </div>
-
-      <div className="flex flex-col w-full mt-3">
-        <div className="flex items-center justify-between w-full">
-          <p className="text-grey-500 font-bold text-xs">
-            {newPercentage.toFixed(2)}%
-          </p>
-          <p className="text-grey-500 text-xs">{`Target of ${formatToDollar(
-            targetAmount
-          )}`}</p>
-        </div>
-      </div>
-
-      <div className="flex flex-col mt-8 gap-1">
-        <CurrencyInput
-          label={isWithdraw ? "Amount to Withdraw" : "Amount to Add"}
-          value={inputValue}
-          onValueChange={setInputValue}
-          placeholder="0.00"
-          id="pot-amount-input"
-        />
-      </div>
-
-      <PrimaryButton
-        className="mt-8"
-        onClick={handleEditPot}
-        isSubmitting={isSubmitting}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleEditPot();
+        }}
       >
-        Save Changes
-      </PrimaryButton>
+        <div className="flex flex-col w-full mt-6">
+          <div className="flex items-center justify-between w-full">
+            <p className="text-grey-500 text-sm">New Amount</p>
+            <h2 className="text-3xl font-bold">{formatToDollar(newAmount)}</h2>
+          </div>
+        </div>
+
+        <div className="mt-4 w-full h-[0.9rem] bg-beige-100 rounded-full relative overflow-hidden">
+          <div
+            className="absolute h-full"
+            style={{
+              width: `${
+                isWithdraw
+                  ? originalPercentage - inputPercentage
+                  : originalPercentage
+              }%`,
+              backgroundColor: theme.color,
+              transition: "width 0.3s ease",
+            }}
+          />
+
+          <div
+            className={`absolute h-full ${
+              isWithdraw ? "bg-secondary-red" : "bg-secondary-green"
+            }`}
+            style={{
+              width: `${inputPercentage}%`,
+              left: isWithdraw
+                ? `calc(${originalPercentage}% - ${inputPercentage}%)`
+                : `${originalPercentage}%`,
+              transition: "width 0.3s ease, left 0.3s ease",
+              borderLeft: "3px solid white",
+              borderTopLeftRadius:
+                currentAmount === 0 || newAmount === 0 ? "0.45rem" : "",
+              borderBottomLeftRadius:
+                currentAmount === 0 || newAmount === 0 ? "0.45rem" : "",
+            }}
+          />
+        </div>
+
+        <div className="flex flex-col w-full mt-3">
+          <div className="flex items-center justify-between w-full">
+            <p className="text-grey-500 font-bold text-xs">
+              {newPercentage.toFixed(2)}%
+            </p>
+            <p className="text-grey-500 text-xs">{`Target of ${formatToDollar(
+              targetAmount
+            )}`}</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col mt-8 gap-1">
+          <CurrencyInput
+            label={isWithdraw ? "Amount to Withdraw" : "Amount to Add"}
+            value={inputValue}
+            onValueChange={setInputValue}
+            placeholder="0.00"
+            id="pot-amount-input"
+          />
+        </div>
+
+        <PrimaryButton
+          className="mt-8"
+          type="submit"
+          isSubmitting={isSubmitting}
+        >
+          Save Changes
+        </PrimaryButton>
+      </form>
     </Modal>
   );
 }

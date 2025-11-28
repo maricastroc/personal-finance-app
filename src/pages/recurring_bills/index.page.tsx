@@ -15,6 +15,7 @@ import Layout from "@/components/layouts/layout.page";
 import { PaginationSection } from "@/components/shared/PaginationSection/PaginationSection";
 import { PageTitle } from "@/components/shared/PageTitle";
 import { RecurringBillsResult } from "@/types/recurring-bills-result";
+import { MAX_CONTENT_WIDTH } from "@/utils/constants";
 
 export default function RecurringBills() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,7 +26,7 @@ export default function RecurringBills() {
 
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const [selectedSortBy, setSelectedSortBy] = useState("latest");
+  const [selectedSortBy, setSelectedSortBy] = useState("");
 
   const { isSidebarOpen } = useAppContext();
 
@@ -126,7 +127,7 @@ export default function RecurringBills() {
       <Layout>
         <div
           role="main"
-          className={`px-4 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
+          className={`max-w-${MAX_CONTENT_WIDTH} px-4 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
             isSidebarOpen ? "lg:pr-10" : "lg:pr-20"
           }`}
         >

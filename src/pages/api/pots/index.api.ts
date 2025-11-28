@@ -28,6 +28,7 @@ export default async function handler(
       const pots = await prisma.pot.findMany({
         where: { userId },
         include: { theme: true },
+        orderBy: [{ createdAt: "desc" }],
       });
 
       const totalCurrentAmount = pots.reduce(

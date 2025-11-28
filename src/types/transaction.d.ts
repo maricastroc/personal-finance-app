@@ -15,4 +15,5 @@ export interface TransactionProps {
   contactAvatar: string;
   category?: CategoryProps;
   recurringBill?: RecurringBillProps;
+  isRecurringGenerated: boolean;
 }

@@ -8,7 +8,9 @@ export const PageTitle = ({ title, description }: PageTitleProps) => {
     <div className="flex flex-col items-start">
       <h1 className="text-grey-900 font-bold text-3xl">{title}</h1>
       {description && (
-        <span className="text-sm text-grey-500">{description}</span>
+        <span className="hidden md:block text-sm text-grey-500">
+          {description}
+        </span>
       )}
     </div>
   );

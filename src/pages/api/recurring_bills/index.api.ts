@@ -73,7 +73,7 @@ export default async function handler(
   const skip = (page - 1) * limit;
 
   let searchQuery;
-  let orderBy: Prisma.RecurringBillOrderByWithRelationInput = {};
+  let orderBy: Prisma.RecurringBillOrderByWithRelationInput | undefined;
 
   if (req.query.search && req.query.search !== "") {
     searchQuery = String(req.query.search).toLowerCase();
@@ -99,11 +99,11 @@ export default async function handler(
       orderBy = { amount: "asc" };
       break;
     default:
-      orderBy = { recurrenceDay: "desc" };
+      orderBy = undefined;
   }
 
   try {
-    const recurringBills = await prisma.recurringBill.findMany({
+    const allRecurringBills = await prisma.recurringBill.findMany({
       where: {
         userId: String(userId),
         ...(searchQuery && {
@@ -113,22 +113,24 @@ export default async function handler(
           },
         }),
       },
-      orderBy,
-      skip,
-      take: limit,
+      ...(orderBy && { orderBy }),
     });
 
-    const totalTransactions = await prisma.recurringBill.count({
-      where: {
-        userId: String(userId),
-        ...(searchQuery && {
-          contactName: {
-            contains: searchQuery,
-            mode: "insensitive",
-          },
-        }),
-      },
-    });
+    const billsWithNextDueDate = allRecurringBills.map((bill) => ({
+      ...bill,
+      calculatedNextDueDate: calculateNextDueDate(bill),
+    }));
+
+    if (!orderBy) {
+      billsWithNextDueDate.sort(
+        (a, b) =>
+          a.calculatedNextDueDate.getTime() - b.calculatedNextDueDate.getTime()
+      );
+    }
+
+    const paginatedBills = billsWithNextDueDate.slice(skip, skip + limit);
+
+    const totalTransactions = allRecurringBills.length;
 
     const today = startOfDay(new Date());
     const dueSoonDate = addDays(today, 3);
@@ -162,8 +164,9 @@ export default async function handler(
       },
     };
 
-    for (const bill of recurringBills) {
-      const nextDueDate = calculateNextDueDate(bill);
+    // Processar apenas as bills paginadas
+    for (const bill of paginatedBills) {
+      const nextDueDate = bill.calculatedNextDueDate;
 
       if (
         isWithinInterval(nextDueDate, {
