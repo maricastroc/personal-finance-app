@@ -127,7 +127,7 @@ export default function RecurringBills() {
       <Layout>
         <div
           role="main"
-          className={`max-w-${MAX_CONTENT_WIDTH} px-4 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
+          className={`flex flex-col overflow-hidden max-w-${MAX_CONTENT_WIDTH} px-4 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
             isSidebarOpen ? "lg:pr-10" : "lg:pr-20"
           }`}
         >
@@ -165,7 +165,7 @@ export default function RecurringBills() {
                 search={search}
               />
 
-              <div className="overflow-x-auto md:mt-5 w-full">
+              <div className="overflow-x-auto w-full">
                 <RecurringBillsTable
                   recurringBills={data?.bills}
                   isValidating={isValidating || isValidatingResume}
