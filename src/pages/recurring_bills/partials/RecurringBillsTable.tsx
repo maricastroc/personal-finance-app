@@ -107,13 +107,7 @@ export const RecurringBillsTable = ({
 
   return (
     <div>
-      <table
-        className={`table-fixed overflow-x-auto ${
-          recurringBills && recurringBills?.length > 0
-            ? "min-w-[40rem]"
-            : "min-w-[35rem]"
-        }`}
-      >
+      <table className={`w-full overflow-x-auto`}>
         <thead>
           <tr>
             <th className="px-4 py-2 text-xs text-grey-500 text-left w-2/5">
@@ -212,10 +206,11 @@ export const RecurringBillsTable = ({
             ))
           ) : (
             <tr>
-              <td colSpan={6} className="px-4 py-2">
-                <span className="text-secondary-red w-full text-sm font-bold">
-                  No recurring bills found.
-                </span>
+              <td
+                colSpan={6}
+                className="text-sm text-grey-500 rounded-md bg-beige-100 px-4 py-2"
+              >
+                No bills found.
               </td>
             </tr>
           )}
