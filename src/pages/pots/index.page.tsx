@@ -48,8 +48,8 @@ export default function Pots() {
       />
 
       <Layout>
-        <div
-          className={`px-4 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
+        <section
+          className={`px-4 w-full py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
             isSidebarOpen ? "lg:pr-10" : "lg:pr-20"
           }`}
         >
@@ -100,7 +100,7 @@ export default function Pots() {
               buttonLabel="Manage Pots"
             />
           )}
-        </div>
+        </section>
       </Layout>
     </>
   );

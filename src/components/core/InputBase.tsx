@@ -30,7 +30,7 @@ export function InputBase({
         aria-invalid={!!error}
         aria-describedby={errorId}
         required={required}
-        className={`text-sm w-full h-12 rounded-md border border-beige-500 px-3 focus:border-beige-500 items-center focus:outline-none focus:ring-secondary-green focus:ring-2 focus:ring-offset-2 ${className}`}
+        className={`text-[16px] md:text-sm w-full h-12 rounded-md border border-beige-500 px-3 focus:border-beige-500 items-center focus:outline-none focus:ring-secondary-green focus:ring-2 focus:ring-offset-2 ${className}`}
         {...props}
       />
 

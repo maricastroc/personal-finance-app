@@ -57,7 +57,7 @@ export default function Budgets() {
       <Layout>
         <section
           role="main"
-          className={`px-4 md:px-10 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
+          className={`px-4 w-full md:px-10 py-5 md:p-10 pb-20 md:pb-32 lg:pb-8 lg:pl-0 ${
             isSidebarOpen ? "lg:pr-10" : "lg:pr-20"
           }`}
         >
