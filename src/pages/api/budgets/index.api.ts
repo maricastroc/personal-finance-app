@@ -112,7 +112,7 @@ export default async function handler(
 
       return res.status(201).json({
         budget: newBudget,
-        message: "Budget successfully created!",
+        message: "Budget created successfully!",
       });
     } catch (error) {
       console.error(error);

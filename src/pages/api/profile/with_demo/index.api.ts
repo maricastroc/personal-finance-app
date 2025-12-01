@@ -151,7 +151,7 @@ export default async function handler(
         return res.status(201).json({
           user: result.user,
           balanceData: result.balanceData,
-          message: "User successfully created!",
+          message: "User created successfully!",
         });
       } catch (error) {
         if (error instanceof z.ZodError) {

@@ -145,7 +145,7 @@ export default async function handler(
 
         return res
           .status(200)
-          .json({ updatedUser, message: "User successfully updated!" });
+          .json({ updatedUser, message: "User updated successfully!" });
       } catch (error) {
         if (error instanceof z.ZodError) {
           return res.status(400).json({ message: error.errors[0].message });
@@ -214,7 +214,7 @@ export default async function handler(
 
         return res.status(201).json({
           user: newUser,
-          message: "User successfully created!",
+          message: "User created successfully!",
         });
       } catch (error) {
         if (error instanceof z.ZodError) {

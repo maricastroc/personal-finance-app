@@ -103,7 +103,7 @@ export default async function handler(
 
       return res.status(200).json({
         pot: newPot,
-        message: "Pot successfully created!",
+        message: "Pot created successfully!",
       });
     } catch (error) {
       console.error(error);

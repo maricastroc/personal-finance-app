@@ -114,7 +114,7 @@ export default async function handler(
     });
 
     return res.status(200).json({
-      message: "Expense paid successfully",
+      message: "Recurring Bill paid successfully!",
       ...result,
     });
   } catch (error) {

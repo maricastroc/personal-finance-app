@@ -128,7 +128,7 @@ export default async function handler(
 
       return res.status(200).json({
         budget: updatedBudget,
-        message: "Budget successfully updated!",
+        message: "Budget updated successfully!",
       });
     } catch (error) {
       console.error(error);
@@ -160,7 +160,7 @@ export default async function handler(
         where: { id: String(budgetId) },
       });
 
-      return res.status(200).json({ message: "Budget successfully deleted!" });
+      return res.status(200).json({ message: "Budget deleted successfully!" });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "An error occurred" });

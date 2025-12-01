@@ -169,7 +169,7 @@ export default async function handler(
       });
 
       return res.status(200).json({
-        message: "Transaction updated successfully",
+        message: "Transaction updated successfully!",
         transaction: updatedTransaction,
       });
     } catch (error) {
@@ -245,7 +245,7 @@ export default async function handler(
       });
 
       return res.status(200).json({
-        message: "Transaction deleted successfully",
+        message: "Transaction deleted successfully!",
       });
     } catch (error) {
       console.error("Error deleting transaction:", error);

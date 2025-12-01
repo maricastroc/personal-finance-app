@@ -167,7 +167,7 @@ export default async function handler(
       return res.status(200).json({
         pot: updatedPot,
         user: { currentBalance: updatedUser?.currentBalance || 0 },
-        message: "Pot successfully updated!",
+        message: "Pot updated successfully!",
       });
     } catch (error) {
       console.error(error);
@@ -219,7 +219,7 @@ export default async function handler(
       });
 
       return res.status(200).json({
-        message: "Pot successfully deleted!",
+        message: "Pot deleted successfully!",
         returnedAmount: pot.currentAmount,
       });
     } catch (error) {
