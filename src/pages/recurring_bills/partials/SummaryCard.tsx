@@ -23,7 +23,10 @@ export const SummaryCard = ({
         {isValidating ? (
           <div className="flex flex-col gap-4">
             {Array.from({ length: 3 }).map((_, index) => (
-              <div key={index} className="w-full h-5 rounded bg-gray-200 animate-pulse" />
+              <div
+                key={index}
+                className="w-full h-5 rounded bg-gray-200 animate-pulse"
+              />
             ))}
           </div>
         ) : (

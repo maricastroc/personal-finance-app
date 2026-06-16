@@ -27,9 +27,17 @@ export function SidebarToggleButton({
       `}
     >
       {isOpen ? (
-        <CaretLeft className="text-grey-300 text-2xl" style={{ marginLeft: 0 }} size={24} />
+        <CaretLeft
+          className="text-grey-300 text-2xl"
+          style={{ marginLeft: 0 }}
+          size={24}
+        />
       ) : (
-        <CaretRight className="text-grey-300 text-2xl" style={{ marginLeft: 20 }} size={24} />
+        <CaretRight
+          className="text-grey-300 text-2xl"
+          style={{ marginLeft: 20 }}
+          size={24}
+        />
       )}
 
       <span

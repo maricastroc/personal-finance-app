@@ -8,7 +8,10 @@ const SkeletonInfoBox = () => (
 const SkeletonRow = () => (
   <div className="flex flex-col lg:flex-row items-center gap-5 w-full">
     {[...Array(2)].map((_, index) => (
-      <div key={index} className="w-full h-[45px] rounded bg-gray-200 animate-pulse" />
+      <div
+        key={index}
+        className="w-full h-[45px] rounded bg-gray-200 animate-pulse"
+      />
     ))}
   </div>
 );
