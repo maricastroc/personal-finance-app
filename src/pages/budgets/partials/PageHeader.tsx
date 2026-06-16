@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as Dialog from "@radix-ui/react-dialog";
 import { BudgetModal } from "./BudgetModal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Plus } from "phosphor-react";
 import { getBudgetsCategories } from "@/utils/getBudgetsCategories";
 import { AxiosResponse } from "axios";
 import { KeyedMutator } from "swr";
@@ -41,7 +40,7 @@ export const PageHeader = ({
             aria-controls="budget-modal"
             className="mt-0 max-w-[8rem] text-sm"
           >
-            <FontAwesomeIcon icon={faPlus} />
+            <Plus size={16} />
             Add Budget
           </PrimaryButton>
         </Dialog.Trigger>

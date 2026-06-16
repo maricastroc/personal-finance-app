@@ -57,7 +57,13 @@ export async function createPot(
   }
 
   return prisma.pot.create({
-    data: { userId, name, themeId: theme.id, targetAmount, currentAmount: initialAmount },
+    data: {
+      userId,
+      name,
+      themeId: theme.id,
+      targetAmount,
+      currentAmount: initialAmount,
+    },
     include: { theme: true },
   });
 }
@@ -81,7 +87,9 @@ export async function updatePot(
     if (currentAmount > targetAmount) {
       throw new ApiError(
         400,
-        `Cannot add money. This would exceed the target amount by ${formatToDollar(currentAmount - targetAmount)}.`
+        `Cannot add money. This would exceed the target amount by ${formatToDollar(
+          currentAmount - targetAmount
+        )}.`
       );
     }
 

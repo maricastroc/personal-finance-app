@@ -1,6 +1,5 @@
 import { useOutsideAndEscape } from "@/hooks/useClickOutside";
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DotsThree } from "phosphor-react";
 import { useState } from "react";
 
 interface BudgetCardMenuProps {
@@ -32,7 +31,7 @@ export function BudgetCardMenu({
         onClick={() => setOpen(!open)}
         className="text-grey-500 hover:text-grey-900"
       >
-        <FontAwesomeIcon icon={faEllipsis} />
+        <DotsThree size={20} />
       </button>
 
       {open && (

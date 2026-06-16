@@ -1,6 +1,6 @@
 import React from "react";
 import * as Select from "@radix-ui/react-select";
-import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import { CaretDown, CaretUp } from "phosphor-react";
 
 interface AvatarSelectInputProps {
   label: string;
@@ -38,7 +38,7 @@ export const AvatarSelectInput = ({
           )}
         </Select.Value>
         <Select.Icon className="ml-1 text-grey-900">
-          <ChevronDownIcon />
+          <CaretDown size={16} />
         </Select.Icon>
       </Select.Trigger>
 
@@ -56,7 +56,7 @@ export const AvatarSelectInput = ({
             className="flex items-center justify-center text-grey-500 hover:text-grey-900"
             aria-label="Scroll up"
           >
-            <ChevronUpIcon />
+            <CaretUp size={16} />
           </Select.ScrollUpButton>
 
           <Select.Viewport className="p-2">
@@ -77,7 +77,7 @@ export const AvatarSelectInput = ({
             className="flex items-center justify-center text-grey-500 hover:text-grey-900"
             aria-label="Scroll down"
           >
-            <ChevronDownIcon />
+            <CaretDown size={16} />
           </Select.ScrollDownButton>
         </Select.Content>
       </Select.Portal>

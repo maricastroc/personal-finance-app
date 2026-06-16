@@ -1,6 +1,6 @@
 import React from "react";
 import * as Select from "@radix-ui/react-select";
-import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import { CaretDown, CaretUp } from "phosphor-react";
 
 interface DataProps {
   id?: string | number;
@@ -37,7 +37,7 @@ export const SelectUser = ({
       >
         <Select.Value placeholder={placeholder} />
         <Select.Icon className="ml-2 text-grey-900">
-          <ChevronDownIcon />
+          <CaretDown size={16} />
         </Select.Icon>
       </Select.Trigger>
 
@@ -54,7 +54,7 @@ export const SelectUser = ({
             className="flex items-center justify-center text-grey-500 hover:text-grey-900"
             aria-label="Scroll up"
           >
-            <ChevronUpIcon />
+            <CaretUp size={16} />
           </Select.ScrollUpButton>
 
           <Select.Viewport className="p-1">
@@ -71,7 +71,7 @@ export const SelectUser = ({
             className="flex items-center justify-center text-grey-500 hover:text-grey-900"
             aria-label="Scroll down"
           >
-            <ChevronDownIcon />
+            <CaretDown size={16} />
           </Select.ScrollDownButton>
         </Select.Content>
       </Select.Portal>

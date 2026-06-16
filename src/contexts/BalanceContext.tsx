@@ -1,5 +1,5 @@
-// contexts/BalanceContext.tsx
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
+import { useSession } from "next-auth/react";
 import useRequest from "@/utils/useRequest";
 import { TransactionProps } from "@/types/transaction";
 import { swrConfig } from "@/utils/constants";
@@ -17,15 +17,10 @@ interface BalanceContextType {
 const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
 
 export function BalanceProvider({ children }: { children: React.ReactNode }) {
-  const [localBalance, setLocalBalance] = useState({
-    currentBalance: 0,
-    incomes: 0,
-    expenses: 0,
-  });
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
 
-  const [balanceLoaded, setBalanceLoaded] = useState(false);
-
-  const [transactionsLoaded, setTransactionsLoaded] = useState(false);
+  const [localBalance, setLocalBalance] = useState<number | null>(null);
 
   const {
     data: balanceData,
@@ -35,80 +30,39 @@ export function BalanceProvider({ children }: { children: React.ReactNode }) {
     currentBalance: number;
     incomes: number;
     expenses: number;
-  }>({ url: "/balance", method: "GET" }, swrConfig);
+  }>(isAuthenticated ? { url: "/balance", method: "GET" } : null, swrConfig);
 
   const {
     data: latestTransactions,
     mutate: mutateTransactions,
     isValidating: isValidatingTransactions,
   } = useRequest<TransactionProps[]>(
-    { url: "/transactions/latest", method: "GET" },
+    isAuthenticated ? { url: "/transactions/latest", method: "GET" } : null,
     swrConfig
   );
 
-  useEffect(() => {
-    if (balanceData) {
-      setLocalBalance(balanceData);
-      setBalanceLoaded(true);
-    }
-  }, [balanceData]);
-
-  useEffect(() => {
-    if (latestTransactions !== undefined) {
-      setTransactionsLoaded(true);
-    }
-  }, [latestTransactions]);
-
-  const isLoading = React.useMemo(() => {
-    if (!balanceLoaded && !transactionsLoaded) {
-      return true;
-    }
-
-    if (
-      (isValidatingBalance || isValidatingTransactions) &&
-      (balanceLoaded || transactionsLoaded)
-    ) {
-      return false;
-    }
-
-    return !balanceLoaded || !transactionsLoaded;
-  }, [
-    balanceLoaded,
-    transactionsLoaded,
-    isValidatingBalance,
-    isValidatingTransactions,
-  ]);
+  const isLoading =
+    status === "loading" ||
+    (isAuthenticated &&
+      ((balanceData === undefined && isValidatingBalance) ||
+        (latestTransactions === undefined && isValidatingTransactions)));
 
   const updateBalance = (newBalance: number) => {
-    setLocalBalance((prev) => ({
-      ...prev,
-      currentBalance: newBalance,
-    }));
+    setLocalBalance(newBalance);
   };
 
   const refetchBalance = async () => {
-    if (!balanceData) setBalanceLoaded(false);
-    if (!latestTransactions) setTransactionsLoaded(false);
-
+    setLocalBalance(null);
     await Promise.all([mutateBalance(), mutateTransactions()]);
   };
-
-  useEffect(() => {
-    if (!balanceData) {
-      setBalanceLoaded(false);
-    }
-    if (!latestTransactions) {
-      setTransactionsLoaded(false);
-    }
-  }, [balanceData, latestTransactions]);
 
   return (
     <BalanceContext.Provider
       value={{
         latestTransactions,
-        currentBalance: localBalance.currentBalance,
-        incomes: localBalance.incomes,
-        expenses: localBalance.expenses,
+        currentBalance: localBalance ?? balanceData?.currentBalance ?? 0,
+        incomes: balanceData?.incomes ?? 0,
+        expenses: balanceData?.expenses ?? 0,
         isLoading,
         updateBalance,
         refetchBalance,

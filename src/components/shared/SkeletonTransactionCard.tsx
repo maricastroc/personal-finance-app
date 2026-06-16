@@ -1,5 +1,3 @@
-import { Skeleton } from "@mui/material";
-
 export const SkeletonTransactionCard = () => {
   return (
     <div
@@ -7,16 +5,8 @@ export const SkeletonTransactionCard = () => {
       aria-hidden="true"
     >
       <div className="flex w-full items-center gap-3">
-        <div className="relative w-11 h-11 rounded-full overflow-hidden">
-          <Skeleton variant="circular" width="100%" height="100%" />
-        </div>
-
-        <Skeleton
-          variant="rounded"
-          width="100%"
-          height={16}
-          className="flex-1"
-        />
+        <div className="w-11 h-11 rounded-full bg-gray-200 animate-pulse shrink-0" />
+        <div className="flex-1 h-4 rounded bg-gray-200 animate-pulse" />
       </div>
     </div>
   );

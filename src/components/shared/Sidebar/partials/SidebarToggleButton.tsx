@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import { CaretLeft, CaretRight } from "phosphor-react";
 
 interface SidebarToggleButtonProps {
   isOpen: boolean;
@@ -27,14 +26,11 @@ export function SidebarToggleButton({
         transition-all duration-300
       `}
     >
-      <FontAwesomeIcon
-        icon={isOpen ? faCaretLeft : faCaretRight}
-        className="text-grey-300"
-        style={{
-          fontSize: "1.5rem",
-          marginLeft: isOpen ? 0 : 20,
-        }}
-      />
+      {isOpen ? (
+        <CaretLeft className="text-grey-300 text-2xl" style={{ marginLeft: 0 }} size={24} />
+      ) : (
+        <CaretRight className="text-grey-300 text-2xl" style={{ marginLeft: 20 }} size={24} />
+      )}
 
       <span
         className={`

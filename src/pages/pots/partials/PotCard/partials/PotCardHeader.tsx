@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { DotsThree } from "phosphor-react";
 
 import { PotProps } from "@/types/pot";
 import { DropdownActions } from "@/components/shared/DropdownActions";
@@ -35,10 +34,7 @@ export function PotCardHeader({
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className="focus:outline-secondary-green focus:outline-2 focus:outline-offset-2"
         >
-          <FontAwesomeIcon
-            className="text-grey-500 cursor-pointer"
-            icon={faEllipsis}
-          />
+          <DotsThree className="text-grey-500 cursor-pointer" size={20} />
         </button>
 
         <DropdownActions

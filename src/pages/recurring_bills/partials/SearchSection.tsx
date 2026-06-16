@@ -1,7 +1,6 @@
 import { SelectInput } from "@/components/core/SelectInput";
 import { sortByFilters } from "@/utils/constants";
-import { faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { SortDescending } from "phosphor-react";
 import { MagnifyingGlass, X } from "phosphor-react";
 import { useState } from "react";
 
@@ -54,11 +53,7 @@ export const SearchSection = ({
           onClick={() => setIsSortBySelectOpen(!isSortBySelectOpen)}
           className="ml-3 md:hidden rounded-md bg-grey-900 p-1 flex items-center justify-center h-[2.5rem]"
         >
-          <FontAwesomeIcon
-            icon={faArrowDownWideShort}
-            width={32}
-            className="text-white"
-          />
+          <SortDescending size={20} className="text-white" />
         </button>
 
         <div className="max-md:hidden md:flex md:min-w-[11rem] md:max-w-[15rem] lg:max-w-[16rem] w-full items-center justify-center gap-2">

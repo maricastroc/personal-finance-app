@@ -1,6 +1,5 @@
 import { RecurringBillsResult } from "@/types/recurring-bills-result";
 import { formatToDollar } from "@/utils/formatToDollar";
-import { Skeleton } from "@mui/material";
 
 interface SummaryCardProps {
   recurringBills: RecurringBillsResult | undefined;
@@ -24,12 +23,7 @@ export const SummaryCard = ({
         {isValidating ? (
           <div className="flex flex-col gap-4">
             {Array.from({ length: 3 }).map((_, index) => (
-              <Skeleton
-                key={index}
-                variant="rounded"
-                width="100%"
-                height={20}
-              />
+              <div key={index} className="w-full h-5 rounded bg-gray-200 animate-pulse" />
             ))}
           </div>
         ) : (

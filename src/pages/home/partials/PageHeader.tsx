@@ -1,6 +1,5 @@
 import { PageTitle } from "@/components/shared/PageTitle";
-import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { SignOut } from "phosphor-react";
 import { signOut } from "next-auth/react";
 import toast from "react-hot-toast";
 
@@ -22,7 +21,7 @@ export const PageHeader = () => {
         type="button"
         className="font-semibold rounded-md p-3 px-4 flex gap-2 items-center transition-all duration-300 max-h-[60px] text-sm bg-grey-900 text-beige-100 hover:bg-grey-500"
       >
-        <FontAwesomeIcon icon={faRightToBracket} />
+        <SignOut size={16} />
         Logout
       </button>
     </header>

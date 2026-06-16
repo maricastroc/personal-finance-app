@@ -1,6 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Plus, Minus } from "phosphor-react";
 
 import { PotProps } from "@/types/pot";
 import { EditPotAmountModal } from "../../EditPotAmountModal";
@@ -32,7 +31,7 @@ export function PotAmountButtons({
             onClick={() => setIsAddOpen(true)}
             className="bg-beige-100 w-full rounded-md py-4 px-3 hover:brightness-90 focus:outline-secondary-green focus:outline-offset-2 focus:outline-2"
           >
-            <FontAwesomeIcon icon={faPlus} className="text-sm mr-1" />
+            <Plus size={14} className="mr-1" />
             Add Money
           </button>
         </Dialog.Trigger>
@@ -56,7 +55,7 @@ export function PotAmountButtons({
             onClick={() => setIsWithdrawOpen(true)}
             className="bg-beige-100 w-full rounded-md py-4 px-3 hover:brightness-90 focus:outline-secondary-green focus:outline-offset-2 focus:outline-2"
           >
-            <FontAwesomeIcon icon={faMinus} className="text-sm mr-1" />
+            <Minus size={14} className="mr-1" />
             Withdraw
           </button>
         </Dialog.Trigger>

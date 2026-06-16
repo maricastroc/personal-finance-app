@@ -16,6 +16,9 @@ export function buildNextAuthOptions(
     session: {
       strategy: "jwt",
     },
+    pages: {
+      signIn: "/",
+    },
     providers: [
       GoogleProvider({
         allowDangerousEmailAccountLinking: true,

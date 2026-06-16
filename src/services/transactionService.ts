@@ -211,8 +211,15 @@ export async function updateTransaction(
   transactionId: string,
   body: z.infer<typeof updateTransactionSchema>
 ) {
-  const { description, amount, categoryName, contactName, contactAvatar, type, date } =
-    body;
+  const {
+    description,
+    amount,
+    categoryName,
+    contactName,
+    contactAvatar,
+    type,
+    date,
+  } = body;
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) throw new ApiError(404, "User not found");
@@ -224,7 +231,11 @@ export async function updateTransaction(
 
   if (!existing) throw new ApiError(404, "Transaction not found");
 
-  if (existing.recurringBillId || existing.isRecurringGenerated || existing.isRecurring) {
+  if (
+    existing.recurringBillId ||
+    existing.isRecurringGenerated ||
+    existing.isRecurring
+  ) {
     throw new ApiError(
       400,
       "Cannot edit transactions created via 'Pay Now'. These payments are linked to recurring bills."

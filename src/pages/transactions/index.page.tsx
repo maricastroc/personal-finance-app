@@ -17,8 +17,7 @@ import useRequest from "@/utils/useRequest";
 import { formatToSnakeCase } from "@/utils/formatToSnakeCase";
 import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
 import { calculateTotalPages } from "@/utils/calculateTotalPages";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Plus } from "phosphor-react";
 import { useDebounce } from "@/utils/useDebounce";
 
 export default function Transactions() {
@@ -149,7 +148,7 @@ export default function Transactions() {
                   aria-controls="transfer-form-modal"
                   className="mt-0 max-w-[5rem] sm:max-w-[8rem] text-sm"
                 >
-                  <FontAwesomeIcon icon={faPlus} className="hidden sm:block" />
+                  <Plus size={16} className="hidden sm:block" />
                   Transfer
                 </PrimaryButton>
               </Dialog.Trigger>

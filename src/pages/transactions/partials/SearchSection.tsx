@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-  faArrowDownWideShort,
-  faFilter,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Funnel, SortDescending } from "phosphor-react";
 import { SelectInput } from "@/components/core/SelectInput";
 import { CategoryProps } from "@/types/category";
 import { sortByFilters } from "@/utils/constants";
@@ -47,7 +43,7 @@ export const SearchSection = ({
           onClick={() => setIsCategoriesSelectOpen(!isCategoriesSelectOpen)}
           className="ml-3 md:hidden rounded-md bg-grey-900 p-1 flex items-center flex-shrink-0 justify-center h-[2.5rem]"
         >
-          <FontAwesomeIcon icon={faFilter} width={32} className="text-white" />
+          <Funnel size={20} className="text-white" />
         </button>
 
         <button
@@ -55,11 +51,7 @@ export const SearchSection = ({
           onClick={() => setIsSortBySelectOpen(!isSortBySelectOpen)}
           className="md:hidden rounded-md bg-grey-900 p-1 flex items-center flex-shrink-0 justify-center h-[2.5rem]"
         >
-          <FontAwesomeIcon
-            icon={faArrowDownWideShort}
-            width={32}
-            className="text-white"
-          />
+          <SortDescending size={20} className="text-white" />
         </button>
       </div>
 

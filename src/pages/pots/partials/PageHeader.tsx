@@ -1,7 +1,6 @@
 import { PrimaryButton } from "@/components/core/PrimaryButton";
 import { PageTitle } from "@/components/shared/PageTitle";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Plus } from "phosphor-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { ReactNode } from "react";
 
@@ -35,7 +34,7 @@ export function PageHeader({
             aria-controls={modalId}
             className="mt-0 max-w-[8rem] text-sm"
           >
-            <FontAwesomeIcon icon={faPlus} />
+            <Plus size={16} />
             {buttonLabel}
           </PrimaryButton>
         </Dialog.Trigger>

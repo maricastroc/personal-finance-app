@@ -1,10 +1,6 @@
 import React from "react";
 import * as Select from "@radix-ui/react-select";
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from "@radix-ui/react-icons";
+import { Check, CaretDown, CaretUp } from "phosphor-react";
 
 interface DataProps {
   id?: string | number;
@@ -44,7 +40,7 @@ export const SelectInput = ({
       >
         <Select.Value className="text-grey-900" placeholder={placeholder} />
         <Select.Icon className="ml-2 text-grey-900">
-          <ChevronDownIcon />
+          <CaretDown size={16} />
         </Select.Icon>
       </Select.Trigger>
 
@@ -62,7 +58,7 @@ export const SelectInput = ({
             className="flex items-center justify-center text-grey-500 hover:text-grey-900"
             aria-label="Scroll up"
           >
-            <ChevronUpIcon />
+            <CaretUp size={16} />
           </Select.ScrollUpButton>
 
           <Select.Viewport className="p-1">
@@ -87,7 +83,7 @@ export const SelectInput = ({
             className="flex items-center justify-center text-grey-500 hover:text-grey-900"
             aria-label="Scroll down"
           >
-            <ChevronDownIcon />
+            <CaretDown size={16} />
           </Select.ScrollDownButton>
         </Select.Content>
       </Select.Portal>
@@ -127,7 +123,7 @@ const SelectItem = React.forwardRef(
       <Select.ItemText>{children}</Select.ItemText>
 
       <Select.ItemIndicator className="absolute right-3 flex items-center rounded-full bg-secondary-green">
-        <CheckIcon className="w-4 h-4 text-white" />
+        <Check className="w-4 h-4 text-white" />
       </Select.ItemIndicator>
 
       {disabled && (

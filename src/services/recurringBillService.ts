@@ -70,9 +70,14 @@ export async function listRecurringBills(
   const limit = parseInt(query.limit ?? "10") || 10;
   const skip = (page - 1) * limit;
 
-  const searchQuery = query.search ? String(query.search).toLowerCase() : undefined;
+  const searchQuery = query.search
+    ? String(query.search).toLowerCase()
+    : undefined;
 
-  const orderByMap: Record<string, Prisma.RecurringBillOrderByWithRelationInput> = {
+  const orderByMap: Record<
+    string,
+    Prisma.RecurringBillOrderByWithRelationInput
+  > = {
     latest: { recurrenceDay: "desc" },
     oldest: { recurrenceDay: "asc" },
     a_to_z: { contactName: "asc" },
@@ -143,19 +148,41 @@ export async function listRecurringBills(
 
     if (isBefore(nextDueDate, today)) {
       status = "overdue";
-      result.overdue.bills.push({ ...bill, status, nextDueDate, baseDate: bill.baseDate });
+      result.overdue.bills.push({
+        ...bill,
+        status,
+        nextDueDate,
+        baseDate: bill.baseDate,
+      });
       result.overdue.total += Math.abs(bill.amount);
-    } else if (isWithinInterval(nextDueDate, { start: today, end: dueSoonDate })) {
+    } else if (
+      isWithinInterval(nextDueDate, { start: today, end: dueSoonDate })
+    ) {
       status = "due soon";
-      result.dueSoon.bills.push({ ...bill, status, nextDueDate, baseDate: bill.baseDate });
+      result.dueSoon.bills.push({
+        ...bill,
+        status,
+        nextDueDate,
+        baseDate: bill.baseDate,
+      });
       result.dueSoon.total += Math.abs(bill.amount);
     } else {
       status = "upcoming";
-      result.upcoming.bills.push({ ...bill, status, nextDueDate, baseDate: bill.baseDate });
+      result.upcoming.bills.push({
+        ...bill,
+        status,
+        nextDueDate,
+        baseDate: bill.baseDate,
+      });
       result.upcoming.total += Math.abs(bill.amount);
     }
 
-    result.bills.push({ ...bill, status, nextDueDate, baseDate: bill.baseDate });
+    result.bills.push({
+      ...bill,
+      status,
+      nextDueDate,
+      baseDate: bill.baseDate,
+    });
   }
 
   return result;
@@ -204,13 +231,18 @@ export async function payRecurringBill(
     if (!bill) throw new ApiError(404, "Recurring expense not found");
 
     if (!bill.recurrenceDay || !bill.recurrenceFrequency) {
-      throw new ApiError(400, "Recurring expense is missing recurrence information");
+      throw new ApiError(
+        400,
+        "Recurring expense is missing recurrence information"
+      );
     }
 
     if (bill.amount > (user.currentBalance ?? 0)) {
       throw new ApiError(
         400,
-        `Insufficient balance. You need $${bill.amount} but only have $${user.currentBalance ?? 0} available.`
+        `Insufficient balance. You need $${bill.amount} but only have $${
+          user.currentBalance ?? 0
+        } available.`
       );
     }
 

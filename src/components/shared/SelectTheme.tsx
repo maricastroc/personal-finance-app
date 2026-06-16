@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import * as Select from "@radix-ui/react-select";
-import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import { CaretDown, CaretUp } from "phosphor-react";
 
 interface DataProps {
   label: ReactNode;
@@ -41,7 +41,7 @@ export const SelectTheme = ({
           placeholder="Select a Color..."
         />
         <Select.Icon className="ml-2 text-grey-900">
-          <ChevronDownIcon />
+          <CaretDown size={16} />
         </Select.Icon>
       </Select.Trigger>
 
@@ -60,7 +60,7 @@ export const SelectTheme = ({
           sideOffset={5}
         >
           <Select.ScrollUpButton className="flex items-center justify-center text-grey-500 hover:text-grey-900">
-            <ChevronUpIcon />
+            <CaretUp size={16} />
           </Select.ScrollUpButton>
 
           <Select.Viewport className="p-1">
@@ -78,7 +78,7 @@ export const SelectTheme = ({
           </Select.Viewport>
 
           <Select.ScrollDownButton className="flex items-center justify-center text-grey-500 hover:text-grey-900">
-            <ChevronDownIcon />
+            <CaretDown size={16} />
           </Select.ScrollDownButton>
         </Select.Content>
       </Select.Portal>

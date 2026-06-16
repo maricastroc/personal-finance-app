@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Skeleton } from "@mui/material";
 import { NextSeo } from "next-seo";
 import { useAppContext } from "@/contexts/AppContext";
 import { EmptyContent } from "@/components/shared/EmptyContent";
@@ -79,11 +78,9 @@ export default function Budgets() {
                     className="relative w-full mx-auto rounded-full"
                     aria-busy="true"
                   >
-                    <Skeleton
-                      variant="circular"
-                      width={250}
-                      height={250}
-                      style={{ margin: "auto" }}
+                    <div
+                      className="rounded-full bg-gray-200 animate-pulse mx-auto"
+                      style={{ width: 250, height: 250 }}
                     />
                   </span>
                 ) : (
