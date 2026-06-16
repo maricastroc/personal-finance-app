@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const createTransactionSchema = z.object({
   description: z.string().optional(),
-  amount: z.number().positive("Amount must be a positive number"),
+  amount: z.number().refine((v) => v !== 0, "Amount must not be zero"),
   categoryName: z.string().min(1, "Category is required"),
   contactName: z.string().min(1, "Contact name is required"),
   contactAvatar: z.string().optional(),
@@ -17,7 +17,7 @@ export const createTransactionSchema = z.object({
 
 export const updateTransactionSchema = z.object({
   description: z.string().optional(),
-  amount: z.number().positive("Amount must be a positive number"),
+  amount: z.number().refine((v) => v !== 0, "Amount must not be zero"),
   categoryName: z.string().min(1, "Category is required"),
   contactName: z.string().min(1, "Contact name is required"),
   contactAvatar: z.string().optional(),
