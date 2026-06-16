@@ -35,7 +35,6 @@
     "react-hook-form": "^7.45.2",
     "react-hot-toast": "^2.5.2",
     "react-svg-loader": "^3.0.3",
-    "react-toastify": "^10.0.6",
     "react-tooltip": "^5.30.0",
     "recharts": "^2.13.3",
     "swr": "^2.2.5",

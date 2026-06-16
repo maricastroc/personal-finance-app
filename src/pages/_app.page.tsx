@@ -2,7 +2,6 @@ import { Public_Sans } from "next/font/google";
 import "@/styles/globals.css";
 import { AppProps } from "next/app";
 import { AppProvider } from "@/contexts/AppContext";
-import "react-toastify/dist/ReactToastify.css";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import { BalanceProvider } from "@/contexts/BalanceContext";
