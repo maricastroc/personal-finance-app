@@ -1,102 +1,49 @@
-import { prisma } from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
-import { isBefore, startOfDay, addDays, isWithinInterval } from "date-fns";
+import { withApiHandler } from "@/lib/apiHandler";
+import { prisma } from "@/lib/prisma";
 import { RecurringBill } from "@prisma/client";
-import { buildNextAuthOptions } from "../../auth/[...nextauth].api";
-import { calculateNextDueDate } from "../index.api";
+import { isBefore, startOfDay, addDays, isWithinInterval } from "date-fns";
+import { calculateNextDueDate } from "@/services/recurringBillService";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default withApiHandler(async (req: NextApiRequest, res: NextApiResponse, userId: string) => {
   if (req.method !== "GET") return res.status(405).end();
 
-  const session = await getServerSession(
-    req,
-    res,
-    buildNextAuthOptions(req, res)
-  );
+  const recurringBills = await prisma.recurringBill.findMany({
+    where: { userId },
+    include: { category: true },
+  });
 
-  if (!session) {
-    return res.status(400).json({ message: "Unauthorized" });
+  if (recurringBills.length === 0) {
+    return res.status(404).json({ message: "No recurring bills found" });
   }
 
-  const userId = session?.user?.id?.toString();
+  const today = startOfDay(new Date());
+  const dueSoonDate = addDays(today, 3);
 
-  if (!userId) {
-    return res.status(400).json({ message: "User ID is required" });
+  type BillEntry = RecurringBill & { nextDueDate: Date; baseDate: Date };
+
+  const result = {
+    overdue: { bills: [] as BillEntry[], total: 0 },
+    dueSoon: { bills: [] as BillEntry[], total: 0 },
+    upcoming: { bills: [] as BillEntry[], total: 0 },
+    monthlyTotal: recurringBills.reduce((sum, b) => sum + Math.abs(b.amount), 0),
+  };
+
+  for (const bill of recurringBills) {
+    const nextDueDate = calculateNextDueDate(bill);
+    const entry = { ...bill, nextDueDate, baseDate: bill.baseDate };
+
+    if (isBefore(nextDueDate, today)) {
+      result.overdue.bills.push(entry);
+      result.overdue.total += Math.abs(bill.amount);
+    } else if (isWithinInterval(nextDueDate, { start: today, end: dueSoonDate })) {
+      result.dueSoon.bills.push(entry);
+      result.dueSoon.total += Math.abs(bill.amount);
+    } else {
+      result.upcoming.bills.push(entry);
+      result.upcoming.total += Math.abs(bill.amount);
+    }
   }
 
-  try {
-    const recurringBills = await prisma.recurringBill.findMany({
-      where: {
-        userId: String(userId),
-      },
-      include: {
-        category: true,
-      },
-    });
-
-    if (recurringBills.length === 0) {
-      return res.status(404).json({ message: "No recurring bills found" });
-    }
-
-    const today = startOfDay(new Date());
-    const dueSoonDate = addDays(today, 3);
-
-    const result = {
-      overdue: {
-        bills: [] as (RecurringBill & { nextDueDate: Date; baseDate: Date })[],
-        total: 0,
-      },
-      dueSoon: {
-        bills: [] as (RecurringBill & { nextDueDate: Date; baseDate: Date })[],
-        total: 0,
-      },
-      upcoming: {
-        bills: [] as (RecurringBill & { nextDueDate: Date; baseDate: Date })[],
-        total: 0,
-      },
-      monthlyTotal: 0,
-    };
-
-    for (const bill of recurringBills) {
-      result.monthlyTotal += Math.abs(bill.amount);
-    }
-
-    for (const bill of recurringBills) {
-      const nextDueDate = calculateNextDueDate(bill);
-
-      if (isBefore(nextDueDate, today)) {
-        result.overdue.bills.push({
-          ...bill,
-          nextDueDate,
-          baseDate: bill.baseDate,
-        });
-        result.overdue.total += Math.abs(bill.amount);
-      } else if (
-        isWithinInterval(nextDueDate, { start: today, end: dueSoonDate })
-      ) {
-        result.dueSoon.bills.push({
-          ...bill,
-          nextDueDate,
-          baseDate: bill.baseDate,
-        });
-        result.dueSoon.total += Math.abs(bill.amount);
-      } else {
-        result.upcoming.bills.push({
-          ...bill,
-          nextDueDate,
-          baseDate: bill.baseDate,
-        });
-        result.upcoming.total += Math.abs(bill.amount);
-      }
-    }
-
-    return res.json({ recurringBills: result });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "An error occurred" });
-  }
-}
+  return res.status(200).json({ recurringBills: result });
+});
