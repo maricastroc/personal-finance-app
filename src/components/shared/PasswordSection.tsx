@@ -1,5 +1,10 @@
-import { EditProfileFormData } from "@/pages/profile/index.page";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
+
+export type EditProfileFormData = {
+  oldPassword?: string;
+  password?: string;
+  passwordConfirm?: string;
+};
 
 type PasswordSectionProps = {
   changePassword: boolean;

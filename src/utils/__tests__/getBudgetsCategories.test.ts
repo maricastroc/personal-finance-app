@@ -9,7 +9,7 @@ const makeBudget = (categoryName: string): BudgetProps =>
     categoryId: "1",
     category: { id: "1", name: categoryName },
     themeId: "1",
-    theme: { id: "1", name: "Green", color: "#00ff00" },
+    theme: { id: "1", color: "#00ff00", description: "Green" },
     userId: "1",
     user: { id: "1", name: "Test", email: "test@test.com" },
   } as BudgetProps);
