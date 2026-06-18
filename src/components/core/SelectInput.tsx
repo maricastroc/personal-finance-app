@@ -35,7 +35,7 @@ export const SelectInput = ({
       <label className="sr-only">{label}</label>
 
       <Select.Trigger
-        className="h-12 flex items-center justify-between w-full px-4 py-2 text-sm text-ink-100 bg-surface-700 border border-surface-600 focus:outline-none focus:ring-1 focus:ring-accent-green focus:ring-offset-1 focus:ring-offset-surface-800 rounded-lg"
+        className="h-12 flex items-center justify-between w-full px-4 py-2 text-sm text-ink-100 bg-surface-700 border border-surface-600 focus:outline-2 focus:outline-accent-green focus:outline-offset-1 rounded-lg"
         aria-label={label}
       >
         <Select.Value className="text-ink-100" placeholder={placeholder} />

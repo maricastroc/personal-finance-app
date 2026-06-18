@@ -39,7 +39,7 @@ export default function HomeCard({
         <Link
           href={routePath}
           aria-label={`Go to ${title} details`}
-          className="flex items-center gap-1.5 group focus:outline-none focus:ring-2 focus:ring-accent-green focus:ring-offset-2 focus:ring-offset-surface-800 rounded"
+          className="flex items-center gap-1.5 group focus:outline-2 focus:outline-accent-green focus:outline-offset-1 rounded"
         >
           <p className="text-[11px] font-medium text-ink-400 group-hover:text-ink-100 transition-colors tracking-wide">
             {buttonLabel}

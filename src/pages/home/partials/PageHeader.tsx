@@ -24,7 +24,6 @@ export const PageHeader = () => {
       <PrimaryButton
         onClick={handleLogout}
         className="mt-0 max-w-[8rem] text-sm"
-        variant="secondary"
       >
         <LogOut size={14} />
         Logout

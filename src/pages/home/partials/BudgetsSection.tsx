@@ -35,7 +35,7 @@ export const BudgetsSection = ({
                 key={index}
                 title={budget.category?.name}
                 color={budget.theme.color}
-                value={budget.amount}
+                value={budget.amountSpent || 0}
               />
             ))}
           </div>

@@ -38,7 +38,6 @@ export const PageHeader = ({
             aria-haspopup="dialog"
             aria-expanded={isBudgetModalOpen}
             aria-controls="budget-modal"
-            variant="secondary"
             className="mt-0 max-w-[9rem] text-sm"
           >
             <Plus size={16} />

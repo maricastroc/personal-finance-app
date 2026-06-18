@@ -31,7 +31,7 @@ export const SelectUser = ({
         className="
           h-12 flex items-center justify-between w-full px-4 py-2 text-sm
           text-ink-100 bg-surface-700 border border-surface-600 rounded-lg
-          focus:border-beige-500 focus:outline-none focus:ring-secondary-green focus:ring-2 focus:ring-offset-2
+          focus:outline-2 focus:outline-accent-green focus:outline-offset-1
         "
         aria-label={label}
       >

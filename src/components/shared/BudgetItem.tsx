@@ -39,7 +39,7 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
 
   const data = budgets.map((b) => ({
     name: b.category?.name,
-    value: b.amount,
+    value: b.amountSpent || 0,
     theme: b.theme,
   }));
 
@@ -48,8 +48,8 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
 
     if (active && payload && payload.length) {
       const { name, value } = payload[0].payload;
-      const percentage = budgetLimitSum
-        ? ((value / budgetLimitSum) * 100).toFixed(2)
+      const percentage = amountSpentSum
+        ? ((value / amountSpentSum) * 100).toFixed(2)
         : "0.00";
 
       return (

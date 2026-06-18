@@ -32,7 +32,6 @@ export function PageHeader({
             aria-haspopup="dialog"
             aria-expanded={isOpen}
             aria-controls={modalId}
-            variant="secondary"
             className="mt-0 max-w-[8rem] text-sm"
           >
             <Plus size={16} />

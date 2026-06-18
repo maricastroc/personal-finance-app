@@ -41,7 +41,7 @@ export const DropdownActions = ({
           setIsEditOpen(true);
           setIsOpen(false);
         }}
-        className="text-sm text-left text-ink-100 hover:text-ink-50 focus:outline-none focus:ring-1 focus:ring-accent-green rounded"
+        className="text-sm text-left text-ink-100 hover:text-ink-50 focus:outline-2 focus:outline-accent-green focus:outline-offset-1 rounded"
       >
         {editText}
       </button>
@@ -54,7 +54,7 @@ export const DropdownActions = ({
           setIsDeleteOpen(true);
           setIsOpen(false);
         }}
-        className="text-sm text-left text-accent-red hover:brightness-125 focus:outline-none focus:ring-1 focus:ring-accent-green rounded"
+        className="text-sm text-left text-accent-red hover:brightness-125 focus:outline-2 focus:outline-accent-green focus:outline-offset-1 rounded"
       >
         {deleteText}
       </button>

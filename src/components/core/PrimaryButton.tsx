@@ -28,7 +28,7 @@ export const PrimaryButton = forwardRef<HTMLButtonElement, PrimaryButtonProps>(
 
     const variantClasses = {
       default:
-        "bg-ink-50 text-surface-950 hover:bg-ink-100 disabled:bg-surface-600 disabled:text-ink-300 disabled:hover:bg-surface-600",
+        "bg-gradient-to-b from-[#F8FAFC] to-[#E5E7EB] text-[#111827] shadow-md hover:from-white hover:to-[#F3F4F6] hover:shadow-xl active:scale-[0.99] disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed rounded-xl",
 
       secondary:
         "bg-surface-700 text-ink-100 border border-surface-500 hover:bg-surface-600 disabled:bg-surface-800 disabled:text-ink-300",
@@ -50,7 +50,7 @@ export const PrimaryButton = forwardRef<HTMLButtonElement, PrimaryButtonProps>(
         className={clsx(baseClass, variantClasses[variant], className)}
         {...props}
       >
-        {isSubmitting ? "Paying..." : children}
+        {isSubmitting ? "Loading..." : children}
       </button>
     );
   }

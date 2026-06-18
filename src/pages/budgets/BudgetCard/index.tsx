@@ -103,7 +103,7 @@ export default function BudgetCard({
         theme={data?.budget?.theme?.color || ""}
       />
 
-      <BudgetCardSpentInfo spent={data?.budget?.amount || 0} free={free} />
+      <BudgetCardSpentInfo spent={data?.amountSpent || 0} free={free} />
 
       <BudgetCardTransactions
         transactions={data?.transactions || []}

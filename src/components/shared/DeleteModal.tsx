@@ -36,7 +36,7 @@ export function DeleteModal({
         <Dialog.Close
           aria-label="Close modal"
           onClick={onClose}
-          className="absolute top-4 right-4 text-ink-400 hover:text-ink-100 hover:bg-surface-700 transition-all duration-200 p-1 rounded-full focus:outline-none focus:ring-1 focus:ring-accent-green"
+          className="absolute top-4 right-4 text-ink-400 hover:text-ink-100 hover:bg-surface-700 transition-all duration-200 p-1 rounded-full focus:outline-2 focus:outline-accent-green focus:outline-offset-1"
         >
           <X size={16} />
         </Dialog.Close>

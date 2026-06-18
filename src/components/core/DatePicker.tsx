@@ -27,7 +27,7 @@ export function DatePicker({
         onChange={(e) => onChange(e.target.value)}
         className={`
           w-full p-3 text-sm border rounded-lg bg-surface-700 text-ink-100
-          focus:outline-none focus:ring-1 focus:ring-accent-green focus:ring-offset-1 focus:ring-offset-surface-800
+          focus:outline-2 focus:outline-accent-green focus:outline-offset-1
           ${error ? "border-accent-red" : "border-surface-600"}
           transition-colors
           [&::-webkit-calendar-picker-indicator]:opacity-60

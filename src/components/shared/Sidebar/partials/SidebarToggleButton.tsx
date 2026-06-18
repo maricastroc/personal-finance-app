@@ -17,12 +17,11 @@ export function SidebarToggleButton({
       aria-expanded={isOpen}
       className={`
         flex items-center gap-3
-        ${!isOpen ? "justify-center w-full" : ""}
+        ${!isOpen ? "justify-center w-10 h-10 rounded-lg" : ""}
         focus:rounded-md
-        focus:outline-none 
         focus:outline-2
-        focus:outline-offset-2 
-        focus:outline-white
+        focus:outline-offset-2
+        focus:outline-accent-green
         transition-all duration-300
       `}
     >

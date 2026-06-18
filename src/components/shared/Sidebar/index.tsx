@@ -7,6 +7,10 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { AsideItem } from "./partials/AsideItem";
 import { SidebarToggleButton } from "./partials/SidebarToggleButton";
+import { ProfileModal } from "@/components/shared/ProfileModal";
+import { Tooltip } from "react-tooltip";
+import userIcon from "/public/assets/images/user-solid.svg";
+import userIconActive from "/public/assets/images/user-solid-active.svg";
 
 type navProp = {
   isSidebarOpen: boolean;
@@ -18,13 +22,10 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
   const session = useSession();
 
   const [filteredNavList, setFilteredNavList] = useState(navList);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
-    if (session?.data?.user.email === process.env.NEXT_PUBLIC_DEMO_LOGIN) {
-      setFilteredNavList(navList.filter((item) => item.name !== "Profile"));
-    } else {
-      setFilteredNavList(navList);
-    }
+    setFilteredNavList(navList.filter((item) => item.name !== "Profile"));
   }, [session?.data?.user?.email]);
 
   return (
@@ -72,15 +73,61 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
       </div>
 
       <div
-        className={`flex flex-col gap-6 ${
+        className={`flex flex-col gap-4 ${
           isSidebarOpen ? "px-6" : "items-center px-0"
         }`}
       >
+        <button
+          onClick={() => setIsProfileOpen(true)}
+          aria-label="Open profile"
+          data-tooltip-id="profile-btn"
+          data-tooltip-content="Profile"
+          className={`
+            flex gap-3 items-center w-full
+            focus:outline-2 focus:outline-accent-green focus:outline-offset-1
+            ${
+              isSidebarOpen
+                ? "mx-[-0.75rem] px-3 py-2.5 rounded-lg border-l-2 border-l-transparent hover:bg-white/5"
+                : "justify-center px-0 py-2.5"
+            }
+            transition-all duration-200 group
+          `}
+        >
+          <div className="relative h-5 w-5 shrink-0">
+            <Image
+              src={isProfileOpen ? userIconActive : userIcon}
+              alt=""
+              aria-hidden="true"
+              fill
+              style={{ opacity: isProfileOpen ? 1 : 0.35 }}
+            />
+          </div>
+          {isSidebarOpen ? (
+            <p className="text-xs font-medium tracking-wide text-white/40 group-hover:text-white/70 transition-colors duration-200">
+              Profile
+            </p>
+          ) : (
+            <>
+              <span className="sr-only">Profile</span>
+              <Tooltip
+                id="profile-btn"
+                place="right"
+                className="custom-tooltip"
+              />
+            </>
+          )}
+        </button>
+
         <SidebarToggleButton
           isOpen={isSidebarOpen}
           onToggle={handleIsSidebarOpen}
         />
       </div>
+
+      <ProfileModal
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+      />
     </aside>
   );
 }

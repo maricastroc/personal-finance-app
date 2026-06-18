@@ -29,7 +29,7 @@ export function PotAmountButtons({
         <Dialog.Trigger asChild>
           <button
             onClick={() => setIsAddOpen(true)}
-            className="bg-surface-700 text-ink-200 text-sm font-medium w-full rounded-lg py-3 px-3 hover:bg-surface-600 transition-colors focus:outline-none focus:ring-1 focus:ring-accent-green flex items-center justify-center gap-1.5"
+            className="bg-surface-700 text-ink-200 text-sm font-medium w-full rounded-lg py-3 px-3 hover:bg-surface-600 transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-accent-green flex items-center justify-center gap-1.5"
           >
             <Plus size={14} />
             Add Money
@@ -53,7 +53,7 @@ export function PotAmountButtons({
           <button
             type="button"
             onClick={() => setIsWithdrawOpen(true)}
-            className="bg-surface-700 text-ink-200 text-sm font-medium w-full rounded-lg py-3 px-3 hover:bg-surface-600 transition-colors focus:outline-none focus:ring-1 focus:ring-accent-green flex items-center justify-center gap-1.5"
+            className="bg-surface-700 text-ink-200 text-sm font-medium w-full rounded-lg py-3 px-3 hover:bg-surface-600 transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-accent-green flex items-center justify-center gap-1.5"
           >
             <Minus size={14} />
             Withdraw

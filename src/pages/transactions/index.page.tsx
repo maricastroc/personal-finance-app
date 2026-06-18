@@ -146,7 +146,6 @@ export default function Transactions() {
                   aria-haspopup="dialog"
                   aria-expanded={isAddModalOpen}
                   aria-controls="transfer-form-modal"
-                  variant="secondary"
                   className="mt-0 max-w-[5rem] sm:max-w-[8rem] text-sm"
                 >
                   <Plus size={16} className="hidden sm:block" />

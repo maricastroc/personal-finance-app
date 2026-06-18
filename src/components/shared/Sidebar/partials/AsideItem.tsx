@@ -10,7 +10,7 @@ export function AsideItem({ item, active, menuShown }: Item) {
       aria-current={active ? "page" : undefined}
       className={`
         flex gap-3 items-center
-        focus:outline-none focus:ring-1 focus:ring-accent-green focus:ring-offset-1 focus:ring-offset-[#201f24]
+        focus:outline-2 focus:outline-accent-green focus:outline-offset-1
         ${
           menuShown
             ? `mx-3 px-3 py-2.5 rounded-lg ${
