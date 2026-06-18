@@ -2,75 +2,115 @@
 <img width="3204" height="1722" alt="personal_finance_app_preview" src="https://github.com/user-attachments/assets/9d5aea2b-00e7-49af-96ef-2f59dc1e9542" />
 
 
-## 📚 Project Description
+## 📚 About
 
-This is a solution to the challenge [personal-finance-app]([https://www.frontendmentor.io/challenges/kanban-task-management-web-app-wgQLt-HlbB](https://www.frontendmentor.io/challenges/personal-finance-app-JfjtZgyMt1)).
+A fullstack personal finance management application built with Next.js and PostgreSQL. It allows users to track transactions, set budgets, manage saving pots, and monitor recurring bills — all in one place, with a real-time balance overview.
 
-![challenge-difficulty-intermediate](https://img.shields.io/badge/Difficulty-GURU-f1b604?style=for-the-badge&amp;logo=frontendmentor)
+## ✨ Features
 
-The project consists of fullstack financial management application that enables the management of transactions, budgets, pots, and recurring bills, while also providing an overview of all entities registered in the user's profile.
+### Overview
+- Dashboard with current balance, total income, and total expenses at a glance
+- Quick summaries of pots, budgets, transactions, and recurring bills
 
-Users are able to:
+### Transactions
+- List all transactions with pagination (10 per page)
+- Search by description, contact name, or category
+- Filter by category and sort by date, amount, or name
+- Create, edit, and delete transactions
+- Balance is automatically updated on every income or expense
 
-- See all of the personal finance app data at-a-glance on the overview page
-- View all transactions on the transactions page with pagination for every ten transactions
-- Search, sort, create and filter transactions
-- Create, read, update, delete (CRUD) budgets and saving pots
-- View the latest three transactions for each budget category created
-- View progress towards each pot
-- Add money to and withdraw money from pots
-- View recurring bills and the status of each for the current month
+### Recurring Bills
+- Create recurring transactions (monthly, bimonthly, half-yearly, or annual)
+- Track bill status: upcoming, due soon (within 3 days), or overdue
+- Pay a bill directly from the recurring bills page
 - Search and sort recurring bills
-- Get user authentication and CRUD operations for personal information
 
+### Budgets
+- Create budgets linked to spending categories
+- Track how much has been spent vs. the defined budget limit
+- View the 3 most recent transactions for each budget category
+- Edit and delete budgets
 
-## 📌 What did I learn?
+### Saving Pots
+- Create saving pots with a name, target amount, and color theme
+- Add or withdraw money from a pot (balance is updated automatically)
+- Track progress towards each pot's target
 
-The project provided an excellent opportunity to leverage Next.js API routes not only for managing the endpoints required to perform CRUD operations but also for implementing the business logic that governs these operations. The database service utilized was Neon, which is powered by PostgreSQL.
+### Authentication & Profile
+- Sign up and log in with email and password
+- Update name, email, and password
+- Upload a custom profile avatar
+- Try the app instantly with a demo account
 
-## 🔍 Links
-[Preview Site](https://maricastroc-kanban-b4og7dlw1-maricastrocs-projects.vercel.app/)
+## 🧪 Tests
 
-## 💻 My Process
-### Built with:
+Unit tests written with [Vitest](https://vitest.dev/) covering utility functions and form validation schemas.
+
+```bash
+npm test
+```
+
+**Utilities tested:**
+- `calculateTotalPages` — pagination edge cases (zero records, exact division, remainder)
+- `formatToDollar` — positive, negative, zero, and large amounts
+- `formatToSnakeCase` — null, undefined, multiple spaces, empty string
+- `getOrdinalSuffix` — 11th/12th/13th exceptions, st/nd/rd/th suffixes
+- `capitalizeFirstLetter` — undefined, empty string, mixed case
+- `getBudgetsCategories` — deduplication, empty list, undefined input
+- `mapCategoriesForSelect` — isUsed flag for available vs. already-used categories
+
+**Validators tested (Zod schemas):**
+- `createBudgetSchema` / `updateBudgetSchema` — required fields, positive amount
+- `createPotSchema` / `updatePotSchema` — optional initialAmount, non-negative currentAmount
+- `createTransactionSchema` / `updateTransactionSchema` — zero amount, invalid type, transfer restriction on update
+- `updateRecurringBillSchema` / `payRecurringBillSchema` — positive amount, optional payment date
+
+## 💻 Tech Stack
 
 - [Next.js](https://nextjs.org/)
 - [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
-- [Typescript](https://www.typescriptlang.org/)
-- [ESLint](https://eslint.org/)
-- [Prettier](https://prettier.io/)
-- [RadixUi](https://www.radix-ui.com/)
-- [Mui](https://mui.com/)
+- [Prisma](https://www.prisma.io/)
 - [Neon PostgreSQL](https://console.neon.tech)
+- [NextAuth.js](https://next-auth.js.org/)
+- [Radix UI](https://www.radix-ui.com/)
+- [Zod](https://zod.dev/)
+- [SWR](https://swr.vercel.app/)
+- [Recharts](https://recharts.org/)
+- [Vitest](https://vitest.dev/)
 
-## ℹ️ How to run the application?
+## 🔍 Links
 
-> Clone the repository:
+[Live Preview](https://maricastroc-personal-finance-app.vercel.app/) · [Repository](https://github.com/maricastroc/personal-finance-app)
+
+## 🚀 Running locally
+
+Clone the repository:
 
 ```bash
-git clone https://github.com/maricastroc/kanban-app
+git clone https://github.com/maricastroc/personal-finance-app
 ```
 
-> Install the dependencies:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-> Rename the .env.example file to .env and add the necessary information to it.
+Rename `.env.example` to `.env` and fill in the required environment variables.
 
-> Generate the Prisma client and apply database migrations:
+Generate the Prisma client and run migrations:
 
 ```bash
 npx prisma generate
 npx prisma migrate dev
 ```
 
-> Start the service:
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-> ⏩ Access [http://localhost:3000](http://localhost:3000) to view the web application.
+Access [http://localhost:3000](http://localhost:3000) to view the application.
