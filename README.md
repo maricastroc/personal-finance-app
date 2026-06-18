@@ -1,5 +1,5 @@
 # Personal Finance App
-![project]<img width="3204" height="1722" alt="personal_finance_app_preview" src="https://github.com/user-attachments/assets/9d5aea2b-00e7-49af-96ef-2f59dc1e9542" />
+<img width="3204" height="1722" alt="personal_finance_app_preview" src="https://github.com/user-attachments/assets/9d5aea2b-00e7-49af-96ef-2f59dc1e9542" />
 
 
 ## 📚 Project Description
