@@ -1,6 +1,6 @@
 import React from "react";
 import * as Select from "@radix-ui/react-select";
-import { CaretDown, CaretUp } from "phosphor-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface DataProps {
   id?: string | number;
@@ -30,14 +30,14 @@ export const SelectUser = ({
       <Select.Trigger
         className="
           h-12 flex items-center justify-between w-full px-4 py-2 text-sm
-          text-grey-900 bg-white border border-beige-500 rounded-md shadow-sm
+          text-ink-100 bg-surface-700 border border-surface-600 rounded-lg
           focus:border-beige-500 focus:outline-none focus:ring-secondary-green focus:ring-2 focus:ring-offset-2
         "
         aria-label={label}
       >
         <Select.Value placeholder={placeholder} />
-        <Select.Icon className="ml-2 text-grey-900">
-          <CaretDown size={16} />
+        <Select.Icon className="ml-2 text-ink-300">
+          <ChevronDown size={16} />
         </Select.Icon>
       </Select.Trigger>
 
@@ -45,16 +45,20 @@ export const SelectUser = ({
         <Select.Content
           position="popper"
           className="
-            z-[10000] mt-1 bg-white text-grey-500 rounded-md shadow-lg
-            border border-grey-300 max-h-40 overflow-y-auto
+            z-[10000] mt-1 text-ink-100 rounded-lg shadow-2xl
+            border border-surface-600 max-h-40 overflow-y-auto
           "
-          style={contentWidth ? { width: `${contentWidth}px` } : undefined}
+          style={
+            contentWidth
+              ? { width: `${contentWidth}px`, background: "var(--surface-700)" }
+              : { background: "var(--surface-700)" }
+          }
         >
           <Select.ScrollUpButton
-            className="flex items-center justify-center text-grey-500 hover:text-grey-900"
+            className="flex items-center justify-center text-ink-300 hover:text-ink-100 py-1"
             aria-label="Scroll up"
           >
-            <CaretUp size={16} />
+            <ChevronUp size={16} />
           </Select.ScrollUpButton>
 
           <Select.Viewport className="p-1">
@@ -68,10 +72,10 @@ export const SelectUser = ({
           </Select.Viewport>
 
           <Select.ScrollDownButton
-            className="flex items-center justify-center text-grey-500 hover:text-grey-900"
+            className="flex items-center justify-center text-ink-300 hover:text-ink-100 py-1"
             aria-label="Scroll down"
           >
-            <CaretDown size={16} />
+            <ChevronDown size={16} />
           </Select.ScrollDownButton>
         </Select.Content>
       </Select.Portal>
@@ -103,8 +107,8 @@ const SelectItem = React.forwardRef(
 
         ${
           disabled
-            ? "text-grey-500 cursor-not-allowed"
-            : "text-grey-900 cursor-pointer hover:bg-blue-100 focus:bg-blue-100"
+            ? "text-ink-400 cursor-not-allowed"
+            : "text-ink-100 cursor-pointer hover:bg-surface-600"
         }
       `}
       {...props}

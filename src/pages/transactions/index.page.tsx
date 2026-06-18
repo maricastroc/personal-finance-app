@@ -17,7 +17,7 @@ import useRequest from "@/utils/useRequest";
 import { formatToSnakeCase } from "@/utils/formatToSnakeCase";
 import { useLoadingOnRouteChange } from "@/utils/useLoadingOnRouteChange";
 import { calculateTotalPages } from "@/utils/calculateTotalPages";
-import { Plus } from "phosphor-react";
+import { Plus } from "lucide-react";
 import { useDebounce } from "@/utils/useDebounce";
 
 export default function Transactions() {
@@ -146,6 +146,7 @@ export default function Transactions() {
                   aria-haspopup="dialog"
                   aria-expanded={isAddModalOpen}
                   aria-controls="transfer-form-modal"
+                  variant="secondary"
                   className="mt-0 max-w-[5rem] sm:max-w-[8rem] text-sm"
                 >
                   <Plus size={16} className="hidden sm:block" />
@@ -166,7 +167,13 @@ export default function Transactions() {
             </Dialog.Root>
           </div>
 
-          <section className="mt-8 flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
+          <section
+            className="mt-8 flex flex-col px-5 py-6 rounded-xl md:p-10"
+            style={{
+              background: "var(--card-gradient)",
+              border: "1px solid var(--card-border)",
+            }}
+          >
             <SearchSection
               categories={categories}
               category={category as string}

@@ -11,31 +11,15 @@ interface TransactionCardProps {
   onDelete?: () => void;
 }
 
-export function TransactionCard({
-  avatarUrl,
-  name,
-  category,
-}: TransactionCardProps) {
+export function TransactionCard({ avatarUrl, name }: TransactionCardProps) {
   return (
-    <article
-      className="flex justify-between w-full items-center py-4"
-      aria-label={`${name} transaction`}
-    >
-      <div className="flex items-center gap-2 md:w-[13rem] flex-1">
-        <span className="relative w-11 h-11 rounded-full">
-          <img
-            src={avatarUrl || AVATAR_URL_DEFAULT}
-            alt={`${name} avatar`}
-            className="rounded-full"
-          />
-        </span>
-
-        <div className="flex flex-col gap-1 items-start pl-2 text-start flex-1">
-          <p className="text-grey-900 font-bold text-sm">{name}</p>
-
-          {category && <p className="text-grey-500 text-xs">{category}</p>}
-        </div>
-      </div>
-    </article>
+    <div className="flex items-center gap-3">
+      <img
+        src={avatarUrl || AVATAR_URL_DEFAULT}
+        alt={`${name} avatar`}
+        className="w-9 h-9 rounded-full shrink-0 object-cover"
+      />
+      <span className="text-sm font-medium text-ink-100 truncate">{name}</span>
+    </div>
   );
 }

@@ -15,8 +15,8 @@ export const DeleteButton = forwardRef<HTMLButtonElement, DeleteButtonProps>(
         aria-live="polite"
         className="
           font-semibold rounded-md p-3 px-4 flex gap-2 transition-all duration-300
-          text-sm bg-secondary-red text-beige-100 hover:brightness-125 justify-center
-          disabled:bg-grey-300 disabled:text-white disabled:cursor-not-allowed
+          text-sm bg-accent-red text-white hover:brightness-125 justify-center
+          disabled:bg-surface-600 disabled:text-white disabled:cursor-not-allowed
           disabled:hover:brightness-100
         "
         disabled={isSubmitting || disabled}

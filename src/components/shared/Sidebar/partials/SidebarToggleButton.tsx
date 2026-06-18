@@ -1,4 +1,5 @@
-import { CaretLeft, CaretRight } from "phosphor-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Tooltip } from "react-tooltip";
 
 interface SidebarToggleButtonProps {
   isOpen: boolean;
@@ -15,9 +16,8 @@ export function SidebarToggleButton({
       aria-label={isOpen ? "Collapse menu" : "Expand menu"}
       aria-expanded={isOpen}
       className={`
-        flex items-center gap-3 
-        ${isOpen ? "ml-6" : "ml-4"}
-        mr-6
+        flex items-center gap-3
+        ${!isOpen ? "justify-center w-full" : ""}
         focus:rounded-md
         focus:outline-none 
         focus:outline-2
@@ -27,28 +27,32 @@ export function SidebarToggleButton({
       `}
     >
       {isOpen ? (
-        <CaretLeft
-          className="text-grey-300 text-2xl"
+        <ChevronLeft
+          className="text-white/40 text-2xl"
           style={{ marginLeft: 0 }}
           size={24}
         />
       ) : (
-        <CaretRight
-          className="text-grey-300 text-2xl"
-          style={{ marginLeft: 20 }}
-          size={24}
-        />
+        <>
+          <ChevronRight
+            className="text-white/40 text-2xl"
+            size={24}
+            data-tooltip-id="sidebar-toggle"
+            data-tooltip-content="Expand menu"
+          />
+          <Tooltip
+            id="sidebar-toggle"
+            place="right"
+            className="custom-tooltip"
+          />
+        </>
       )}
 
-      <span
-        className={`
-          text-grey-300 font-semibold text-sm
-          transition-opacity duration-300
-          ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}
-        `}
-      >
-        Minimize Menu
-      </span>
+      {isOpen && (
+        <span className="text-white/40 font-semibold text-sm">
+          Minimize Menu
+        </span>
+      )}
     </button>
   );
 }

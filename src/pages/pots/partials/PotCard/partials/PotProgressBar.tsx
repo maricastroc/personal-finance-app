@@ -9,7 +9,7 @@ interface Props {
 export function PotProgressBar({ percentage, color, target }: Props) {
   return (
     <>
-      <div className="mt-4 w-full h-[0.9rem] p-[0.1rem] bg-beige-100 rounded-full">
+      <div className="mt-4 w-full h-[0.9rem] p-[0.1rem] bg-surface-600 rounded-full">
         <div
           className="h-full rounded-full"
           style={{
@@ -20,10 +20,10 @@ export function PotProgressBar({ percentage, color, target }: Props) {
       </div>
 
       <div className="flex justify-between mt-3">
-        <p className="text-grey-500 font-bold text-xs">
+        <p className="text-ink-300 font-bold text-xs">
           {percentage.toFixed(2)}%
         </p>
-        <p className="text-grey-500 text-xs">{`Target of ${formatToDollar(
+        <p className="text-ink-400 text-xs">{`Target of ${formatToDollar(
           target
         )}`}</p>
       </div>

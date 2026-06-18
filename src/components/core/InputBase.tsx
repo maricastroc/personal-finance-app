@@ -20,7 +20,7 @@ export function InputBase({
   return (
     <div className={`flex flex-col ${containerClassName}`}>
       {label && (
-        <label htmlFor={id} className="text-xs font-bold text-grey-500 mb-1">
+        <label htmlFor={id} className="text-xs font-bold text-ink-300 mb-1">
           {label}
         </label>
       )}
@@ -30,7 +30,7 @@ export function InputBase({
         aria-invalid={!!error}
         aria-describedby={errorId}
         required={required}
-        className={`text-[16px] md:text-sm w-full h-12 rounded-md border border-beige-500 px-3 focus:border-beige-500 items-center focus:outline-none focus:ring-secondary-green focus:ring-2 focus:ring-offset-2 ${className}`}
+        className={`text-[16px] md:text-sm w-full h-12 rounded-lg border border-[var(--input-border)] bg-surface-700 text-ink-100 placeholder:text-ink-400 px-3 items-center focus:outline-none focus:border-accent-green/50 focus:shadow-[0_0_0_3px_var(--input-focus-glow)] transition-all duration-150 ${className}`}
         {...props}
       />
 

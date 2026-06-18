@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Plus } from "phosphor-react";
+import { Plus } from "lucide-react";
 import { PrimaryButton } from "../core/PrimaryButton";
 
 interface EmptyContentProps {
@@ -24,8 +24,8 @@ export const EmptyContent = ({
   if (!content) return null;
 
   const defaultIcon = (
-    <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">
-      <Plus size={32} className="text-grey-500" />
+    <div className="w-16 h-16 rounded-full bg-surface-700 flex items-center justify-center">
+      <Plus size={32} className="text-ink-300" />
     </div>
   );
 
@@ -35,7 +35,7 @@ export const EmptyContent = ({
       aria-live="polite"
       className={clsx(
         "flex flex-col shadow-lg items-center justify-center text-center gap-4 w-full p-8 rounded-lg min-h-48",
-        variant === "primary" ? "bg-beige-100" : "bg-white",
+        variant === "primary" ? "bg-surface-800" : "bg-surface-800",
         className
       )}
     >
@@ -44,8 +44,8 @@ export const EmptyContent = ({
       </div>
 
       <div className="flex flex-col gap-2">
-        <p className="text-lg font-semibold text-grey-900">{content}</p>
-        <p className="text-sm text-grey-500 max-w-xs">
+        <p className="text-lg font-semibold text-ink-100">{content}</p>
+        <p className="text-sm text-ink-300 max-w-xs">
           {description || "Get started by creating your first item."}
         </p>
       </div>

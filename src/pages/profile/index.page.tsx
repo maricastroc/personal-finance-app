@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Checkbox from "@radix-ui/react-checkbox";
-import { Check, X as Cross } from "phosphor-react";
+import { Check, X, LogOut } from "lucide-react";
 import { UserProps } from "@/types/user";
 import Layout from "@/components/layouts/layout.page";
 import { LoadingPage } from "@/components/shared/LoadingPage";
@@ -18,7 +18,6 @@ import { NextSeo } from "next-seo";
 import toast from "react-hot-toast";
 import { InputBase } from "@/components/core/InputBase";
 import { PasswordInput } from "@/components/core/PasswordInput";
-import { SignOut } from "phosphor-react";
 
 const editProfileFormSchema = (changePassword: boolean) =>
   z
@@ -142,7 +141,7 @@ export default function Profile() {
                 onClick={handleLogout}
                 className={`font-semibold rounded-md focus:outline-secondary-green focus:outline-offset-2 focus:outline-2 p-3 px-4 items-center flex gap-2 transition-all duration-300 max-h-[60px] text-sm bg-secondary-red text-beige-100 hover:bg-secondary-redHover capitalize justify-center disabled:bg-grey-300 disabled:text-white disabled:cursor-not-allowed`}
               >
-                <SignOut size={16} />
+                <LogOut size={16} />
                 <p className="hidden sm:block">Logout</p>
               </button>
             </div>
@@ -197,7 +196,7 @@ export default function Profile() {
                         bg-transparent data-[state=checked]:bg-black data-[state=checked]:border-black"
                 >
                   <Checkbox.Indicator>
-                    {changePassword ? <Check size={12} /> : <Cross size={12} />}
+                    {changePassword ? <Check size={12} /> : <X size={12} />}
                   </Checkbox.Indicator>
                 </Checkbox.Root>
                 <label

@@ -25,7 +25,7 @@ export function Footer() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="fixed bottom-0 left-0 right-0 h-18 lg:hidden flex justify-between items-center bg-grey-900 px-4 pt-3 z-50"
+      className="fixed bottom-0 left-0 right-0 h-18 lg:hidden flex justify-between items-center bg-surface-900 border-t border-surface-600 px-4 pt-3 z-50"
     >
       {filteredNavList.map((item) => (
         <AsideItem
@@ -47,13 +47,13 @@ function AsideItem({ item, active }: Item) {
       className={`flex flex-col gap-2
         ${
           active
-            ? "bg-beige-100 border-b-4 border-b-secondary-green"
+            ? "bg-surface-700 border-b-2 border-b-accent-green"
             : "bg-transparent"
         }
-        items-center justify-start rounded-t-xl min-w-[50px] min-h-[50px] p-2
+        items-center justify-start rounded-t-lg min-w-[50px] min-h-[50px] p-2
       `}
     >
-      <div className="relative h-6 w-6">
+      <div className={`relative h-6 w-6 ${active ? "" : "opacity-50"}`}>
         <Image
           src={active ? item.iconActive : item.icon}
           alt=""
@@ -63,8 +63,8 @@ function AsideItem({ item, active }: Item) {
       </div>
 
       <p
-        className={`font-semibold text-sm transition-all duration-500
-          ${active ? "text-grey-900" : "text-white"}
+        className={`font-medium text-sm transition-all duration-500
+          ${active ? "text-ink-50" : "text-ink-200"}
           hidden sm:block
         `}
       >

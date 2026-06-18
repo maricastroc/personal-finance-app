@@ -71,7 +71,11 @@ export default function Budgets() {
             <div className="h-auto flex flex-col gap-6 w-full lg:grid lg:grid-cols-[1fr,1.4fr] items-start">
               <section
                 aria-labelledby="spending-summary-title"
-                className="w-full lg:w-auto h-auto flex-grow-0 flex flex-col md:grid md:grid-cols-[1fr,2fr] md:gap-10 lg:flex lg:flex-col lg:gap-8 bg-white px-5 py-6 rounded-md md:p-10"
+                className="w-full lg:w-auto h-auto flex-grow-0 flex flex-col md:grid md:grid-cols-[1fr,2fr] md:gap-10 lg:flex lg:flex-col lg:gap-8 px-5 py-6 rounded-xl md:p-10"
+                style={{
+                  background: "var(--card-gradient)",
+                  border: "1px solid var(--card-border)",
+                }}
               >
                 {isValidating ? (
                   <span
@@ -79,7 +83,7 @@ export default function Budgets() {
                     aria-busy="true"
                   >
                     <div
-                      className="rounded-full bg-gray-200 animate-pulse mx-auto"
+                      className="rounded-full bg-surface-600 animate-pulse mx-auto"
                       style={{ width: 250, height: 250 }}
                     />
                   </span>

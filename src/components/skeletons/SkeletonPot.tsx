@@ -1,7 +1,7 @@
 const SkeletonInfoBox = () => (
-  <div className="flex flex-col items-start justify-center gap-2 h-full w-full p-4 rounded-lg md:h-32 lg:h-[7.4rem] bg-beige-100">
-    <div className="w-[30%] h-6 rounded bg-gray-200 animate-pulse" />
-    <div className="w-full h-6 rounded bg-gray-200 animate-pulse" />
+  <div className="flex flex-col items-start justify-center gap-2 h-full w-full p-4 rounded-lg md:h-32 lg:h-[7.4rem] bg-surface-700 border border-surface-500">
+    <div className="w-[30%] h-5 rounded bg-surface-600 animate-pulse" />
+    <div className="w-full h-6 rounded bg-surface-600 animate-pulse" />
   </div>
 );
 
@@ -10,7 +10,7 @@ const SkeletonRow = () => (
     {[...Array(2)].map((_, index) => (
       <div
         key={index}
-        className="w-full h-[45px] rounded bg-gray-200 animate-pulse"
+        className="w-full h-[45px] rounded bg-surface-600 animate-pulse"
       />
     ))}
   </div>

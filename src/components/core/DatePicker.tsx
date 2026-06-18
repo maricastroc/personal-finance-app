@@ -26,11 +26,10 @@ export function DatePicker({
         min={minDate}
         onChange={(e) => onChange(e.target.value)}
         className={`
-          w-full p-3 text-sm border rounded-md
-          focus:outline-none focus:ring-2 focus:ring-secondary-green focus:ring-offset-2
-          ${error ? "border-secondary-red" : "border-grey-500"}
+          w-full p-3 text-sm border rounded-lg bg-surface-700 text-ink-100
+          focus:outline-none focus:ring-1 focus:ring-accent-green focus:ring-offset-1 focus:ring-offset-surface-800
+          ${error ? "border-accent-red" : "border-surface-600"}
           transition-colors
-          text-grey-900
           [&::-webkit-calendar-picker-indicator]:opacity-60
           [&::-webkit-calendar-picker-indicator]:hover:opacity-100
           [&::-webkit-calendar-picker-indicator]:transition-opacity

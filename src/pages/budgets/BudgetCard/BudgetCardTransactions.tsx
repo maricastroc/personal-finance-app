@@ -19,7 +19,7 @@ export function BudgetCardTransactions({
   return (
     <section
       aria-labelledby="latest-spending-title"
-      className="mt-6 bg-beige-100 p-4 rounded-lg md:p-6"
+      className="mt-6 bg-surface-700 p-4 rounded-lg md:p-6"
     >
       <div className="flex items-center justify-between">
         <h2 id="latest-spending-title" className="font-bold text-base">
@@ -32,7 +32,7 @@ export function BudgetCardTransactions({
           type="button"
           className="flex items-center gap-2 hover:opacity-80"
         >
-          <span className="text-sm text-grey-500">See All</span>
+          <span className="text-sm text-ink-300">See All</span>
           <img
             src="/assets/images/icon-caret-right.svg"
             alt=""
@@ -49,7 +49,7 @@ export function BudgetCardTransactions({
           ))}
         </div>
       ) : !transactions.length ? (
-        <p className="mt-6 text-sm text-grey-500 text-center">
+        <p className="mt-6 text-sm text-ink-300 text-center">
           No transactions found
         </p>
       ) : (
@@ -71,7 +71,7 @@ export function BudgetCardTransactions({
               {index < transactions.length - 1 && (
                 <span
                   aria-hidden="true"
-                  className="w-full h-px bg-grey-300 my-1"
+                  className="w-full h-px bg-surface-600 my-1"
                 />
               )}
             </li>

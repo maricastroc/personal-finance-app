@@ -4,7 +4,7 @@ import { api } from "@/lib/axios";
 import { PotProps } from "@/types/pot";
 import { handleApiError } from "@/utils/handleApiError";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X } from "phosphor-react";
+import { X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 

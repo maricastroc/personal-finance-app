@@ -20,13 +20,12 @@ export function TransactionCard({
   isBudgetsScreen = false,
 }: TransactionCardProps) {
   const isPlaceholder = !avatarUrl;
-
   const altText = isPlaceholder ? "" : `${name}'s avatar`;
 
   return (
     <div
-      className={`flex justify-between items-center border-b border-b-beige-100 py-4 ${
-        isBudgetsScreen ? "py-0" : ""
+      className={`flex justify-between items-center border-b border-surface-700 py-3.5 ${
+        isBudgetsScreen ? "py-2.5" : ""
       }`}
     >
       <div
@@ -35,8 +34,10 @@ export function TransactionCard({
         }`}
       >
         <div
-          className={`relative w-11 h-11 rounded-full overflow-hidden ${
-            isBudgetsScreen ? "max-sm:w-9 max-sm:h-9 md:w-11 md:h-11" : ""
+          className={`relative rounded-full overflow-hidden shrink-0 ${
+            isBudgetsScreen
+              ? "w-8 h-8 max-sm:w-7 max-sm:h-7 md:w-9 md:h-9"
+              : "w-9 h-9"
           }`}
         >
           <img
@@ -47,31 +48,34 @@ export function TransactionCard({
           />
         </div>
 
-        <div className="flex flex-col gap-1 items-start text-start overflow-hidden max-sm:pl-2 sm:pl-0">
+        <div className="flex flex-col gap-0.5 items-start text-start overflow-hidden">
           <p
-            className={`text-grey-900 font-bold text-sm ${
+            className={`text-ink-100 font-medium ${
               isBudgetsScreen
-                ? "overflow-hidden text-xs max-sm:truncate max-sm:whitespace-nowrap max-sm:max-w-[5rem] md:text-sm md:max-w-[12rem]"
-                : ""
+                ? "text-xs max-sm:truncate max-sm:whitespace-nowrap max-sm:max-w-[5rem] md:text-sm md:max-w-[12rem]"
+                : "text-sm"
             }`}
           >
             {name}
           </p>
 
-          {category && <p className="text-grey-500 text-xs">{category}</p>}
+          {category && (
+            <p className="text-[10px] uppercase tracking-[0.06em] text-ink-400 font-medium">
+              {category}
+            </p>
+          )}
         </div>
       </div>
 
-      <div className="flex flex-col gap-1 items-end pl-2 text-end">
+      <div className="flex flex-col gap-0.5 items-end pl-2">
         <p
-          className={`font-bold text-sm ${
-            balance === "income" ? "text-secondary-green" : "text-secondary-red"
-          } ${isBudgetsScreen ? "text-xs" : ""}`}
+          className={`font-semibold ${
+            balance === "income" ? "text-accent-green" : "text-accent-red"
+          } ${isBudgetsScreen ? "text-xs" : "text-sm"}`}
         >
-          {balance === "income" ? "+" : ""} {value}
+          {balance === "income" ? "+" : "−"} {value}
         </p>
-
-        <p className="text-grey-500 text-xs">{date}</p>
+        <p className="text-[10px] text-ink-400 tracking-wide">{date}</p>
       </div>
     </div>
   );

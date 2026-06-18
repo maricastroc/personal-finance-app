@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import * as Select from "@radix-ui/react-select";
-import { CaretDown, CaretUp } from "phosphor-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface DataProps {
   label: ReactNode;
@@ -27,21 +27,21 @@ export const SelectTheme = ({
       <Select.Trigger
         className="
           h-12 flex items-center justify-between w-full px-4 py-2 
-          text-sm text-grey-900 bg-white border border-grey-500 
+          text-sm text-ink-100 bg-surface-700 border border-surface-600 
           rounded-md shadow-sm 
           focus-visible:outline-none 
-          focus-visible:ring-2 focus-visible:ring-grey-900 
+          focus-visible:ring-1 focus-visible:ring-accent-green 
           focus-visible:ring-offset-2 
           transition-all
         "
         aria-label="Theme"
       >
         <Select.Value
-          className="text-grey-900"
+          className="text-ink-100"
           placeholder="Select a Color..."
         />
-        <Select.Icon className="ml-2 text-grey-900">
-          <CaretDown size={16} />
+        <Select.Icon className="ml-2 text-ink-300">
+          <ChevronDown size={16} />
         </Select.Icon>
       </Select.Trigger>
 
@@ -50,17 +50,18 @@ export const SelectTheme = ({
           position="popper"
           className="
             z-[10000] w-[220px] max-h-52 overflow-y-auto mt-1 
-            bg-white text-grey-500 rounded-md shadow-lg 
-            border border-grey-300
+            text-ink-100 rounded-lg shadow-2xl 
+            border border-surface-600
           "
           style={{
             width: "var(--radix-select-trigger-width)",
             maxHeight: "200px",
+            background: "var(--surface-700)",
           }}
           sideOffset={5}
         >
-          <Select.ScrollUpButton className="flex items-center justify-center text-grey-500 hover:text-grey-900">
-            <CaretUp size={16} />
+          <Select.ScrollUpButton className="flex items-center justify-center text-ink-300 hover:text-ink-100 py-1">
+            <ChevronUp size={16} />
           </Select.ScrollUpButton>
 
           <Select.Viewport className="p-1">
@@ -77,8 +78,8 @@ export const SelectTheme = ({
             </Select.Group>
           </Select.Viewport>
 
-          <Select.ScrollDownButton className="flex items-center justify-center text-grey-500 hover:text-grey-900">
-            <CaretDown size={16} />
+          <Select.ScrollDownButton className="flex items-center justify-center text-ink-300 hover:text-ink-100 py-1">
+            <ChevronDown size={16} />
           </Select.ScrollDownButton>
         </Select.Content>
       </Select.Portal>
@@ -110,8 +111,8 @@ const SelectItem = React.forwardRef(
         outline-none
         ${
           disabled
-            ? "text-grey-500 cursor-not-allowed"
-            : "text-grey-900 cursor-pointer hover:bg-blue-100 focus:bg-blue-100"
+            ? "text-ink-400 cursor-not-allowed"
+            : "text-ink-100 cursor-pointer hover:bg-surface-600"
         }
       `}
       {...props}
@@ -121,7 +122,7 @@ const SelectItem = React.forwardRef(
       </Select.ItemText>
 
       {disabled && (
-        <span className="ml-auto text-xs text-grey-500">Already used</span>
+        <span className="ml-auto text-xs text-ink-400">Already used</span>
       )}
     </Select.Item>
   )

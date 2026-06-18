@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { CurrencyDollar } from "phosphor-react";
+import { DollarSign } from "lucide-react";
 import { InputBase } from "./InputBase";
 import { ErrorMessage } from "../shared/ErrorMessage";
 
@@ -73,10 +73,12 @@ export function CurrencyInput({
         return;
       }
 
+      const numericValue = parseFloat(numericOnly) / 100;
+
+      if (numericValue > 900000) return;
+
       const formattedValue = formatDisplayValue(numericOnly);
       setDisplayValue(formattedValue);
-
-      const numericValue = parseFloat(numericOnly) / 100;
 
       if (onValueChange) {
         onValueChange(numericValue);
@@ -137,14 +139,14 @@ export function CurrencyInput({
   return (
     <div className={`flex flex-col ${containerClassName}`}>
       {label && (
-        <label htmlFor={id} className="text-xs font-bold text-grey-500 mb-1">
+        <label htmlFor={id} className="text-xs font-bold text-ink-300 mb-1">
           {label}
         </label>
       )}
 
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <CurrencyDollar className="h-5 w-5 text-grey-500" />
+          <DollarSign className="h-5 w-5 text-ink-300" />
         </div>
 
         <InputBase

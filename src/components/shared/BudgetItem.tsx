@@ -25,7 +25,7 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
 
   if (!budgets?.length) {
     return (
-      <p className="text-grey-500 text-center" role="status">
+      <p className="text-ink-300 text-center" role="status">
         No budgets available
       </p>
     );
@@ -53,7 +53,7 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
         : "0.00";
 
       return (
-        <div className="custom-tooltip bg-white text-grey-500 shadow-lg text-sm font-semibold p-2 rounded-md">
+        <div className="custom-tooltip text-sm font-medium p-2 rounded-md">
           <p>{`${name}: ${percentage}%`}</p>
         </div>
       );
@@ -134,9 +134,9 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
             y="48%"
             textAnchor="middle"
             dominantBaseline="middle"
-            fill="#000"
+            fill="var(--ink-50)"
             fontSize="24"
-            fontWeight="bold"
+            fontWeight="600"
           >
             {formatToDollar(amountSpentSum)}
           </text>
@@ -147,8 +147,8 @@ export function BudgetItem({ isBudgetsScreen }: BudgetItemProps) {
             y="58%"
             textAnchor="middle"
             dominantBaseline="middle"
-            fill="#696868"
-            fontSize="15"
+            fill="var(--ink-300)"
+            fontSize="13"
           >
             of {formatToDollar(budgetLimitSum)} limit
           </text>

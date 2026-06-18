@@ -28,7 +28,12 @@ export const DropdownActions = ({
   return (
     <div
       ref={dropdownRef}
-      className="absolute top-[1.5rem] w-[8.5rem] bg-white shadow-xl p-3 rounded-lg flex flex-col gap-2 z-10"
+      className="absolute top-[1.5rem] w-[8.5rem] p-3 rounded-lg flex flex-col gap-2 z-10"
+      style={{
+        background: "var(--surface-700)",
+        border: "1px solid var(--card-border)",
+        boxShadow: "var(--shadow-dropdown)",
+      }}
     >
       <button
         type="button"
@@ -36,12 +41,12 @@ export const DropdownActions = ({
           setIsEditOpen(true);
           setIsOpen(false);
         }}
-        className="text-sm text-left text-grey-900 hover:text-grey-500 focus:outline-secondary-green focus:outline-offset-2 focus:outline-2"
+        className="text-sm text-left text-ink-100 hover:text-ink-50 focus:outline-none focus:ring-1 focus:ring-accent-green rounded"
       >
         {editText}
       </button>
 
-      <span className="h-[1px] w-full bg-grey-300" />
+      <span className="h-px w-full bg-surface-600" />
 
       <button
         type="button"
@@ -49,7 +54,7 @@ export const DropdownActions = ({
           setIsDeleteOpen(true);
           setIsOpen(false);
         }}
-        className="text-sm text-left text-secondary-red focus:outline-secondary-green focus:outline-offset-2 focus:outline-2 hover:brightness-125"
+        className="text-sm text-left text-accent-red hover:brightness-125 focus:outline-none focus:ring-1 focus:ring-accent-green rounded"
       >
         {deleteText}
       </button>

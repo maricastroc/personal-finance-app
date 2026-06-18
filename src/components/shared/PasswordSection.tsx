@@ -19,7 +19,7 @@ export function PasswordSection({
       <div>
         <label
           htmlFor="oldPassword"
-          className="text-xs font-bold text-grey-500 mb-1"
+          className="text-xs font-bold text-ink-300 mb-1"
         >
           Current Password
         </label>
@@ -39,7 +39,7 @@ export function PasswordSection({
         {errors.oldPassword && (
           <span
             id="oldPassword-error"
-            className="text-secondary-red font-semibold text-xs"
+            className="text-accent-red font-semibold text-xs"
           >
             {errors.oldPassword.message}
           </span>
@@ -49,7 +49,7 @@ export function PasswordSection({
       <div>
         <label
           htmlFor="password"
-          className="text-xs font-bold text-grey-500 mb-1"
+          className="text-xs font-bold text-ink-300 mb-1"
         >
           New Password
         </label>
@@ -67,7 +67,7 @@ export function PasswordSection({
         {errors.password && (
           <span
             id="password-error"
-            className="text-secondary-red font-semibold text-xs"
+            className="text-accent-red font-semibold text-xs"
           >
             {errors.password.message}
           </span>
@@ -77,7 +77,7 @@ export function PasswordSection({
       <div>
         <label
           htmlFor="passwordConfirm"
-          className="text-xs font-bold text-grey-500 mb-1"
+          className="text-xs font-bold text-ink-300 mb-1"
         >
           Confirm New Password
         </label>
@@ -97,7 +97,7 @@ export function PasswordSection({
         {errors.passwordConfirm && (
           <span
             id="passwordConfirm-error"
-            className="text-secondary-red font-semibold text-xs"
+            className="text-accent-red font-semibold text-xs"
           >
             {errors.passwordConfirm.message}
           </span>

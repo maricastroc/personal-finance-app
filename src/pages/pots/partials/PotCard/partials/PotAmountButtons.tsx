@@ -1,5 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { Plus, Minus } from "phosphor-react";
+import { Plus, Minus } from "lucide-react";
 
 import { PotProps } from "@/types/pot";
 import { EditPotAmountModal } from "../../EditPotAmountModal";
@@ -29,7 +29,7 @@ export function PotAmountButtons({
         <Dialog.Trigger asChild>
           <button
             onClick={() => setIsAddOpen(true)}
-            className="bg-beige-100 w-full rounded-md py-4 px-3 hover:brightness-90 focus:outline-secondary-green focus:outline-offset-2 focus:outline-2 flex items-center justify-center gap-1"
+            className="bg-surface-700 text-ink-200 text-sm font-medium w-full rounded-lg py-3 px-3 hover:bg-surface-600 transition-colors focus:outline-none focus:ring-1 focus:ring-accent-green flex items-center justify-center gap-1.5"
           >
             <Plus size={14} />
             Add Money
@@ -53,7 +53,7 @@ export function PotAmountButtons({
           <button
             type="button"
             onClick={() => setIsWithdrawOpen(true)}
-            className="bg-beige-100 w-full rounded-md py-4 px-3 hover:brightness-90 focus:outline-secondary-green focus:outline-offset-2 focus:outline-2 flex items-center justify-center gap-1"
+            className="bg-surface-700 text-ink-200 text-sm font-medium w-full rounded-lg py-3 px-3 hover:bg-surface-600 transition-colors focus:outline-none focus:ring-1 focus:ring-accent-green flex items-center justify-center gap-1.5"
           >
             <Minus size={14} />
             Withdraw

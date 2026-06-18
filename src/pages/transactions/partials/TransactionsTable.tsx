@@ -80,11 +80,10 @@ export const TransactionTable = ({
       setIsSubmitting(false);
     }
   };
-  console.log(transactions);
   return (
     <section
       aria-labelledby="transaction-table-title"
-      className="flex overflow-x-auto mt-6"
+      className="flex overflow-x-auto mt-4"
     >
       <table className="min-w-full table-fixed">
         <caption id="transaction-table-title" className="sr-only">
@@ -92,34 +91,40 @@ export const TransactionTable = ({
         </caption>
 
         <thead>
-          <tr>
+          <tr className="border-b border-surface-600">
             <th
               scope="col"
-              className="px-4 py-2 text-xs text-grey-500 text-left w-2/5"
+              className="px-4 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-400 text-left w-2/5"
             >
-              Recipient Name
+              Recipient
             </th>
             <th
               scope="col"
-              className="px-4 py-2 text-xs text-grey-500 text-left w-1/5"
+              className="px-4 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-400 text-left w-1/5"
             >
               Category
             </th>
             <th
               scope="col"
-              className="px-4 py-2 text-xs text-grey-500 text-left w-1/5"
+              className="px-4 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-400 text-left w-1/5"
             >
-              Transaction Date
+              Date
             </th>
             <th
               scope="col"
-              className="px-4 py-2 text-xs text-grey-500 text-right w-1/5"
+              className="px-4 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-400 text-center w-1/6"
+            >
+              Recurring
+            </th>
+            <th
+              scope="col"
+              className="px-4 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-400 text-right w-1/5"
             >
               Amount
             </th>
             <th
               scope="col"
-              className="px-4 py-2 text-xs text-grey-500 text-center w-20"
+              className="px-4 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-400 text-center w-20"
             >
               Actions
             </th>
@@ -129,8 +134,8 @@ export const TransactionTable = ({
         <tbody>
           {isValidating ? (
             Array.from({ length: 9 }).map((_, index) => (
-              <tr key={index} className="border-t">
-                <td colSpan={5} className="px-4 py-2">
+              <tr key={index} className="border-b border-surface-600">
+                <td colSpan={6} className="px-4 py-3">
                   <div aria-hidden="true">
                     <SkeletonTransactionCard />
                   </div>
@@ -140,13 +145,14 @@ export const TransactionTable = ({
           ) : transactions && transactions.length > 0 ? (
             transactions.map((transaction) => {
               const name = transaction?.contactName;
+              const isIncome = transaction.balance === "income";
 
               return (
                 <tr
                   key={transaction.id}
-                  className="border-t hover:bg-white transition-colors"
+                  className="border-b border-surface-600 hover:bg-surface-700/50 transition-colors group"
                 >
-                  <td className="px-4 py-2 text-left align-top">
+                  <td className="px-4 py-3.5 text-left align-middle">
                     <TransactionCard
                       name={name}
                       balance={transaction.balance}
@@ -157,11 +163,15 @@ export const TransactionTable = ({
                     />
                   </td>
 
-                  <td className="text-xs text-grey-500 px-4 py-2 text-left align-middle">
-                    {transaction.category?.name}
+                  <td className="px-4 py-3.5 text-left align-middle">
+                    {transaction.category?.name && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide bg-surface-600 text-ink-300">
+                        {transaction.category.name}
+                      </span>
+                    )}
                   </td>
 
-                  <td className="text-xs text-grey-500 px-4 py-2 text-left align-middle">
+                  <td className="text-xs text-ink-400 px-4 py-3.5 text-left align-middle tabular-nums">
                     <time dateTime={new Date(transaction.date).toISOString()}>
                       {format(
                         toZonedTime(transaction.date, "UTC"),
@@ -170,19 +180,38 @@ export const TransactionTable = ({
                     </time>
                   </td>
 
-                  <td className="text-xs text-grey-500 px-4 py-2 text-right align-middle">
+                  <td className="px-4 py-3.5 text-center align-middle">
+                    {transaction.isRecurring ||
+                    transaction.isRecurringGenerated ? (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide bg-accent-green/10 text-accent-green">
+                        <svg
+                          width="10"
+                          height="10"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" />
+                        </svg>
+                        Recurring
+                      </span>
+                    ) : (
+                      <span className="text-ink-400 text-[10px]">—</span>
+                    )}
+                  </td>
+
+                  <td className="px-4 py-3.5 text-right align-middle tabular-nums whitespace-nowrap">
                     <span
                       aria-label={
-                        transaction.balance === "income"
+                        isIncome
                           ? `Income of ${formatToDollar(transaction.amount)}`
                           : `Expense of ${formatToDollar(transaction.amount)}`
                       }
-                      className={`font-bold ${
-                        transaction.balance === "income"
-                          ? "text-secondary-green"
-                          : "text-secondary-red"
+                      className={`text-sm font-semibold ${
+                        isIncome ? "text-accent-green" : "text-accent-red"
                       }`}
                     >
+                      {isIncome ? "+ " : "– "}
                       {formatToDollar(transaction.amount)}
                     </span>
                   </td>
@@ -202,8 +231,8 @@ export const TransactionTable = ({
           ) : (
             <tr>
               <td
-                colSpan={5}
-                className="text-sm text-grey-500 rounded-md bg-beige-100 px-4 py-2"
+                colSpan={6}
+                className="text-sm text-ink-300 px-4 py-8 text-center"
               >
                 No transactions found.
               </td>
@@ -211,7 +240,7 @@ export const TransactionTable = ({
           )}
 
           <tr>
-            <td colSpan={5}>
+            <td colSpan={6}>
               <WarningSection title="All recurring transactions are managed in the Recurring Bills area, which is why the edit and delete buttons are disabled here. Go there to view or pay your scheduled bills." />
             </td>
           </tr>

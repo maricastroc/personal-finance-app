@@ -187,7 +187,7 @@ export default function SignUp() {
 
             <label
               htmlFor="createWithDemo"
-              className="text-sm text-grey-500 font-bold leading-snug"
+              className="text-sm text-ink-300 font-bold leading-snug"
             >
               Create with demo?
               <span id="demo-desc" className="block font-normal">
@@ -205,7 +205,7 @@ export default function SignUp() {
             Create account
           </PrimaryButton>
 
-          <p className="text-sm flex items-center justify-center w-full text-grey-500 gap-2">
+          <p className="text-sm flex items-center justify-center w-full text-ink-300 gap-2">
             Already have an account?
             <TextLink href="/">Login</TextLink>
           </p>

@@ -1,4 +1,4 @@
-import { DotsThree } from "phosphor-react";
+import { MoreHorizontal } from "lucide-react";
 
 import { PotProps } from "@/types/pot";
 import { DropdownActions } from "@/components/shared/DropdownActions";
@@ -34,7 +34,7 @@ export function PotCardHeader({
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className="focus:outline-secondary-green focus:outline-2 focus:outline-offset-2"
         >
-          <DotsThree className="text-grey-500 cursor-pointer" size={20} />
+          <MoreHorizontal className="text-grey-500 cursor-pointer" size={20} />
         </button>
 
         <DropdownActions

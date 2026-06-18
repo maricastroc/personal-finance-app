@@ -1,5 +1,5 @@
 import { useOutsideAndEscape } from "@/hooks/useClickOutside";
-import { DotsThree } from "phosphor-react";
+import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 
 interface BudgetCardMenuProps {
@@ -29,16 +29,21 @@ export function BudgetCardMenu({
         aria-controls={`budget-menu-${budgetId}`}
         type="button"
         onClick={() => setOpen(!open)}
-        className="text-grey-500 hover:text-grey-900"
+        className="text-ink-300 hover:text-ink-100"
       >
-        <DotsThree size={20} />
+        <MoreHorizontal size={20} />
       </button>
 
       {open && (
         <div
           id={`budget-menu-${budgetId}`}
           role="menu"
-          className="absolute top-[1.5rem] right-0 w-[8.5rem] bg-white shadow-xl p-3 rounded-lg flex flex-col gap-1"
+          className="absolute top-[1.5rem] right-0 w-[8.5rem] p-3 rounded-lg flex flex-col gap-1 z-10"
+          style={{
+            background: "var(--surface-700)",
+            border: "1px solid var(--card-border)",
+            boxShadow: "var(--shadow-dropdown)",
+          }}
         >
           <button
             role="menuitem"
@@ -49,12 +54,12 @@ export function BudgetCardMenu({
             Edit Budget
           </button>
 
-          <span className="my-1 h-px bg-grey-300" />
+          <span className="my-1 h-px bg-surface-600" />
 
           <button
             role="menuitem"
             type="button"
-            className="text-sm text-left text-secondary-red hover:brightness-150"
+            className="text-sm text-left text-accent-red hover:brightness-150"
             onClick={onDelete}
           >
             Delete Budget

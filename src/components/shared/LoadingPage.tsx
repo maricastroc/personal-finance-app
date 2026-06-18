@@ -14,7 +14,7 @@ export function LoadingPage() {
         <div
           role="status"
           aria-label="Loading, please wait"
-          className="w-12 h-12 rounded-full border-4 border-grey-300 border-t-[#277c78] animate-spin"
+          className="w-12 h-12 rounded-full border-4 border-surface-600 border-t-accent-green animate-spin"
         />
         <span className="sr-only">Loading…</span>
       </div>

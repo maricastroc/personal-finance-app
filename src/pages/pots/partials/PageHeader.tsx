@@ -1,6 +1,6 @@
 import { PrimaryButton } from "@/components/core/PrimaryButton";
 import { PageTitle } from "@/components/shared/PageTitle";
-import { Plus } from "phosphor-react";
+import { Plus } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { ReactNode } from "react";
 
@@ -32,6 +32,7 @@ export function PageHeader({
             aria-haspopup="dialog"
             aria-expanded={isOpen}
             aria-controls={modalId}
+            variant="secondary"
             className="mt-0 max-w-[8rem] text-sm"
           >
             <Plus size={16} />

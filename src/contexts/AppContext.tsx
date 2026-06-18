@@ -1,6 +1,12 @@
 import { ThemeProps } from "@/types/theme";
 import useRequest from "@/utils/useRequest";
-import React, { createContext, useContext, useState, useMemo } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  useEffect,
+} from "react";
 
 interface AppContextType {
   isSidebarOpen: boolean;
@@ -16,6 +22,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  useEffect(() => {
+    document.documentElement.classList.remove("light");
+  }, []);
+
   const handleIsSidebarOpen = (value: boolean) => {
     setIsSidebarOpen(value);
   };
@@ -23,10 +33,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   const { data: themes, isValidating: isValidatingThemes } = useRequest<
     ThemeProps[]
   >(
-    {
-      url: "/themes",
-      method: "GET",
-    },
+    { url: "/themes", method: "GET" },
     {
       revalidateOnFocus: false,
       revalidateIfStale: false,
@@ -51,10 +58,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export const useAppContext = (): AppContextType => {
   const context = useContext(AppContext);
-
   if (context === undefined) {
     throw new Error("useAppContext must be used within an AppProvider");
   }
-
   return context;
 };

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as Dialog from "@radix-ui/react-dialog";
 import { BudgetModal } from "./BudgetModal";
-import { Plus } from "phosphor-react";
+import { Plus } from "lucide-react";
 import { getBudgetsCategories } from "@/utils/getBudgetsCategories";
 import { AxiosResponse } from "axios";
 import { KeyedMutator } from "swr";
@@ -38,7 +38,8 @@ export const PageHeader = ({
             aria-haspopup="dialog"
             aria-expanded={isBudgetModalOpen}
             aria-controls="budget-modal"
-            className="mt-0 max-w-[8rem] text-sm"
+            variant="secondary"
+            className="mt-0 max-w-[9rem] text-sm"
           >
             <Plus size={16} />
             Add Budget

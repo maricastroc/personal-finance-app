@@ -2,7 +2,7 @@ import { SkeletonTransactionCard } from "@/components/shared/SkeletonTransaction
 
 export const SkeletonSection = () => {
   return Array.from({ length: 9 }).map((_, index) => (
-    <tr key={index} className="border-t">
+    <tr key={index} className="border-b border-surface-600">
       <td colSpan={6} className="px-4 py-2">
         <SkeletonTransactionCard />
       </td>

@@ -78,7 +78,13 @@ export default function BudgetCard({
   const free = (data?.budget?.amount || 0) - (data?.amountSpent || 0);
 
   return (
-    <section className="flex flex-col bg-white px-5 py-6 rounded-md md:p-10">
+    <section
+      className="flex flex-col px-5 py-6 rounded-xl md:p-10"
+      style={{
+        background: "var(--card-gradient)",
+        border: "1px solid var(--card-border)",
+      }}
+    >
       <BudgetCardHeader
         categoryName={data?.budget?.category?.name || ""}
         theme={data?.budget?.theme?.color || ""}

@@ -1,9 +1,9 @@
 const SkeletonBillCard = ({ height = "5rem" }: { height?: string }) => (
   <div
-    className="flex flex-col items-start justify-center gap-2 w-full p-4 rounded-lg bg-beige-100"
+    className="flex flex-col items-start justify-center gap-2 w-full p-4 rounded-lg bg-surface-700 border border-surface-500"
     style={{ height }}
   >
-    <div className="w-full h-6 rounded bg-gray-200 animate-pulse" />
+    <div className="w-full h-5 rounded bg-surface-600 animate-pulse" />
   </div>
 );
 

@@ -7,9 +7,9 @@ interface BillCardProps {
 }
 
 const borderColors = {
-  green: "border-l-secondary-green",
-  yellow: "border-l-secondary-yellow",
-  red: "border-l-secondary-red",
+  green: "border-l-accent-green",
+  yellow: "border-l-accent-yellow",
+  red: "border-l-accent-red",
 };
 
 export function BillCard({ title, value, borderColor }: BillCardProps) {
@@ -17,13 +17,14 @@ export function BillCard({ title, value, borderColor }: BillCardProps) {
     <article
       aria-label={`${title}: ${value}`}
       className={clsx(
-        "w-full h-14 rounded-lg border-l-4 px-4 flex items-center justify-between bg-beige-100",
+        "w-full py-4 px-4 border-l-2 flex items-center justify-between",
         borderColors[borderColor]
       )}
     >
-      <p className="capitalize text-grey-500 text-sm">{title}</p>
-
-      <p className="font-semibold text-sm" aria-live="polite">
+      <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-ink-400">
+        {title}
+      </p>
+      <p className="font-semibold text-sm text-ink-50" aria-live="polite">
         {value}
       </p>
     </article>

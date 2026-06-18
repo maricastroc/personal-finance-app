@@ -1,7 +1,7 @@
 import { SelectInput } from "@/components/core/SelectInput";
+import { SearchInput } from "@/components/core/SearchInput";
 import { sortByFilters } from "@/utils/constants";
-import { SortDescending } from "phosphor-react";
-import { MagnifyingGlass, X } from "phosphor-react";
+import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 
 interface SearchSectionProps {
@@ -20,41 +20,21 @@ export const SearchSection = ({
   return (
     <div className="flex flex-col mb-6">
       <div className="flex items-center md:grid md:grid-cols-[1.5fr,1fr] md:justify-between md:justify-items-end">
-        <div className="h-12 text-sm truncate w-full flex items-center rounded-md border border-grey-500">
-          <label htmlFor="search" className="sr-only">
-            Search transactions
-          </label>
-
-          <input
-            id="search"
-            className="truncate w-full px-4 py-3 outline-none"
-            type="text"
-            placeholder="Search..."
+        <div className="flex justify-between gap-3 items-center w-full">
+          <SearchInput
             value={search}
-            onChange={(ev) => handleSetSearch(ev.target.value)}
+            onChange={handleSetSearch}
+            label="Search recurring bills"
           />
 
-          {search?.length ? (
-            <X
-              aria-hidden="true"
-              className="pr-4 flex w-[2.2rem] h-[2.2rem] shrink-0 cursor-pointer"
-              onClick={() => handleSetSearch("")}
-            />
-          ) : (
-            <MagnifyingGlass
-              aria-hidden="true"
-              className="pr-4 flex w-[2.2rem] h-[2.2rem] shrink-0"
-            />
-          )}
+          <button
+            aria-label="Open sort options"
+            onClick={() => setIsSortBySelectOpen(!isSortBySelectOpen)}
+            className="ml-3 md:hidden rounded-md bg-surface-700 p-1 flex items-center justify-center h-[2.5rem]"
+          >
+            <ArrowUpDown size={20} className="text-white" />
+          </button>
         </div>
-
-        <button
-          aria-label="Open sort options"
-          onClick={() => setIsSortBySelectOpen(!isSortBySelectOpen)}
-          className="ml-3 md:hidden rounded-md bg-grey-900 p-1 flex items-center justify-center h-[2.5rem]"
-        >
-          <SortDescending size={20} className="text-white" />
-        </button>
 
         <div className="max-md:hidden md:flex md:min-w-[11rem] md:max-w-[15rem] lg:max-w-[16rem] w-full items-center justify-center gap-2">
           <p className="whitespace-nowrap text-sm">Sort by</p>

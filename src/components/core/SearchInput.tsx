@@ -1,5 +1,5 @@
 import { useDebounce } from "@/utils/useDebounce";
-import { MagnifyingGlass, X } from "phosphor-react";
+import { Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface SearchInputProps {
@@ -43,9 +43,9 @@ export function SearchInput({
   return (
     <div
       className={`
-        h-12 text-sm w-full flex items-center rounded-md border border-grey-500 px-1
-        focus-within:ring-2 focus-within:ring-secondary-green 
-        focus-within:ring-offset-2 
+        h-12 text-sm w-full flex items-center rounded-lg border border-surface-600 bg-surface-700 text-ink-100 px-1
+        focus-within:ring-1 focus-within:ring-accent-green
+        focus-within:ring-offset-1 focus-within:ring-offset-surface-800
         transition-all duration-150
         ${className}
       `}
@@ -73,10 +73,7 @@ export function SearchInput({
           <X aria-hidden="true" className="w-5 h-5" />
         </button>
       ) : (
-        <MagnifyingGlass
-          aria-hidden="true"
-          className="mr-3 flex shrink-0 w-5 h-5"
-        />
+        <Search aria-hidden="true" className="mr-3 flex shrink-0 w-5 h-5" />
       )}
     </div>
   );

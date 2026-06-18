@@ -1,4 +1,4 @@
-import { Public_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import { AppProps } from "next/app";
 import { AppProvider } from "@/contexts/AppContext";
@@ -6,9 +6,9 @@ import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import { BalanceProvider } from "@/contexts/BalanceContext";
 
-const font = Public_Sans({
+const font = Inter({
   subsets: ["latin"],
-  weight: ["400", "700", "800", "900"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -17,19 +17,20 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Toaster
         toastOptions={{
           style: {
-            backgroundColor: "#201f24",
-            color: "#fff",
+            backgroundColor: "var(--toast-bg)",
+            color: "var(--foreground)",
+            border: "1px solid var(--toast-border)",
           },
           success: {
             style: {
-              backgroundColor: "#201f24",
-              color: "#fff",
+              backgroundColor: "var(--toast-bg-accent)",
+              color: "var(--foreground)",
             },
           },
           error: {
             style: {
-              backgroundColor: "#201f24",
-              color: "#fff",
+              backgroundColor: "var(--toast-bg-accent)",
+              color: "var(--foreground)",
             },
           },
         }}
@@ -37,7 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <AppProvider>
         <BalanceProvider>
           <div
-            className={`${font.className} bg-beige-100 overflow-x-hidden h-full`}
+            className={`${font.className} bg-surface-950 overflow-x-hidden h-full`}
           >
             <Component {...pageProps} />
           </div>

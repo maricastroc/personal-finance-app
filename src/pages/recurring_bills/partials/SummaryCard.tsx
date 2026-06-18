@@ -13,9 +13,16 @@ export const SummaryCard = ({
   return (
     <section
       aria-labelledby="summary-title"
-      className="rounded-xl flex bg-white p-6 text-start flex-col"
+      className="rounded-xl flex p-6 text-start flex-col"
+      style={{
+        background: "var(--card-gradient)",
+        border: "1px solid var(--card-border)",
+      }}
     >
-      <h2 id="summary-title" className="text-base font-bold text-grey-900 mb-4">
+      <h2
+        id="summary-title"
+        className="text-[11px] font-semibold uppercase tracking-[0.1em] text-ink-300 mb-4"
+      >
         Summary
       </h2>
 
@@ -25,15 +32,15 @@ export const SummaryCard = ({
             {Array.from({ length: 3 }).map((_, index) => (
               <div
                 key={index}
-                className="w-full h-5 rounded bg-gray-200 animate-pulse"
+                className="w-full h-5 rounded bg-surface-600 animate-pulse"
               />
             ))}
           </div>
         ) : (
           <>
             <div className="flex items-center justify-between w-full">
-              <p className="text-xs text-grey-500">Total Upcoming</p>
-              <p className="font-bold text-grey-900 text-xs">
+              <p className="text-xs text-ink-300">Total Upcoming</p>
+              <p className="font-semibold text-ink-100 text-xs">
                 {`${
                   recurringBills?.upcoming.bills.length || 0
                 } (${formatToDollar(recurringBills?.upcoming.total || 0)})`}
@@ -43,12 +50,12 @@ export const SummaryCard = ({
             <span
               role="separator"
               aria-hidden="true"
-              className="bg-grey-300 w-full h-[0.05rem] my-3"
+              className="bg-surface-600 w-full h-px my-3"
             />
 
             <div className="flex items-center justify-between w-full">
-              <p className="text-xs text-grey-500">Total Due Soon</p>
-              <p className="font-bold text-grey-900 text-xs">
+              <p className="text-xs text-ink-300">Total Due Soon</p>
+              <p className="font-semibold text-ink-100 text-xs">
                 {`${
                   recurringBills?.dueSoon.bills.length || 0
                 } (${formatToDollar(recurringBills?.dueSoon.total || 0)})`}
@@ -58,12 +65,12 @@ export const SummaryCard = ({
             <span
               role="separator"
               aria-hidden="true"
-              className="bg-grey-300 w-full h-[0.05rem] my-3"
+              className="bg-surface-600 w-full h-px my-3"
             />
 
             <div className="flex items-center justify-between w-full">
-              <p className="text-xs text-secondary-red">Total Overdue</p>
-              <p className="font-bold text-secondary-red text-xs">
+              <p className="text-xs text-accent-red">Total Overdue</p>
+              <p className="font-semibold text-accent-red text-xs">
                 {`${
                   recurringBills?.overdue.bills.length || 0
                 } (${formatToDollar(recurringBills?.overdue.total || 0)})`}

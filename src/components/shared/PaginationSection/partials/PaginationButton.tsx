@@ -1,4 +1,4 @@
-import { CaretLeft, CaretRight } from "phosphor-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ButtonHTMLAttributes } from "react";
 
 interface PaginationBtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -18,10 +18,10 @@ export function PaginationBtn({
       content = number;
       break;
     case "left":
-      content = <CaretLeft />;
+      content = <ChevronLeft />;
       break;
     case "right":
-      content = <CaretRight />;
+      content = <ChevronRight />;
       break;
     default:
       content = number;
@@ -29,7 +29,7 @@ export function PaginationBtn({
 
   return (
     <button
-      className="rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-secondary-green flex items-center gap-3 border border-grey-900 h-10 min-w-10 justify-center bg-grey-900 text-beige-100 px-3 hover:bg-grey-900 hover:text-beige-100 disabled:bg-grey-300 disabled:border-grey-300 disabled:text-white disabled:cursor-not-allowed transition-all duration-500"
+      className="rounded-lg focus:ring-1 focus:ring-offset-1 focus:ring-accent-green focus:ring-offset-surface-800 flex items-center gap-3 border border-surface-600 h-10 min-w-10 justify-center bg-surface-700 text-ink-200 px-3 hover:bg-surface-600 hover:text-ink-50 disabled:bg-surface-800 disabled:border-surface-700 disabled:text-ink-400 disabled:cursor-not-allowed transition-all duration-200"
       {...rest}
     >
       {content}

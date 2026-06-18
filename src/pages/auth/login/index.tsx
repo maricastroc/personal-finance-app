@@ -116,26 +116,48 @@ export default function Login() {
             )}
           />
           <PrimaryButton
-            className="mt-8"
+            className="
+    mt-8
+    h-12
+    rounded-xl
+    bg-gradient-to-b
+    from-[#F8FAFC]
+    to-[#E5E7EB]
+    text-[#111827]
+    font-medium
+    shadow-md
+    transition-all
+    duration-200
+    hover:from-white
+    hover:to-[#F3F4F6]
+    hover:shadow-xl
+    active:scale-[0.99]
+  "
             type="submit"
             isSubmitting={isSubmitting}
           >
-            Login
+            Sign in
           </PrimaryButton>
 
-          <section className="flex flex-col gap-1">
-            <p className="text-sm flex items-center justify-center w-full text-grey-500 gap-2">
+          <section className="flex flex-col gap-3 mt-2">
+            <p className="text-sm flex items-center justify-center w-full text-white/40 gap-2">
               Need to create an account?
-              <TextLink href="/auth/signup">Sign up</TextLink>
+              <TextLink
+                href="/auth/signup"
+                className="text-white/75 hover:text-white transition-colors"
+              >
+                Sign up
+              </TextLink>
             </p>
 
-            <p className="text-sm flex items-center justify-center w-full text-grey-500 gap-2">
+            <p className="text-sm flex items-center justify-center w-full text-white/40 gap-2">
               You’re just browsing?
               <TextLink
                 aria-label="Log in using a demo account to test the app."
                 as="button"
                 type="button"
                 onClick={onSubmitDemo}
+                className="text-white/75 hover:text-white transition-colors"
               >
                 Demo Login
               </TextLink>

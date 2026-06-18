@@ -12,29 +12,39 @@ interface FinanceCardProps {
 
 const variants = {
   primary: {
-    card: "bg-grey-900",
-    title: "text-beige-100",
-    value: "text-beige-100",
+    label: "text-white/50",
+    value: "text-white",
+    accent: "",
+    glow: "0 0 40px rgba(77, 173, 168, 0.08)",
+    dark: true,
   },
   income: {
-    card: "bg-white",
-    title: "text-grey-500",
-    value: "text-secondary-green",
+    label: "text-ink-300",
+    value: "text-accent-green",
+    accent: "border-l-2 border-l-accent-green",
+    glow: "0 0 24px var(--glow-green)",
+    dark: false,
   },
   outcome: {
-    card: "bg-white",
-    title: "text-grey-500",
-    value: "text-secondary-red",
+    label: "text-ink-300",
+    value: "text-accent-red",
+    accent: "border-l-2 border-l-accent-red",
+    glow: "0 0 24px var(--glow-red)",
+    dark: false,
   },
   secondary: {
-    card: "bg-white",
-    title: "text-grey-500",
-    value: "text-grey-900",
+    label: "text-ink-300",
+    value: "text-ink-50",
+    accent: "",
+    glow: undefined as string | undefined,
+    dark: false,
   },
   tertiary: {
-    card: "bg-beige-100",
-    title: "text-grey-500",
-    value: "text-grey-900",
+    label: "text-ink-300",
+    value: "text-ink-50",
+    accent: "",
+    glow: undefined as string | undefined,
+    dark: false,
   },
 };
 
@@ -53,20 +63,39 @@ export function FinanceCard({
     <article
       aria-label={`${title}: ${value}`}
       className={clsx(
-        "flex items-center gap-2 h-full w-full p-4 rounded-lg md:h-32 lg:h-[7.4rem]",
-        v.card
+        "flex items-center gap-4 h-full w-full px-6 py-5 rounded-xl md:h-32 lg:h-[7.4rem]",
+        v.accent
       )}
+      style={{
+        background: v.dark
+          ? "linear-gradient(145deg, #16161a 0%, #0e0e11 100%)"
+          : "var(--card-gradient)",
+        border: v.dark
+          ? "1px solid rgba(255,255,255,0.10)"
+          : "1px solid var(--card-border)",
+        boxShadow: v.glow,
+      }}
     >
       {icon && (
-        <div className="mr-4" aria-hidden="true">
+        <div className="shrink-0 opacity-60" aria-hidden="true">
           {icon}
         </div>
       )}
 
-      <div className="flex flex-col">
-        <h2 className={clsx("text-sm font-medium", v.title)}>{title}</h2>
+      <div className="flex flex-col gap-1.5">
         <p
-          className={clsx("text-2xl font-bold mt-1", v.value)}
+          className={clsx(
+            "text-[10px] font-medium uppercase tracking-[0.14em]",
+            v.label
+          )}
+        >
+          {title}
+        </p>
+        <p
+          className={clsx(
+            "text-2xl font-semibold tracking-tight leading-none mt-1",
+            v.value
+          )}
           aria-live="polite"
         >
           {value}

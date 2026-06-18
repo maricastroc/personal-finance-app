@@ -9,6 +9,34 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Theme-aware surface scale (values come from CSS variables)
+        surface: {
+          950: "var(--surface-950)",
+          900: "var(--surface-900)",
+          800: "var(--surface-800)",
+          700: "var(--surface-700)",
+          600: "var(--surface-600)",
+          500: "var(--surface-500)",
+        },
+        // Theme-aware text scale
+        ink: {
+          50: "var(--ink-50)",
+          100: "var(--ink-100)",
+          200: "var(--ink-200)",
+          300: "var(--ink-300)",
+          400: "var(--ink-400)",
+        },
+        // Theme-aware accent colors
+        accent: {
+          green: "var(--accent-green)",
+          greenHover: "var(--accent-green-hover)",
+          greenDim: "var(--accent-green-dim)",
+          red: "var(--accent-red)",
+          redHover: "var(--accent-red-hover)",
+          redDim: "var(--accent-red-dim)",
+          yellow: "var(--accent-yellow)",
+        },
+        // Legacy aliases — kept for backward compat during migration
         beige: {
           500: "#98908b",
           100: "#f8f4f0",
@@ -51,7 +79,7 @@ export default {
         xxs: "0.75rem",
       },
       fontFamily: {
-        sans: ["Public Sans", "sans-serif"],
+        sans: ["Inter", "sans-serif"],
       },
       screens: {
         "max-sm": { max: "500px" },

@@ -15,7 +15,7 @@ export function BudgetCardSpentInfo({ spent, free }: BudgetCardSpentInfoProps) {
         />
 
         <div>
-          <dt className="text-xs text-grey-500">Spent</dt>
+          <dt className="text-xs text-ink-300">Spent</dt>
           <dd className="font-bold text-sm">{formatToDollar(spent)}</dd>
         </div>
       </div>
@@ -23,14 +23,12 @@ export function BudgetCardSpentInfo({ spent, free }: BudgetCardSpentInfoProps) {
       <div className="flex items-center w-full">
         <span
           aria-hidden="true"
-          className="w-1 h-10 rounded-md mr-3 bg-beige-100"
+          className="w-1 h-10 rounded-md mr-3 bg-surface-700"
         />
 
         <div>
-          <dt className="text-xs text-grey-500">Free</dt>
-          <dd
-            className={`font-bold text-sm ${free < 0 && "text-secondary-red"}`}
-          >
+          <dt className="text-xs text-ink-300">Free</dt>
+          <dd className={`font-bold text-sm ${free < 0 && "text-accent-red"}`}>
             {formatToDollar(free)}
           </dd>
         </div>

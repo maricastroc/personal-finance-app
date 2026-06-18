@@ -31,11 +31,16 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
     <aside
       aria-label="Main navigation sidebar"
       className={`
-        fixed hidden left-0 top-0 bottom-0 bg-grey-900 rounded-r-xl lg:flex 
+        fixed hidden left-0 top-0 bottom-0 lg:flex
         flex-col justify-between py-12
+        backdrop-blur-xl
         ${isSidebarOpen ? "lg:w-[240px]" : "lg:w-[88px]"}
         transition-all duration-500 z-50
       `}
+      style={{
+        background: "var(--sidebar-bg)",
+        borderRight: "1px solid var(--sidebar-border)",
+      }}
     >
       <div
         className={`flex flex-col gap-20 ${
@@ -54,10 +59,7 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
           />
         </div>
 
-        <nav
-          aria-label="Main navigation"
-          className={`${!isSidebarOpen && "flex flex-col gap-8"}`}
-        >
+        <nav aria-label="Main navigation" className={`flex flex-col gap-4`}>
           {filteredNavList.map((item, index) => (
             <AsideItem
               key={index}
@@ -69,10 +71,16 @@ export function Sidebar({ isSidebarOpen, handleIsSidebarOpen }: navProp) {
         </nav>
       </div>
 
-      <SidebarToggleButton
-        isOpen={isSidebarOpen}
-        onToggle={handleIsSidebarOpen}
-      />
+      <div
+        className={`flex flex-col gap-6 ${
+          isSidebarOpen ? "px-6" : "items-center px-0"
+        }`}
+      >
+        <SidebarToggleButton
+          isOpen={isSidebarOpen}
+          onToggle={handleIsSidebarOpen}
+        />
+      </div>
     </aside>
   );
 }

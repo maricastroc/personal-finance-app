@@ -9,19 +9,24 @@ export function AsideItem({ item, active, menuShown }: Item) {
       href={item.href}
       aria-current={active ? "page" : undefined}
       className={`
-        flex gap-4 hover:brightness-150 focus:outline-none
-        focus:outline-2 focus:outline-white focus:outline-offset-2
+        flex gap-3 items-center
+        focus:outline-none focus:ring-1 focus:ring-accent-green focus:ring-offset-1 focus:ring-offset-[#201f24]
         ${
-          menuShown && active
-            ? "bg-beige-100 border-l-4 border-l-secondary-green"
-            : "bg-transparent"
+          menuShown
+            ? `mx-3 px-3 py-2.5 rounded-lg ${
+                active
+                  ? "bg-white/10 border-l-2 border-l-accent-green"
+                  : "border-l-2 border-l-transparent"
+              }`
+            : `justify-center px-0 py-2.5 w-full ${active ? "relative" : ""}`
         }
-        w-[90%] items-center justify-start
-        ${menuShown ? "px-6 py-4 rounded-r-xl" : "justify-center rounded-sm"}
-        transition-all duration-500
-      `}
+        transition-all duration-200
+        group
+      `
+        .replace(/\s+/g, " ")
+        .trim()}
     >
-      <div className="relative h-6 w-6">
+      <div className={`relative h-5 w-5 shrink-0 ${!menuShown ? "" : ""}`}>
         <Image
           src={active ? item.iconActive : item.icon}
           data-tooltip-id={item.name}
@@ -29,13 +34,18 @@ export function AsideItem({ item, active, menuShown }: Item) {
           alt=""
           aria-hidden="true"
           fill
+          className="transition-all duration-200"
+          style={{
+            opacity: active ? 1 : 0.35,
+            filter: "none",
+          }}
         />
       </div>
 
       {menuShown ? (
         <p
-          className={`font-semibold text-base ${
-            active ? "text-grey-900" : "text-grey-300"
+          className={`text-xs font-medium tracking-wide transition-colors duration-200 ${
+            active ? "text-white" : "text-white/40 group-hover:text-white/70"
           }`}
         >
           {item.name}

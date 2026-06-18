@@ -23,27 +23,31 @@ export function FinanceItem({
     >
       <span
         aria-hidden="true"
-        className={`w-1 rounded-md mr-3 ${!isBudgetsPage ? "h-14" : "h-6"}`}
+        className={`w-0.5 rounded-full mr-3 shrink-0 ${
+          !isBudgetsPage ? "h-10" : "h-5"
+        }`}
         style={{ backgroundColor: color }}
       />
 
       <div
-        className={`flex gap-4 ${
-          !isBudgetsPage ? "flex-col" : "w-full justify-between"
+        className={`flex gap-1 ${
+          !isBudgetsPage ? "flex-col" : "w-full justify-between items-center"
         }`}
       >
-        <p className="text-grey-500 text-xs">{title}</p>
+        <p className="text-[10px] font-medium uppercase tracking-[0.08em] text-ink-400 leading-none">
+          {title}
+        </p>
 
-        <div className="flex items-center">
-          <h2 className="text-sm font-bold text-grey-900">
+        <div className="flex items-baseline gap-1">
+          <p className="text-sm font-semibold text-ink-100 leading-tight">
             {isBudgetsPage
               ? formatToDollar(amountSpent || 0)
               : formatToDollar(value || 0)}
-          </h2>
+          </p>
 
           {isBudgetsPage && amountSpent !== undefined && (
-            <p className="ml-1 text-xs text-grey-500">
-              of {formatToDollar(value || 0)}
+            <p className="text-[10px] text-ink-400">
+              / {formatToDollar(value || 0)}
             </p>
           )}
         </div>

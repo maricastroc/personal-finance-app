@@ -2,10 +2,6 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { RecurringBillProps } from "@/types/recurring-bills";
 import { formatToDollar } from "@/utils/formatToDollar";
 import { RecurringBillCard } from "./RecurringBillCard";
-import iconBillPaid from "/public/assets/images/icon-bill-paid.svg";
-import iconBillDueSoon from "/public/assets/images/icon-bill-due.svg";
-import iconBillOverdue from "/public/assets/images/icon-bill-overdue.svg";
-import Image from "next/image";
 import { SkeletonSection } from "./SkeletonSection";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -18,6 +14,7 @@ import { ActionsSection } from "./ActionsSection";
 import { DeleteModal } from "@/components/shared/DeleteModal";
 import { EditBillModal } from "./EditBillModal";
 import { toZonedTime } from "date-fns-tz";
+import { PrimaryButton } from "@/components/core/PrimaryButton";
 
 export const RecurringBillsTable = ({
   recurringBills,
@@ -109,23 +106,41 @@ export const RecurringBillsTable = ({
     <div>
       <table className={`w-full overflow-x-auto`}>
         <thead>
-          <tr>
-            <th className="px-4 py-2 text-xs text-grey-500 text-left w-2/5">
+          <tr className="border-b border-surface-600">
+            <th
+              scope="col"
+              className="px-4 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-400 text-left w-2/5"
+            >
               Recipient Name
             </th>
-            <th className="px-4 py-2 text-xs text-grey-500 text-left w-1/5">
+            <th
+              scope="col"
+              className="px-4 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-400 text-left w-1/5"
+            >
               Due Date
             </th>
-            <th className="px-4 py-2 text-xs text-grey-500 text-left w-1/7">
+            <th
+              scope="col"
+              className="px-4 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-400 text-left"
+            >
               Status
             </th>
-            <th className="px-4 py-2 text-xs text-grey-500 text-right w-1/5">
+            <th
+              scope="col"
+              className="px-4 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-400 text-right w-1/5"
+            >
               Amount
             </th>
-            <th className="px-4 py-2 text-xs text-grey-500 text-center w-3/5">
+            <th
+              scope="col"
+              className="px-4 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-400 text-center"
+            >
               Payment
             </th>
-            <th className="px-4 py-2 text-xs text-grey-500 text-center w-3/5">
+            <th
+              scope="col"
+              className="px-4 pb-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-400 text-center"
+            >
               Actions
             </th>
           </tr>
@@ -136,63 +151,53 @@ export const RecurringBillsTable = ({
             <SkeletonSection />
           ) : recurringBills && recurringBills.length > 0 ? (
             recurringBills.map((bill) => (
-              <tr key={bill.id} className="border-t">
-                <td className="px-4 py-2 text-left">
+              <tr
+                key={bill.id}
+                className="border-b border-surface-600 hover:bg-surface-700/50 transition-colors"
+              >
+                <td className="px-4 py-3.5 text-left">
                   <RecurringBillCard
                     name={bill.contactName}
                     avatarUrl={bill.contactAvatar}
                   />
                 </td>
 
-                <td className="text-xs text-grey-500 px-4 py-2 text-left">
+                <td className="text-xs text-ink-300 px-4 py-3.5 text-left">
                   {format(
                     toZonedTime(bill.nextDueDate as Date, "UTC"),
                     "MMM dd, yyyy"
                   )}
                 </td>
 
-                <td className="text-xs text-grey-500 px-4 py-2 text-left">
-                  <div className="flex items-center gap-1 capitalize">
-                    {bill.status === "upcoming" && (
-                      <Image src={iconBillPaid} alt="Upcoming" width={12} />
-                    )}
-
-                    {bill.status === "due soon" && (
-                      <Image src={iconBillDueSoon} alt="Due soon" width={12} />
-                    )}
-
-                    {bill.status === "overdue" && (
-                      <Image src={iconBillOverdue} alt="Overdue" width={12} />
-                    )}
-
+                <td className="px-4 py-3.5 text-left">
+                  <span className="text-xs capitalize text-ink-400">
                     {bill.status}
-                  </div>
+                  </span>
                 </td>
 
-                <td className="text-sm text-grey-500 px-4 py-2 text-right">
+                <td className="text-sm text-ink-300 px-4 py-3.5 text-right">
                   <span
                     className={`font-bold ${
                       bill.status === "due soon" || bill.status === "overdue"
-                        ? "text-secondary-red"
-                        : "text-grey-900"
+                        ? "text-accent-red"
+                        : "text-ink-100"
                     }`}
                   >
                     {formatToDollar(bill.amount)}
                   </span>
                 </td>
 
-                <td className="px-4 py-2 text-center">
-                  <button
+                <td className="px-4 py-3.5 text-center">
+                  <PrimaryButton
                     type="button"
+                    variant="small"
                     onClick={() => handlePayNow(bill)}
                     disabled={!shouldShowEnabledButton(bill)}
-                    className={`
-                      p-2 py-1 text-xs font-medium rounded-md transition-colors
-                      disabled:cursor-not-allowed disabled:border-grey-300 border text-white bg-secondary-green hover:text-white hover:bg-secondary-greenHover disabled:bg-grey-300 disabled:text-white
-                    `}
+                    isSubmitting={payingBillId === bill.id}
+                    className="text-xs font-semibold min-w-16"
                   >
-                    {payingBillId === bill.id ? "Paying..." : "Pay Now"}
-                  </button>
+                    Pay
+                  </PrimaryButton>
                 </td>
 
                 <td>
@@ -208,7 +213,7 @@ export const RecurringBillsTable = ({
             <tr>
               <td
                 colSpan={6}
-                className="text-sm text-grey-500 rounded-md bg-beige-100 px-4 py-2"
+                className="text-sm text-ink-300 rounded-md bg-surface-700 px-4 py-3.5"
               >
                 No bills found.
               </td>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Funnel, SortDescending } from "phosphor-react";
+import { Filter, ArrowUpDown } from "lucide-react";
 import { SelectInput } from "@/components/core/SelectInput";
 import { CategoryProps } from "@/types/category";
 import { sortByFilters } from "@/utils/constants";
@@ -41,17 +41,17 @@ export const SearchSection = ({
         <button
           aria-label="Open category filter"
           onClick={() => setIsCategoriesSelectOpen(!isCategoriesSelectOpen)}
-          className="ml-3 md:hidden rounded-md bg-grey-900 p-1 flex items-center flex-shrink-0 justify-center h-[2.5rem]"
+          className="ml-3 md:hidden rounded-md bg-surface-700 p-1 flex items-center flex-shrink-0 justify-center h-[2.5rem]"
         >
-          <Funnel size={20} className="text-white" />
+          <Filter size={20} className="text-white" />
         </button>
 
         <button
           aria-label="Open sort options"
           onClick={() => setIsSortBySelectOpen(!isSortBySelectOpen)}
-          className="md:hidden rounded-md bg-grey-900 p-1 flex items-center flex-shrink-0 justify-center h-[2.5rem]"
+          className="md:hidden rounded-md bg-surface-700 p-1 flex items-center flex-shrink-0 justify-center h-[2.5rem]"
         >
-          <SortDescending size={20} className="text-white" />
+          <ArrowUpDown size={20} className="text-white" />
         </button>
       </div>
 

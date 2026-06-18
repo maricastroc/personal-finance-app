@@ -138,7 +138,7 @@ export default function RecurringBills() {
             />
           </header>
 
-          <div className="flex flex-col w-full md:grid lg:grid-cols-[1fr,2fr] md:gap-6">
+          <div className="flex flex-col w-full md:grid lg:grid-cols-[320px,1fr] md:gap-6">
             <section
               aria-label="Recurring bills overview"
               className="w-full flex flex-col gap-3 md:grid md:grid-cols-2 md:gap-6 lg:flex lg:flex-col lg:gap-6"
@@ -153,7 +153,11 @@ export default function RecurringBills() {
 
             <section
               aria-labelledby="recurring-bills-list-title"
-              className="mt-5 md:mt-0 flex flex-col bg-white rounded-lg px-5 py-6 md:p-8"
+              className="mt-5 md:mt-0 flex flex-col rounded-xl px-5 py-6 md:p-8"
+              style={{
+                background: "var(--card-gradient)",
+                border: "1px solid var(--card-border)",
+              }}
             >
               <h2 id="recurring-bills-list-title" className="sr-only">
                 Recurring bills list and filters

@@ -1,26 +1,91 @@
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Dark theme (default) ─────────────────────────────────── */
 :root {
-  --background: #f2f3f7;
-  --foreground: #171717;
-  --color-tooltip: #201f24;
-  --color-tooltip-text: #f2f2f2;
+  --surface-950: #09090b;
+  --surface-900: #0e0e11;
+  --surface-800: #111114;
+  --surface-700: #18181b;
+  --surface-600: #222228;
+  --surface-500: #2e2e35;
+
+  --ink-50:  #fafafa;
+  --ink-100: #e5e5e5;
+  --ink-200: #a3a3a3;
+  --ink-300: #737373;
+  --ink-400: #525252;
+
+  --accent-green:     #4dada8;
+  --accent-green-hover: #6ecbc6;
+  --accent-green-dim: #164e4c;
+  --accent-red:       #d15d4e;
+  --accent-red-hover: #e07060;
+  --accent-red-dim:   #5c1f19;
+  --accent-yellow:    #eccfb0;
+
+  --card-gradient: linear-gradient(180deg, #131317 0%, #0e0e11 100%);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --glow-green: rgba(77, 173, 168, 0.12);
+  --glow-red: rgba(209, 93, 78, 0.12);
+  --glow-primary: rgba(59, 130, 246, 0.08);
+
+  --background: #09090b;
+  --foreground: #fafafa;
+  --color-tooltip: #18181b;
+  --color-tooltip-text: #e5e5e5;
+  --color-border: #222228;
+
+  /* Inputs */
+  --input-border: rgba(255, 255, 255, 0.18);
+  --input-focus-glow: rgba(77, 173, 168, 0.12);
+
+  /* Shadows */
+  --shadow-overlay: rgba(0, 0, 0, 0.4);
+  --shadow-dropdown: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 24px 64px rgba(0, 0, 0, 0.4);
+
+  /* Sidebar */
+  --sidebar-bg: rgba(9, 9, 11, 0.85);
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+
+  /* Auth panel */
+  --auth-panel-gradient: linear-gradient(145deg, #0c0c10 0%, #0e1614 50%, #0a0e10 100%);
+  --auth-panel-border: rgba(255, 255, 255, 0.06);
+  --auth-glow-primary: rgba(110, 203, 198, 0.10);
+  --auth-glow-secondary: rgba(110, 203, 198, 0.06);
+
+  /* Toast */
+  --toast-bg: #181818;
+  --toast-border: #2a2a2a;
+  --toast-bg-accent: #201f24;
 }
+
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--surface-800) inset !important;
+  -webkit-text-fill-color: var(--ink-100) !important;
+  caret-color: var(--ink-100);
+  transition: background-color 9999s ease-in-out 0s;
 }
 
 .custom-tooltip {
   background-color: var(--color-tooltip);
+  border: 1px solid var(--color-border);
   padding: 0.4rem 0.8rem;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--color-tooltip-text);
   z-index: 9999;

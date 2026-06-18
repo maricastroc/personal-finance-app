@@ -25,7 +25,7 @@ export const BudgetsList = ({ budgets }: BudgetsListProps) => {
             amountSpent={budget.amountSpent || 0}
           />
           {index !== budgets.length - 1 && (
-            <span className="my-3 w-full h-[1px] bg-grey-300" />
+            <span className="my-3 w-full h-[1px] bg-grey-700" />
           )}
         </div>
       ))}
