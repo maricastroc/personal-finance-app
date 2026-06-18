@@ -20,9 +20,11 @@ function calculateNextDueDate(baseDate: Date, recurrenceDay: number): Date {
 }
 
 async function findOrCreateCategory(name: string) {
-  const existing = await prisma.category.findUnique({ where: { name } });
-  if (existing) return existing;
-  return prisma.category.create({ data: { name } });
+  return prisma.category.upsert({
+    where: { name },
+    update: {},
+    create: { name },
+  });
 }
 
 export type ListTransactionsQuery = {

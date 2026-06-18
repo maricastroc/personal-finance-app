@@ -25,10 +25,11 @@ export const AvatarSelectInput = ({
       <label className="sr-only">{label}</label>
 
       <Select.Trigger
-        className="h-12 flex items-center justify-between w-[4rem] p-2 text-sm text-grey-900 bg-white border border-beige-500 focus:outline-2 focus:outline-accent-green focus:outline-offset-1 rounded-md shadow-sm"
+        className="h-12 flex items-center justify-between w-[4rem] p-2 text-sm text-ink-100 border border-[var(--input-border)] bg-surface-700 focus:outline-none focus:border-accent-green/50 rounded-lg"
+        style={{}}
         aria-label={label}
       >
-        <Select.Value className="text-grey-900" placeholder={placeholder}>
+        <Select.Value className="text-ink-100" placeholder={placeholder}>
           {defaultValue && (
             <img
               src={defaultValue}
@@ -37,7 +38,7 @@ export const AvatarSelectInput = ({
             />
           )}
         </Select.Value>
-        <Select.Icon className="ml-1 text-grey-900">
+        <Select.Icon className="ml-1 text-ink-100">
           <ChevronDown size={16} />
         </Select.Icon>
       </Select.Trigger>

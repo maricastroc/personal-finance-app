@@ -25,7 +25,7 @@ export function Modal({
         id={id}
         aria-labelledby={`${id}-title`}
         aria-describedby={`${id}-desc`}
-        className="max-h-[90vh] overflow-y-auto fixed z-[999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[560px] rounded-xl shadow-2xl p-6 md:p-8"
+        className="max-h-[90vh] overflow-y-auto scrollbar-hide fixed z-[999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[560px] rounded-xl shadow-2xl p-6 md:p-8"
         style={{
           background: "var(--surface-800)",
           border: "1px solid var(--card-border)",
