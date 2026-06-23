@@ -35,8 +35,12 @@ function Card({
         border: "1px solid var(--card-border)",
       }}
     >
-      <span className="text-xs text-ink-300 uppercase tracking-wide">{label}</span>
-      <span className={`text-xl font-bold ${valueColor ?? "text-ink-50"}`}>{value}</span>
+      <span className="text-xs text-ink-300 uppercase tracking-wide">
+        {label}
+      </span>
+      <span className={`text-xl font-bold ${valueColor ?? "text-ink-50"}`}>
+        {value}
+      </span>
       {sub && <span className="text-xs text-ink-300">{sub}</span>}
     </div>
   );
@@ -60,7 +64,8 @@ export function MetricsCards({ metrics, isLoading }: Props) {
       ? "text-accent-yellow"
       : "text-accent-red";
 
-  const netColor = metrics.netCashFlow >= 0 ? "text-accent-green" : "text-accent-red";
+  const netColor =
+    metrics.netCashFlow >= 0 ? "text-accent-green" : "text-accent-red";
   const netPrefix = metrics.netCashFlow >= 0 ? "+" : "";
 
   return (
@@ -73,7 +78,9 @@ export function MetricsCards({ metrics, isLoading }: Props) {
       />
       <Card
         label="Savings Rate"
-        value={`${metrics.savingsRate > 0 ? metrics.savingsRate.toFixed(0) : 0}%`}
+        value={`${
+          metrics.savingsRate > 0 ? metrics.savingsRate.toFixed(0) : 0
+        }%`}
         valueColor={savingsColor}
         sub={
           metrics.savingsRate >= 20
@@ -85,7 +92,11 @@ export function MetricsCards({ metrics, isLoading }: Props) {
       />
       <Card
         label="Largest Expense"
-        value={metrics.largestExpense ? formatToDollar(metrics.largestExpense.amount) : "—"}
+        value={
+          metrics.largestExpense
+            ? formatToDollar(metrics.largestExpense.amount)
+            : "—"
+        }
         valueColor="text-accent-red"
         sub={metrics.largestExpense?.category}
       />

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { format, parse } from "date-fns";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import { useAppContext } from "@/contexts/AppContext";
@@ -69,7 +70,10 @@ export default function Insights() {
       setActiveKey(key);
       setPeriod(next);
       router.replace(
-        { pathname: "/insights", query: { from: next.from, to: next.to, preset: key } },
+        {
+          pathname: "/insights",
+          query: { from: next.from, to: next.to, preset: key },
+        },
         undefined,
         { shallow: true }
       );
@@ -85,15 +89,23 @@ export default function Insights() {
 
   const { data: insights, isValidating } = useRequest<InsightsData>(
     { url: `/insights?from=${period.from}&to=${period.to}`, method: "GET" },
-    { revalidateOnFocus: false, keepPreviousData: true, dedupingInterval: 10000 }
+    {
+      revalidateOnFocus: false,
+      keepPreviousData: true,
+      dedupingInterval: 10000,
+    }
   );
 
   if (isRouteLoading) return <LoadingPage />;
 
   const activePreset = PRESETS.find((p) => p.key === activeKey);
+  function formatMonth(ym: string) {
+    return format(parse(ym.slice(0, 7), "yyyy-MM", new Date()), "MMM yyyy");
+  }
+
   const subtitle =
     activeKey === "custom"
-      ? `${customFrom.slice(0, 7)} → ${customTo.slice(0, 7)}`
+      ? `${formatMonth(customFrom)} → ${formatMonth(customTo)}`
       : activePreset?.label ?? "";
 
   return (
@@ -101,7 +113,10 @@ export default function Insights() {
       <NextSeo
         title="Insights | Finance App"
         additionalMetaTags={[
-          { name: "viewport", content: "width=device-width, initial-scale=1.0" },
+          {
+            name: "viewport",
+            content: "width=device-width, initial-scale=1.0",
+          },
         ]}
       />
       <Layout>
@@ -124,25 +139,40 @@ export default function Insights() {
 
           <div className="flex flex-col gap-6">
             {/* Quick metrics */}
-            <MetricsCards metrics={insights?.metrics} isLoading={isValidating} />
+            <MetricsCards
+              metrics={insights?.metrics}
+              isLoading={isValidating}
+            />
 
             {/* Charts row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <ChartCard title="Income vs Expenses" subtitle={subtitle}>
-                <MonthlyChart data={insights?.monthly} isLoading={isValidating} />
+                <MonthlyChart
+                  data={insights?.monthly}
+                  isLoading={isValidating}
+                />
               </ChartCard>
               <ChartCard title="Balance Over Time" subtitle={subtitle}>
-                <BalanceChart data={insights?.balanceHistory} isLoading={isValidating} />
+                <BalanceChart
+                  data={insights?.balanceHistory}
+                  isLoading={isValidating}
+                />
               </ChartCard>
             </div>
 
             {/* Category breakdown — horizontal bars */}
             <ChartCard title="Spending by Category" subtitle={subtitle}>
-              <CategoryChart data={insights?.categories} isLoading={isValidating} />
+              <CategoryChart
+                data={insights?.categories}
+                isLoading={isValidating}
+              />
             </ChartCard>
 
             {/* Text insights */}
-            <FinancialInsights insights={insights?.insights} isLoading={isValidating} />
+            <FinancialInsights
+              insights={insights?.insights}
+              isLoading={isValidating}
+            />
           </div>
         </section>
       </Layout>

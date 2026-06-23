@@ -22,12 +22,6 @@ const colors = {
   neutral: "text-ink-300",
 };
 
-const bgColors = {
-  positive: "bg-accent-greenDim",
-  warning: "bg-surface-600",
-  neutral: "bg-surface-600",
-};
-
 export function FinancialInsights({ insights, isLoading }: Props) {
   if (isLoading || !insights) return <ChartSkeleton height={80} />;
 
@@ -45,7 +39,9 @@ export function FinancialInsights({ insights, isLoading }: Props) {
       <ul className="flex flex-col gap-2">
         {insights.map((item, i) => (
           <li key={i} className="flex items-center gap-2.5">
-            <span className={`text-sm font-bold leading-none ${colors[item.type]}`}>
+            <span
+              className={`text-sm font-bold leading-none ${colors[item.type]}`}
+            >
               {icons[item.type]}
             </span>
             <p className="text-xs text-ink-200 leading-snug">{item.text}</p>

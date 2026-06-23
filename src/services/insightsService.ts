@@ -1,5 +1,10 @@
 import { prisma } from "@/lib/prisma";
-import { startOfMonth, endOfMonth, format, eachMonthOfInterval, subMonths } from "date-fns";
+import {
+  startOfMonth,
+  endOfMonth,
+  format,
+  eachMonthOfInterval,
+} from "date-fns";
 
 type MonthlyRow = { month: Date; type: string; total: number };
 type CategoryRow = { name: string; total: number };
@@ -25,9 +30,16 @@ export async function getInsights(userId: string, params: InsightsParams) {
   const prevRangeEnd = new Date(rangeStart.getTime() - 1);
   const prevRangeStart = new Date(prevRangeEnd.getTime() - rangeLengthMs);
 
-  const [monthlyRaw, categoriesRaw, user, txCountRaw, prevExpenseRaw, currentExpenseRaw, largestTxRaw] =
-    await Promise.all([
-      prisma.$queryRaw<MonthlyRow[]>`
+  const [
+    monthlyRaw,
+    categoriesRaw,
+    user,
+    txCountRaw,
+    prevExpenseRaw,
+    currentExpenseRaw,
+    largestTxRaw,
+  ] = await Promise.all([
+    prisma.$queryRaw<MonthlyRow[]>`
         SELECT
           DATE_TRUNC('month', date) AS month,
           type,
@@ -40,7 +52,7 @@ export async function getInsights(userId: string, params: InsightsParams) {
         GROUP BY DATE_TRUNC('month', date), type
         ORDER BY month ASC
       `,
-      prisma.$queryRaw<CategoryRow[]>`
+    prisma.$queryRaw<CategoryRow[]>`
         SELECT
           COALESCE(c.name, 'Uncategorized') AS name,
           SUM(t.amount)::float AS total
@@ -54,19 +66,19 @@ export async function getInsights(userId: string, params: InsightsParams) {
         ORDER BY total DESC
         LIMIT 8
       `,
-      prisma.user.findUnique({
-        where: { id: userId },
-        select: { currentBalance: true },
-      }),
-      prisma.$queryRaw<CountRow[]>`
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { currentBalance: true },
+    }),
+    prisma.$queryRaw<CountRow[]>`
         SELECT COUNT(*)::int AS total
         FROM transactions
         WHERE "userId" = ${userId}
           AND date >= ${rangeStart}
           AND date <= ${rangeEnd}
       `,
-      // Total expense in previous period
-      prisma.$queryRaw<CountRow[]>`
+    // Total expense in previous period
+    prisma.$queryRaw<CountRow[]>`
         SELECT COALESCE(SUM(amount), 0)::float AS total
         FROM transactions
         WHERE "userId" = ${userId}
@@ -74,8 +86,8 @@ export async function getInsights(userId: string, params: InsightsParams) {
           AND date >= ${prevRangeStart}
           AND date <= ${prevRangeEnd}
       `,
-      // Total expense in current period
-      prisma.$queryRaw<CountRow[]>`
+    // Total expense in current period
+    prisma.$queryRaw<CountRow[]>`
         SELECT COALESCE(SUM(amount), 0)::float AS total
         FROM transactions
         WHERE "userId" = ${userId}
@@ -83,13 +95,17 @@ export async function getInsights(userId: string, params: InsightsParams) {
           AND date >= ${rangeStart}
           AND date <= ${rangeEnd}
       `,
-      // Largest single expense
-      prisma.transaction.findFirst({
-        where: { userId, type: "expense", date: { gte: rangeStart, lte: rangeEnd } },
-        orderBy: { amount: "desc" },
-        include: { category: true },
-      }),
-    ]);
+    // Largest single expense
+    prisma.transaction.findFirst({
+      where: {
+        userId,
+        type: "expense",
+        date: { gte: rangeStart, lte: rangeEnd },
+      },
+      orderBy: { amount: "desc" },
+      include: { category: true },
+    }),
+  ]);
 
   // ── Monthly chart data ──────────────────────────────────────────────────────
   const monthDates = eachMonthOfInterval({ start: rangeStart, end: rangeEnd });
@@ -121,14 +137,19 @@ export async function getInsights(userId: string, params: InsightsParams) {
   balanceHistory.reverse();
 
   // ── Category breakdown ──────────────────────────────────────────────────────
-  const categories = categoriesRaw.map((r) => ({ name: r.name, total: r.total }));
+  const categories = categoriesRaw.map((r) => ({
+    name: r.name,
+    total: r.total,
+  }));
 
   // ── Quick metrics ───────────────────────────────────────────────────────────
   const totalIncome = monthly.reduce((s, m) => s + m.income, 0);
   const totalExpense = monthly.reduce((s, m) => s + m.expense, 0);
-  const txCount = Number((txCountRaw[0] as any)?.total ?? 0);
-  const avgMonthlyExpense = months.length > 0 ? totalExpense / months.length : 0;
-  const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpense) / totalIncome) * 100 : 0;
+  const txCount = txCountRaw[0]?.total ?? 0;
+  const avgMonthlyExpense =
+    months.length > 0 ? totalExpense / months.length : 0;
+  const savingsRate =
+    totalIncome > 0 ? ((totalIncome - totalExpense) / totalIncome) * 100 : 0;
 
   const metrics = {
     totalIncome,
@@ -138,13 +159,16 @@ export async function getInsights(userId: string, params: InsightsParams) {
     savingsRate,
     txCount,
     largestExpense: largestTxRaw
-      ? { amount: largestTxRaw.amount, category: largestTxRaw.category?.name ?? "Uncategorized" }
+      ? {
+          amount: largestTxRaw.amount,
+          category: largestTxRaw.category?.name ?? "Uncategorized",
+        }
       : null,
   };
 
   // ── Text insights ───────────────────────────────────────────────────────────
-  const prevExpense = Number((prevExpenseRaw[0] as any)?.total ?? 0);
-  const currentExpense = Number((currentExpenseRaw[0] as any)?.total ?? 0);
+  const prevExpense = prevExpenseRaw[0]?.total ?? 0;
+  const currentExpense = currentExpenseRaw[0]?.total ?? 0;
   const insights: InsightItem[] = [];
 
   if (prevExpense > 0) {
@@ -152,12 +176,16 @@ export async function getInsights(userId: string, params: InsightsParams) {
     if (expenseChange <= -5) {
       insights.push({
         type: "positive",
-        text: `Spending decreased ${Math.abs(expenseChange).toFixed(0)}% compared to the previous period`,
+        text: `Spending decreased ${Math.abs(expenseChange).toFixed(
+          0
+        )}% compared to the previous period`,
       });
     } else if (expenseChange >= 10) {
       insights.push({
         type: "warning",
-        text: `Spending increased ${expenseChange.toFixed(0)}% compared to the previous period`,
+        text: `Spending increased ${expenseChange.toFixed(
+          0
+        )}% compared to the previous period`,
       });
     }
   }
@@ -165,12 +193,16 @@ export async function getInsights(userId: string, params: InsightsParams) {
   if (savingsRate >= 20) {
     insights.push({
       type: "positive",
-      text: `Savings rate of ${savingsRate.toFixed(0)}% — you're keeping more than you spend`,
+      text: `Savings rate of ${savingsRate.toFixed(
+        0
+      )}% — you're keeping more than you spend`,
     });
   } else if (savingsRate > 0 && savingsRate < 10) {
     insights.push({
       type: "warning",
-      text: `Savings rate is only ${savingsRate.toFixed(0)}% — consider reducing expenses`,
+      text: `Savings rate is only ${savingsRate.toFixed(
+        0
+      )}% — consider reducing expenses`,
     });
   } else if (savingsRate <= 0 && totalIncome > 0) {
     insights.push({
@@ -187,12 +219,16 @@ export async function getInsights(userId: string, params: InsightsParams) {
       if (topPct > 50) {
         insights.push({
           type: "warning",
-          text: `${top.name} accounts for ${topPct.toFixed(1)}% of all expenses`,
+          text: `${top.name} accounts for ${topPct.toFixed(
+            1
+          )}% of all expenses`,
         });
       } else {
         insights.push({
           type: "positive",
-          text: `Spending spread across categories — ${top.name} is the largest at ${topPct.toFixed(1)}%`,
+          text: `Spending spread across categories — ${
+            top.name
+          } is the largest at ${topPct.toFixed(1)}%`,
         });
       }
     }
@@ -201,7 +237,9 @@ export async function getInsights(userId: string, params: InsightsParams) {
   if (largestTxRaw) {
     insights.push({
       type: "neutral",
-      text: `Largest transaction: ${largestTxRaw.category?.name ?? largestTxRaw.contactName} ($${largestTxRaw.amount.toFixed(2)})`,
+      text: `Largest transaction: ${
+        largestTxRaw.category?.name ?? largestTxRaw.contactName
+      } ($${largestTxRaw.amount.toFixed(2)})`,
     });
   }
 
@@ -212,7 +250,9 @@ export async function getInsights(userId: string, params: InsightsParams) {
     if (lastMonth.expense < prevMonth.expense) {
       insights.push({
         type: "positive",
-        text: `Last month's spending ($${lastMonth.expense.toFixed(0)}) was lower than the month before ($${prevMonth.expense.toFixed(0)})`,
+        text: `Last month's spending ($${lastMonth.expense.toFixed(
+          0
+        )}) was lower than the month before ($${prevMonth.expense.toFixed(0)})`,
       });
     }
   }

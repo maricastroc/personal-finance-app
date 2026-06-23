@@ -1,4 +1,5 @@
 import { formatToDollar } from "@/utils/formatToDollar";
+import { CHART_CATEGORY_COLORS } from "@/utils/chartTokens";
 import { ChartSkeleton } from "./ChartSkeleton";
 
 type CategoryData = { name: string; total: number };
@@ -7,17 +8,6 @@ type Props = {
   data?: CategoryData[];
   isLoading: boolean;
 };
-
-const CHART_COLORS = [
-  "#4dada8",
-  "#d15d4e",
-  "#eccfb0",
-  "#826cb0",
-  "#3f82b2",
-  "#cab361",
-  "#af81ba",
-  "#97a0ac",
-];
 
 export function CategoryChart({ data, isLoading }: Props) {
   if (isLoading || !data) return <ChartSkeleton height={220} />;
@@ -36,10 +26,12 @@ export function CategoryChart({ data, isLoading }: Props) {
     <div className="flex flex-col gap-3">
       {data.map((item, i) => {
         const pct = max > 0 ? (item.total / max) * 100 : 0;
-        const color = CHART_COLORS[i % CHART_COLORS.length];
+        const color = CHART_CATEGORY_COLORS[i % CHART_CATEGORY_COLORS.length];
         return (
           <div key={item.name} className="flex items-center gap-3">
-            <span className="text-xs text-ink-200 w-28 shrink-0 truncate">{item.name}</span>
+            <span className="text-xs text-ink-200 w-28 shrink-0 truncate">
+              {item.name}
+            </span>
             <div className="flex-1 h-2 rounded-full bg-surface-500 overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-500"

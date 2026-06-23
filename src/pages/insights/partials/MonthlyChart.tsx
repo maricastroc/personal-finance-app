@@ -7,8 +7,15 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
+  type TooltipProps,
 } from "recharts";
+import {
+  type ValueType,
+  type NameType,
+  type Payload,
+} from "recharts/types/component/DefaultTooltipContent";
 import { formatToDollar } from "@/utils/formatToDollar";
+import { CHART_GREEN, CHART_RED } from "@/utils/chartTokens";
 import { ChartSkeleton } from "./ChartSkeleton";
 
 type MonthlyData = { month: string; income: number; expense: number };
@@ -18,7 +25,11 @@ type Props = {
   isLoading: boolean;
 };
 
-function CustomTooltip({ active, payload, label }: any) {
+function CustomTooltip({
+  active,
+  payload,
+  label,
+}: TooltipProps<ValueType, NameType>) {
   if (!active || !payload?.length) return null;
   return (
     <div
@@ -26,11 +37,14 @@ function CustomTooltip({ active, payload, label }: any) {
       style={{ minWidth: 140 }}
     >
       <p className="font-semibold mb-1">{label}</p>
-      {payload.map((entry: any) => (
-        <p key={entry.dataKey} style={{ color: entry.fill }}>
-          {entry.name}: {formatToDollar(entry.value)}
-        </p>
-      ))}
+      {payload.map((entry: Payload<ValueType, NameType>) => {
+        const color = entry.dataKey === "income" ? CHART_GREEN : CHART_RED;
+        return (
+          <p key={String(entry.dataKey)} style={{ color }}>
+            {entry.name}: {formatToDollar(Number(entry.value ?? 0))}
+          </p>
+        );
+      })}
     </div>
   );
 }
@@ -59,15 +73,28 @@ export function MonthlyChart({ data, isLoading }: Props) {
           tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
           width={40}
         />
-        <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
+        <Tooltip
+          content={<CustomTooltip />}
+          cursor={{ fill: "rgba(255,255,255,0.04)" }}
+        />
         <Legend
           wrapperStyle={{ fontSize: 11, paddingTop: 16 }}
-          formatter={(value) =>
+          formatter={(value) => (
             <span style={{ color: "var(--ink-200)" }}>{value}</span>
-          }
+          )}
         />
-        <Bar dataKey="income" name="Income" fill="#4dada8" radius={[4, 4, 0, 0]} />
-        <Bar dataKey="expense" name="Expense" fill="#d15d4e" radius={[4, 4, 0, 0]} />
+        <Bar
+          dataKey="income"
+          name="Income"
+          fill={CHART_GREEN}
+          radius={[4, 4, 0, 0]}
+        />
+        <Bar
+          dataKey="expense"
+          name="Expense"
+          fill={CHART_RED}
+          radius={[4, 4, 0, 0]}
+        />
       </BarChart>
     </ResponsiveContainer>
   );

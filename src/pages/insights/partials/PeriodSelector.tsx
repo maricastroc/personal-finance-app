@@ -1,4 +1,5 @@
 import { format, startOfMonth, subMonths, startOfYear } from "date-fns";
+import { MonthPicker } from "@/components/shared/MonthPicker";
 
 export type Period = {
   from: string; // ISO date string YYYY-MM-DD
@@ -17,12 +18,18 @@ export const PRESETS: Preset[] = [
   {
     label: "3 months",
     key: "3m",
-    period: { from: isoMonth(startOfMonth(subMonths(now, 2))), to: isoMonth(now) },
+    period: {
+      from: isoMonth(startOfMonth(subMonths(now, 2))),
+      to: isoMonth(now),
+    },
   },
   {
     label: "6 months",
     key: "6m",
-    period: { from: isoMonth(startOfMonth(subMonths(now, 5))), to: isoMonth(now) },
+    period: {
+      from: isoMonth(startOfMonth(subMonths(now, 5))),
+      to: isoMonth(now),
+    },
   },
   {
     label: "This year",
@@ -87,35 +94,17 @@ export function PeriodSelector({
 
       {isCustom && (
         <div className="flex items-center gap-2 mt-1 w-full sm:w-auto sm:mt-0">
-          <input
-            type="month"
+          <MonthPicker
             value={customFrom.slice(0, 7)}
             max={customTo.slice(0, 7)}
-            onChange={(e) =>
-              onCustomChange(e.target.value + "-01", customTo)
-            }
-            className="
-              bg-surface-600 border border-surface-500 text-ink-100
-              text-xs rounded-lg px-2 py-1.5
-              focus:outline-2 focus:outline-accent-green focus:outline-offset-1
-            "
-            style={{ colorScheme: "dark" }}
+            onChange={(v) => onCustomChange(v + "-01", customTo)}
           />
           <span className="text-ink-300 text-xs">→</span>
-          <input
-            type="month"
+          <MonthPicker
             value={customTo.slice(0, 7)}
             min={customFrom.slice(0, 7)}
             max={format(now, "yyyy-MM")}
-            onChange={(e) =>
-              onCustomChange(customFrom, e.target.value + "-01")
-            }
-            className="
-              bg-surface-600 border border-surface-500 text-ink-100
-              text-xs rounded-lg px-2 py-1.5
-              focus:outline-2 focus:outline-accent-green focus:outline-offset-1
-            "
-            style={{ colorScheme: "dark" }}
+            onChange={(v) => onCustomChange(customFrom, v + "-01")}
           />
         </div>
       )}

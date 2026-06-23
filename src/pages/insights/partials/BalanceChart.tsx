@@ -6,8 +6,14 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  type TooltipProps,
 } from "recharts";
+import {
+  type ValueType,
+  type NameType,
+} from "recharts/types/component/DefaultTooltipContent";
 import { formatToDollar } from "@/utils/formatToDollar";
+import { CHART_GREEN } from "@/utils/chartTokens";
 import { ChartSkeleton } from "./ChartSkeleton";
 
 type BalanceData = { month: string; balance: number };
@@ -17,12 +23,18 @@ type Props = {
   isLoading: boolean;
 };
 
-function CustomTooltip({ active, payload, label }: any) {
+function CustomTooltip({
+  active,
+  payload,
+  label,
+}: TooltipProps<ValueType, NameType>) {
   if (!active || !payload?.length) return null;
   return (
     <div className="custom-tooltip rounded-lg px-3 py-2 text-xs">
       <p className="font-semibold mb-1">{label}</p>
-      <p style={{ color: "#4dada8" }}>Balance: {formatToDollar(payload[0].value)}</p>
+      <p style={{ color: CHART_GREEN }}>
+        Balance: {formatToDollar(Number(payload[0].value ?? 0))}
+      </p>
     </div>
   );
 }
@@ -35,8 +47,8 @@ export function BalanceChart({ data, isLoading }: Props) {
       <AreaChart data={data}>
         <defs>
           <linearGradient id="balanceGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#4dada8" stopOpacity={0.2} />
-            <stop offset="95%" stopColor="#4dada8" stopOpacity={0} />
+            <stop offset="5%" stopColor={CHART_GREEN} stopOpacity={0.2} />
+            <stop offset="95%" stopColor={CHART_GREEN} stopOpacity={0} />
           </linearGradient>
         </defs>
         <CartesianGrid
@@ -61,11 +73,11 @@ export function BalanceChart({ data, isLoading }: Props) {
         <Area
           type="monotone"
           dataKey="balance"
-          stroke="#4dada8"
+          stroke={CHART_GREEN}
           strokeWidth={2}
           fill="url(#balanceGradient)"
-          dot={{ fill: "#4dada8", r: 3, strokeWidth: 0 }}
-          activeDot={{ r: 5, fill: "#4dada8", strokeWidth: 0 }}
+          dot={{ fill: CHART_GREEN, r: 3, strokeWidth: 0 }}
+          activeDot={{ r: 5, fill: CHART_GREEN, strokeWidth: 0 }}
         />
       </AreaChart>
     </ResponsiveContainer>
