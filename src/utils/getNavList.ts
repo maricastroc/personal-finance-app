@@ -8,6 +8,8 @@ import navPots from "/public/assets/images/icon-nav-pots.svg";
 import navPotsActive from "/public/assets/images/icon-nav-pots-active.svg";
 import recBills from "/public/assets/images/icon-nav-recurring-bills.svg";
 import recBillsActive from "/public/assets/images/icon-nav-recurring-bills-active.svg";
+import navInsights from "/public/assets/images/icon-nav-insights.svg";
+import navInsightsActive from "/public/assets/images/icon-nav-insights-active.svg";
 import user from "/public/assets/images/user-solid.svg";
 import userActive from "/public/assets/images/user-solid-active.svg";
 
@@ -54,6 +56,12 @@ export const navList = [
     icon: recBills,
     iconActive: recBillsActive,
     href: "/recurring_bills",
+  },
+  {
+    name: "Insights",
+    icon: navInsights,
+    iconActive: navInsightsActive,
+    href: "/insights",
   },
 
   {
